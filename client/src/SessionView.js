@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { Dialog, CardMedia, Avatar, Card, CardHeader, CardActions, IconButton, Grid } from '@material-ui/core'
+import {
+  Avatar,
+  Card,
+  CardActions,
+  CardHeader,
+  CardMedia,
+  Dialog,
+  Grid,
+  IconButton,
+  Tooltip,
+} from '@material-ui/core'
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -46,20 +56,24 @@ function SessionView({
               image={getFactionCheatSheetPath(factionData.key)}
             />
             <CardActions disableSpacing>
-              <IconButton
-                aria-label="go to wiki"
-                href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(factionData.name)}`}
-                target="about:blank"
-              >
-                <LocalLibrary />
-              </IconButton>
-              <IconButton
-                aria-label="open original image"
-                href={getFactionCheatSheetPath(factionData.key)}
-                target="about:blank"
-              >
-                <PhotoLibrary />
-              </IconButton>
+              <Tooltip title="go to wiki" placement="top">
+                <IconButton
+                  aria-label="go to wiki"
+                  href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(factionData.name)}`}
+                  target="about:blank"
+                >
+                  <LocalLibrary />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="open original image" placement="top">
+                <IconButton
+                  aria-label="open original image"
+                  href={getFactionCheatSheetPath(factionData.key)}
+                  target="about:blank"
+                >
+                  <PhotoLibrary />
+                </IconButton>
+              </Tooltip>
             </CardActions>
           </Card>
         </Grid>
