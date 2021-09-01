@@ -24,6 +24,9 @@ function SessionView({
 
   return <>
     <Grid container justifyContent="center" spacing={4}>
+      <Grid item xs={12}>
+        session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
+      </Grid>
       {session.factions.map(faction => {
         const factionData = factions.getData(faction)
 
