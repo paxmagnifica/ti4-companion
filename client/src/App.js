@@ -33,13 +33,11 @@ const sessionFactory = {
 }
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'relative',
-  },
   fab: {
-    position: 'absolute',
-    right: theme.spacing(2),
-    bottom: theme.spacing(-2),
+    position: 'sticky',
+    float: 'right',
+    right: 0,
+    bottom: 0,
     zIndex: 9001,
   }
 }))
@@ -66,6 +64,11 @@ function App() {
         />
       default:
         return <>
+          {
+            sessions.loading || !sessions.loaded
+              ? <CircularProgress />
+              : <SessionsList sessions={sessions.data} dispatch={dispatch} />
+          }
           <Fab
             onClick={goToNewGameSession}
             color="primary"
@@ -74,11 +77,6 @@ function App() {
           >
             <Add />
           </Fab>
-          {
-            sessions.loading || !sessions.loaded
-              ? <CircularProgress />
-              : <SessionsList sessions={sessions.data} dispatch={dispatch} />
-          }
         </>
     }
   }, [view, classes.fab, sessions, goToNewGameSession, createGameSession, sessionToView])
@@ -106,7 +104,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <Toolbar/>
-      <Container className={classes.root}>
+      <Container>
         <Box m={2}>
           {renderContent()}
         </Box>

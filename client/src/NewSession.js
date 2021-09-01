@@ -9,23 +9,25 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Check } from '@material-ui/icons'
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { factionsList } from './gameInfo/factions'
 
 const useStyles = makeStyles(theme => ({
   fab: {
-    position: 'absolute',
+    position: 'sticky',
     right: 0,
-    bottom: theme.spacing(-6),
+    bottom: 0,
     zIndex: 9001,
+  },
+  containedButton: {
+    backgroundColor: ({ color }) => color === 'default' ? 'transparent' : '',
   }
 }))
 
 function NewSession({
   onSessionCreated
 }) {
-  useTheme()
   const classes = useStyles()
   const [selected, setSelected] = useState([])
   const isSelected = useCallback(factionKey => selected.includes(factionKey), [selected])
@@ -48,7 +50,9 @@ function NewSession({
 
     <Grid container justifyContent="center" spacing={4}>
       {factionsList.map(faction => <Grid item xs={12} sm={6} md={4} lg={3} key={faction.key}>
-        <Button fullWidth
+        <Button
+          className={classes.containedButton}
+          fullWidth
           onClick={() => toggleSelection(faction.key)}
           variant='contained'
           color={isSelected(faction.key) ? 'primary' : 'default'}
