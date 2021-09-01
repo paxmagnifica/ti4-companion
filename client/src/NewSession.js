@@ -21,7 +21,9 @@ const useStyles = makeStyles(theme => ({
     zIndex: 9001,
   },
   containedButton: {
-    backgroundColor: ({ color }) => color === 'default' ? 'transparent' : '',
+    '&:not(.MuiButton-containedPrimary)': {
+      backgroundColor: 'transparent',
+    },
   }
 }))
 
