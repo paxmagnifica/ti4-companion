@@ -27,8 +27,8 @@ function App() {
   const { view, sessions, sessionToView } = state;
 
   const goToNewGameSession = useCallback(() => dispatch({type: 'go', where: VIEWS.NEW_GAME }), [])
-  const createGameSession = useCallback(factions => {
-    const session = sessionFactory.createSession(factions)
+  const createGameSession = useCallback(async factions => {
+    const session = await sessionFactory.createSession(factions)
     dispatch({type: 'createGameSession', session})
   }, [])
 
