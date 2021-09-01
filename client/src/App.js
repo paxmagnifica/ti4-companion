@@ -1,13 +1,23 @@
 import { useEffect, useReducer, useCallback } from 'react'
-import { CircularProgress, Button, Box, Container, CssBaseline, AppBar, Toolbar, Typography } from '@material-ui/core'
+import {
+  AppBar,
+  Box,
+  CircularProgress,
+  Container,
+  CssBaseline,
+  Fab,
+  IconButton,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
+import { Home, Add } from '@material-ui/icons'
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import NewSession from './NewSession'
 import SessionsList from './SessionsList'
 import SessionView from './SessionView'
 import { getAllSessions, saveSession } from './persistence'
 import { VIEWS, reducer, init } from './state'
-
-import './App.css'
 
 const sessionFactory = {
   createSession: async factions => {
@@ -22,7 +32,21 @@ const sessionFactory = {
   },
 }
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: 'relative',
+  },
+  fab: {
+    position: 'absolute',
+    right: theme.spacing(2),
+    bottom: theme.spacing(-2),
+    zIndex: 9001,
+  }
+}))
+
 function App() {
+  useTheme()
+  const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
   const { view, sessions, sessionToView } = state;
 
@@ -42,7 +66,14 @@ function App() {
         />
       default:
         return <>
-          <Button onClick={goToNewGameSession}>New Game Session</Button>
+          <Fab
+            onClick={goToNewGameSession}
+            color="primary"
+            aria-label="add"
+            className={classes.fab}
+          >
+            <Add />
+          </Fab>
           {
             sessions.loading || !sessions.loaded
               ? <CircularProgress />
@@ -50,7 +81,7 @@ function App() {
           }
         </>
     }
-  }, [view, sessions, goToNewGameSession, createGameSession, sessionToView])
+  }, [view, classes.fab, sessions, goToNewGameSession, createGameSession, sessionToView])
 
   useEffect(() => {
     const load = async () => {
@@ -66,11 +97,16 @@ function App() {
       <CssBaseline />
       <AppBar>
         <Toolbar>
-          <Typography variant="h5"><Button onClick={() => dispatch({ type: 'go', where: VIEWS.LIST })}>TI4 Companion</Button></Typography>
+          <IconButton
+            onClick={() => dispatch({ type: 'go', where: VIEWS.LIST })}
+          >
+            <Home />
+          </IconButton>
+          <Typography variant="h5">TI4 Companion</Typography>
         </Toolbar>
       </AppBar>
       <Toolbar/>
-      <Container>
+      <Container className={classes.root}>
         <Box m={2}>
           {renderContent()}
         </Box>

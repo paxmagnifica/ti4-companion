@@ -1,5 +1,6 @@
-import { CardMedia, Avatar, Card, CardHeader, CardActions, IconButton, Grid } from '@material-ui/core'
-import { LocalLibrary } from '@material-ui/icons'
+import { useState } from 'react'
+import { Dialog, CardMedia, Avatar, Card, CardHeader, CardActions, IconButton, Grid } from '@material-ui/core'
+import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
 import * as factions from './gameInfo/factions'
@@ -8,13 +9,18 @@ const useStyles = makeStyles({
   media: {
     height: 0,
     paddingTop: '71.25%',
+    cursor: 'pointer',
   },
 })
+
+const getFactionCheatSheetPath = factionKey => `/factionCheatsheets/${factionKey.toLowerCase()}.png`
 
 function SessionView({
   session
 }) {
   const classes = useStyles()
+  const [open, setOpen] = useState(false)
+  const [faction, setFaction] = useState(null)
 
   return <>
     <Grid container justifyContent="center" spacing={4}>
@@ -28,11 +34,15 @@ function SessionView({
               title={factionData.name}
             />
             <CardMedia
+              onClick={() => {
+                setFaction(factionData.key)
+                setOpen(open => !open)
+              }}
               className={classes.media}
               title={factionData.name}
-              image={`/factionCheatsheets/${factionData.key.toLowerCase()}.png`}
+              image={getFactionCheatSheetPath(factionData.key)}
             />
-            <CardActions>
+            <CardActions disableSpacing>
               <IconButton
                 aria-label="go to wiki"
                 href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(factionData.name)}`}
@@ -40,11 +50,25 @@ function SessionView({
               >
                 <LocalLibrary />
               </IconButton>
+              <IconButton
+                aria-label="open original image"
+                href={getFactionCheatSheetPath(factionData.key)}
+                target="about:blank"
+              >
+                <PhotoLibrary />
+              </IconButton>
             </CardActions>
           </Card>
         </Grid>
       })}
     </Grid>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      maxWidth='lg'
+    >
+      {faction && <img src={getFactionCheatSheetPath(faction)} alt={faction} />}
+    </Dialog>
   </>
 }
 

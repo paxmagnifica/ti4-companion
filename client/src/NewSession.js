@@ -1,15 +1,24 @@
 import { useCallback, useState } from 'react'
-import { Button, Box, Container, Typography, Fab, Grid, Avatar } from '@material-ui/core'
-import { Add } from '@material-ui/icons'
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Fab,
+  Grid,
+  Typography,
+} from '@material-ui/core'
+import { Check } from '@material-ui/icons'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { factionsList } from './gameInfo/factions'
 
 const useStyles = makeStyles(theme => ({
   fab: {
-    position: 'fixed',
-    right: theme.spacing(2),
-    bottom: theme.spacing(2),
+    position: 'absolute',
+    right: 0,
+    bottom: theme.spacing(-6),
+    zIndex: 9001,
   }
 }))
 
@@ -48,17 +57,16 @@ function NewSession({
             {faction.name}
         </Button>
       </Grid>)}
+      <Fab
+        onClick={createSession}
+        color="secondary"
+        aria-label="add"
+        className={classes.fab}
+        disabled={!selected.length}
+      >
+        <Check />
+      </Fab>
     </Grid>
-
-    <Fab
-      onClick={createSession}
-      color="primary"
-      aria-label="add"
-      className={classes.fab}
-      disabled={!selected.length}
-    >
-      <Add />
-    </Fab>
   </>
 }
 
