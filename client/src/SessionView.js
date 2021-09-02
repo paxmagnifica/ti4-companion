@@ -36,7 +36,12 @@ function SessionView({
   const [faction, setFaction] = useState(null)
 
   return <>
-    <Grid container justifyContent="center" spacing={4}>
+    <Grid
+      container
+      alignItems="center"
+      justifyContent="center"
+      spacing={4}
+    >
       <Grid item xs={6}>
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
       </Grid>
