@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useCallback } from 'react'
+import { useMemo, useEffect, useReducer, useCallback } from 'react'
 import {
   AppBar,
   Box,
@@ -46,7 +46,7 @@ function App() {
   useTheme()
   const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
-  const { view, sessions, sessionToView } = state;
+  const { view, sessions, sessionToView } = state
 
   const goToNewGameSession = useCallback(() => dispatch({type: 'go', where: VIEWS.NEW_GAME }), [])
   const createGameSession = useCallback(async factions => {
@@ -54,13 +54,17 @@ function App() {
     dispatch({type: 'createGameSession', session})
   }, [])
 
+  const viewedSession = useMemo(() => sessions.data.find(s => s.id === sessionToView), [sessions, sessionToView])
+  const shuffleFactions = useCallback(() => dispatch({ type: 'shuffleFactions', sessionId: sessionToView }), [sessionToView])
+
   const renderContent = useCallback(() => {
     switch (view) {
       case VIEWS.NEW_GAME:
         return <NewSession onSessionCreated={createGameSession} />
       case VIEWS.SESSION:
         return <SessionView
-          session={sessions.data.find(s => s.id === sessionToView)}
+          session={viewedSession}
+          shuffleFactions={shuffleFactions}
         />
       default:
         return <>
@@ -79,7 +83,7 @@ function App() {
           </Fab>
         </>
     }
-  }, [view, classes.fab, sessions, goToNewGameSession, createGameSession, sessionToView])
+  }, [view, classes.fab, sessions, goToNewGameSession, createGameSession, shuffleFactions, viewedSession])
 
   useEffect(() => {
     const load = async () => {
