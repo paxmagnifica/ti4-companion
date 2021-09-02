@@ -41,17 +41,36 @@ export const reducer = (state, action) => {
           data: [action.session, ...state.sessions.data]
         },
       }
-    case 'shuffleFactions':
-      const sessionIndex = state.sessions.data.findIndex(session => session.id === action.sessionId)
-      const session = state.sessions.data[sessionIndex]
+    case 'setFactions':
+      const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.sessionId)
+      const set_session = state.sessions.data[set_sessionIndex]
 
-      session.factions = shuffle(session.factions)
+      set_session.factions = action.factions
+
+      const set_sessions = [...state.sessions.data]
+      set_sessions.splice(set_sessionIndex, 1, {...set_session})
 
       return {
         ...state,
         sessions: {
           ...state.sessions,
-          data: [...state.sessions.data].splice(sessionIndex, 1, {...session})
+          data: set_sessions,
+        }
+      }
+    case 'shuffleFactions':
+      const shuffle_sessionIndex = state.sessions.data.findIndex(session => session.id === action.sessionId)
+      const shuffle_session = state.sessions.data[shuffle_sessionIndex]
+
+      shuffle_session.factions = shuffle(shuffle_session.factions)
+
+      const shuffle_sessionsWithShuffle = [...state.sessions.data]
+      shuffle_sessionsWithShuffle.splice(shuffle_sessionIndex, 1, {...shuffle_session})
+
+      return {
+        ...state,
+        sessions: {
+          ...state.sessions,
+          data: shuffle_sessionsWithShuffle
         }
       }
     default:

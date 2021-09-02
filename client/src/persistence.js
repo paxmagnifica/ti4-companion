@@ -1,5 +1,9 @@
 const KEY = 'ti4companion-sessions'
 
+export const saveAllSessions = newSessions => {
+  localStorage.setItem(KEY, JSON.stringify(newSessions))
+}
+
 export const getAllSessions = () => {
   const storedSessionString = localStorage.getItem(KEY)
   if (storedSessionString) {
@@ -9,12 +13,13 @@ export const getAllSessions = () => {
   return []
 }
 
-export const saveSession = async session => {
-  const sessions = await getAllSessions();
+export const saveSession = session => {
+  const sessions = getAllSessions();
 
   const newSessions = sessions.filter(s => s.id !== session.id)
   newSessions.push(session)
   newSessions.sort((a, b) => a.createdAt - b.createdAt)
 
-  localStorage.setItem(KEY, JSON.stringify(newSessions))
+  saveAllSessions(newSessions)
 }
+

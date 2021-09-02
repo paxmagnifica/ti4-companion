@@ -3,14 +3,11 @@ import {
   Backdrop,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
+  Snackbar,
   Tooltip,
 } from '@material-ui/core'
-import { Casino } from '@material-ui/icons'
+import { Casino, Close } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -21,30 +18,39 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function ShuffleFactionsButton({
-  shuffleFactions
+  factions,
+  shuffleFactions,
+  setFactions,
 }) {
   const classes = useStyles()
 
-  const [confirmationOpen, setConfirmationOpen] = useState(false)
+  const [undoOptionOpen, setUndoOptionOpen] = useState(false)
   const [shuffling, setShuffling] = useState(false)
+  const [factionsBeforeShuffle, setFactionsBeforeShuffle] = useState(factions)
   const shuffleMultipleTimes = useCallback(async () => {
-    const MAX_SHUFFLES = 50
-    const MIN_SHUFFLES = 20
+    const MAX_SHUFFLES = 30
+    const MIN_SHUFFLES = 10
     const shuffles = Math.max(MIN_SHUFFLES, Math.floor(Math.random() * MAX_SHUFFLES))
 
-    setConfirmationOpen(false)
+    setFactionsBeforeShuffle(factions)
     setShuffling(true)
     for(let i = 0; i < shuffles; ++i) {
       shuffleFactions()
       await new Promise(resolve => setTimeout(resolve, 80 + 40 * Math.floor(i / 10)))
     }
     setShuffling(false)
-  }, [shuffleFactions])
+    setUndoOptionOpen(true)
+  }, [shuffleFactions, factions])
+
+  const undoLastShuffle = useCallback(() => {
+    setFactions(factionsBeforeShuffle)
+    setUndoOptionOpen(false)
+  }, [factionsBeforeShuffle, setFactions])
 
   return <>
     <Tooltip title="shuffle faction order" placement="bottom">
       <IconButton
-        onClick={() => setConfirmationOpen(true)}
+        onClick={shuffleMultipleTimes}
         aria-label="shuffle faction order"
       >
         <Casino />
@@ -53,25 +59,26 @@ function ShuffleFactionsButton({
     <Backdrop className={classes.backdrop} open={shuffling} >
       <CircularProgress color="inherit"/>
     </Backdrop>
-    <Dialog
-      open={confirmationOpen}
-      onClose={() => setConfirmationOpen(false)}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle>Are you sure you want to shuffle factions?</DialogTitle>
-      <DialogContent>
-        You will lose current ordering!
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={shuffleMultipleTimes} color="secondary" >
-          Yes, shuffle
-        </Button>
-        <Button onClick={() => setConfirmationOpen(false)} color="primary" autoFocus>
-          Don't shuffle
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      open={undoOptionOpen}
+      autoHideDuration={10000}
+      onClose={() => setUndoOptionOpen(false)}
+      message="Factions shuffled"
+      action={
+        <>
+          <Button color="secondary" size="small" onClick={undoLastShuffle}>
+            UNDO
+          </Button>
+          <IconButton size="small" aria-label="close" color="inherit" onClick={() => setUndoOptionOpen(false)}>
+            <Close fontSize="small" />
+          </IconButton>
+        </>
+      }
+    />
   </>
 }
 

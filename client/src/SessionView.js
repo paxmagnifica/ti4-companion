@@ -29,6 +29,7 @@ const getFactionCheatSheetPath = factionKey => `/factionCheatsheets/${factionKey
 function SessionView({
   session,
   shuffleFactions,
+  setFactions,
 }) {
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
@@ -41,7 +42,9 @@ function SessionView({
       </Grid>
       <Grid item container xs={6} justifyContent="flex-end">
         <ShuffleFactionsButton
+          factions={session.factions}
           shuffleFactions={shuffleFactions}
+          setFactions={setFactions}
         />
       </Grid>
       {session.factions.map(faction => {

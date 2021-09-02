@@ -16,7 +16,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import NewSession from './NewSession'
 import SessionsList from './SessionsList'
 import SessionView from './SessionView'
-import { getAllSessions, saveSession } from './persistence'
+import { getAllSessions, saveSession, saveAllSessions } from './persistence'
 import { VIEWS, reducer, init } from './state'
 
 const sessionFactory = {
@@ -56,6 +56,12 @@ function App() {
 
   const viewedSession = useMemo(() => sessions.data.find(s => s.id === sessionToView), [sessions, sessionToView])
   const shuffleFactions = useCallback(() => dispatch({ type: 'shuffleFactions', sessionId: sessionToView }), [sessionToView])
+  const setFactions = useCallback(factions => dispatch({ type: 'setFactions', sessionId: sessionToView, factions }), [sessionToView])
+
+  // TODO refactor this shit xD
+  useEffect(() => {
+    setTimeout(() => saveAllSessions(sessions.data), 0)
+  }, [sessions]);
 
   const renderContent = useCallback(() => {
     switch (view) {
@@ -65,6 +71,7 @@ function App() {
         return <SessionView
           session={viewedSession}
           shuffleFactions={shuffleFactions}
+          setFactions={setFactions}
         />
       default:
         return <>
@@ -83,7 +90,7 @@ function App() {
           </Fab>
         </>
     }
-  }, [view, classes.fab, sessions, goToNewGameSession, createGameSession, shuffleFactions, viewedSession])
+  }, [view, classes.fab, sessions, goToNewGameSession, createGameSession, shuffleFactions, viewedSession, setFactions])
 
   useEffect(() => {
     const load = async () => {
