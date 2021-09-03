@@ -36,7 +36,6 @@ namespace server
 
             services.AddDbContext<SessionContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("SessionContext")));
-            // services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
