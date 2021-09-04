@@ -43,15 +43,20 @@ function SessionView({
       justifyContent="center"
       spacing={4}
     >
+      {session.remote ? <Grid item xs={12}>you are looking at a remote session!!</Grid> : null}
       <Grid item xs={6}>
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
       </Grid>
       <Grid item container xs={6} justifyContent="flex-end">
-        <ShuffleFactionsButton
-          factions={session.factions}
-          shuffleFactions={() => shuffleFactions(session.id)}
-          setFactions={factions => setFactions(session.id)}
-        />
+        {
+          session.remote
+            ? null
+            : <ShuffleFactionsButton
+              factions={session.factions}
+              shuffleFactions={() => shuffleFactions(session.id)}
+              setFactions={factions => setFactions(session.id)}
+            />
+        }
       </Grid>
       {session.factions.map(faction => {
         const factionData = factions.getData(faction)

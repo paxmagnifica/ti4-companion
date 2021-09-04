@@ -81,7 +81,7 @@ function App() {
             </Route>
             <Route path="/:id">
               <SessionProvider state={state}>
-                {session => <SessionView
+                {(session, loading) => loading ? null : <SessionView
                   session={session}
                   shuffleFactions={shuffleFactions}
                   setFactions={setFactions}
