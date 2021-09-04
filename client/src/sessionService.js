@@ -1,3 +1,5 @@
+import debounce from 'lodash.debounce'
+
 import { saveSession } from './persistence'
 
 export const createSession = async factions => {
@@ -8,3 +10,6 @@ export const createSession = async factions => {
 
   return session
 }
+
+const rawUpdate = session => fetch(`/api/sessions/${session.id}`, { method: 'put', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(session) })
+export const update = debounce(rawUpdate, 400, { trailing: true })

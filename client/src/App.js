@@ -15,12 +15,14 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Home } from '@material-ui/icons'
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles'
+import shuffle from 'lodash.shuffle'
 
 import NewSession from './NewSession'
 import SessionsList from './SessionsList'
 import SessionView, { SessionProvider } from './SessionView'
 import { getAllSessions, saveAllSessions } from './persistence'
+import * as sessionService from './sessionService'
 import { reducer, init } from './state'
 
 function App() {
@@ -28,8 +30,20 @@ function App() {
   const [state, dispatch] = useReducer(reducer, null, init)
   const { sessions } = state
 
-  const shuffleFactions = useCallback(sessionId => dispatch({ type: 'shuffleFactions', sessionId }), [])
-  const setFactions = useCallback((sessionId, factions) => dispatch({ type: 'setFactions', sessionId, factions }), [])
+  const shuffleFactions = useCallback(sessionId => {
+    // TODO remove logic duplication
+    const session = sessions.data.find(s => s.id === sessionId)
+    const shuffledFactions = shuffle(session.factions)
+    sessionService.update({ ...session, factions: shuffledFactions })
+    dispatch({ type: 'setFactions', sessionId, factions: shuffledFactions })
+  }, [sessions.data])
+
+  const setFactions = useCallback((sessionId, factions) => {
+    // TODO remove logic duplication
+    const session = sessions.data.find(s => s.id === sessionId)
+    sessionService.update({ ...session, factions })
+    dispatch({ type: 'setFactions', sessionId, factions })
+  }, [sessions.data])
 
   // TODO refactor this shit xD
   useEffect(() => {

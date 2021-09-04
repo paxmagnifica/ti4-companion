@@ -1,5 +1,3 @@
-import shuffle from 'lodash.shuffle'
-
 export const init = () => {
   return {
     sessions: {
@@ -46,22 +44,6 @@ export const reducer = (state, action) => {
         sessions: {
           ...state.sessions,
           data: set_sessions,
-        }
-      }
-    case 'shuffleFactions':
-      const shuffle_sessionIndex = state.sessions.data.findIndex(session => session.id === action.sessionId)
-      const shuffle_session = state.sessions.data[shuffle_sessionIndex]
-
-      shuffle_session.factions = shuffle(shuffle_session.factions)
-
-      const shuffle_sessionsWithShuffle = [...state.sessions.data]
-      shuffle_sessionsWithShuffle.splice(shuffle_sessionIndex, 1, {...shuffle_session})
-
-      return {
-        ...state,
-        sessions: {
-          ...state.sessions,
-          data: shuffle_sessionsWithShuffle
         }
       }
     default:
