@@ -1,14 +1,7 @@
 import shuffle from 'lodash.shuffle'
 
-export const VIEWS = {
-  LIST: 'list',
-  NEW_GAME: 'new_game',
-  SESSION: 'session',
-}
-
 export const init = () => {
   return {
-    view: VIEWS.LIST,
     sessions: {
       loading: true,
       loaded: false,
@@ -33,8 +26,6 @@ export const reducer = (state, action) => {
     case 'createGameSession':
       return {
         ...state,
-        view: VIEWS.SESSION,
-        sessionToView: action.session.id,
         sessions: {
           loading: false,
           loaded: true,

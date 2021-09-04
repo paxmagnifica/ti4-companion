@@ -10,8 +10,10 @@ import {
 } from '@material-ui/core'
 import { Check } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom'
 
 import { factionsList } from './gameInfo/factions'
+import * as sessionService from './sessionService'
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -28,20 +30,24 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function NewSession({
-  onSessionCreated
+  dispatch,
 }) {
   const classes = useStyles()
-  const [selected, setSelected] = useState([])
-  const isSelected = useCallback(factionKey => selected.includes(factionKey), [selected])
+
+  const [selectedFactions, setSelected] = useState([])
+  const isSelected = useCallback(factionKey => selectedFactions.includes(factionKey), [selectedFactions])
   const toggleSelection = useCallback(factionKey => isSelected(factionKey)
     ? setSelected(selected => selected.filter(faction => faction !== factionKey))
     : setSelected(selected => [...selected, factionKey]),
     [setSelected, isSelected]
   )
 
-  const createSession = useCallback(() => {
-    onSessionCreated(selected)
-  }, [selected, onSessionCreated]);
+  const history = useHistory()
+  const createGameSession = useCallback(async () => {
+    const session = await sessionService.createSession(selectedFactions)
+    dispatch({type: 'createGameSession', session})
+    history.push(`/${session.id}`)
+  }, [history, dispatch, selectedFactions])
 
   return <>
     <Box mb={2}>
@@ -64,11 +70,11 @@ function NewSession({
         </Button>
       </Grid>)}
       <Fab
-        onClick={createSession}
+        onClick={createGameSession}
         color="secondary"
         aria-label="add"
         className={classes.fab}
-        disabled={!selected.length}
+        disabled={!selectedFactions.length}
       >
         <Check />
       </Fab>

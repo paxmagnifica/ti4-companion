@@ -13,7 +13,8 @@ import {
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
-import * as factions from './gameInfo/factions'
+import * as factions from '../gameInfo/factions'
+
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 
 const useStyles = makeStyles(theme => ({
@@ -48,8 +49,8 @@ function SessionView({
       <Grid item container xs={6} justifyContent="flex-end">
         <ShuffleFactionsButton
           factions={session.factions}
-          shuffleFactions={shuffleFactions}
-          setFactions={setFactions}
+          shuffleFactions={() => shuffleFactions(session.id)}
+          setFactions={factions => setFactions(session.id)}
         />
       </Grid>
       {session.factions.map(faction => {
@@ -105,3 +106,5 @@ function SessionView({
 }
 
 export default SessionView
+
+export * from './SessionProvider'
