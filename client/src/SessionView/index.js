@@ -16,6 +16,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import * as factions from '../gameInfo/factions'
 
 import ShuffleFactionsButton from './ShuffleFactionsButton'
+import ShareButton from './ShareButton'
 
 const useStyles = makeStyles(theme => ({
   media: {
@@ -57,6 +58,7 @@ function SessionView({
               setFactions={factions => setFactions(session.id)}
             />
         }
+        <ShareButton id={session.id} />
       </Grid>
       {session.factions.map(faction => {
         const factionData = factions.getData(faction)
