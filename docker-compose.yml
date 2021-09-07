@@ -18,8 +18,8 @@ services:
       context: ./server
       dockerfile: Dockerfile.dev
     environment:
-      - ConnectionStrings__SessionContext=Server=postgres;Port=5432;Database=ti4-companion;User Id=postgres;Password=companion;
-      - AllowedOrigin=http://localhost:3000
+      - ConnectionStrings__SessionContext
+      - AllowedOrigin
     ports:
       - "5000:5000"
       - "5001:5001"
