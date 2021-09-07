@@ -22,10 +22,17 @@ namespace server.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromRoute]Guid sessionId, [FromBody]EventDto eventDto)
         {
-            var gameEvent = _eventFactory.GetGameEvent(sessionId, eventDto);
-            await _dispatcher.Dispatch(gameEvent);
+            try
+            {
+                var gameEvent = _eventFactory.GetGameEvent(sessionId, eventDto);
+                await _dispatcher.Dispatch(gameEvent);
 
-            return new OkResult();
+                return new OkResult();
+            }
+            catch (HandlerNotFoundException)
+            {
+                return new NotFoundResult();
+            }
         }
     }
 }
