@@ -24,7 +24,9 @@ namespace server
             {
                 options.AddPolicy(name: "_localhostCors", builder =>
                 {
-                    builder.WithOrigins(Configuration.GetValue<string>("AllowedOrigin"));
+                    builder
+                        .WithOrigins(Configuration.GetValue<string>("AllowedOrigin"))
+                        .AllowAnyHeader();
                 });
             });
 
