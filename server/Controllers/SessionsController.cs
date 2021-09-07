@@ -75,7 +75,7 @@ namespace server.Controllers
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSession), new { id = newSession.Id }, newSession);
+            return CreatedAtAction(nameof(GetSession), new { id = newSession.Id }, new SessionDto(newSession));
         }
 
         [HttpGet]
