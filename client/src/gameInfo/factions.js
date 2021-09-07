@@ -176,4 +176,6 @@ export const factionsList = Object.values(factions)
 export const getName = key => factions[key].name
 export const getData = key => factions[key]
 
+export const getFactionCheatSheetPath = factionKey => `/factionCheatsheets/${factionKey.toLowerCase()}.png`
+
 export default factions

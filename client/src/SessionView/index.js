@@ -17,6 +17,7 @@ import * as factions from '../gameInfo/factions'
 
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
+import VictoryPoints from './VictoryPoints'
 
 const useStyles = makeStyles(theme => ({
   media: {
@@ -44,6 +45,7 @@ function SessionView({
       justifyContent="center"
       spacing={4}
     >
+      <Grid item xs={12}><VictoryPoints onChange={console.log} factions={session.factions} /></Grid>
       {session.remote ? <Grid item xs={12}>you are looking at a remote session!!</Grid> : null}
       <Grid item xs={6}>
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
