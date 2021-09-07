@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using server.Infra;
 
 namespace server.Controllers
@@ -12,11 +13,13 @@ namespace server.Controllers
     {
         private readonly EventFactory _eventFactory;
         private readonly Dispatcher _dispatcher;
+        private readonly ILogger<EventsController> _logger;
 
-        public EventsController(EventFactory eventFactory, Dispatcher dispatch)
+        public EventsController(EventFactory eventFactory, Dispatcher dispatch, ILogger<EventsController> logger)
         {
             _eventFactory = eventFactory;
             _dispatcher = dispatch;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -29,8 +32,9 @@ namespace server.Controllers
 
                 return new OkResult();
             }
-            catch (HandlerNotFoundException)
+            catch (HandlerNotFoundException exception)
             {
+                _logger.LogWarning(exception.Message);
                 return new NotFoundResult();
             }
         }

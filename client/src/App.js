@@ -47,7 +47,7 @@ function App() {
   const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
     // TODO remove logic duplication in reducer and stuff
     const payload = { sessionId, faction, points }
-    sessionService.pushEvent(sessionId, { type: 'updateVictoryPoints', payload })
+    sessionService.pushEvent(sessionId, { type: 'victoryPointsUpdated', payload })
     dispatch({ type: 'updateVictoryPoints', payload })
   }, [])
 
