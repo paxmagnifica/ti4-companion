@@ -68,35 +68,5 @@ namespace server.Controllers
 
             return new SessionDto(sessionFromDb);
         }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, SessionDto sessionDto)
-        {
-            if (id != sessionDto.Id)
-            {
-                return BadRequest();
-            }
-
-            var session = new Session() { Id = sessionDto.Id, CreatedAt = sessionDto.CreatedAt, Factions = sessionDto.Factions };
-            _sessionContext.Entry(session).State = EntityState.Modified;
-
-            try
-            {
-                await _sessionContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_sessionContext.Sessions.Any(s => s.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
     }
 }

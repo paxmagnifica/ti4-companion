@@ -31,19 +31,18 @@ function App() {
   const { sessions } = state
 
   const shuffleFactions = useCallback(sessionId => {
-    // TODO remove logic duplication
+    // TODO remove logic duplication in reducer and stuff
     const session = sessions.data.find(s => s.id === sessionId)
     const shuffledFactions = shuffle(session.factions)
-    sessionService.update({ ...session, factions: shuffledFactions })
+    sessionService.pushEvent(session.id, { type: 'factionsShuffled', payload: shuffledFactions })
     dispatch({ type: 'setFactions', sessionId, factions: shuffledFactions })
   }, [sessions.data])
 
   const setFactions = useCallback((sessionId, factions) => {
-    // TODO remove logic duplication
-    const session = sessions.data.find(s => s.id === sessionId)
-    sessionService.update({ ...session, factions })
+    // TODO remove logic duplication in reducer and stuff
+    sessionService.pushEvent(sessionId, { type: 'factionsShuffled', payload: factions })
     dispatch({ type: 'setFactions', sessionId, factions })
-  }, [sessions.data])
+  }, [])
 
   // TODO refactor this shit xD
   useEffect(() => {

@@ -57,7 +57,7 @@ function SessionView({
             : <ShuffleFactionsButton
               factions={session.factions}
               shuffleFactions={() => shuffleFactions(session.id)}
-              setFactions={factions => setFactions(session.id)}
+              setFactions={factions => setFactions(session.id, factions)}
             />
         }
         <ShareButton id={session.id} />
