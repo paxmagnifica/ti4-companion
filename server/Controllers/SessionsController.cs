@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using server.Domain;
 using Microsoft.EntityFrameworkCore;
+using server.Domain;
 using server.Persistence;
 
 namespace server.Controllers

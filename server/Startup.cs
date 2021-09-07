@@ -49,6 +49,8 @@ namespace server
             services.AddScoped<ITimeProvider, TimeProvider>();
             services.AddScoped<Dispatcher>();
 
+            services.AddScoped<IRepository, Repository>();
+
             AddAllHandlers(services);
         }
 
