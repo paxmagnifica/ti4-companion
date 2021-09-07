@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using server.Domain;
 
-namespace server
+namespace server.Persistence
 {
     public class SessionContext : DbContext
     {
@@ -15,6 +15,7 @@ namespace server
         }
 
         public DbSet<Session> Sessions { get; set; }
+        public DbSet<GameEvent> Events { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
                 => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("SessionContext"));

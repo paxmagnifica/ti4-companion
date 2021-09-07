@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using server.Domain;
 using System.Linq;
 
-namespace server
+namespace server.Persistence
 {
     public static class DbInitializer
     {

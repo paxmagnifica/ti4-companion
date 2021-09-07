@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using server.Domain;
 using Microsoft.EntityFrameworkCore;
+using server.Persistence;
 
 namespace server.Controllers
 {
