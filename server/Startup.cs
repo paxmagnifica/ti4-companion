@@ -5,6 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using server.Persistence;
+using server.Infra;
+using server.Domain;
+using System;
+using System.Reflection;
+using System.Linq;
 
 namespace server
 {
@@ -38,6 +44,26 @@ namespace server
 
             services.AddDbContext<SessionContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("SessionContext")));
+
+            services.AddScoped<EventFactory>();
+            services.AddScoped<ITimeProvider, TimeProvider>();
+            services.AddScoped<Dispatcher>();
+
+            services.AddScoped<IRepository, Repository>();
+
+            AddAllHandlers(services);
+        }
+
+        private void AddAllHandlers(IServiceCollection services)
+        {
+            Type handler = typeof(IHandler);
+            Type[] concreteTypes = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.IsClass && t.GetInterfaces().Contains(handler))
+                .ToArray();
+            foreach (Type t in concreteTypes)
+            {
+                services.AddScoped(t);
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

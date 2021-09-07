@@ -6,6 +6,7 @@ import * as sessionService from '../sessionService'
 export function SessionProvider({
   children,
   state,
+  dispatch,
 }) {
   const { id } = useParams()
 
@@ -30,6 +31,7 @@ export function SessionProvider({
         const session = await sessionService.get(id)
         session.remote = true
         setForeignSession(session)
+        dispatch({ type: 'loadSessions', sessions: [...state.sessions.data, session]});
       } catch (e) {
         console.error(e)
       } finally {
@@ -38,7 +40,7 @@ export function SessionProvider({
     }
 
     loadSession()
-  }, [id, sessionFromLocalStorage])
+  }, [dispatch, state.sessions.data, id, sessionFromLocalStorage])
 
 
   if (!id) {

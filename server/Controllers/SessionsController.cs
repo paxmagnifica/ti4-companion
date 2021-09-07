@@ -4,24 +4,55 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using server.Domain;
 using Microsoft.EntityFrameworkCore;
+using server.Domain;
+using server.Persistence;
 
 namespace server.Controllers
 {
-    public class SessionDto
+    public class SessionDto: Session
     {
-        public SessionDto() { }
         public SessionDto(Session session)
         {
             Id = session.Id;
             CreatedAt = session.CreatedAt;
             Factions = session.Factions;
+            SetPoints(session.Events);
         }
 
-        public Guid Id { get; set; }
-        public DateTimeOffset CreatedAt { get; set; }
-        public List<string> Factions { get; set; }
+        public List<FactionPoint> Points { get; internal set; }
+
+        private void SetPoints(List<GameEvent> events)
+        {
+            Dictionary<string, int> points = new Dictionary<string, int>();
+
+            foreach (var faction in Factions)
+            {
+                points[faction] = 0;
+            }
+
+            IEnumerable<GameEvent> victoryPointEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(VictoryPointsUpdated))
+                .OrderBy(ge => ge.HappenedAt);
+            foreach (var gameEvent in victoryPointEvents)
+            {
+                // TODO isn't this hacky and ugly? :(
+                var payload = VictoryPointsUpdated.GetPayload(gameEvent);
+                points[payload.Faction] = payload.Points;
+            }
+
+            Points = points.ToArray().Select(kvp => new FactionPoint
+            {
+                Faction = kvp.Key,
+                Points = kvp.Value
+            }).ToList();
+        }
+    }
+
+    public class FactionPoint
+    {
+        public string Faction { get; set; }
+        public int Points { get; set; }
     }
 
     [ApiController]
@@ -59,6 +90,9 @@ namespace server.Controllers
         public async Task<ActionResult<SessionDto>> GetSession(Guid id)
         {
             var sessionFromDb = await _sessionContext.Sessions.FindAsync(id);
+            _sessionContext.Entry(sessionFromDb)
+                .Collection(session => session.Events)
+                .Load();
 
             if (sessionFromDb == null)
             {
@@ -66,36 +100,6 @@ namespace server.Controllers
             }
 
             return new SessionDto(sessionFromDb);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, SessionDto sessionDto)
-        {
-            if (id != sessionDto.Id)
-            {
-                return BadRequest();
-            }
-
-            var session = new Session() { Id = sessionDto.Id, CreatedAt = sessionDto.CreatedAt, Factions = sessionDto.Factions };
-            _sessionContext.Entry(session).State = EntityState.Modified;
-
-            try
-            {
-                await _sessionContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_sessionContext.Sessions.Any(s => s.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
     }
 }

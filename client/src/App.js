@@ -31,23 +31,29 @@ function App() {
   const { sessions } = state
 
   const shuffleFactions = useCallback(sessionId => {
-    // TODO remove logic duplication
+    // TODO remove logic duplication in reducer and stuff
     const session = sessions.data.find(s => s.id === sessionId)
     const shuffledFactions = shuffle(session.factions)
-    sessionService.update({ ...session, factions: shuffledFactions })
+    sessionService.pushEvent(session.id, { type: 'factionsShuffled', payload: shuffledFactions })
     dispatch({ type: 'setFactions', sessionId, factions: shuffledFactions })
   }, [sessions.data])
 
   const setFactions = useCallback((sessionId, factions) => {
-    // TODO remove logic duplication
-    const session = sessions.data.find(s => s.id === sessionId)
-    sessionService.update({ ...session, factions })
+    // TODO remove logic duplication in reducer and stuff
+    sessionService.pushEvent(sessionId, { type: 'factionsShuffled', payload: factions })
     dispatch({ type: 'setFactions', sessionId, factions })
-  }, [sessions.data])
+  }, [])
+
+  const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
+    // TODO remove logic duplication in reducer and stuff
+    const payload = { sessionId, faction, points }
+    sessionService.pushEvent(sessionId, { type: 'victoryPointsUpdated', payload })
+    dispatch({ type: 'updateVictoryPoints', payload })
+  }, [])
 
   // TODO refactor this shit xD
   useEffect(() => {
-    setTimeout(() => saveAllSessions(sessions.data), 0)
+    setTimeout(() => saveAllSessions(sessions.data.filter(session => !session.remote)), 0)
   }, [sessions]);
 
   useEffect(() => {
@@ -80,11 +86,12 @@ function App() {
               <NewSession dispatch={dispatch} />
             </Route>
             <Route path="/:id">
-              <SessionProvider state={state}>
-                {(session, loading) => loading ? null : <SessionView
+              <SessionProvider state={state} dispatch={dispatch}>
+                {(session, loading) => (loading || !session) ? null : <SessionView
                   session={session}
                   shuffleFactions={shuffleFactions}
                   setFactions={setFactions}
+                  updateFactionPoints={updateFactionPoints}
                 />}
               </SessionProvider>
             </Route>

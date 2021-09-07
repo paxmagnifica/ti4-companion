@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Avatar,
   Card,
@@ -17,6 +17,7 @@ import * as factions from '../gameInfo/factions'
 
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
+import VictoryPoints from './VictoryPoints'
 
 const useStyles = makeStyles(theme => ({
   media: {
@@ -32,10 +33,17 @@ function SessionView({
   session,
   shuffleFactions,
   setFactions,
+  updateFactionPoints,
 }) {
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
   const [faction, setFaction] = useState(null)
+
+  const updateFactionPointsInSession = useCallback((faction, points) => updateFactionPoints({
+    sessionId: session.id,
+    faction,
+    points
+  }), [session.id, updateFactionPoints])
 
   return <>
     <Grid
@@ -44,7 +52,13 @@ function SessionView({
       justifyContent="center"
       spacing={4}
     >
-      {session.remote ? <Grid item xs={12}>you are looking at a remote session!!</Grid> : null}
+      <Grid item xs={12}>
+        <VictoryPoints
+          onChange={updateFactionPointsInSession}
+          points={session.points}
+          factions={session.factions}
+        />
+      </Grid>
       <Grid item xs={6}>
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
       </Grid>
@@ -55,7 +69,7 @@ function SessionView({
             : <ShuffleFactionsButton
               factions={session.factions}
               shuffleFactions={() => shuffleFactions(session.id)}
-              setFactions={factions => setFactions(session.id)}
+              setFactions={factions => setFactions(session.id, factions)}
             />
         }
         <ShareButton id={session.id} />

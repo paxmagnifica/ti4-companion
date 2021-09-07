@@ -30,6 +30,8 @@ export const reducer = (state, action) => {
           data: [action.session, ...state.sessions.data]
         },
       }
+    case 'updateVictoryPoints':
+      return updateVictoryPoints(state, action.payload)
     case 'setFactions':
       const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.sessionId)
       const set_session = state.sessions.data[set_sessionIndex]
@@ -49,5 +51,22 @@ export const reducer = (state, action) => {
     default:
       console.error('unhandled action', action)
       return state
+  }
+}
+
+const updateVictoryPoints = (state, payload) => {
+  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const session = state.sessions.data[sessionIndex]
+
+  session.points = session.points.map(({faction, points: previousPoints}) => faction === payload.faction ? {faction, points: payload.points} : {faction, points: previousPoints})
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, {...session})
+
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
   }
 }
