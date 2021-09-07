@@ -53,7 +53,7 @@ function App() {
 
   // TODO refactor this shit xD
   useEffect(() => {
-    setTimeout(() => saveAllSessions(sessions.data), 0)
+    setTimeout(() => saveAllSessions(sessions.data.filter(session => !session.remote)), 0)
   }, [sessions]);
 
   useEffect(() => {
@@ -86,8 +86,8 @@ function App() {
               <NewSession dispatch={dispatch} />
             </Route>
             <Route path="/:id">
-              <SessionProvider state={state}>
-                {(session, loading) => loading ? null : <SessionView
+              <SessionProvider state={state} dispatch={dispatch}>
+                {(session, loading) => (loading || !session) ? null : <SessionView
                   session={session}
                   shuffleFactions={shuffleFactions}
                   setFactions={setFactions}

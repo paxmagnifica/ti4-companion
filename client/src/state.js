@@ -58,7 +58,7 @@ const updateVictoryPoints = (state, payload) => {
   const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
   const session = state.sessions.data[sessionIndex]
 
-  session.points = session.points.map(([faction, previousPoints]) => faction === payload.faction ? [faction, payload.points] : [faction, previousPoints])
+  session.points = session.points.map(({faction, points: previousPoints}) => faction === payload.faction ? {faction, points: payload.points} : {faction, points: previousPoints})
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, {...session})
 

@@ -17,7 +17,7 @@ namespace server.Domain
         {
             List<string> shuffledFactions = JsonConvert.DeserializeObject<List<string>>(gameEvent.SerializedPayload);
 
-            var session = await _repository.GetById(gameEvent.SessionId);
+            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
 
             session.Factions = shuffledFactions;
             if (session.Events == null)

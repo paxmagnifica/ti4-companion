@@ -1,5 +1,6 @@
 using System;
 using server.Domain;
+using server.Extensions;
 
 namespace server.Infra
 {
@@ -17,7 +18,7 @@ namespace server.Infra
             var gameEvent = new GameEvent();
             gameEvent.HappenedAt = _timeProvider.Now;
             gameEvent.SessionId = sessionId;
-            gameEvent.EventType = eventDto.EventType;
+            gameEvent.EventType = eventDto.EventType.Capitalize();
             gameEvent.SerializedPayload = eventDto.SerializedPayload;
 
             return gameEvent;

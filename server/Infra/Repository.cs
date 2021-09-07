@@ -20,6 +20,16 @@ namespace server.Infra
             return await _sessionContext.Sessions.FindAsync(sessionId);
         }
 
+        public async Task<Session> GetByIdWithEvents(Guid sessionId)
+        {
+            var session = await _sessionContext.Sessions.FindAsync(sessionId);
+            _sessionContext.Entry(session)
+                .Collection(session => session.Events)
+                .Load();
+
+            return session;
+        }
+
         public Task SaveChangesAsync()
         {
             return _sessionContext.SaveChangesAsync();

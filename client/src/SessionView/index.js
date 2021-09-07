@@ -59,7 +59,6 @@ function SessionView({
           factions={session.factions}
         />
       </Grid>
-      {session.remote ? <Grid item xs={12}>you are looking at a remote session!!</Grid> : null}
       <Grid item xs={6}>
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
       </Grid>

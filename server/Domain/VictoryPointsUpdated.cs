@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace server.Domain
 {
@@ -14,7 +15,7 @@ namespace server.Domain
 
         public async Task Handle(GameEvent gameEvent)
         {
-            var session = await _repository.GetById(gameEvent.SessionId);
+            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
             {
@@ -26,5 +27,16 @@ namespace server.Domain
 
             await _repository.SaveChangesAsync();
         }
+
+        public static VictoryPointsUpdatedPayload GetPayload(GameEvent gameEvent)
+        {
+            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(gameEvent.SerializedPayload);
+        }
+    }
+
+    public class VictoryPointsUpdatedPayload
+    {
+        public string Faction { get; set; }
+        public int Points { get; set; }
     }
 }

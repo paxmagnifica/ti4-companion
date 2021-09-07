@@ -8,6 +8,7 @@ namespace server.Domain
         Task SaveChangesAsync();
 
         Task<Session> GetById(Guid sessionId);
+        Task<Session> GetByIdWithEvents(Guid sessionId);
         void UpdateSession(Session session);
     }
 }

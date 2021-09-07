@@ -113,7 +113,7 @@ function VictoryPoints({
   return <DndProvider backend={HTML5Backend}>
     <Grid container justifyContent='center'>
       {[...Array(11).keys()].map(numberOfPoints => {
-        const factionsWithThisManyPoints = points.filter(([faction, points]) => points === numberOfPoints)
+        const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
 
         return <PointContainer
           className={classes.points}
@@ -121,7 +121,7 @@ function VictoryPoints({
           id={numberOfPoints}
           key={numberOfPoints}
         >
-          {factionsWithThisManyPoints.map(([faction]) => <Flag
+          {factionsWithThisManyPoints.map(({faction}) => <Flag
             key={faction}
             factionKey={faction}
             updatePoints={points => onChange(faction, points)}
