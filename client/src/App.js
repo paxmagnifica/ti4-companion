@@ -44,6 +44,13 @@ function App() {
     dispatch({ type: 'setFactions', sessionId, factions })
   }, [])
 
+  const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
+    // TODO remove logic duplication in reducer and stuff
+    const payload = { sessionId, faction, points }
+    sessionService.pushEvent(sessionId, { type: 'updateVictoryPoints', payload })
+    dispatch({ type: 'updateVictoryPoints', payload })
+  }, [])
+
   // TODO refactor this shit xD
   useEffect(() => {
     setTimeout(() => saveAllSessions(sessions.data), 0)
@@ -84,6 +91,7 @@ function App() {
                   session={session}
                   shuffleFactions={shuffleFactions}
                   setFactions={setFactions}
+                  updateFactionPoints={updateFactionPoints}
                 />}
               </SessionProvider>
             </Route>

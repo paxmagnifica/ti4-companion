@@ -4,7 +4,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDrag, useDrop } from 'react-dnd'
 import {
   Grid,
-  Avatar,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -107,10 +106,9 @@ const useVPStyles = makeStyles({
 function VictoryPoints({
   onChange,
   factions,
+  points,
 }) {
   const classes = useVPStyles()
-
-  const [points, setPoints] = useState(factions.map(faction => ([faction, 0])))
 
   return <DndProvider backend={HTML5Backend}>
     <Grid container justifyContent='center'>
@@ -121,11 +119,12 @@ function VictoryPoints({
           className={classes.points}
           points={numberOfPoints}
           id={numberOfPoints}
+          key={numberOfPoints}
         >
           {factionsWithThisManyPoints.map(([faction]) => <Flag
             key={faction}
             factionKey={faction}
-            updatePoints={points => setPoints(pointsState => pointsState.map(([f, previousPoints]) => f === faction ? [f, points] : [f, previousPoints]))}
+            updatePoints={points => onChange(faction, points)}
           />)}
         </PointContainer>
       })}
