@@ -5,8 +5,6 @@ WORKDIR /source
 COPY *.csproj .
 RUN dotnet restore
 
-RUN dotnet dev-certs https
-
 # copy and publish app and libraries
 COPY . .
 RUN dotnet publish -c release -o /app --no-restore
@@ -15,4 +13,4 @@ RUN dotnet publish -c release -o /app --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
 COPY --from=build /app .
-CMD ConnectionStrings__SessionContext=$ConnectionStrings__SessionContext AllowedOrigin=$AllowedOrigin dotnet server.dll --urls https://*:$PORT
+CMD ConnectionStrings__SessionContext=$ConnectionStrings__SessionContext AllowedOrigin=$AllowedOrigin dotnet server.dll --urls http://*:$PORT
