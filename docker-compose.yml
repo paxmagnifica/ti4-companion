@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  client:
+    image: "node:14"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - REACT_APP_API_URL=https://localhost:5001
+    volumes:
+      - ./client:/home/node/app
+    ports:
+      - "3000:3000"
+    command: "yarn start"
+    depends_on:
+      - server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    environment:
+      - ConnectionStrings__SessionContext=Server=postgres;Port=5432;Database=ti4-companion;User Id=postgres;Password=companion;
+      - AllowedOrigin=http://localhost:3000
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      - postgres
+    volumes:
+      - "./server:/source"
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=companion
+    ports:
+      - "5432:5432"

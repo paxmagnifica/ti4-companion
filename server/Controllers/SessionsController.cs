@@ -11,7 +11,7 @@ namespace server.Controllers
 {
     public class SessionDto
     {
-        public SessionDto() {}
+        public SessionDto() { }
         public SessionDto(Session session)
         {
             Id = session.Id;
@@ -40,7 +40,7 @@ namespace server.Controllers
         [HttpPost]
         public async Task<ActionResult<Session>> Post(List<string> factions)
         {
-            var newSession = new Session{Id=Guid.NewGuid(), CreatedAt=DateTimeOffset.UtcNow, Factions=factions};
+            var newSession = new Session { Id = Guid.NewGuid(), CreatedAt = DateTimeOffset.UtcNow, Factions = factions };
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 
@@ -76,7 +76,7 @@ namespace server.Controllers
                 return BadRequest();
             }
 
-            var session = new Session(){Id = sessionDto.Id, CreatedAt=sessionDto.CreatedAt, Factions=sessionDto.Factions};
+            var session = new Session() { Id = sessionDto.Id, CreatedAt = sessionDto.CreatedAt, Factions = sessionDto.Factions };
             _sessionContext.Entry(session).State = EntityState.Modified;
 
             try

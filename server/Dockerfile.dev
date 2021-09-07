@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /source
+
+RUN dotnet dev-certs https
+RUN dotnet dev-certs https --trust
+
+# copy csproj and restore as distinct layers
+COPY *.csproj .
+RUN dotnet restore
+
+COPY . .
+
+CMD dotnet watch run --urls "http://0.0.0.0:5000;https://0.0.0.0:5001"
