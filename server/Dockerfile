@@ -5,6 +5,8 @@ WORKDIR /source
 COPY *.csproj .
 RUN dotnet restore
 
+RUN dotnet dev-certs https
+
 # copy and publish app and libraries
 COPY . .
 RUN dotnet publish -c release -o /app --no-restore
