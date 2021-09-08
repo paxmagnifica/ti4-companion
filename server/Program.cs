@@ -27,12 +27,8 @@ namespace server
                 try
                 {
                     var context = services.GetRequiredService<SessionContext>();
-                    var created = context.Database.EnsureCreated();
+                    context.Database.Migrate();
                     DbInitializer.Initialize(context);
-                    if (!created)
-                    {
-                        context.Database.Migrate();
-                    }
                 }
                 catch (Exception ex)
                 {
