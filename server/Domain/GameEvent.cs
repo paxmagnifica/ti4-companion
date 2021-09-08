@@ -9,5 +9,7 @@ namespace server.Domain
         public DateTimeOffset HappenedAt { get; set; }
         public string EventType { get; set; }
         public string SerializedPayload { get; set; }
+
+        public const string GameStarted = "GameStarted";
     }
 }

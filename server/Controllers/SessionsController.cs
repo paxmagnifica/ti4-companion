@@ -7,71 +7,40 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using server.Domain;
 using server.Persistence;
+using server.Infra;
+using Newtonsoft.Json;
 
 namespace server.Controllers
 {
-    public class SessionDto: Session
-    {
-        public SessionDto(Session session)
-        {
-            Id = session.Id;
-            CreatedAt = session.CreatedAt;
-            Factions = session.Factions;
-            SetPoints(session.Events);
-        }
-
-        public List<FactionPoint> Points { get; internal set; }
-
-        private void SetPoints(List<GameEvent> events)
-        {
-            Dictionary<string, int> points = new Dictionary<string, int>();
-
-            foreach (var faction in Factions)
-            {
-                points[faction] = 0;
-            }
-
-            IEnumerable<GameEvent> victoryPointEvents = (events ?? new List<GameEvent>())
-                .Where(ge => ge.EventType == nameof(VictoryPointsUpdated))
-                .OrderBy(ge => ge.HappenedAt);
-            foreach (var gameEvent in victoryPointEvents)
-            {
-                // TODO isn't this hacky and ugly? :(
-                var payload = VictoryPointsUpdated.GetPayload(gameEvent);
-                points[payload.Faction] = payload.Points;
-            }
-
-            Points = points.ToArray().Select(kvp => new FactionPoint
-            {
-                Faction = kvp.Key,
-                Points = kvp.Value
-            }).ToList();
-        }
-    }
-
-    public class FactionPoint
-    {
-        public string Faction { get; set; }
-        public int Points { get; set; }
-    }
-
     [ApiController]
     [Route("api/[controller]")]
     public class SessionsController : ControllerBase
     {
         private readonly ILogger<SessionsController> _logger;
         private readonly SessionContext _sessionContext;
+        private readonly ITimeProvider _timeProvider;
 
-        public SessionsController(ILogger<SessionsController> logger, SessionContext sessionContext)
+        public SessionsController(ILogger<SessionsController> logger, SessionContext sessionContext, ITimeProvider timeProvider)
         {
             _logger = logger;
             _sessionContext = sessionContext;
+            _timeProvider = timeProvider;
         }
 
         [HttpPost]
         public async Task<ActionResult<Session>> Post(List<string> factions)
         {
-            var newSession = new Session { Id = Guid.NewGuid(), CreatedAt = DateTimeOffset.UtcNow, Factions = factions };
+            var sessionId = Guid.NewGuid();
+            var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now };
+            newSession.Events = new List<GameEvent> {
+                new GameEvent {
+                    Id = Guid.NewGuid(),
+                    SessionId = sessionId,
+                    HappenedAt = _timeProvider.Now,
+                    EventType = GameEvent.GameStarted,
+                    SerializedPayload = JsonConvert.SerializeObject(factions)
+                }
+            };
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 
