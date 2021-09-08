@@ -6,7 +6,6 @@ using server.Infra;
 
 namespace server.Controllers
 {
-
     [ApiController]
     [Route("api/sessions/{sessionId:guid}/[controller]")]
     public class EventsController : ControllerBase

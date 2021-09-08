@@ -19,7 +19,6 @@ namespace server.Domain
 
             var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
 
-            session.Factions = shuffledFactions;
             if (session.Events == null)
             {
                 session.Events = new List<GameEvent>();
