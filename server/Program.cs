@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using server.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace server
 {
@@ -28,6 +29,7 @@ namespace server
                     var context = services.GetRequiredService<SessionContext>();
                     context.Database.EnsureCreated();
                     DbInitializer.Initialize(context);
+                    context.Database.Migrate();
                 }
                 catch (Exception ex)
                 {
