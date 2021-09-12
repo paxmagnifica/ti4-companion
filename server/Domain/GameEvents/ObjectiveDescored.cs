@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace server.Domain
 {
-    public class ObjectiveScored: IHandler
+    public class ObjectiveDescored: IHandler
     {
         private readonly IRepository _repository;
 
-        public ObjectiveScored(IRepository repository)
+        public ObjectiveDescored(IRepository repository)
         {
             _repository = repository;
         }
@@ -28,13 +28,13 @@ namespace server.Domain
             await _repository.SaveChangesAsync();
         }
 
-        internal static ObjectiveScoredPayload GetPayload(GameEvent gameEvent)
+        internal static ObjectiveDescoredPayload GetPayload(GameEvent gameEvent)
         {
-            return JsonConvert.DeserializeObject<ObjectiveScoredPayload>(gameEvent.SerializedPayload);
+            return JsonConvert.DeserializeObject<ObjectiveDescoredPayload>(gameEvent.SerializedPayload);
         }
     }
 
-    internal class ObjectiveScoredPayload
+    internal class ObjectiveDescoredPayload
     {
         public string Slug { get; set; }
         public string Faction { get; set; }

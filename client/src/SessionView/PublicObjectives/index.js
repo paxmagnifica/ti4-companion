@@ -76,13 +76,13 @@ function FactionSelector({
 
   const clicked = useCallback((factionKey, selected) => {
     if (selected) {
-      onChange([...value, factionKey])
+      onChange({ factionKey, event: 'selected' })
       return
     }
 
-    onChange(value.filter(fk => fk !== factionKey))
+    onChange({ factionKey, event: 'deselected' })
     return
-  }, [onChange, value])
+  }, [onChange])
 
   return <div className={classes.root}>
     {factions.map(factionKey => <Flag
@@ -118,20 +118,27 @@ function PublicObjectives({
     setAddObjectiveOpen(false)
   }, [dispatch, session.id])
 
-  const objectiveScored = useCallback(({ scoredBy, objective }) => {
-    dispatch({ type: 'objectiveScored', payload: { sessionId: session.id, slug: objective.slug, scoredBy } })
+  const objectiveScored = useCallback(({ change, objective }) => {
+    if (change.event === 'selected') {
+      dispatch({ type: 'objectiveScored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
+    } else {
+      dispatch({ type: 'objectiveDescored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
+    }
   }, [dispatch, session.id])
 
   return <>
     <Grid container justifyContent='center'>
-      {sessionObjectives.map(sessionObjective => <div className={classes.objectiveContainer}>
+      {sessionObjectives.map(sessionObjective => <div
+        className={classes.objectiveContainer}
+        key={sessionObjective.slug}
+      >
         <Objective
           {...sessionObjective}
         />
         <FactionSelector
           factions={session.factions}
           value={sessionObjective.scoredBy}
-          onChange={scoredBy => objectiveScored({ scoredBy, objective: sessionObjective })}
+          onChange={change => objectiveScored({ change, objective: sessionObjective })}
         />
       </div>)}
       <div className={classes.objectiveContainer}>

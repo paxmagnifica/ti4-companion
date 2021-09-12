@@ -19,15 +19,11 @@ namespace server.Controllers
         public List<ScorableObjectiveDto> Objectives { get; internal set; }
         private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)
         {
+            var objectiveDictionary = new Dictionary<string, List<string>>();
+
             IEnumerable<GameEvent> objectivesAddedEvents = (events ?? new List<GameEvent>())
                 .Where(ge => ge.EventType == nameof(ObjectiveAdded))
                 .OrderBy(ge => ge.HappenedAt);
-
-            IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
-                .Where(ge => ge.EventType == nameof(ObjectiveScored))
-                .OrderBy(ge => ge.HappenedAt);
-
-            var objectiveDictionary = new Dictionary<string, List<string>>();
             foreach (var gameEvent in objectivesAddedEvents)
             {
                 // TODO isn't this hacky and ugly? :(
@@ -35,11 +31,22 @@ namespace server.Controllers
                 objectiveDictionary[payload.Slug] = new List<string>();
             }
 
+            IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveScored) || ge.EventType == nameof(ObjectiveDescored))
+                .OrderBy(ge => ge.HappenedAt);
             foreach (var gameEvent in objectivesScoredEvents)
             {
-                // TODO isn't this hacky and ugly? :(
-                var payload = ObjectiveScored.GetPayload(gameEvent);
-                objectiveDictionary[payload.Slug] = payload.ScoredBy;
+                if (gameEvent.EventType == nameof(ObjectiveScored))
+                {
+                    var scoredPayload = ObjectiveScored.GetPayload(gameEvent);
+                    objectiveDictionary[scoredPayload.Slug].Add(scoredPayload.Faction);
+                }
+
+                if (gameEvent.EventType == nameof(ObjectiveDescored))
+                {
+                    var descoredPayload = ObjectiveDescored.GetPayload(gameEvent);
+                    objectiveDictionary[descoredPayload.Slug].Remove(descoredPayload.Faction);
+                }
             }
 
             return objectiveDictionary.ToArray().Select(kvp => new ScorableObjectiveDto
@@ -81,6 +88,24 @@ namespace server.Controllers
                 // TODO isn't this hacky and ugly? :(
                 var payload = VictoryPointsUpdated.GetPayload(gameEvent);
                 points[payload.Faction] = payload.Points;
+            }
+
+            IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveScored) || ge.EventType == nameof(ObjectiveDescored))
+                .OrderBy(ge => ge.HappenedAt);
+            foreach (var gameEvent in objectivesScoredEvents)
+            {
+                if (gameEvent.EventType == nameof(ObjectiveScored))
+                {
+                    var scoredPayload = ObjectiveScored.GetPayload(gameEvent);
+                    points[scoredPayload.Faction] = points[scoredPayload.Faction] + 1;
+                }
+
+                if (gameEvent.EventType == nameof(ObjectiveDescored))
+                {
+                    var descoredPayload = ObjectiveDescored.GetPayload(gameEvent);
+                    points[descoredPayload.Faction] = points[descoredPayload.Faction] - 1;
+                }
             }
 
             return points.ToArray().Select(kvp => new FactionPoint
