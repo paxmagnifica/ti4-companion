@@ -47,5 +47,5 @@ export function SessionProvider({
     return null
   }
 
-  return children(sessionFromLocalStorage || foreignSession, loading)
+  return children(sessionFromLocalStorage || foreignSession, loading || state.objectives.loading)
 }

@@ -11,12 +11,46 @@ namespace server.Controllers
         public SessionDto(Session session)
         {
             Id = session.Id;
-            SetFactions(session.Events);
-            SetPoints(session.Events);
+            Factions = GetFactions(session.Events);
+            Points = GetPoints(session.Events);
+            Objectives = GetObjectives(session.Events);
+        }
+
+        public List<ScorableObjectiveDto> Objectives { get; internal set; }
+        private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)
+        {
+            IEnumerable<GameEvent> objectivesAddedEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveAdded))
+                .OrderBy(ge => ge.HappenedAt);
+
+            IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveScored))
+                .OrderBy(ge => ge.HappenedAt);
+
+            var objectiveDictionary = new Dictionary<string, List<string>>();
+            foreach (var gameEvent in objectivesAddedEvents)
+            {
+                // TODO isn't this hacky and ugly? :(
+                var payload = ObjectiveAdded.GetPayload(gameEvent);
+                objectiveDictionary[payload.Slug] = new List<string>();
+            }
+
+            foreach (var gameEvent in objectivesScoredEvents)
+            {
+                // TODO isn't this hacky and ugly? :(
+                var payload = ObjectiveScored.GetPayload(gameEvent);
+                objectiveDictionary[payload.Slug] = payload.ScoredBy;
+            }
+
+            return objectiveDictionary.ToArray().Select(kvp => new ScorableObjectiveDto
+            {
+                Slug = kvp.Key,
+                ScoredBy = kvp.Value,
+            }).ToList();
         }
 
         public List<string> Factions { get; internal set; }
-        private void SetFactions(List<GameEvent> events)
+        private List<String> GetFactions(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == GameEvent.GameStarted);
 
@@ -26,11 +60,11 @@ namespace server.Controllers
                 throw new Exception("game session without factions event");
             }
 
-            Factions = JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
+            return JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
         }
 
         public List<FactionPoint> Points { get; internal set; }
-        private void SetPoints(List<GameEvent> events)
+        private List<FactionPoint> GetPoints(List<GameEvent> events)
         {
             Dictionary<string, int> points = new Dictionary<string, int>();
 
@@ -49,11 +83,17 @@ namespace server.Controllers
                 points[payload.Faction] = payload.Points;
             }
 
-            Points = points.ToArray().Select(kvp => new FactionPoint
+            return points.ToArray().Select(kvp => new FactionPoint
             {
                 Faction = kvp.Key,
                 Points = kvp.Value
             }).ToList();
         }
+    }
+
+    public class ScorableObjectiveDto
+    {
+        public string Slug { get; set; }
+        public List<string> ScoredBy { get; set; }
     }
 }

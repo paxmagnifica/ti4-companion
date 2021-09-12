@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 
 import publicObjectiveI from '../../assets/objective-1.png'
@@ -6,6 +6,7 @@ import publicObjectiveII from '../../assets/objective-2.png'
 import secretObjective from '../../assets/objective-secret.png'
 import reverseObjective from '../../assets/objective-1-reverse.jpg'
 import translations from '../../i18n/index'
+import { StateContext } from '../../state'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,13 +56,11 @@ const useStyles = makeStyles(theme => ({
 function Objective({
   title,
   slug,
-  points,
-  secret,
-  when,
   reverse,
-  reward,
   ...other
 }) {
+  const { objectives: { data: availableObjectives } } = useContext(StateContext)
+  const { secret, points, reward, when } = availableObjectives[slug] || {}
   const classes = useStyles()
 
   const background = useMemo(() => secret

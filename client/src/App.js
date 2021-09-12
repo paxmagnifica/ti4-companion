@@ -30,7 +30,8 @@ function App() {
   useTheme()
   const [state, dispatch] = useReducer(reducer, null, init)
   const comboDispatch = useCallback(action => {
-    console.log({ action })
+    const { payload } = action
+    sessionService.pushEvent(payload.sessionId, { type: action.type, payload })
     dispatch(action)
   }, [dispatch])
   const { sessions } = state

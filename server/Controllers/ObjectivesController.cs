@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using server.Domain;
@@ -31,12 +29,6 @@ namespace server.Controllers
             var objectivesFromDb = _sessionContext.Objectives.ToList();
 
             return objectivesFromDb.Select(fromDb => new ObjectiveDto(fromDb));
-        }
-
-        [HttpGet("{slug}")]
-        public async Task<ActionResult<ObjectiveDto>> GetObjective(Guid id)
-        {
-            throw new NotImplementedException();
         }
     }
 

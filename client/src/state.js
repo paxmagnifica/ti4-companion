@@ -67,6 +67,8 @@ export const reducer = (state, action) => {
       }
     case 'objectiveAdded':
       return addObjective(state, action.payload)
+    case 'objectiveScored':
+      return scoreObjective(state, action.payload)
     default:
       console.error('unhandled action', action)
       return state
@@ -94,7 +96,26 @@ const addObjective = (state, payload) => {
   const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
   const session = state.sessions.data[sessionIndex]
 
-  session.objectives = [...session.objectives, payload.objective]
+  session.objectives = [...session.objectives, {slug: payload.slug, scoredBy: []}]
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, {...session})
+
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
+  }
+}
+
+const scoreObjective = (state, payload) => {
+  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const session = state.sessions.data[sessionIndex]
+
+  session.objectives = session.objectives.map(obj => obj.slug === payload.slug
+    ? {...obj, scoredBy: payload.scoredBy }
+    : obj)
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, {...session})
 

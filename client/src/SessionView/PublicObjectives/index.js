@@ -114,12 +114,12 @@ function PublicObjectives({
   const [addObjectiveOpen, setAddObjectiveOpen] = useState(false)
 
   const objectiveAdded = useCallback(objective => {
-    dispatch({ type: 'objectiveAdded', payload: { sessionId: session.id, objective } })
+    dispatch({ type: 'objectiveAdded', payload: { sessionId: session.id, slug: objective.slug } })
     setAddObjectiveOpen(false)
   }, [dispatch, session.id])
 
-  const objectiveScored = useCallback(scoredBy => {
-    dispatch({ type: 'objectiveScored', payload: { sessionId: session.id, scoredBy } })
+  const objectiveScored = useCallback(({ scoredBy, objective }) => {
+    dispatch({ type: 'objectiveScored', payload: { sessionId: session.id, slug: objective.slug, scoredBy } })
   }, [dispatch, session.id])
 
   return <>
@@ -131,7 +131,7 @@ function PublicObjectives({
         <FactionSelector
           factions={session.factions}
           value={sessionObjective.scoredBy}
-          onChange={objectiveScored}
+          onChange={scoredBy => objectiveScored({ scoredBy, objective: sessionObjective })}
         />
       </div>)}
       <div className={classes.objectiveContainer}>
