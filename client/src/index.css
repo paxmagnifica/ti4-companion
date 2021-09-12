@@ -22,12 +22,6 @@ body {
   background-color: transparent !important;
 }
 
-.MuiList-root {
-    background-color: white !important;
-    padding-top: 5px !important;
-    border-radius: 4px;
-}
-
 .MuiAppBar-root {
     background-color: transparent !important;
     box-shadow: none !important;
