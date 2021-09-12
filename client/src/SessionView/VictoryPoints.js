@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDrag, useDrop } from 'react-dnd'
@@ -6,6 +5,7 @@ import {
   Grid,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import victoryPointsBackground from '../assets/victory-points-background.jpg'
 import * as factions from '../gameInfo/factions'
@@ -54,6 +54,7 @@ function Flag({
 
 function PointContainer({
   className,
+  imgStyles,
   children,
   points,
 }) {
@@ -64,26 +65,6 @@ function PointContainer({
       isOver: !!monitor.isOver(),
     }),
   }), [])
-
-  const imgStyles = {
-    objectFit: 'none',
-    objectPosition: `-${38 + 89*points}px -18px`,
-    width: 91,
-    height: 105,
-    position: 'absolute',
-    zIndex: -1,
-    pointerEvents: 'none',
-  }
-
-  if (points === 0) {
-    imgStyles.borderTopLeftRadius = '2%';
-    imgStyles.borderBottomLeftRadius = '40%';
-  }
-
-  if (points === 10) {
-    imgStyles.borderTopRightRadius = '20%';
-    imgStyles.borderBottomRightRadius = '2%';
-  }
 
   return <Grid
     ref={drop}
@@ -104,26 +85,71 @@ function PointContainer({
 const useVPStyles = makeStyles({
   points: {
     position: 'relative',
-    width: 91,
-    height: 105,
+    width: props => props.containerWidth,
+    height: props => props.containerHeight,
     cursor: 'pointer',
   }
 })
+
+const VICTORY_POINTS_SPRITE_BIG = {
+  containerWidth: 89,
+  containerHeight: 105,
+  imgXOffset: 41,
+  imgWidth: 89,
+  imgHeight: 105,
+  imgYOffset: 18,
+  imgScale: 'scale(1)',
+}
+
+const VICTORY_POINTS_SPRITE_SMALL = {
+  containerWidth: 44,
+  containerHeight: 52,
+  imgXOffset: 41,
+  imgWidth: 89,
+  imgHeight: 105,
+  imgYOffset: 18,
+  imgScale: 'scale(0.5) translateX(-50%)',
+}
 
 function VictoryPoints({
   onChange,
   factions,
   points,
 }) {
-  const classes = useVPStyles()
+  const smallViewport = useMediaQuery('(max-width:649px)');
+  const spriteValues = smallViewport ? VICTORY_POINTS_SPRITE_SMALL : VICTORY_POINTS_SPRITE_BIG
+
+  const classes = useVPStyles(spriteValues)
 
   return <DndProvider backend={HTML5Backend}>
     <Grid container justifyContent='center'>
       {[...Array(11).keys()].map(numberOfPoints => {
         const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
 
+        const imgStyles = {
+          objectFit: 'none',
+          objectPosition: `-${spriteValues.imgXOffset + spriteValues.imgWidth*numberOfPoints}px -${spriteValues.imgYOffset}px`,
+          width: spriteValues.imgWidth,
+          height: spriteValues.imgHeight,
+          position: 'absolute',
+          transform: spriteValues.imgScale,
+          zIndex: -1,
+          pointerEvents: 'none',
+        }
+
+        if (numberOfPoints === 0) {
+          imgStyles.borderTopLeftRadius = '2%';
+          imgStyles.borderBottomLeftRadius = '40%';
+        }
+
+        if (numberOfPoints === 10) {
+          imgStyles.borderTopRightRadius = '20%';
+          imgStyles.borderBottomRightRadius = '2%';
+        }
+
         return <PointContainer
           className={classes.points}
+          imgStyles={imgStyles}
           points={numberOfPoints}
           id={numberOfPoints}
           key={numberOfPoints}
