@@ -18,6 +18,7 @@ import * as factions from '../gameInfo/factions'
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
 import VictoryPoints from './VictoryPoints'
+import PublicObjectives from './PublicObjectives'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +45,7 @@ function SessionView({
   shuffleFactions,
   setFactions,
   updateFactionPoints,
+  updateObjectives,
 }) {
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
@@ -63,13 +65,6 @@ function SessionView({
       justifyContent="center"
       spacing={4}
     >
-      <Grid item xs={12}>
-        <VictoryPoints
-          onChange={updateFactionPointsInSession}
-          points={session.points}
-          factions={session.factions}
-        />
-      </Grid>
       <Grid item xs={6}>
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
       </Grid>
@@ -84,6 +79,18 @@ function SessionView({
             />
         }
         <ShareButton id={session.id} />
+      </Grid>
+      <Grid item xs={12}>
+        <VictoryPoints
+          onChange={updateFactionPointsInSession}
+          points={session.points}
+          factions={session.factions}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <PublicObjectives
+          session={session}
+        />
       </Grid>
       {session.factions.map(faction => {
         const factionData = factions.getData(faction)
