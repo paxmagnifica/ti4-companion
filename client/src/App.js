@@ -68,11 +68,11 @@ function App() {
   return (
     <Router>
       <CssBaseline />
-      <AppBar>
+      <AppBar disableElevation>
         <Toolbar>
           <Link to='/'>
             <IconButton >
-              <Home />
+              <Home style={{ color: 'white' }} />
             </IconButton>
           </Link>
           <Typography variant="h5">TI4 Companion</Typography>

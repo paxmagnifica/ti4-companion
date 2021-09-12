@@ -1,3 +1,7 @@
+html {
+    background-image: url('./assets/background-1.png');
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,4 +14,21 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* mui override */
+
+body {
+  background-color: transparent !important;
+}
+
+.MuiList-root {
+    background-color: white !important;
+    padding-top: 5px !important;
+    border-radius: 4px;
+}
+
+.MuiAppBar-root {
+    background-color: transparent !important;
+    box-shadow: none !important;
 }

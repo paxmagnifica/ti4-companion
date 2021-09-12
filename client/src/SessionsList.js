@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme => ({
     position: 'sticky',
     float: 'right',
     right: 0,
-    bottom: 0,
+    bottom: 10,
+    marginTop: 10,
     zIndex: 9001,
   }
 }))
