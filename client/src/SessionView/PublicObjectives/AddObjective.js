@@ -31,7 +31,13 @@ function AddObjective({
   const [secretSelected, setSecret] = useState(false)
   const [selected, setSelected] = useState(null)
 
-  const select = useCallback(() => onSelect(selected), [selected, onSelect])
+  const select = useCallback(() => {
+    if (!selected) {
+      return
+    }
+
+   onSelect(selected)
+  }, [selected, onSelect])
 
   const filteredObjectives = useMemo(() => {
     const  withMeta = translations.objectivesArray.map(obj => ({ ...obj, ...availableObjectives[obj.slug]}))

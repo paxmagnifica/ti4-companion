@@ -65,7 +65,7 @@ export const reducer = (state, action) => {
           data: set_sessions,
         }
       }
-    case 'addObjective':
+    case 'objectiveAdded':
       return addObjective(state, action.payload)
     default:
       console.error('unhandled action', action)

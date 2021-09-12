@@ -29,6 +29,10 @@ import { DispatchContext, StateContext, reducer, init } from './state'
 function App() {
   useTheme()
   const [state, dispatch] = useReducer(reducer, null, init)
+  const comboDispatch = useCallback(action => {
+    console.log({ action })
+    dispatch(action)
+  }, [dispatch])
   const { sessions } = state
 
   const shuffleFactions = useCallback(sessionId => {
@@ -87,7 +91,7 @@ function App() {
       <Toolbar/>
       <Container>
         <StateContext.Provider value={state}>
-          <DispatchContext.Provider value={dispatch}>
+          <DispatchContext.Provider value={comboDispatch}>
             <Box m={2}>
               <Switch>
                 <Route path="/new">
