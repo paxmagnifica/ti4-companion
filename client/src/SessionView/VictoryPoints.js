@@ -20,6 +20,7 @@ const useFlagStyles = makeStyles({
     marginLeft: '3%',
     height: 'auto',
     borderRadius: 4,
+    cursor: 'pointer',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     '&:hover': {
       backgroundColor: 'white',
@@ -49,7 +50,13 @@ function Flag({
 
   const factionData = factions.getData(factionKey)
 
-  return <img className={classes.flag} ref={drag} src={factionData.image} alt={factionKey} />
+  return <img
+    className={classes.flag}
+    ref={drag}
+    src={factionData.image}
+    alt={factionKey}
+    title={factionData.name}
+  />
 }
 
 function PointContainer({
@@ -77,6 +84,7 @@ function PointContainer({
     {<img
       src={victoryPointsBackground}
       style={imgStyles}
+      alt={`victory points backgroudn ${points}`}
     />}
     {children}
   </Grid>
@@ -87,7 +95,6 @@ const useVPStyles = makeStyles({
     position: 'relative',
     width: props => props.containerWidth,
     height: props => props.containerHeight,
-    cursor: 'pointer',
   }
 })
 
