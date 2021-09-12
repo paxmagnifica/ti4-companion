@@ -16,6 +16,9 @@ import { factionsList } from './gameInfo/factions'
 import * as sessionService from './sessionService'
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    color: 'white',
+  },
   fab: {
     position: 'sticky',
     right: 0,
@@ -23,8 +26,8 @@ const useStyles = makeStyles(theme => ({
     zIndex: 9001,
   },
   containedButton: {
-    '&:not(.MuiButton-containedPrimary)': {
-      backgroundColor: 'transparent',
+    '&:not(.MuiButton-containedSecondary)': {
+      backgroundColor: 'white',
     },
   }
 }))
@@ -50,7 +53,10 @@ function NewSession({
   }, [history, dispatch, selectedFactions])
 
   return <>
-    <Box mb={2}>
+    <Box
+      className={classes.root}
+      mb={2}
+    >
       <Container>
         <Typography variant="h4">What factions are in the game?</Typography>
       </Container>
@@ -63,7 +69,7 @@ function NewSession({
           fullWidth
           onClick={() => toggleSelection(faction.key)}
           variant='contained'
-          color={isSelected(faction.key) ? 'primary' : 'default'}
+          color={isSelected(faction.key) ? 'secondary' : 'default'}
           startIcon={<Avatar alt={faction.name} src={faction.image} />}
         >
             {faction.name}
