@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
+import victoryPointsBackground from '../assets/victory-points-background.jpg'
 import * as factions from '../gameInfo/factions'
 
 const DRAGGABLE = {
@@ -18,10 +19,12 @@ const useFlagStyles = makeStyles({
     width: '44%',
     marginLeft: '3%',
     height: 'auto',
+    borderRadius: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     '&:hover': {
-      backgroundColor: 'rgb(63 81 181 / 8%)',
+      backgroundColor: 'white',
     },
-  }
+  },
 })
 
 function Flag({
@@ -62,17 +65,38 @@ function PointContainer({
     }),
   }), [])
 
+  const imgStyles = {
+    objectFit: 'none',
+    objectPosition: `-${38 + 89*points}px -18px`,
+    width: 91,
+    height: 105,
+    position: 'absolute',
+    zIndex: -1,
+    pointerEvents: 'none',
+  }
+
+  if (points === 0) {
+    imgStyles.borderTopLeftRadius = '2%';
+    imgStyles.borderBottomLeftRadius = '40%';
+  }
+
+  if (points === 10) {
+    imgStyles.borderTopRightRadius = '20%';
+    imgStyles.borderBottomRightRadius = '2%';
+  }
+
   return <Grid
     ref={drop}
     className={className}
     item
     justifyContent='center'
-    xs={2}
-    md={1}
     container
     direction='column'
   >
-    <div className='points-count'>{points}</div>
+    {<img
+      src={victoryPointsBackground}
+      style={imgStyles}
+    />}
     {children}
   </Grid>
 }
@@ -80,26 +104,9 @@ function PointContainer({
 const useVPStyles = makeStyles({
   points: {
     position: 'relative',
-    '& .points-count': {
-      borderLeft: '1px solid black',
-      borderTop: '1px solid black',
-      borderBottom: '1px solid black',
-      borderRight: '1px solid black',
-      marginLeft: '-1px',
-      marginTop: '-1px',
-      zIndex: 0,
-      top: '50%',
-      transform: 'translateY(-50%)',
-      fontSize: '2em',
-      fontWeight: 'bold',
-      position: 'absolute',
-      left: 0, right: 0,
-      textAlign: 'center',
-    },
-    '& >*:not(.points-count)': {
-      cursor: 'pointer',
-      zIndex: 1,
-    }
+    width: 91,
+    height: 105,
+    cursor: 'pointer',
   }
 })
 
