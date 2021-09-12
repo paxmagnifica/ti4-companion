@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDrag, useDrop } from 'react-dnd'
@@ -6,7 +5,9 @@ import {
   Grid,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+import victoryPointsBackground from '../assets/victory-points-background.jpg'
 import * as factions from '../gameInfo/factions'
 
 const DRAGGABLE = {
@@ -18,10 +19,13 @@ const useFlagStyles = makeStyles({
     width: '44%',
     marginLeft: '3%',
     height: 'auto',
+    borderRadius: 4,
+    cursor: 'pointer',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     '&:hover': {
-      backgroundColor: 'rgb(63 81 181 / 8%)',
+      backgroundColor: 'white',
     },
-  }
+  },
 })
 
 function Flag({
@@ -46,11 +50,18 @@ function Flag({
 
   const factionData = factions.getData(factionKey)
 
-  return <img className={classes.flag} ref={drag} src={factionData.image} alt={factionKey} />
+  return <img
+    className={classes.flag}
+    ref={drag}
+    src={factionData.image}
+    alt={factionKey}
+    title={factionData.name}
+  />
 }
 
 function PointContainer({
   className,
+  imgStyles,
   children,
   points,
 }) {
@@ -67,12 +78,14 @@ function PointContainer({
     className={className}
     item
     justifyContent='center'
-    xs={2}
-    md={1}
     container
     direction='column'
   >
-    <div className='points-count'>{points}</div>
+    {<img
+      src={victoryPointsBackground}
+      style={imgStyles}
+      alt={`victory points backgroudn ${points}`}
+    />}
     {children}
   </Grid>
 }
@@ -80,43 +93,70 @@ function PointContainer({
 const useVPStyles = makeStyles({
   points: {
     position: 'relative',
-    '& .points-count': {
-      borderLeft: '1px solid black',
-      borderTop: '1px solid black',
-      borderBottom: '1px solid black',
-      borderRight: '1px solid black',
-      marginLeft: '-1px',
-      marginTop: '-1px',
-      zIndex: 0,
-      top: '50%',
-      transform: 'translateY(-50%)',
-      fontSize: '2em',
-      fontWeight: 'bold',
-      position: 'absolute',
-      left: 0, right: 0,
-      textAlign: 'center',
-    },
-    '& >*:not(.points-count)': {
-      cursor: 'pointer',
-      zIndex: 1,
-    }
+    width: props => props.containerWidth,
+    height: props => props.containerHeight,
   }
 })
+
+const VICTORY_POINTS_SPRITE_BIG = {
+  containerWidth: 89,
+  containerHeight: 105,
+  imgXOffset: 41,
+  imgWidth: 89,
+  imgHeight: 105,
+  imgYOffset: 18,
+  imgScale: 'scale(1)',
+}
+
+const VICTORY_POINTS_SPRITE_SMALL = {
+  containerWidth: 44,
+  containerHeight: 52,
+  imgXOffset: 41,
+  imgWidth: 89,
+  imgHeight: 105,
+  imgYOffset: 18,
+  imgScale: 'scale(0.5) translateX(-50%)',
+}
 
 function VictoryPoints({
   onChange,
   factions,
   points,
 }) {
-  const classes = useVPStyles()
+  const smallViewport = useMediaQuery('(max-width:649px)');
+  const spriteValues = smallViewport ? VICTORY_POINTS_SPRITE_SMALL : VICTORY_POINTS_SPRITE_BIG
+
+  const classes = useVPStyles(spriteValues)
 
   return <DndProvider backend={HTML5Backend}>
     <Grid container justifyContent='center'>
       {[...Array(11).keys()].map(numberOfPoints => {
         const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
 
+        const imgStyles = {
+          objectFit: 'none',
+          objectPosition: `-${spriteValues.imgXOffset + spriteValues.imgWidth*numberOfPoints}px -${spriteValues.imgYOffset}px`,
+          width: spriteValues.imgWidth,
+          height: spriteValues.imgHeight,
+          position: 'absolute',
+          transform: spriteValues.imgScale,
+          zIndex: -1,
+          pointerEvents: 'none',
+        }
+
+        if (numberOfPoints === 0) {
+          imgStyles.borderTopLeftRadius = '2%';
+          imgStyles.borderBottomLeftRadius = '40%';
+        }
+
+        if (numberOfPoints === 10) {
+          imgStyles.borderTopRightRadius = '20%';
+          imgStyles.borderBottomRightRadius = '2%';
+        }
+
         return <PointContainer
           className={classes.points}
+          imgStyles={imgStyles}
           points={numberOfPoints}
           id={numberOfPoints}
           key={numberOfPoints}

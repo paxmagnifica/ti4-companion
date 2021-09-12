@@ -20,6 +20,16 @@ import ShareButton from './ShareButton'
 import VictoryPoints from './VictoryPoints'
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    color: 'white',
+  },
+  factionCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    color: 'white',
+  },
+  factionCardIcon: {
+    color: 'white',
+  },
   media: {
     height: 0,
     paddingTop: '71.25%',
@@ -47,6 +57,7 @@ function SessionView({
 
   return <>
     <Grid
+      className={classes.root}
       container
       alignItems="center"
       justifyContent="center"
@@ -78,7 +89,7 @@ function SessionView({
         const factionData = factions.getData(faction)
 
         return <Grid item xs={12} sm={6} key={factionData.key}>
-          <Card>
+          <Card className={classes.factionCard}>
             <CardHeader
               avatar={<Avatar alt={factionData.name} src={factionData.image}/>}
               title={factionData.name}
@@ -95,6 +106,7 @@ function SessionView({
             <CardActions disableSpacing>
               <Tooltip title="go to wiki" placement="top">
                 <IconButton
+                  className={classes.factionCardIcon}
                   aria-label="go to wiki"
                   href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(factionData.name)}`}
                   target="about:blank"
@@ -104,6 +116,7 @@ function SessionView({
               </Tooltip>
               <Tooltip title="open original image" placement="top">
                 <IconButton
+                  className={classes.factionCardIcon}
                   aria-label="open original image"
                   href={getFactionCheatSheetPath(factionData.key)}
                   target="about:blank"

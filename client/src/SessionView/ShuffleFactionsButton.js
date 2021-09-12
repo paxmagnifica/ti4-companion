@@ -11,6 +11,9 @@ import { Casino, Close } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
+  button: {
+    color: 'white',
+  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
@@ -50,6 +53,7 @@ function ShuffleFactionsButton({
   return <>
     <Tooltip title="shuffle faction order" placement="bottom">
       <IconButton
+        className={classes.button}
         onClick={shuffleMultipleTimes}
         aria-label="shuffle faction order"
       >

@@ -13,11 +13,27 @@ import { Link, useHistory } from 'react-router-dom'
 import * as factions from './gameInfo/factions'
 
 const useStyles = makeStyles(theme => ({
+  list: {
+    color: 'white',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: '2%',
+    '& .MuiListItem-root:hover': {
+      backgroundColor: 'rgba(255,255,255,0.1)',
+    },
+    '& .MuiListSubheader-root': {
+      background: 'none',
+      color: 'white',
+    },
+    '& .MuiTypography-root': {
+      color: 'white',
+    },
+  },
   fab: {
     position: 'sticky',
     float: 'right',
     right: 0,
-    bottom: 0,
+    bottom: 10,
+    marginTop: 10,
     zIndex: 9001,
   }
 }))
@@ -34,6 +50,7 @@ function SessionsList({
     ? <CircularProgress />
     : <>
       <List
+        className={classes.list}
         subheader={
           <ListSubheader>
             Your remembered sessions
