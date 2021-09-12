@@ -11,12 +11,53 @@ namespace server.Controllers
         public SessionDto(Session session)
         {
             Id = session.Id;
-            SetFactions(session.Events);
-            SetPoints(session.Events);
+            Factions = GetFactions(session.Events);
+            Points = GetPoints(session.Events);
+            Objectives = GetObjectives(session.Events);
+        }
+
+        public List<ScorableObjectiveDto> Objectives { get; internal set; }
+        private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)
+        {
+            var objectiveDictionary = new Dictionary<string, List<string>>();
+
+            IEnumerable<GameEvent> objectivesAddedEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveAdded))
+                .OrderBy(ge => ge.HappenedAt);
+            foreach (var gameEvent in objectivesAddedEvents)
+            {
+                // TODO isn't this hacky and ugly? :(
+                var payload = ObjectiveAdded.GetPayload(gameEvent);
+                objectiveDictionary[payload.Slug] = new List<string>();
+            }
+
+            IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveScored) || ge.EventType == nameof(ObjectiveDescored))
+                .OrderBy(ge => ge.HappenedAt);
+            foreach (var gameEvent in objectivesScoredEvents)
+            {
+                if (gameEvent.EventType == nameof(ObjectiveScored))
+                {
+                    var scoredPayload = ObjectiveScored.GetPayload(gameEvent);
+                    objectiveDictionary[scoredPayload.Slug].Add(scoredPayload.Faction);
+                }
+
+                if (gameEvent.EventType == nameof(ObjectiveDescored))
+                {
+                    var descoredPayload = ObjectiveDescored.GetPayload(gameEvent);
+                    objectiveDictionary[descoredPayload.Slug].Remove(descoredPayload.Faction);
+                }
+            }
+
+            return objectiveDictionary.ToArray().Select(kvp => new ScorableObjectiveDto
+            {
+                Slug = kvp.Key,
+                ScoredBy = kvp.Value,
+            }).ToList();
         }
 
         public List<string> Factions { get; internal set; }
-        private void SetFactions(List<GameEvent> events)
+        private List<String> GetFactions(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == GameEvent.GameStarted);
 
@@ -26,11 +67,11 @@ namespace server.Controllers
                 throw new Exception("game session without factions event");
             }
 
-            Factions = JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
+            return JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
         }
 
         public List<FactionPoint> Points { get; internal set; }
-        private void SetPoints(List<GameEvent> events)
+        private List<FactionPoint> GetPoints(List<GameEvent> events)
         {
             Dictionary<string, int> points = new Dictionary<string, int>();
 
@@ -49,11 +90,35 @@ namespace server.Controllers
                 points[payload.Faction] = payload.Points;
             }
 
-            Points = points.ToArray().Select(kvp => new FactionPoint
+            IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveScored) || ge.EventType == nameof(ObjectiveDescored))
+                .OrderBy(ge => ge.HappenedAt);
+            foreach (var gameEvent in objectivesScoredEvents)
+            {
+                if (gameEvent.EventType == nameof(ObjectiveScored))
+                {
+                    var scoredPayload = ObjectiveScored.GetPayload(gameEvent);
+                    points[scoredPayload.Faction] = points[scoredPayload.Faction] + 1;
+                }
+
+                if (gameEvent.EventType == nameof(ObjectiveDescored))
+                {
+                    var descoredPayload = ObjectiveDescored.GetPayload(gameEvent);
+                    points[descoredPayload.Faction] = points[descoredPayload.Faction] - 1;
+                }
+            }
+
+            return points.ToArray().Select(kvp => new FactionPoint
             {
                 Faction = kvp.Key,
                 Points = kvp.Value
             }).ToList();
         }
+    }
+
+    public class ScorableObjectiveDto
+    {
+        public string Slug { get; set; }
+        public List<string> ScoredBy { get; set; }
     }
 }

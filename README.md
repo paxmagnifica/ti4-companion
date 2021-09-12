@@ -13,9 +13,9 @@ A way of sharing the game state in read-only state that would show the big pictu
 
 - [x] Creating a _local_ Game Session with a list of factions in play with easy access to Faction Info.
 - [x] Randomising the order of factions playing the game.
-- [ ] persisting and sharing the Game Session.
-- [ ] Amount of Victory Points accumulated by each faction.
-- [ ] List of public Objectives with indication which faction reached which objective already.
+- [x] persisting and sharing the Game Session.
+- [x] Amount of Victory Points accumulated by each faction.
+- [x] List of public Objectives with indication which faction reached which objective already.
 - [ ] List of technologies researched by each faction in the game.
 - [ ] A big picture view of the game (factions, victory points, public objectives, laws).
 

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using server.Infra;
 
 namespace server.Controllers
@@ -26,6 +27,8 @@ namespace server.Controllers
         {
             try
             {
+                _logger.LogInformation("event!");
+                _logger.LogInformation(JsonConvert.SerializeObject(eventDto));
                 var gameEvent = _eventFactory.GetGameEvent(sessionId, eventDto);
                 await _dispatcher.Dispatch(gameEvent);
 

@@ -23,11 +23,17 @@ import SessionsList from './SessionsList'
 import SessionView, { SessionProvider } from './SessionView'
 import { getAllSessions, saveAllSessions } from './persistence'
 import * as sessionService from './sessionService'
-import { reducer, init } from './state'
+import * as objectivesService from './objectivesService'
+import { DispatchContext, StateContext, reducer, init } from './state'
 
 function App() {
   useTheme()
   const [state, dispatch] = useReducer(reducer, null, init)
+  const comboDispatch = useCallback(action => {
+    const { payload } = action
+    sessionService.pushEvent(payload.sessionId, { type: action.type, payload })
+    dispatch(action)
+  }, [dispatch])
   const { sessions } = state
 
   const shuffleFactions = useCallback(sessionId => {
@@ -58,8 +64,13 @@ function App() {
 
   useEffect(() => {
     const load = async () => {
-      const sessions = await getAllSessions()
-      dispatch({ type: 'loadSessions', sessions })
+      const sessionsPromise = getAllSessions()
+      const objectivesPromise = objectivesService.getAll()
+
+      const [sessions, objectives] = await Promise.allSettled([sessionsPromise, objectivesPromise])
+
+      dispatch({ type: 'loadSessions', sessions: sessions.value })
+      dispatch({ type: 'loadObjectives', objectives: objectives.value })
     }
 
     load()
@@ -68,7 +79,7 @@ function App() {
   return (
     <Router>
       <CssBaseline />
-      <AppBar disableElevation>
+      <AppBar>
         <Toolbar>
           <Link to='/'>
             <IconButton >
@@ -80,29 +91,33 @@ function App() {
       </AppBar>
       <Toolbar/>
       <Container>
-        <Box m={2}>
-          <Switch>
-            <Route path="/new">
-              <NewSession dispatch={dispatch} />
-            </Route>
-            <Route path="/:id">
-              <SessionProvider state={state} dispatch={dispatch}>
-                {(session, loading) => (loading || !session) ? null : <SessionView
-                  session={session}
-                  shuffleFactions={shuffleFactions}
-                  setFactions={setFactions}
-                  updateFactionPoints={updateFactionPoints}
-                />}
-              </SessionProvider>
-            </Route>
-            <Route path="/">
-              <SessionsList
-                sessions={sessions.data}
-                loading={sessions.loading || !sessions.loaded}
-              />
-            </Route>
-          </Switch>
-        </Box>
+        <StateContext.Provider value={state}>
+          <DispatchContext.Provider value={comboDispatch}>
+            <Box m={2}>
+              <Switch>
+                <Route path="/new">
+                  <NewSession dispatch={dispatch} />
+                </Route>
+                <Route path="/:id">
+                  <SessionProvider state={state} dispatch={dispatch}>
+                    {(session, loading) => (loading || !session) ? null : <SessionView
+                      session={session}
+                      shuffleFactions={shuffleFactions}
+                      setFactions={setFactions}
+                      updateFactionPoints={updateFactionPoints}
+                    />}
+                  </SessionProvider>
+                </Route>
+                <Route path="/">
+                  <SessionsList
+                    sessions={sessions.data}
+                    loading={sessions.loading || !sessions.loaded}
+                  />
+                </Route>
+              </Switch>
+            </Box>
+            </DispatchContext.Provider>
+        </StateContext.Provider>
       </Container>
     </Router>
   );

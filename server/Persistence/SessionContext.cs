@@ -14,6 +14,7 @@ namespace server.Persistence
             _configuration = configuration;
         }
 
+        public DbSet<Objective> Objectives { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<GameEvent> Events { get; set; }
 
