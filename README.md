@@ -1,5 +1,7 @@
 # ti4-companion
 
+for live version see [https://ti4companion.willcodeforskipass.com/](https://ti4companion.willcodeforskipass.com/)
+
 This is supposed to be a companion app for a session of [Twilight Imperium 4th Edition](https://twilight-imperium.fandom.com/wiki/Twilight_Imperium_Wiki#Fourth_Edition) board game.
 
 It's supposed to be an easy way to share game state between players.
