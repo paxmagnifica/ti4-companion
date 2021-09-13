@@ -17,12 +17,6 @@ const useFlagStyles = makeStyles({
     backgroundColor: ({ selected }) => `rgba(255, 255, 255, ${selected ? '1' : '0.3'})`,
     borderRadius: '4%',
     cursor: 'pointer',
-    '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.6)',
-      '& img': {
-        opacity: '1 !important',
-      }
-    },
     display: 'flex',
     justifyContent: 'center',
   },
