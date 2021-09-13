@@ -59,6 +59,7 @@ function Objective({
   slug,
   reverse,
   small,
+  className,
   ...other
 }) {
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
@@ -79,7 +80,7 @@ function Objective({
 
   if (reverse) {
     return <div
-      className={classes.root}
+      className={`${classes.root} ${className || ''}`}
       {...other}
     >
       <img
@@ -92,7 +93,7 @@ function Objective({
   }
 
   return <div
-    className={classes.root}
+    className={`${classes.root} ${className || ''}`}
     {...other}
   >
     <img

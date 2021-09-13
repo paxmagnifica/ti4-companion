@@ -7,46 +7,10 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../useSmallViewport'
 import { DispatchContext } from '../../state'
-import FactionFlag from '../../FactionFlag'
 
 import Objective from './Objective'
 import AddObjective from './AddObjective'
-
-const useSelectorStyles = makeStyles({
-  root: {
-    display: 'flex',
-  }
-})
-
-function FactionSelector({
-  factions,
-  value,
-  onChange,
-  small,
-}) {
-  const classes = useSelectorStyles()
-
-  const clicked = useCallback((factionKey, selected) => {
-    if (selected) {
-      onChange({ factionKey, event: 'selected' })
-      return
-    }
-
-    onChange({ factionKey, event: 'deselected' })
-    return
-  }, [onChange])
-
-  return <div className={classes.root}>
-    {factions.map(factionKey => <FactionFlag
-      width='25%'
-      height={small ? '1em' : '2em'}
-      key={factionKey}
-      factionKey={factionKey}
-      selected={value.includes(factionKey)}
-      onClick={() => clicked(factionKey, !value.includes(factionKey))}
-    />)}
-  </div>
-}
+import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
 
 const useStyles = makeStyles({
   objectiveContainer: {
@@ -90,15 +54,14 @@ function PublicObjectives({
         className={classes.objectiveContainer}
         key={sessionObjective.slug}
       >
-        <Objective
+        <ObjectiveWithFactionSelector
           small={smallViewport}
-          {...sessionObjective}
-        />
-        <FactionSelector
-          small={smallViewport}
-          factions={session.factions}
-          value={sessionObjective.scoredBy}
-          onChange={change => objectiveScored({ change, objective: sessionObjective })}
+          objective={sessionObjective}
+          selector={{
+            factions: session.factions,
+            value: sessionObjective.scoredBy,
+            onChange: change => objectiveScored({ change, objective: sessionObjective }),
+          }}
         />
       </div>)}
       <div className={classes.objectiveContainer}>
