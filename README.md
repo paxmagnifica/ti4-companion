@@ -11,17 +11,26 @@ A way of sharing the game state in read-only state that would show the big pictu
 
 ## Features
 
-- [x] Creating a _local_ Game Session with a list of factions in play with easy access to Faction Info.
-- [x] Randomising the order of factions playing the game.
-- [x] persisting and sharing the Game Session.
-- [x] Amount of Victory Points accumulated by each faction.
-- [x] List of public Objectives with indication which faction reached which objective already.
-- [ ] List of technologies researched by each faction in the game.
-- [ ] A big picture view of the game (factions, victory points, public objectives, laws).
+see [issues](https://github.com/tarnas14/ti4-companion/issues)
 
 # development
 
+## to run the application
+
+use provided `docker-compose.yml`, together with the committed `.env.dev` file, like this (in the root of the repo):
+
+```bash
+$ docker-compose --env-file .env.dev up -d
+```
+
+This will run postgres, backend and frontend services in dockers.
+Check docker-compose which services are available on which host ports.
+
 ## extracting faction images from codex pdf
+
+The _nutshell_ images of factions (the ones shown on session view) are extracted from codex pdf.
+The extraction was done using the `./extract-images-from-pdf.sh`.
+More info below.
 
 last used pdf: [https://images-cdn.fantasyflightgames.com/filer_public/ff/5c/ff5cc986-344a-4460-a0cb-41d40a3446ed/ti_codex_2_cards_web.pdf](https://images-cdn.fantasyflightgames.com/filer_public/ff/5c/ff5cc986-344a-4460-a0cb-41d40a3446ed/ti_codex_2_cards_web.pdf)
 
