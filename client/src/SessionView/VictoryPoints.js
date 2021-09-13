@@ -1,39 +1,23 @@
 import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
 import { useDrag, useDrop } from 'react-dnd'
 import {
   Grid,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
+import FactionFlag from '../FactionFlag'
 import victoryPointsBackground from '../assets/victory-points-background.jpg'
-import * as factions from '../gameInfo/factions'
 
 const DRAGGABLE = {
   FLAG: 'flag'
 }
 
-const useFlagStyles = makeStyles({
-  flag: {
-    width: '44%',
-    marginLeft: '3%',
-    height: 'auto',
-    borderRadius: 4,
-    cursor: 'pointer',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    '&:hover': {
-      backgroundColor: 'white',
-    },
-  },
-})
-
-function Flag({
+function DraggableFlag({
   factionKey,
   updatePoints,
 }) {
-  const classes = useFlagStyles()
-
   const [{isDragging}, drag] = useDrag(() => ({
     type: DRAGGABLE.FLAG,
     collect: monitor => ({
@@ -48,14 +32,12 @@ function Flag({
     },
   }), [updatePoints])
 
-  const factionData = factions.getData(factionKey)
-
-  return <img
-    className={classes.flag}
+  return <FactionFlag
     ref={drag}
-    src={factionData.image}
-    alt={factionKey}
-    title={factionData.name}
+    factionKey={factionKey}
+    selected
+    height='25%'
+    width='50%'
   />
 }
 
@@ -77,7 +59,6 @@ function PointContainer({
     ref={drop}
     className={className}
     item
-    justifyContent='center'
     container
     direction='column'
   >
@@ -115,7 +96,7 @@ const VICTORY_POINTS_SPRITE_SMALL = {
   imgWidth: 89,
   imgHeight: 105,
   imgYOffset: 18,
-  imgScale: 'scale(0.5) translateX(-50%)',
+  imgScale: 'scale(0.5) translateX(-50%) translateY(-50%)',
 }
 
 function VictoryPoints({
@@ -128,7 +109,7 @@ function VictoryPoints({
 
   const classes = useVPStyles(spriteValues)
 
-  return <DndProvider backend={HTML5Backend}>
+  return <DndProvider backend={TouchBackend}>
     <Grid container justifyContent='center'>
       {[...Array(11).keys()].map(numberOfPoints => {
         const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
@@ -161,7 +142,7 @@ function VictoryPoints({
           id={numberOfPoints}
           key={numberOfPoints}
         >
-          {factionsWithThisManyPoints.map(({faction}) => <Flag
+          {factionsWithThisManyPoints.map(({faction}) => <DraggableFlag
             key={faction}
             factionKey={faction}
             updatePoints={points => onChange(faction, points)}
