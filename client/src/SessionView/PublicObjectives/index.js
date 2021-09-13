@@ -6,54 +6,10 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import { DispatchContext } from '../../state'
-import * as factions from '../../gameInfo/factions'
+import FactionFlag from '../../FactionFlag'
 
 import Objective from './Objective'
 import AddObjective from './AddObjective'
-
-const useFlagStyles = makeStyles({
-  root: {
-    width: ({ width }) => width,
-    backgroundColor: ({ selected }) => `rgba(255, 255, 255, ${selected ? '1' : '0.3'})`,
-    borderRadius: '4%',
-    cursor: 'pointer',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  factionImage: {
-    opacity: ({ selected }) => selected ? 1 : 0.5,
-    height: ({ height }) => height,
-    width: 'auto',
-    backgroundSize: 'contain',
-    backgroundRepeat: 'none',
-  }
-})
-
-// TODO duplication in VictoryPoints
-function Flag({
-  factionKey,
-  selected,
-  onClick,
-  width,
-  height,
-}) {
-  const classes = useFlagStyles({
-    selected,
-    width,
-    height,
-  })
-  const factionData = factions.getData(factionKey)
-
-  return <div className={classes.root}>
-    <img
-      className={classes.factionImage}
-      onClick={onClick}
-      src={factionData.image}
-      alt={factionKey}
-      title={factionData.name}
-    />
-  </div>
-}
 
 const useSelectorStyles = makeStyles({
   root: {
@@ -79,7 +35,7 @@ function FactionSelector({
   }, [onChange])
 
   return <div className={classes.root}>
-    {factions.map(factionKey => <Flag
+    {factions.map(factionKey => <FactionFlag
       width='25%'
       height='2em'
       key={factionKey}
