@@ -21,4 +21,4 @@ export const get = async id => {
 }
 
 export const pushEventImmediately = (sessionId, gameEvent) => fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, { method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventType: gameEvent.type, serializedPayload: JSON.stringify(gameEvent.payload)}) })
-export const pushEvent = debounce(pushEventImmediately, 400, { trailing: true })
+export const pushEvent = debounce(pushEventImmediately, 400, { trailing: true, leading: true })

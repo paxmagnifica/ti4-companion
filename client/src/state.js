@@ -115,7 +115,6 @@ const scoreObjective = (state, payload) => {
   const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
   const session = state.sessions.data[sessionIndex]
 
-  session.points = session.points.map(p => p.faction === payload.faction ? {...p, points: p.points + 1} : p)
   session.objectives = session.objectives.map(obj => obj.slug === payload.slug
     ? {...obj, scoredBy: [...obj.scoredBy, payload.faction] }
     : obj)
@@ -135,7 +134,6 @@ const descoreObjective = (state, payload) => {
   const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
   const session = state.sessions.data[sessionIndex]
 
-  session.points = session.points.map(p => p.faction === payload.faction ? {...p, points: p.points - 1} : p)
   session.objectives = session.objectives.map(obj => obj.slug === payload.slug
     ? {...obj, scoredBy: obj.scoredBy.filter(sb => sb !== payload.faction) }
     : obj)
