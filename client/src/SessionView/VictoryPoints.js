@@ -5,8 +5,8 @@ import {
   Grid,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 
+import useSmallViewport from '../useSmallViewport'
 import FactionFlag from '../FactionFlag'
 import victoryPointsBackground from '../assets/victory-points-background.jpg'
 
@@ -104,7 +104,7 @@ function VictoryPoints({
   factions,
   points,
 }) {
-  const smallViewport = useMediaQuery('(max-width:649px)');
+  const smallViewport = useSmallViewport()
   const spriteValues = smallViewport ? VICTORY_POINTS_SPRITE_SMALL : VICTORY_POINTS_SPRITE_BIG
 
   const classes = useVPStyles(spriteValues)

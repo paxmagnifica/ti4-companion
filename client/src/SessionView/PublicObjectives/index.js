@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
+import useSmallViewport from '../../useSmallViewport'
 import { DispatchContext } from '../../state'
 import FactionFlag from '../../FactionFlag'
 
@@ -21,6 +22,7 @@ function FactionSelector({
   factions,
   value,
   onChange,
+  small,
 }) {
   const classes = useSelectorStyles()
 
@@ -37,7 +39,7 @@ function FactionSelector({
   return <div className={classes.root}>
     {factions.map(factionKey => <FactionFlag
       width='25%'
-      height='2em'
+      height={small ? '1em' : '2em'}
       key={factionKey}
       factionKey={factionKey}
       selected={value.includes(factionKey)}
@@ -49,7 +51,7 @@ function FactionSelector({
 const useStyles = makeStyles({
   objectiveContainer: {
     padding: 0,
-    margin: 12,
+    margin: ({ small }) => small ? 6 : 12,
     display: 'flex',
     flexDirection: 'column',
   }
@@ -59,7 +61,8 @@ function PublicObjectives({
   session,
   updateFactionPoints,
 }) {
-  const classes = useStyles()
+  const smallViewport = useSmallViewport()
+  const classes = useStyles({ small: smallViewport })
   const dispatch = useContext(DispatchContext)
   const sessionObjectives = useMemo(() => session.objectives || [], [session])
   const [addObjectiveOpen, setAddObjectiveOpen] = useState(false)
@@ -88,9 +91,11 @@ function PublicObjectives({
         key={sessionObjective.slug}
       >
         <Objective
+          small={smallViewport}
           {...sessionObjective}
         />
         <FactionSelector
+          small={smallViewport}
           factions={session.factions}
           value={sessionObjective.scoredBy}
           onChange={change => objectiveScored({ change, objective: sessionObjective })}
@@ -102,6 +107,7 @@ function PublicObjectives({
           style={{ padding: 0, margin: 0 }}
         >
           <Objective
+            small={smallViewport}
             reverse
             title='new Stage I objective'
           />

@@ -12,9 +12,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    width: 150,
-    height: 225,
+    width: ({ width }) => width,
+    height: ({ height }) => height,
     position: 'relative',
+    fontSize: ({ small }) => small ? '0.6em' : '1em',
     '& > p': {
       margin: 0,
       textAlign: 'center',
@@ -45,8 +46,8 @@ const useStyles = makeStyles(theme => ({
   },
   objective: {
     position: 'absolute',
-    width: 150,
-    height: 225,
+    width: ({ width }) => width,
+    height: ({ height }) => height,
     pointerEvents: 'none',
     zIndex: 0,
     borderRadius: '5%',
@@ -57,11 +58,16 @@ function Objective({
   title,
   slug,
   reverse,
+  small,
   ...other
 }) {
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
   const { secret, points, reward, when } = availableObjectives[slug] || {}
-  const classes = useStyles()
+  const classes = useStyles({
+    small,
+    width: small ? 80 : 150,
+    height: small ? 120 : 225,
+  })
 
   const background = useMemo(() => secret
     ? secretObjective
