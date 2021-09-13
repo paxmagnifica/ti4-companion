@@ -57,6 +57,7 @@ const useStyles = makeStyles({
 
 function PublicObjectives({
   session,
+  updateFactionPoints,
 }) {
   const classes = useStyles()
   const dispatch = useContext(DispatchContext)
@@ -69,12 +70,16 @@ function PublicObjectives({
   }, [dispatch, session.id])
 
   const objectiveScored = useCallback(({ change, objective }) => {
+    const factionPoints = session.points.find(({faction}) => faction === change.factionKey)?.points;
+
     if (change.event === 'selected') {
+      updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints + 1 })
       dispatch({ type: 'objectiveScored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
     } else {
+      updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints - 1 })
       dispatch({ type: 'objectiveDescored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
     }
-  }, [dispatch, session.id])
+  }, [dispatch, session.id, session.points, updateFactionPoints])
 
   return <>
     <Grid container justifyContent='center'>

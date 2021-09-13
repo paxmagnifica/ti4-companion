@@ -90,24 +90,6 @@ namespace server.Controllers
                 points[payload.Faction] = payload.Points;
             }
 
-            IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
-                .Where(ge => ge.EventType == nameof(ObjectiveScored) || ge.EventType == nameof(ObjectiveDescored))
-                .OrderBy(ge => ge.HappenedAt);
-            foreach (var gameEvent in objectivesScoredEvents)
-            {
-                if (gameEvent.EventType == nameof(ObjectiveScored))
-                {
-                    var scoredPayload = ObjectiveScored.GetPayload(gameEvent);
-                    points[scoredPayload.Faction] = points[scoredPayload.Faction] + 1;
-                }
-
-                if (gameEvent.EventType == nameof(ObjectiveDescored))
-                {
-                    var descoredPayload = ObjectiveDescored.GetPayload(gameEvent);
-                    points[descoredPayload.Faction] = points[descoredPayload.Faction] - 1;
-                }
-            }
-
             return points.ToArray().Select(kvp => new FactionPoint
             {
                 Faction = kvp.Key,
