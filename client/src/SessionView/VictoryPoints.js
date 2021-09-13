@@ -1,5 +1,6 @@
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
 import { useDrag, useDrop } from 'react-dnd'
 import {
   Grid,
@@ -109,7 +110,7 @@ function VictoryPoints({
 
   const classes = useVPStyles(spriteValues)
 
-  return <DndProvider backend={HTML5Backend}>
+  return <DndProvider backend={TouchBackend}>
     <Grid container justifyContent='center'>
       {[...Array(11).keys()].map(numberOfPoints => {
         const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
