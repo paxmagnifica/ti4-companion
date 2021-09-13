@@ -5,51 +5,17 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
+import useSmallViewport from '../../useSmallViewport'
 import { DispatchContext } from '../../state'
-import FactionFlag from '../../FactionFlag'
 
 import Objective from './Objective'
 import AddObjective from './AddObjective'
-
-const useSelectorStyles = makeStyles({
-  root: {
-    display: 'flex',
-  }
-})
-
-function FactionSelector({
-  factions,
-  value,
-  onChange,
-}) {
-  const classes = useSelectorStyles()
-
-  const clicked = useCallback((factionKey, selected) => {
-    if (selected) {
-      onChange({ factionKey, event: 'selected' })
-      return
-    }
-
-    onChange({ factionKey, event: 'deselected' })
-    return
-  }, [onChange])
-
-  return <div className={classes.root}>
-    {factions.map(factionKey => <FactionFlag
-      width='25%'
-      height='2em'
-      key={factionKey}
-      factionKey={factionKey}
-      selected={value.includes(factionKey)}
-      onClick={() => clicked(factionKey, !value.includes(factionKey))}
-    />)}
-  </div>
-}
+import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
 
 const useStyles = makeStyles({
   objectiveContainer: {
     padding: 0,
-    margin: 12,
+    margin: ({ small }) => small ? 6 : 12,
     display: 'flex',
     flexDirection: 'column',
   }
@@ -59,7 +25,8 @@ function PublicObjectives({
   session,
   updateFactionPoints,
 }) {
-  const classes = useStyles()
+  const smallViewport = useSmallViewport()
+  const classes = useStyles({ small: smallViewport })
   const dispatch = useContext(DispatchContext)
   const sessionObjectives = useMemo(() => session.objectives || [], [session])
   const [addObjectiveOpen, setAddObjectiveOpen] = useState(false)
@@ -87,13 +54,14 @@ function PublicObjectives({
         className={classes.objectiveContainer}
         key={sessionObjective.slug}
       >
-        <Objective
-          {...sessionObjective}
-        />
-        <FactionSelector
-          factions={session.factions}
-          value={sessionObjective.scoredBy}
-          onChange={change => objectiveScored({ change, objective: sessionObjective })}
+        <ObjectiveWithFactionSelector
+          small={smallViewport}
+          objective={sessionObjective}
+          selector={{
+            factions: session.factions,
+            value: sessionObjective.scoredBy,
+            onChange: change => objectiveScored({ change, objective: sessionObjective }),
+          }}
         />
       </div>)}
       <div className={classes.objectiveContainer}>
@@ -102,6 +70,7 @@ function PublicObjectives({
           style={{ padding: 0, margin: 0 }}
         >
           <Objective
+            small={smallViewport}
             reverse
             title='new Stage I objective'
           />
