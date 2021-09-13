@@ -90,6 +90,7 @@ function SessionView({
       <Grid item xs={12}>
         <PublicObjectives
           session={session}
+          updateFactionPoints={updateFactionPoints}
         />
       </Grid>
       {session.factions.map(faction => {

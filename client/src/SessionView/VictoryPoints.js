@@ -109,7 +109,10 @@ function VictoryPoints({
 
   const classes = useVPStyles(spriteValues)
 
-  return <DndProvider backend={TouchBackend}>
+  return <DndProvider
+    backend={TouchBackend}
+    options={{ enableMouseEvents: true }}
+  >
     <Grid container justifyContent='center'>
       {[...Array(11).keys()].map(numberOfPoints => {
         const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
