@@ -1,6 +1,7 @@
 import React from 'react'
 
 export const StateContext = React.createContext();
+export const ComboDispatchContext = React.createContext();
 export const DispatchContext = React.createContext();
 
 export const init = () => {
@@ -20,7 +21,7 @@ export const init = () => {
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'loadSessions':
+    case 'LoadSessions':
       return {
         ...state,
         sessions: {
@@ -29,7 +30,7 @@ export const reducer = (state, action) => {
           data: action.sessions,
         }
       }
-    case 'loadObjectives':
+    case 'LoadObjectives':
       return {
         ...state,
         objectives: {
@@ -38,7 +39,7 @@ export const reducer = (state, action) => {
           data: action.objectives.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
         }
       }
-    case 'createGameSession':
+    case 'CreateGameSession':
       return {
         ...state,
         sessions: {
@@ -47,13 +48,13 @@ export const reducer = (state, action) => {
           data: [action.session, ...state.sessions.data]
         },
       }
-    case 'updateVictoryPoints':
+    case 'VictoryPointsUpdated':
       return updateVictoryPoints(state, action.payload)
-    case 'setFactions':
-      const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.sessionId)
+    case 'FactionsShuffled':
+      const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.payload.sessionId)
       const set_session = state.sessions.data[set_sessionIndex]
 
-      set_session.factions = action.factions
+      set_session.factions = action.payload.factions
 
       const set_sessions = [...state.sessions.data]
       set_sessions.splice(set_sessionIndex, 1, {...set_session})
@@ -65,11 +66,11 @@ export const reducer = (state, action) => {
           data: set_sessions,
         }
       }
-    case 'objectiveAdded':
+    case 'ObjectiveAdded':
       return addObjective(state, action.payload)
-    case 'objectiveScored':
+    case 'ObjectiveScored':
       return scoreObjective(state, action.payload)
-    case 'objectiveDescored':
+    case 'ObjectiveDescored':
       return descoreObjective(state, action.payload)
     default:
       console.error('unhandled action', action)
@@ -97,6 +98,10 @@ const updateVictoryPoints = (state, payload) => {
 const addObjective = (state, payload) => {
   const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
   const session = state.sessions.data[sessionIndex]
+
+  if (session.objectives.find(obj => obj.slug === payload.slug)) {
+    return state
+  }
 
   session.objectives = [...session.objectives, {slug: payload.slug, scoredBy: []}]
   const sessions = [...state.sessions.data]

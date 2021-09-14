@@ -28,6 +28,15 @@ $ docker-compose --env-file .env.dev up -d
 This will run postgres, backend and frontend services in dockers.
 Check docker-compose which services are available on which host ports.
 
+### initial data
+
+If you run the application against an empty database, 2 sessions will be created with static Guids:
+
+- `1811a152-b64c-41cd-bdfd-8885fdfb7620`
+- `6fd5c725-30cd-4320-8889-c2f6427ba365`
+
+so you can check the installation by trying to hit `https://localhost:3000/6fd5c725-30cd-4320-8889-c2f6427ba365` or the other one
+
 ## extracting faction images from codex pdf
 
 The _nutshell_ images of factions (the ones shown on session view) are extracted from codex pdf.

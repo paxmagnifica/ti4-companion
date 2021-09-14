@@ -26,13 +26,16 @@ namespace server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "_localhostCors", builder =>
                 {
                     builder
                         .WithOrigins(Configuration.GetValue<string>("AllowedOrigin"))
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
 
@@ -46,6 +49,7 @@ namespace server
                 options.UseNpgsql(Configuration.GetConnectionString("SessionContext")));
 
             services.AddScoped<EventFactory>();
+            services.AddScoped<SessionHub>();
             services.AddScoped<ITimeProvider, TimeProvider>();
             services.AddScoped<Dispatcher>();
 
@@ -90,6 +94,7 @@ namespace server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<SessionHub>("/sessionHub");
             });
         }
     }

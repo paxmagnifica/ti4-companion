@@ -24,10 +24,12 @@ import SessionView, { SessionProvider } from './SessionView'
 import { getAllSessions, saveAllSessions } from './persistence'
 import * as sessionService from './sessionService'
 import * as objectivesService from './objectivesService'
-import { DispatchContext, StateContext, reducer, init } from './state'
+import { ComboDispatchContext, DispatchContext, StateContext, reducer, init } from './state'
+import { SignalRConnectionProvider } from './signalR'
 
 function App() {
   useTheme()
+
   const [state, dispatch] = useReducer(reducer, null, init)
   const comboDispatch = useCallback(action => {
     const { payload } = action
@@ -37,40 +39,40 @@ function App() {
   const { sessions } = state
 
   const shuffleFactions = useCallback(sessionId => {
-    // TODO remove logic duplication in reducer and stuff
     const session = sessions.data.find(s => s.id === sessionId)
     const shuffledFactions = shuffle(session.factions)
-    sessionService.pushEvent(session.id, { type: 'factionsShuffled', payload: shuffledFactions })
-    dispatch({ type: 'setFactions', sessionId, factions: shuffledFactions })
-  }, [sessions.data])
+    const payload = { factions: shuffledFactions, sessionId }
+    comboDispatch({ type: 'FactionsShuffled', payload })
+  }, [sessions.data, comboDispatch])
 
   const setFactions = useCallback((sessionId, factions) => {
-    // TODO remove logic duplication in reducer and stuff
-    sessionService.pushEvent(sessionId, { type: 'factionsShuffled', payload: factions })
-    dispatch({ type: 'setFactions', sessionId, factions })
-  }, [])
+    const payload = { factions, sessionId }
+    comboDispatch({ type: 'FactionsShuffled', payload })
+  }, [comboDispatch])
 
   const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
-    // TODO remove logic duplication in reducer and stuff
     const payload = { sessionId, faction, points }
-    sessionService.pushEvent(sessionId, { type: 'victoryPointsUpdated', payload })
-    dispatch({ type: 'updateVictoryPoints', payload })
-  }, [])
+    comboDispatch({ type: 'VictoryPointsUpdated', payload })
+  }, [comboDispatch])
 
-  // TODO refactor this shit xD
   useEffect(() => {
-    setTimeout(() => saveAllSessions(sessions.data.filter(session => !session.remote)), 0)
+    async function save() {
+      saveAllSessions(sessions.data)
+    }
+
+    save()
+
+    return save
   }, [sessions]);
 
   useEffect(() => {
+    const sessions = getAllSessions()
+    dispatch({ type: 'LoadSessions', sessions })
+
     const load = async () => {
-      const sessionsPromise = getAllSessions()
-      const objectivesPromise = objectivesService.getAll()
+      const objectives = await objectivesService.getAll()
 
-      const [sessions, objectives] = await Promise.allSettled([sessionsPromise, objectivesPromise])
-
-      dispatch({ type: 'loadSessions', sessions: sessions.value })
-      dispatch({ type: 'loadObjectives', objectives: objectives.value })
+      dispatch({ type: 'LoadObjectives', objectives })
     }
 
     load()
@@ -92,7 +94,8 @@ function App() {
       <Toolbar/>
       <Container>
         <StateContext.Provider value={state}>
-          <DispatchContext.Provider value={comboDispatch}>
+        <ComboDispatchContext.Provider value={comboDispatch}>
+        <DispatchContext.Provider value={dispatch}>
             <Box m={2}>
               <Switch>
                 <Route path="/new">
@@ -116,11 +119,18 @@ function App() {
                 </Route>
               </Switch>
             </Box>
-            </DispatchContext.Provider>
+        </DispatchContext.Provider>
+        </ComboDispatchContext.Provider>
         </StateContext.Provider>
       </Container>
     </Router>
   );
 }
 
-export default App
+function SignalRConnectedApp() {
+  return <SignalRConnectionProvider>
+    <App/>
+  </SignalRConnectionProvider>
+}
+
+export default SignalRConnectedApp

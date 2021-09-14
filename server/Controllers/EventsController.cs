@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using server.Infra;
 
@@ -13,12 +14,14 @@ namespace server.Controllers
         private readonly EventFactory _eventFactory;
         private readonly Dispatcher _dispatcher;
         private readonly ILogger<EventsController> _logger;
+        private readonly IHubContext<SessionHub> _sessionHub;
 
-        public EventsController(EventFactory eventFactory, Dispatcher dispatch, ILogger<EventsController> logger)
+        public EventsController(EventFactory eventFactory, Dispatcher dispatch, ILogger<EventsController> logger, IHubContext<SessionHub> sessionHub)
         {
             _eventFactory = eventFactory;
             _dispatcher = dispatch;
             _logger = logger;
+            _sessionHub = sessionHub;
         }
 
         [HttpPost]
@@ -28,6 +31,8 @@ namespace server.Controllers
             {
                 var gameEvent = _eventFactory.GetGameEvent(sessionId, eventDto);
                 await _dispatcher.Dispatch(gameEvent);
+
+                await _sessionHub.Clients.Group(sessionId.ToString()).SendCoreAsync("SessionEvent", new object[] { gameEvent });
 
                 return new OkResult();
             }

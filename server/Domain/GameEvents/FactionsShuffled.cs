@@ -15,8 +15,6 @@ namespace server.Domain
 
         public async Task Handle(GameEvent gameEvent)
         {
-            List<string> shuffledFactions = JsonConvert.DeserializeObject<List<string>>(gameEvent.SerializedPayload);
-
             var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
@@ -29,5 +27,15 @@ namespace server.Domain
 
             await _repository.SaveChangesAsync();
         }
+
+        internal static FactionsShuffledPayload GetPayload(GameEvent gameEvent)
+        {
+            return JsonConvert.DeserializeObject<FactionsShuffledPayload>(gameEvent.SerializedPayload);
+        }
+    }
+
+    internal class FactionsShuffledPayload
+    {
+        public List<string> Factions { get; set; }
     }
 }

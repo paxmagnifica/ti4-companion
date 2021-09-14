@@ -60,14 +60,20 @@ namespace server.Controllers
         private List<String> GetFactions(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == GameEvent.GameStarted);
+            var lastShuffle = events.OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == nameof(FactionsShuffled));
 
-            if (gameStartEvent == null)
+            if (gameStartEvent == null && lastShuffle == null)
             {
                 // TODO domain exception
                 throw new Exception("game session without factions event");
             }
 
-            return JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
+            if (lastShuffle == null)
+            {
+                return JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
+            }
+
+            return FactionsShuffled.GetPayload(lastShuffle).Factions;
         }
 
         public List<FactionPoint> Points { get; internal set; }

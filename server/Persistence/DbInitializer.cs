@@ -1,5 +1,8 @@
-using server.Domain;
+using System.Collections.Generic;
 using System.Linq;
+using System;
+using server.Domain;
+using Newtonsoft.Json;
 
 namespace server.Persistence
 {
@@ -12,6 +15,36 @@ namespace server.Persistence
             {
                 return; // DB has been seeded
             }
+
+            var sessionId = Guid.Parse("6fd5c725-30cd-4320-8889-c2f6427ba365");
+            context.Sessions.Add(new Session() {
+                Id = sessionId,
+                Events = new List<GameEvent>() {
+                    new GameEvent {
+                        Id = Guid.NewGuid(),
+                        SessionId = sessionId,
+                        HappenedAt = DateTimeOffset.Now,
+                        EventType = GameEvent.GameStarted,
+                        SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" })
+                    }
+                },
+                CreatedAt = DateTimeOffset.Now,
+            });
+
+            var sessionId2 = Guid.Parse("1811a152-b64c-41cd-bdfd-8885fdfb7620");
+            context.Sessions.Add(new Session() {
+                Id = sessionId2,
+                Events = new List<GameEvent>() {
+                    new GameEvent {
+                        Id = Guid.NewGuid(),
+                        SessionId = sessionId2,
+                        HappenedAt = DateTimeOffset.Now,
+                        EventType = GameEvent.GameStarted,
+                        SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance" })
+                    }
+                },
+                CreatedAt = DateTimeOffset.Now,
+            });
 
             var objectives = new Objective[]
             {
