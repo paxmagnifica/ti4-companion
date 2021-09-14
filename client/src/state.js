@@ -99,6 +99,10 @@ const addObjective = (state, payload) => {
   const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
   const session = state.sessions.data[sessionIndex]
 
+  if (session.objectives.find(obj => obj.slug === payload.slug)) {
+    return state
+  }
+
   session.objectives = [...session.objectives, {slug: payload.slug, scoredBy: []}]
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, {...session})
