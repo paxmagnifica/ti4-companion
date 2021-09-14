@@ -37,25 +37,21 @@ function App() {
   const { sessions } = state
 
   const shuffleFactions = useCallback(sessionId => {
-    // TODO remove logic duplication in reducer and stuff
     const session = sessions.data.find(s => s.id === sessionId)
     const shuffledFactions = shuffle(session.factions)
-    sessionService.pushEvent(session.id, { type: 'factionsShuffled', payload: shuffledFactions })
-    dispatch({ type: 'setFactions', sessionId, factions: shuffledFactions })
-  }, [sessions.data])
+    const payload = { factions: shuffledFactions, sessionId }
+    comboDispatch({ type: 'factionsShuffled', payload })
+  }, [sessions.data, comboDispatch])
 
   const setFactions = useCallback((sessionId, factions) => {
-    // TODO remove logic duplication in reducer and stuff
-    sessionService.pushEvent(sessionId, { type: 'factionsShuffled', payload: factions })
-    dispatch({ type: 'setFactions', sessionId, factions })
-  }, [])
+    const payload = { factions, sessionId }
+    comboDispatch({ type: 'factionsShuffled', payload })
+  }, [comboDispatch])
 
   const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
-    // TODO remove logic duplication in reducer and stuff
     const payload = { sessionId, faction, points }
-    sessionService.pushEvent(sessionId, { type: 'victoryPointsUpdated', payload })
-    dispatch({ type: 'updateVictoryPoints', payload })
-  }, [])
+    comboDispatch({ type: 'victoryPointsUpdated', payload })
+  }, [comboDispatch])
 
   // TODO refactor this shit xD
   useEffect(() => {

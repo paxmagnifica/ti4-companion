@@ -47,13 +47,13 @@ export const reducer = (state, action) => {
           data: [action.session, ...state.sessions.data]
         },
       }
-    case 'updateVictoryPoints':
+    case 'victoryPointsUpdated':
       return updateVictoryPoints(state, action.payload)
-    case 'setFactions':
-      const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.sessionId)
+    case 'factionsShuffled':
+      const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.payload.sessionId)
       const set_session = state.sessions.data[set_sessionIndex]
 
-      set_session.factions = action.factions
+      set_session.factions = action.payload.factions
 
       const set_sessions = [...state.sessions.data]
       set_sessions.splice(set_sessionIndex, 1, {...set_session})

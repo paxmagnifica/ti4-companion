@@ -69,15 +69,11 @@ function SessionView({
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
       </Grid>
       <Grid item container xs={6} justifyContent="flex-end">
-        {
-          session.remote
-            ? null
-            : <ShuffleFactionsButton
+             <ShuffleFactionsButton
               factions={session.factions}
               shuffleFactions={() => shuffleFactions(session.id)}
               setFactions={factions => setFactions(session.id, factions)}
             />
-        }
         <ShareButton id={session.id} />
       </Grid>
       <Grid item xs={12}>
