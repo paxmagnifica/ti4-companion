@@ -5,7 +5,7 @@ services:
     user: "node"
     working_dir: /home/node/app
     environment:
-      - REACT_APP_API_URL=https://localhost:5001
+      - REACT_APP_API_URL=http://localhost:5000
     volumes:
       - ./client:/home/node/app
     ports:
