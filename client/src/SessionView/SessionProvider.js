@@ -31,7 +31,7 @@ export function SessionProvider({
         const session = await sessionService.get(id)
         session.remote = true
         setForeignSession(session)
-        dispatch({ type: 'loadSessions', sessions: [...state.sessions.data, session]});
+        dispatch({ type: 'LoadSessions', sessions: [...state.sessions.data, session]});
       } catch (e) {
         console.error(e)
       } finally {

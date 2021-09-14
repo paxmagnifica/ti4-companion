@@ -31,6 +31,21 @@ namespace server.Persistence
                 CreatedAt = DateTimeOffset.Now,
             });
 
+            var sessionId2 = Guid.Parse("1811a152-b64c-41cd-bdfd-8885fdfb7620");
+            context.Sessions.Add(new Session() {
+                Id = sessionId2,
+                Events = new List<GameEvent>() {
+                    new GameEvent {
+                        Id = Guid.NewGuid(),
+                        SessionId = sessionId2,
+                        HappenedAt = DateTimeOffset.Now,
+                        EventType = GameEvent.GameStarted,
+                        SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance" })
+                    }
+                },
+                CreatedAt = DateTimeOffset.Now,
+            });
+
             var objectives = new Objective[]
             {
                 new Objective("corner-the-market", GameVersion.Base, 1, false, GamePhase.Status),

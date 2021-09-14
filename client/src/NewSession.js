@@ -48,7 +48,7 @@ function NewSession({
   const history = useHistory()
   const createGameSession = useCallback(async () => {
     const session = await sessionService.createSession(selectedFactions)
-    dispatch({type: 'createGameSession', session})
+    dispatch({type: 'CreateGameSession', session})
     history.push(`/${session.id}`)
   }, [history, dispatch, selectedFactions])
 

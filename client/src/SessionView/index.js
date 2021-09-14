@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useEffect, useContext, useState, useCallback } from 'react'
 import {
   Avatar,
   Card,
@@ -14,6 +14,8 @@ import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
 import * as factions from '../gameInfo/factions'
+import { SignalRConnectionContext } from '../signalR'
+import { DispatchContext } from '../state'
 
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
@@ -38,6 +40,29 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const useRealTimeSession = sessionId => {
+  const signalRConnection = useContext(SignalRConnectionContext)
+  const dispatch = useContext(DispatchContext)
+
+  useEffect(() => {
+    signalRConnection.on("SessionEvent", sessionEvent => {
+      const payload = JSON.parse(sessionEvent.serializedPayload)
+      dispatch({ type: sessionEvent.eventType, payload })
+    })
+  }, [signalRConnection, dispatch])
+
+  useEffect(() => {
+    if (!sessionId) {
+      return
+    }
+
+    signalRConnection.invoke("UnsubscribeFromSession", sessionId)
+    signalRConnection.invoke("SubscribeToSession", sessionId)
+
+    return () => signalRConnection.invoke("UnsubscribeFromSession", sessionId)
+  }, [signalRConnection, sessionId])
+}
+
 const getFactionCheatSheetPath = factionKey => `/factionCheatsheets/${factionKey.toLowerCase()}.png`
 
 function SessionView({
@@ -47,6 +72,7 @@ function SessionView({
   updateFactionPoints,
   updateObjectives,
 }) {
+  useRealTimeSession(session.id)
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
   const [faction, setFaction] = useState(null)

@@ -24,10 +24,12 @@ import SessionView, { SessionProvider } from './SessionView'
 import { getAllSessions, saveAllSessions } from './persistence'
 import * as sessionService from './sessionService'
 import * as objectivesService from './objectivesService'
-import { DispatchContext, StateContext, reducer, init } from './state'
+import { ComboDispatchContext, DispatchContext, StateContext, reducer, init } from './state'
+import { SignalRConnectionProvider } from './signalR'
 
 function App() {
   useTheme()
+
   const [state, dispatch] = useReducer(reducer, null, init)
   const comboDispatch = useCallback(action => {
     const { payload } = action
@@ -40,17 +42,17 @@ function App() {
     const session = sessions.data.find(s => s.id === sessionId)
     const shuffledFactions = shuffle(session.factions)
     const payload = { factions: shuffledFactions, sessionId }
-    comboDispatch({ type: 'factionsShuffled', payload })
+    comboDispatch({ type: 'FactionsShuffled', payload })
   }, [sessions.data, comboDispatch])
 
   const setFactions = useCallback((sessionId, factions) => {
     const payload = { factions, sessionId }
-    comboDispatch({ type: 'factionsShuffled', payload })
+    comboDispatch({ type: 'FactionsShuffled', payload })
   }, [comboDispatch])
 
   const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
     const payload = { sessionId, faction, points }
-    comboDispatch({ type: 'victoryPointsUpdated', payload })
+    comboDispatch({ type: 'VictoryPointsUpdated', payload })
   }, [comboDispatch])
 
   // TODO refactor this shit xD
@@ -65,8 +67,8 @@ function App() {
 
       const [sessions, objectives] = await Promise.allSettled([sessionsPromise, objectivesPromise])
 
-      dispatch({ type: 'loadSessions', sessions: sessions.value })
-      dispatch({ type: 'loadObjectives', objectives: objectives.value })
+      dispatch({ type: 'LoadSessions', sessions: sessions.value })
+      dispatch({ type: 'LoadObjectives', objectives: objectives.value })
     }
 
     load()
@@ -88,7 +90,8 @@ function App() {
       <Toolbar/>
       <Container>
         <StateContext.Provider value={state}>
-          <DispatchContext.Provider value={comboDispatch}>
+        <ComboDispatchContext.Provider value={comboDispatch}>
+        <DispatchContext.Provider value={dispatch}>
             <Box m={2}>
               <Switch>
                 <Route path="/new">
@@ -112,11 +115,18 @@ function App() {
                 </Route>
               </Switch>
             </Box>
-            </DispatchContext.Provider>
+        </DispatchContext.Provider>
+        </ComboDispatchContext.Provider>
         </StateContext.Provider>
       </Container>
     </Router>
   );
 }
 
-export default App
+function SignalRConnectedApp() {
+  return <SignalRConnectionProvider>
+    <App/>
+  </SignalRConnectionProvider>
+}
+
+export default SignalRConnectedApp

@@ -6,7 +6,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../useSmallViewport'
-import { DispatchContext } from '../../state'
+import { ComboDispatchContext } from '../../state'
 
 import Objective from './Objective'
 import AddObjective from './AddObjective'
@@ -27,26 +27,26 @@ function PublicObjectives({
 }) {
   const smallViewport = useSmallViewport()
   const classes = useStyles({ small: smallViewport })
-  const dispatch = useContext(DispatchContext)
+  const comboDispatch = useContext(ComboDispatchContext)
   const sessionObjectives = useMemo(() => session.objectives || [], [session])
   const [addObjectiveOpen, setAddObjectiveOpen] = useState(false)
 
   const objectiveAdded = useCallback(objective => {
-    dispatch({ type: 'objectiveAdded', payload: { sessionId: session.id, slug: objective.slug } })
+    comboDispatch({ type: 'ObjectiveAdded', payload: { sessionId: session.id, slug: objective.slug } })
     setAddObjectiveOpen(false)
-  }, [dispatch, session.id])
+  }, [comboDispatch, session.id])
 
   const objectiveScored = useCallback(({ change, objective }) => {
     const factionPoints = session.points.find(({faction}) => faction === change.factionKey)?.points;
 
     if (change.event === 'selected') {
       updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints + 1 })
-      dispatch({ type: 'objectiveScored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
+      comboDispatch({ type: 'ObjectiveScored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
     } else {
       updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints - 1 })
-      dispatch({ type: 'objectiveDescored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
+      comboDispatch({ type: 'ObjectiveDescored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
     }
-  }, [dispatch, session.id, session.points, updateFactionPoints])
+  }, [comboDispatch, session.id, session.points, updateFactionPoints])
 
   return <>
     <Grid container justifyContent='center'>

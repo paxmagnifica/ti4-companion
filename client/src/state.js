@@ -1,6 +1,7 @@
 import React from 'react'
 
 export const StateContext = React.createContext();
+export const ComboDispatchContext = React.createContext();
 export const DispatchContext = React.createContext();
 
 export const init = () => {
@@ -20,7 +21,7 @@ export const init = () => {
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'loadSessions':
+    case 'LoadSessions':
       return {
         ...state,
         sessions: {
@@ -29,7 +30,7 @@ export const reducer = (state, action) => {
           data: action.sessions,
         }
       }
-    case 'loadObjectives':
+    case 'LoadObjectives':
       return {
         ...state,
         objectives: {
@@ -38,7 +39,7 @@ export const reducer = (state, action) => {
           data: action.objectives.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
         }
       }
-    case 'createGameSession':
+    case 'CreateGameSession':
       return {
         ...state,
         sessions: {
@@ -47,9 +48,9 @@ export const reducer = (state, action) => {
           data: [action.session, ...state.sessions.data]
         },
       }
-    case 'victoryPointsUpdated':
+    case 'VictoryPointsUpdated':
       return updateVictoryPoints(state, action.payload)
-    case 'factionsShuffled':
+    case 'FactionsShuffled':
       const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.payload.sessionId)
       const set_session = state.sessions.data[set_sessionIndex]
 
@@ -65,11 +66,11 @@ export const reducer = (state, action) => {
           data: set_sessions,
         }
       }
-    case 'objectiveAdded':
+    case 'ObjectiveAdded':
       return addObjective(state, action.payload)
-    case 'objectiveScored':
+    case 'ObjectiveScored':
       return scoreObjective(state, action.payload)
-    case 'objectiveDescored':
+    case 'ObjectiveDescored':
       return descoreObjective(state, action.payload)
     default:
       console.error('unhandled action', action)
