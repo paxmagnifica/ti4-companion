@@ -55,20 +55,24 @@ function App() {
     comboDispatch({ type: 'VictoryPointsUpdated', payload })
   }, [comboDispatch])
 
-  // TODO refactor this shit xD
   useEffect(() => {
-    setTimeout(() => saveAllSessions(sessions.data.filter(session => !session.remote)), 0)
+    async function save() {
+      saveAllSessions(sessions.data)
+    }
+
+    save()
+
+    return save
   }, [sessions]);
 
   useEffect(() => {
+    const sessions = getAllSessions()
+    dispatch({ type: 'LoadSessions', sessions })
+
     const load = async () => {
-      const sessionsPromise = getAllSessions()
-      const objectivesPromise = objectivesService.getAll()
+      const objectives = await objectivesService.getAll()
 
-      const [sessions, objectives] = await Promise.allSettled([sessionsPromise, objectivesPromise])
-
-      dispatch({ type: 'LoadSessions', sessions: sessions.value })
-      dispatch({ type: 'LoadObjectives', objectives: objectives.value })
+      dispatch({ type: 'LoadObjectives', objectives })
     }
 
     load()

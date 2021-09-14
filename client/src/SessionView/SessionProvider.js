@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import * as sessionService from '../sessionService'
@@ -10,17 +10,14 @@ export function SessionProvider({
 }) {
   const { id } = useParams()
 
-  const [loading, setLoading] = useState(true)
-  const sessionFromLocalStorage = useMemo(() => state.sessions.data.find(s => s.id === id), [state, id])
-  const [foreignSession, setForeignSession] = useState(null)
+  const [loading, setLoading] = useState(null)
 
   useEffect(() => {
     if (!id) {
       return
     }
 
-    if (sessionFromLocalStorage) {
-      setLoading(false)
+    if (loading !== null) {
       return
     }
 
@@ -30,8 +27,7 @@ export function SessionProvider({
       try {
         const session = await sessionService.get(id)
         session.remote = true
-        setForeignSession(session)
-        dispatch({ type: 'LoadSessions', sessions: [...state.sessions.data, session]});
+        dispatch({ type: 'LoadSessions', sessions: [session, ...state.sessions.data.filter(s => s.id !== session.id)]});
       } catch (e) {
         console.error(e)
       } finally {
@@ -40,12 +36,13 @@ export function SessionProvider({
     }
 
     loadSession()
-  }, [dispatch, state.sessions.data, id, sessionFromLocalStorage])
+  }, [loading, dispatch, state.sessions.data, id])
 
+  const session = useMemo(() => state.sessions.data.find(s => s.id === id), [state, id])
 
   if (!id) {
     return null
   }
 
-  return children(sessionFromLocalStorage || foreignSession, loading || state.objectives.loading)
+  return children(session, loading || state.objectives.loading)
 }
