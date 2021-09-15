@@ -27,7 +27,6 @@ function ShareButton({
 		navigator.clipboard.writeText(`${window.location.origin}/${id}`);
 		const copyButton = e.target;
 		copyButton.innerText = "Copied!";
-		console.log(e.target);
 	}
 
   return <>
