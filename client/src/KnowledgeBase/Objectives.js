@@ -57,7 +57,7 @@ function Objectives() {
       className={classes.objectivesGrid}
       container
       alignItems="center"
-      justifyContent={smallViewport ? 'center' : ''}
+      justifyContent={smallViewport ? 'center' : 'flex-start'}
       spacing={2}
     >
       <Grid item xs={12} sm={6}>

@@ -96,7 +96,6 @@ function Objective({
       : big
         ? GINORMOUS_SIZE
         : NORMAL_SIZE
-  console.log({styles})
   const classes = useStyles(styles)
 
   const background = useMemo(() => secret

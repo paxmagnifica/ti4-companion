@@ -10,12 +10,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import reverseObjective from '../assets/objective-1-reverse.jpg'
+import StrategyCard from '../gameInfo/strategyCards'
 
 import Objectives from './Objectives'
+import StrategyCards from './StrategyCards'
+import StrategyBack from './StrategyBack'
 
 const useTabPanelStyles = makeStyles({
   root: {
-    padding: '2em'
+    padding: '2em',
+    overflowX: 'hidden',
   },
 })
 
@@ -50,8 +54,9 @@ const useStyles = makeStyles(theme => ({
   cardContainer: {
     '&:hover > *:not(:hover)': {
       opacity: .8,
-      '& > img': {
-        transform: 'rotate(90deg)',
+      '& > *': {
+        transform: 'rotate(-90deg)',
+        transformOrigin: 'center center',
       }
     },
   },
@@ -66,10 +71,9 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
     opacity: .8,
     marginLeft: -30,
-    '& > img': {
-      height: 80,
-      width: 'auto',
-      transform: 'rotate(90deg)',
+    '& > *': {
+      transform: 'rotate(-90deg)',
+      transformOrigin: 'center center',
       transition: theme.transitions.create(['transform'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -79,20 +83,22 @@ const useStyles = makeStyles(theme => ({
   hoverableCard: {
     '&:hover': {
       opacity: 1,
-      '& > img': {
-        transform: 'translateX(-30%) scale(1.4) rotate(90deg)',
+      '& > *': {
+        transform: 'translateX(-30%) scale(1.4) rotate(-90deg)',
+        transformOrigin: 'center center',
       }
     },
   },
   cardActive: {
     opacity: 1,
-    '& > img': {
-      transform: 'translateX(-30%) scale(1.4) rotate(90deg)',
+    '& > *': {
+      transform: 'translateX(-30%) scale(1.4) rotate(-90deg)',
+      transformOrigin: 'center center',
     }
   },
   smallCard: {
     marginLeft: -22,
-    '& > img': {
+    '& > *': {
       height: 64,
     }
   },
@@ -165,10 +171,26 @@ function KnowledgeBase() {
           })}
         >
           <img
+            height={80}
             onClick={() => open(0)}
             alt="Browse objectives"
             title="Browse objectives"
             src={reverseObjective}
+          />
+        </div>
+        <div
+          className={clsx(classes.card, {
+            [classes.hoverableCard]: hoverable,
+            [classes.smallCard]: smallCards,
+            [classes.cardActive]: drawerOpen && chosenTab === 1,
+          })}
+        >
+          <StrategyBack
+            onClick={() => open(1)}
+            alt="Browse objectives"
+            title="Browse objectives"
+            strategy={StrategyCard.Leadership}
+            height={smallCards ? 64 : 80}
           />
         </div>
       </span>
@@ -192,6 +214,14 @@ function KnowledgeBase() {
         index={0}
       >
         <Objectives />
+      </TabPanel>
+      <TabPanel
+        small={smallCards}
+        title='Strategy cards'
+        value={chosenTab}
+        index={1}
+      >
+        <StrategyCards />
       </TabPanel>
     </Drawer>
   </>
