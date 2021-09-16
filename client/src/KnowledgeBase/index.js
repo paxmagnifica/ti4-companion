@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react'
 import clsx from 'clsx'
 import {
+  Divider,
   Drawer,
   Grid,
+  Typography,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
@@ -17,13 +19,19 @@ const useTabPanelStyles = makeStyles({
   },
 })
 
-function TabPanel({ children, value, index }) {
+function TabPanel({ small, children, value, index, title }) {
   const classes = useTabPanelStyles()
   if (value !== index) {
     return null
   }
 
-  return <div className={classes.root}>{children}</div>
+  return <div className={classes.root}>
+    <Typography variant="h4" component="div" gutterBottom>
+      {!small && 'Knowledge base: '}<i>{title}</i>
+    </Typography>
+    <Divider />
+    {children}
+  </div>
 }
 
 const useStyles = makeStyles(theme => ({
@@ -120,7 +128,7 @@ function KnowledgeBase() {
   const gapWidth = smallCards ? '70px' : '17%'
   const drawerWidth = `calc(100% - ${gapWidth})`
   const classes = useStyles({ gapWidth, drawerWidth })
-  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(true)
   const [chosenTab, setChosenTab] = useState(0)
 
   const open = useCallback(index => {
@@ -178,6 +186,7 @@ function KnowledgeBase() {
       anchor='right'
     >
       <TabPanel
+        small={smallCards}
         title='Objectives'
         value={chosenTab}
         index={0}
