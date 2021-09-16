@@ -3,6 +3,9 @@ import clsx from 'clsx'
 import {
   Grid,
   CircularProgress,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -58,13 +61,14 @@ function Objectives() {
       justifyContent={smallViewport ? 'center' : ''}
       spacing={2}
     >
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={6}>
         <Grid
           container
           alignItems="center"
           justifyContent="center"
         >
           <DebouncedTextField
+            placeholder='search'
             onChange={setSearchValue}
             setLoading={setFiltering}
           />
@@ -74,6 +78,22 @@ function Objectives() {
             className={clsx(classes.filtering, { [classes.hide]: !filtering })}
           />
         </Grid>
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <FormGroup row>
+          <FormControlLabel
+            control={<Checkbox checked={stageISelected} onChange={() => setStageI(x => !x)} />}
+            label="Stage I"
+          />
+          <FormControlLabel
+            control={<Checkbox checked={stageIISelected} onChange={() => setStageII(x => !x)} />}
+            label="Stage II"
+          />
+          <FormControlLabel
+            control={<Checkbox checked={secretSelected} onChange={() => setSecret(x => !x)} />}
+            label="Secret"
+          />
+        </FormGroup>
       </Grid>
       {filteredObjectives.map(({ slug }) => <Grid item key={slug}><Objective
         small={smallViewport}

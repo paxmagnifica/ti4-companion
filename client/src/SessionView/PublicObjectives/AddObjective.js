@@ -43,9 +43,9 @@ function AddObjective({
     const  withMeta = translations.objectivesArray.map(obj => ({ ...obj, ...availableObjectives[obj.slug]}))
 
     return [
+      ...(stageISelected ? withMeta.filter(obj => obj.points === 1 && !obj.secret) : []),
+      ...(stageIISelected ? withMeta.filter(obj => obj.points === 2 && !obj.secret) : []),
       ...(secretSelected ? withMeta.filter(obj => obj.secret) : []),
-      ...(stageISelected ? withMeta.filter(obj => obj.points === 1) : []),
-      ...(stageIISelected ? withMeta.filter(obj => obj.points === 2) : []),
     ]
   }, [availableObjectives, stageISelected, stageIISelected, secretSelected]);
 

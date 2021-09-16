@@ -10,6 +10,7 @@ function DebouncedTextField({
   onChange,
   setLoading,
   debounceTime,
+  ...others
 }) {
   const [value, setValue] = useState('')
   const debouncedOnChange = useMemo(() => debounce(search => {
@@ -31,6 +32,7 @@ function DebouncedTextField({
   }, [debouncedOnChange, setLoading])
 
   return <TextField
+    {...others}
     value={value}
     onChange={magic}
     InputProps={{
