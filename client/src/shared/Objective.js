@@ -5,12 +5,12 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
 
-import publicObjectiveI from '../../assets/objective-1.png'
-import publicObjectiveII from '../../assets/objective-2.png'
-import secretObjective from '../../assets/objective-secret.png'
-import reverseObjective from '../../assets/objective-1-reverse.jpg'
-import translations from '../../i18n/index'
-import { StateContext } from '../../state'
+import publicObjectiveI from '../assets/objective-1.png'
+import publicObjectiveII from '../assets/objective-2.png'
+import secretObjective from '../assets/objective-secret.png'
+import reverseObjective from '../assets/objective-1-reverse.jpg'
+import translations from '../i18n/index'
+import { StateContext } from '../state'
 
 const useStyles = makeStyles(theme => ({
   root: {

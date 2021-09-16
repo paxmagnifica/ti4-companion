@@ -12,8 +12,9 @@ import { Check } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom'
 
+import * as sessionService from './shared/sessionService'
+
 import { factionsList } from './gameInfo/factions'
-import * as sessionService from './sessionService'
 
 const useStyles = makeStyles(theme => ({
   root: {

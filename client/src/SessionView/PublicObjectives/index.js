@@ -5,10 +5,10 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import useSmallViewport from '../../useSmallViewport'
+import useSmallViewport from '../../shared/useSmallViewport'
 import { ComboDispatchContext } from '../../state'
+import Objective from '../../shared/Objective'
 
-import Objective from './Objective'
 import AddObjective from './AddObjective'
 import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
 

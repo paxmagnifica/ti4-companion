@@ -1,7 +1,8 @@
 import debounce from 'lodash.debounce'
 
+import CONFIG from '../config'
+
 import { saveSession } from './persistence'
-import CONFIG from './config'
 
 export const createSession = async factions => {
   const result = await fetch(`${CONFIG.apiUrl}/api/sessions`, { method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(factions) })

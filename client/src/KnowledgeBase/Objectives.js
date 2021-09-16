@@ -11,9 +11,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { StateContext } from '../state'
 import translations from '../i18n'
-// TODO make it shared component
-import Objective from '../SessionView/PublicObjectives/Objective'
-import useSmallViewport from '../useSmallViewport'
+import Objective from '../shared/Objective'
+import useSmallViewport from '../shared/useSmallViewport'
 
 import DebouncedTextField from './DebouncedTextField'
 

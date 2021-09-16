@@ -18,11 +18,11 @@ import { Home } from '@material-ui/icons'
 import shuffle from 'lodash.shuffle'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 
+import { getAllSessions, saveAllSessions } from './shared/persistence'
+import * as sessionService from './shared/sessionService'
 import NewSession from './NewSession'
 import SessionsList from './SessionsList'
 import SessionView, { SessionProvider } from './SessionView'
-import { getAllSessions, saveAllSessions } from './persistence'
-import * as sessionService from './sessionService'
 import * as objectivesService from './objectivesService'
 import { ComboDispatchContext, DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'

@@ -6,8 +6,8 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import useSmallViewport from '../useSmallViewport'
-import FactionFlag from '../FactionFlag'
+import useSmallViewport from '../shared/useSmallViewport'
+import FactionFlag from '../shared/FactionFlag'
 import victoryPointsBackground from '../assets/victory-points-background.jpg'
 
 const DRAGGABLE = {
