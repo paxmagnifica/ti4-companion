@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useCallback } from 'react'
+import { useMemo, useEffect, useReducer, useCallback } from 'react'
 import {
   BrowserRouter as Router,
   Link,
@@ -15,8 +15,8 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Home } from '@material-ui/icons'
-import { useTheme } from '@material-ui/core/styles'
 import shuffle from 'lodash.shuffle'
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import NewSession from './NewSession'
 import SessionsList from './SessionsList'
@@ -29,8 +29,6 @@ import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
 
 function App() {
-  useTheme()
-
   const [state, dispatch] = useReducer(reducer, null, init)
   const comboDispatch = useCallback(action => {
     const { payload } = action
@@ -79,53 +77,61 @@ function App() {
     load()
   }, [])
 
+  const theme = useMemo(() => createTheme({
+    palette: {
+      type: 'dark',
+    },
+  }), []);
+
   return (
-    <Router>
-      <CssBaseline />
-      <AppBar>
-        <Toolbar>
-          <Link to='/'>
-            <IconButton >
-              <Home style={{ color: 'white' }} />
-            </IconButton>
-          </Link>
-          <Typography variant="h5">TI4 Companion</Typography>
-        </Toolbar>
-      </AppBar>
-      <Toolbar/>
-      <KnowledgeBase />
-      <Container>
-        <StateContext.Provider value={state}>
-        <ComboDispatchContext.Provider value={comboDispatch}>
-        <DispatchContext.Provider value={dispatch}>
-            <Box m={2}>
-              <Switch>
-                <Route path="/new">
-                  <NewSession dispatch={dispatch} />
-                </Route>
-                <Route path="/:id">
-                  <SessionProvider state={state} dispatch={dispatch}>
-                    {(session, loading) => (loading || !session) ? null : <SessionView
-                      session={session}
-                      shuffleFactions={shuffleFactions}
-                      setFactions={setFactions}
-                      updateFactionPoints={updateFactionPoints}
-                    />}
-                  </SessionProvider>
-                </Route>
-                <Route path="/">
-                  <SessionsList
-                    sessions={sessions.data}
-                    loading={sessions.loading || !sessions.loaded}
-                  />
-                </Route>
-              </Switch>
-            </Box>
-        </DispatchContext.Provider>
-        </ComboDispatchContext.Provider>
-        </StateContext.Provider>
-      </Container>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <CssBaseline />
+        <AppBar>
+          <Toolbar>
+            <Link to='/'>
+              <IconButton >
+                <Home style={{ color: 'white' }} />
+              </IconButton>
+            </Link>
+            <Typography variant="h5">TI4 Companion</Typography>
+          </Toolbar>
+        </AppBar>
+        <Toolbar/>
+        <KnowledgeBase />
+        <Container>
+          <StateContext.Provider value={state}>
+          <ComboDispatchContext.Provider value={comboDispatch}>
+          <DispatchContext.Provider value={dispatch}>
+              <Box m={2}>
+                <Switch>
+                  <Route path="/new">
+                    <NewSession dispatch={dispatch} />
+                  </Route>
+                  <Route path="/:id">
+                    <SessionProvider state={state} dispatch={dispatch}>
+                      {(session, loading) => (loading || !session) ? null : <SessionView
+                        session={session}
+                        shuffleFactions={shuffleFactions}
+                        setFactions={setFactions}
+                        updateFactionPoints={updateFactionPoints}
+                      />}
+                    </SessionProvider>
+                  </Route>
+                  <Route path="/">
+                    <SessionsList
+                      sessions={sessions.data}
+                      loading={sessions.loading || !sessions.loaded}
+                    />
+                  </Route>
+                </Switch>
+              </Box>
+          </DispatchContext.Provider>
+          </ComboDispatchContext.Provider>
+          </StateContext.Provider>
+        </Container>
+      </Router>
+    </ThemeProvider>
   );
 }
 
