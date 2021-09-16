@@ -26,6 +26,7 @@ import * as sessionService from './sessionService'
 import * as objectivesService from './objectivesService'
 import { ComboDispatchContext, DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
+import KnowledgeBase from './KnowledgeBase'
 
 function App() {
   useTheme()
@@ -92,6 +93,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <Toolbar/>
+      <KnowledgeBase />
       <Container>
         <StateContext.Provider value={state}>
         <ComboDispatchContext.Provider value={comboDispatch}>
