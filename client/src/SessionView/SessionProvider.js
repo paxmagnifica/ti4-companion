@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import * as sessionService from '../sessionService'
+import * as sessionService from '../shared/sessionService'
 
 export function SessionProvider({
   children,

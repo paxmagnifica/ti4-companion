@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 
-import FactionFlag from '../../FactionFlag'
+import FactionFlag from '../../shared/FactionFlag'
 
 const useSelectorStyles = makeStyles({
   root: {

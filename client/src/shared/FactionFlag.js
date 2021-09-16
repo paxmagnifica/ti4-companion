@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 
-import * as factions from './gameInfo/factions'
+import * as factions from '../gameInfo/factions'
 
 const useFlagStyles = makeStyles({
   root: {
