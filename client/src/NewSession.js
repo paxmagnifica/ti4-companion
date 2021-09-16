@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     position: 'sticky',
     right: 0,
     bottom: 0,
-    zIndex: 9001,
+    zIndex: 1199,
   },
   containedButton: {
     '&:not(.MuiButton-containedSecondary)': {

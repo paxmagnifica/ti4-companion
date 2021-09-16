@@ -128,7 +128,7 @@ function KnowledgeBase() {
   const gapWidth = smallCards ? '70px' : '17%'
   const drawerWidth = `calc(100% - ${gapWidth})`
   const classes = useStyles({ gapWidth, drawerWidth })
-  const [drawerOpen, setDrawerOpen] = useState(true)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [chosenTab, setChosenTab] = useState(0)
 
   const open = useCallback(index => {

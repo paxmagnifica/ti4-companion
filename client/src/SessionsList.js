@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     right: 0,
     bottom: 10,
     marginTop: 10,
-    zIndex: 9001,
+    zIndex: 1199,
   }
 }))
 
