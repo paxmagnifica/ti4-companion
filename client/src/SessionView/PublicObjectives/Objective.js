@@ -18,8 +18,11 @@ const useStyles = makeStyles(theme => ({
     fontSize: ({ small }) => small ? '0.6em' : '1em',
     '& > p': {
       margin: 0,
+      width: '100%',
       textAlign: 'center',
       padding: '0 2px',
+      wordBreak: 'break-word',
+      whiteSpace: 'normal',
       zIndex: 1,
       color: 'white',
     }

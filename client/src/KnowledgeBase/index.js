@@ -9,12 +9,21 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import reverseObjective from '../assets/objective-1-reverse.jpg'
 
+import Objectives from './Objectives'
+
+const useTabPanelStyles = makeStyles({
+  root: {
+    padding: '2em'
+  },
+})
+
 function TabPanel({ children, value, index }) {
+  const classes = useTabPanelStyles()
   if (value !== index) {
     return null
   }
 
-  return children
+  return <div className={classes.root}>{children}</div>
 }
 
 const useStyles = makeStyles(theme => ({
@@ -63,17 +72,18 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       opacity: 1,
       '& > img': {
-        transform: 'translateX(-20px) scale(1.4) rotate(90deg)',
+        transform: 'translateX(-30%) scale(1.4) rotate(90deg)',
       }
     },
   },
   cardActive: {
     opacity: 1,
     '& > img': {
-      transform: 'translateX(-20px) scale(1.4) rotate(90deg)',
+      transform: 'translateX(-30%) scale(1.4) rotate(90deg)',
     }
   },
   smallCard: {
+    marginLeft: -22,
     '& > img': {
       height: 64,
     }
@@ -107,7 +117,7 @@ const useStyles = makeStyles(theme => ({
 function KnowledgeBase() {
   const smallCards = useMediaQuery('(max-width:599px)')
   const hoverable = useMediaQuery('(hover: hover)')
-  const gapWidth = smallCards ? '80px' : '10%'
+  const gapWidth = smallCards ? '70px' : '17%'
   const drawerWidth = `calc(100% - ${gapWidth})`
   const classes = useStyles({ gapWidth, drawerWidth })
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -139,48 +149,20 @@ function KnowledgeBase() {
       direction='column'
     >
       <span className={classes.cardContainer}>
-      <div
-        className={clsx(classes.card, {
-          [classes.hoverableCard]: hoverable,
-          [classes.smallCard]: smallCards,
-          [classes.cardActive]: drawerOpen && chosenTab === 0,
-        })}
-      >
-        <img
-          onClick={() => open(0)}
-          alt="Browse objectives"
-          title="Browse objectives"
-          src={reverseObjective}
-        />
-      </div>
-      <div
-        className={clsx(classes.card, {
-          [classes.smallCard]: smallCards,
-          [classes.hoverableCard]: hoverable,
-          [classes.cardActive]: drawerOpen && chosenTab === 1,
-        })}
-      >
-        <img
-          onClick={() => open(1)}
-          alt="Browse objectives"
-          title="Browse objectives"
-          src={reverseObjective}
-        />
-      </div>
-      <div
+        <div
           className={clsx(classes.card, {
-            [classes.smallCard]: smallCards,
             [classes.hoverableCard]: hoverable,
-            [classes.cardActive]: drawerOpen && chosenTab === 2,
+            [classes.smallCard]: smallCards,
+            [classes.cardActive]: drawerOpen && chosenTab === 0,
           })}
-      >
-        <img
-          onClick={() => open(2)}
-          alt="Browse objectives"
-          title="Browse objectives"
-          src={reverseObjective}
-        />
-      </div>
+        >
+          <img
+            onClick={() => open(0)}
+            alt="Browse objectives"
+            title="Browse objectives"
+            src={reverseObjective}
+          />
+        </div>
       </span>
     </Grid>
     { drawerOpen && <div
@@ -195,14 +177,12 @@ function KnowledgeBase() {
       variant='permanent'
       anchor='right'
     >
-      <TabPanel value={chosenTab} index={0}>
-        objectives
-      </TabPanel>
-      <TabPanel value={chosenTab} index={1}>
-        strategy cards?
-      </TabPanel>
-      <TabPanel value={chosenTab} index={2}>
-        something else entirely
+      <TabPanel
+        title='Objectives'
+        value={chosenTab}
+        index={0}
+      >
+        <Objectives />
       </TabPanel>
     </Drawer>
   </>

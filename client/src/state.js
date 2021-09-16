@@ -10,6 +10,7 @@ export const init = () => {
       loading: true,
       loaded: false,
       data: {},
+      slugs: [],
     },
     sessions: {
       loading: true,
@@ -37,6 +38,7 @@ export const reducer = (state, action) => {
           loading: false,
           loaded: true,
           data: action.objectives.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
+          slugs: action.objectives.map(({ slug }) => slug),
         }
       }
     case 'CreateGameSession':

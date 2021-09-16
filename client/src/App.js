@@ -98,34 +98,34 @@ function App() {
           </Toolbar>
         </AppBar>
         <Toolbar/>
-        <KnowledgeBase />
         <Container>
           <StateContext.Provider value={state}>
           <ComboDispatchContext.Provider value={comboDispatch}>
           <DispatchContext.Provider value={dispatch}>
-              <Box m={2}>
-                <Switch>
-                  <Route path="/new">
-                    <NewSession dispatch={dispatch} />
-                  </Route>
-                  <Route path="/:id">
-                    <SessionProvider state={state} dispatch={dispatch}>
-                      {(session, loading) => (loading || !session) ? null : <SessionView
-                        session={session}
-                        shuffleFactions={shuffleFactions}
-                        setFactions={setFactions}
-                        updateFactionPoints={updateFactionPoints}
-                      />}
-                    </SessionProvider>
-                  </Route>
-                  <Route path="/">
-                    <SessionsList
-                      sessions={sessions.data}
-                      loading={sessions.loading || !sessions.loaded}
-                    />
-                  </Route>
-                </Switch>
-              </Box>
+            <KnowledgeBase />
+            <Box m={2}>
+              <Switch>
+                <Route path="/new">
+                  <NewSession dispatch={dispatch} />
+                </Route>
+                <Route path="/:id">
+                  <SessionProvider state={state} dispatch={dispatch}>
+                    {(session, loading) => (loading || !session) ? null : <SessionView
+                      session={session}
+                      shuffleFactions={shuffleFactions}
+                      setFactions={setFactions}
+                      updateFactionPoints={updateFactionPoints}
+                    />}
+                  </SessionProvider>
+                </Route>
+                <Route path="/">
+                  <SessionsList
+                    sessions={sessions.data}
+                    loading={sessions.loading || !sessions.loaded}
+                  />
+                </Route>
+              </Switch>
+            </Box>
           </DispatchContext.Provider>
           </ComboDispatchContext.Provider>
           </StateContext.Provider>
