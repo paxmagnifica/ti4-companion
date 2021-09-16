@@ -1,4 +1,7 @@
-import { useContext, useMemo } from 'react'
+import { useContext, useState, useMemo } from 'react'
+import {
+  Dialog,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import publicObjectiveI from '../../assets/objective-1.png'
@@ -15,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     width: ({ width }) => width,
     height: ({ height }) => height,
     position: 'relative',
-    fontSize: ({ small }) => small ? '0.6em' : '1em',
+    fontSize: ({ fontSize }) => fontSize,
     '& > p': {
       margin: 0,
       width: '100%',
@@ -57,21 +60,42 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const SMALL_SIZE = {
+  width: 100,
+  height: 150,
+  fontSize: '.6em',
+}
+
+const NORMAL_SIZE = {
+  width: 150,
+  height: 225,
+  fontSize: '1em',
+}
+
+const GINORMOUS_SIZE = {
+  width: '80vw',
+  height: '120vw',
+  fontSize: '2em',
+}
+
 function Objective({
   title,
   slug,
   reverse,
   small,
+  big,
   className,
   ...other
 }) {
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
   const { secret, points, reward, when } = availableObjectives[slug] || {}
-  const classes = useStyles({
-    small,
-    width: small ? 80 : 150,
-    height: small ? 120 : 225,
-  })
+  const styles = small
+      ? SMALL_SIZE
+      : big
+        ? GINORMOUS_SIZE
+        : NORMAL_SIZE
+  console.log({styles})
+  const classes = useStyles(styles)
 
   const background = useMemo(() => secret
     ? secretObjective
@@ -123,4 +147,55 @@ function Objective({
   </div>
 }
 
-export default Objective
+const useWithModalStyles = makeStyles({
+  dialog: {
+    '& .MuiPaper-root': {
+      backgroundColor: 'transparent',
+    }
+  },
+  clickableObjective: {
+    cursor: 'pointer',
+  }
+})
+
+function ObjectiveWithModal({
+  small,
+  reverse,
+  ...other
+}) {
+  const classes = useWithModalStyles()
+  const [bigObjectiveOpen, setBigObjectiveOpen] = useState(false)
+
+  if (reverse || !small) {
+    return <>
+      <Objective
+        reverse={reverse}
+        small={small}
+        {...other}
+      />
+    </>
+  }
+
+  return <>
+    <Objective
+      reverse={reverse}
+      className={classes.clickableObjective}
+      small={small}
+      onClick={() => setBigObjectiveOpen(true)}
+      {...other}
+    />
+    <Dialog
+      className={classes.dialog}
+      open={bigObjectiveOpen}
+      onClose={() => setBigObjectiveOpen(false)}
+    >
+      <Objective
+        big={true}
+        {...other}
+      />
+    </Dialog>
+  </>
+
+}
+
+export default ObjectiveWithModal
