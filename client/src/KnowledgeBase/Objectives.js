@@ -98,6 +98,7 @@ function Objectives() {
       {filteredObjectives.map(({ slug }) => <Grid item key={slug}><Objective
         small={smallViewport}
         slug={slug}
+        highlight={searchValue.split(' ')}
       /></Grid>)}
     </Grid>
   </>

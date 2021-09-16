@@ -3,6 +3,7 @@ import {
   Dialog,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import Highlighter from 'react-highlight-words'
 
 import publicObjectiveI from '../../assets/objective-1.png'
 import publicObjectiveII from '../../assets/objective-2.png'
@@ -85,6 +86,7 @@ function Objective({
   small,
   big,
   className,
+  highlight,
   ...other
 }) {
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
@@ -104,6 +106,14 @@ function Objective({
       : publicObjectiveII, [secret, points])
 
   const translation = useMemo(() => translations.objectivesDictionary[slug], [slug])
+
+  const renderer = useMemo(() => text => highlight
+    ? <Highlighter
+      searchWords={highlight}
+      autoEscape={true}
+      textToHighlight={text}
+    />
+    : text, [highlight])
 
   if (reverse) {
     return <div
@@ -130,13 +140,13 @@ function Objective({
       title={title || translation.name}
     />
     <p className={classes.objectiveName}>
-      {translation.name}
+      {renderer(translation.name)}
     </p>
     <p className={classes.phase}>
       {translations.general.phase[when]}
     </p>
     <p className={classes.condition}>
-      {translation.condition}
+      {renderer(translation.condition)}
     </p>
     <p className={classes.points}>
       {points}
