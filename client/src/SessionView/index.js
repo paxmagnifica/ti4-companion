@@ -73,6 +73,7 @@ function SessionView({
       <meta property="og:description" content={sortedPoints.map(({ faction, points }) => `${factions.getData(faction).name}(${points}vp)`).join(', ')} />
       <meta property="og:image" content={`${window.location.origin}${getFactionCheatSheetPath(winningFaction)}`} />
     </Helmet>
+
     <Grid
       className={classes.root}
       container
