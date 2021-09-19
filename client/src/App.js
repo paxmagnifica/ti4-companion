@@ -4,7 +4,8 @@ import {
   Link,
   Route,
   Switch,
-} from "react-router-dom"
+} from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import {
   AppBar,
   Box,
@@ -75,6 +76,12 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>TI4 Companion</title>
+        <meta name="description" content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further." />
+        <meta property="og:title" content="TI4 Companion" />
+        <meta property="og:description" content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further." />
+      </Helmet>
       <Router>
         <CssBaseline />
         <AppBar>

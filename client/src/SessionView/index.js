@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { Helmet } from 'react-helmet'
 import {
   Avatar,
   Card,
@@ -59,7 +60,19 @@ function SessionView({
     points
   }), [session.id, updateFactionPoints])
 
+  const sortedPoints = [...session.points]
+  sortedPoints.sort((a, b) => b.points - a.points)
+  const winningFaction = sortedPoints[0].faction
+
   return <>
+    <Helmet>
+      <title>{`TI4 - ${session.factions.length} players - 10VP`}</title>
+      <meta name="description" content={sortedPoints.map(({ faction, points }) => `${factions.getData(faction).name}(${points}vp)`).join(', ')} />
+
+      <meta property="og:title" content={`TI4 - ${session.factions.length} players - 10VP`} />
+      <meta property="og:description" content={sortedPoints.map(({ faction, points }) => `${factions.getData(faction).name}(${points}vp)`).join(', ')} />
+      <meta property="og:image" content={`${window.location.origin}${getFactionCheatSheetPath(winningFaction)}`} />
+    </Helmet>
     <Grid
       className={classes.root}
       container
@@ -71,11 +84,11 @@ function SessionView({
         session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
       </Grid>
       <Grid item container xs={6} justifyContent="flex-end">
-             <ShuffleFactionsButton
-              factions={session.factions}
-              shuffleFactions={() => shuffleFactions(session.id)}
-              setFactions={factions => setFactions(session.id, factions)}
-            />
+        <ShuffleFactionsButton
+          factions={session.factions}
+          shuffleFactions={() => shuffleFactions(session.id)}
+          setFactions={factions => setFactions(session.id, factions)}
+        />
         <ShareButton id={session.id} />
       </Grid>
       <Grid item xs={12}>
