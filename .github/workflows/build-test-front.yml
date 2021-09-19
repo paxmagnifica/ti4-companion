@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '14'
           cache: 'yarn'
-          cache-dependency-path: yarn.lock
+          cache-dependency-path: client/yarn.lock
       - run: yarn --cwd client install
       - run: yarn --cwd client build
       - run: yarn --cwd client test
