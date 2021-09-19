@@ -28,7 +28,12 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function Objectives() {
+function Objectives({
+  stageI,
+  stageII,
+  secrets,
+  onFilterChange,
+}) {
   const smallViewport = useSmallViewport()
   const classes = useStyles()
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
@@ -36,21 +41,17 @@ function Objectives() {
   const [searchValue, setSearchValue] = useState('')
   const [filtering, setFiltering] = useState(false)
 
-  const [stageISelected, setStageI] = useState(true)
-  const [stageIISelected, setStageII] = useState(true)
-  const [secretSelected, setSecret] = useState(true)
-
   const filteredObjectives = useMemo(() => {
     const  withMeta = translations.objectivesArray.map(obj => ({ ...obj, ...availableObjectives[obj.slug]}))
 
     return [
-      ...(stageISelected ? withMeta.filter(obj => obj.points === 1 && !obj.secret) : []),
-      ...(stageIISelected ? withMeta.filter(obj => obj.points === 2 && !obj.secret) : []),
-      ...(secretSelected ? withMeta.filter(obj => obj.secret) : []),
+      ...(stageI ? withMeta.filter(obj => obj.points === 1 && !obj.secret) : []),
+      ...(stageII ? withMeta.filter(obj => obj.points === 2 && !obj.secret) : []),
+      ...(secrets ? withMeta.filter(obj => obj.secret) : []),
     ].filter(obj =>
       obj.name.toLowerCase().includes(searchValue.toLowerCase()) ||
       obj.condition.toLowerCase().includes(searchValue.toLowerCase()) )
-  }, [availableObjectives, stageISelected, stageIISelected, secretSelected, searchValue]);
+  }, [availableObjectives, searchValue, stageI, stageII, secrets]);
 
   return <>
     <Grid
@@ -81,15 +82,15 @@ function Objectives() {
       <Grid item xs={12} sm={6}>
         <FormGroup row>
           <FormControlLabel
-            control={<Checkbox checked={stageISelected} onChange={() => setStageI(x => !x)} />}
+            control={<Checkbox checked={stageI} onChange={() => onFilterChange(filters => ({ ...filters, stageI: !filters.stageI}))} />}
             label="Stage I"
           />
           <FormControlLabel
-            control={<Checkbox checked={stageIISelected} onChange={() => setStageII(x => !x)} />}
+            control={<Checkbox checked={stageII} onChange={() => onFilterChange(filters => ({ ...filters, stageII: !filters.stageII}))} />}
             label="Stage II"
           />
           <FormControlLabel
-            control={<Checkbox checked={secretSelected} onChange={() => setSecret(x => !x)} />}
+            control={<Checkbox checked={secrets} onChange={() => onFilterChange(filters => ({ ...filters, secrets: !filters.secrets}))} />}
             label="Secret"
           />
         </FormGroup>
