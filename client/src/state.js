@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { saveAllSessions } from './shared/persistence'
+
 export const StateContext = React.createContext();
 export const ComboDispatchContext = React.createContext();
 export const DispatchContext = React.createContext();
@@ -23,6 +25,7 @@ export const init = () => {
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'LoadSessions':
+      saveAllSessions(action.sessions)
       return {
         ...state,
         sessions: {

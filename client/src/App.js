@@ -18,7 +18,7 @@ import { Home } from '@material-ui/icons'
 import shuffle from 'lodash.shuffle'
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 
-import { getAllSessions, saveAllSessions } from './shared/persistence'
+import { getAllSessions } from './shared/persistence'
 import * as sessionService from './shared/sessionService'
 import NewSession from './NewSession'
 import SessionsList from './SessionsList'
@@ -53,16 +53,6 @@ function App() {
     const payload = { sessionId, faction, points }
     comboDispatch({ type: 'VictoryPointsUpdated', payload })
   }, [comboDispatch])
-
-  useEffect(() => {
-    async function save() {
-      saveAllSessions(sessions.data)
-    }
-
-    save()
-
-    return save
-  }, [sessions]);
 
   useEffect(() => {
     const sessions = getAllSessions()
