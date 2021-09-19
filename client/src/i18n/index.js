@@ -7,7 +7,9 @@ const i18n = {
   strategyCards,
   general: {
     phase: {
-      0: 'status phase'
+      0: 'status phase',
+      1: 'action phase',
+      2: 'agenda phase'
     },
     reward: {
       0: 'victory point'
