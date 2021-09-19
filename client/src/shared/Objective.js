@@ -41,6 +41,7 @@ const useStyles = makeStyles(theme => ({
   condition: {
     marginTop: '13% !important',
     height: '40%',
+    overflow: 'auto',
   },
   points: {
     marginTop: '5% !important',
