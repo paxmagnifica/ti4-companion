@@ -87,7 +87,7 @@ function Objective({
   big,
   className,
   highlight,
-  ...other
+  onClick,
 }) {
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
   const { secret, points, reward, when } = availableObjectives[slug] || {}
@@ -117,7 +117,7 @@ function Objective({
   if (reverse) {
     return <div
       className={`${classes.root} ${className || ''}`}
-      {...other}
+      onClick={onClick}
     >
       <img
         src={reverseObjective}
@@ -130,7 +130,7 @@ function Objective({
 
   return <div
     className={`${classes.root} ${className || ''}`}
-    {...other}
+    onClick={onClick}
   >
     <img
       src={background}

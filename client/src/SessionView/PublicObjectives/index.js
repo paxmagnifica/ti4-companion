@@ -6,7 +6,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../shared/useSmallViewport'
-import { ComboDispatchContext } from '../../state'
+import { StateContext, ComboDispatchContext } from '../../state'
 import Objective from '../../shared/Objective'
 
 import AddObjective from './AddObjective'
@@ -28,6 +28,7 @@ function PublicObjectives({
   const smallViewport = useSmallViewport()
   const classes = useStyles({ small: smallViewport })
   const comboDispatch = useContext(ComboDispatchContext)
+  const { objectives: { data: availableObjectives } } = useContext(StateContext)
   const sessionObjectives = useMemo(() => session.objectives || [], [session])
   const [addObjectiveOpen, setAddObjectiveOpen] = useState(false)
 
@@ -38,15 +39,16 @@ function PublicObjectives({
 
   const objectiveScored = useCallback(({ change, objective }) => {
     const factionPoints = session.points.find(({faction}) => faction === change.factionKey)?.points;
+    const objectivePoints = availableObjectives[objective.slug].points
 
     if (change.event === 'selected') {
-      updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints + 1 })
+      updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints + objectivePoints })
       comboDispatch({ type: 'ObjectiveScored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
     } else {
-      updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints - 1 })
+      updateFactionPoints({ sessionId: session.id, faction: change.factionKey, points: factionPoints - objectivePoints })
       comboDispatch({ type: 'ObjectiveDescored', payload: { sessionId: session.id, slug: objective.slug, faction: change.factionKey } })
     }
-  }, [comboDispatch, session.id, session.points, updateFactionPoints])
+  }, [comboDispatch, session.id, session.points, updateFactionPoints, availableObjectives])
 
   return <>
     <Grid container justifyContent='center'>

@@ -18,7 +18,7 @@ function DraggableFlag({
   factionKey,
   updatePoints,
 }) {
-  const [{isDragging}, drag] = useDrag(() => ({
+  const [, drag] = useDrag(() => ({
     type: DRAGGABLE.FLAG,
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
@@ -47,7 +47,7 @@ function PointContainer({
   children,
   points,
 }) {
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [, drop] = useDrop(() => ({
     accept: DRAGGABLE.FLAG,
     drop: () => ({ points, }),
     collect: monitor => ({

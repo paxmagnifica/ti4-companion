@@ -1,0 +1,22 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: CLient CI
+
+on: [push]
+
+jobs:
+  build:
+    name: Build and test client
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+          cache-dependency-path: client/yarn.lock
+      - run: yarn --cwd client install
+      - run: yarn --cwd client build
+      - run: yarn --cwd client test
