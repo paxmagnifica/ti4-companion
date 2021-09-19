@@ -10,15 +10,13 @@ jobs:
     name: Test
 
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@v2.3.0
+      - uses: actions/setup-node@v2
         with:
-          cmd: install # will run `yarn install` command
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: build # will run `yarn build` command
-      - uses: borales/actions-yarn@v2.3.0
-        with:
-          cmd: test # will run `yarn test` command
+          node-version: '14'
+          cache: 'yarn'
+          cache-dependency-path: yarn.lock
+      - run: yarn --cwd client install
+      - run: yarn --cwd client build
+      - run: yarn --cwd client test
