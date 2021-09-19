@@ -4,7 +4,8 @@ import {
   Link,
   Route,
   Switch,
-} from "react-router-dom";
+} from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import {
   AppBar,
   Box,
@@ -14,10 +15,10 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core'
-import { Home } from '@material-ui/icons'
 import shuffle from 'lodash.shuffle'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles'
 
+import homeIcon from './assets/icon.jpg'
 import { getAllSessions } from './shared/persistence'
 import * as sessionService from './shared/sessionService'
 import NewSession from './NewSession'
@@ -75,13 +76,25 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>TI4 Companion</title>
+        <meta name="description" content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further." />
+        <meta property="og:title" content="TI4 Companion" />
+        <meta property="og:description" content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further." />
+      </Helmet>
+
       <Router>
         <CssBaseline />
         <AppBar>
           <Toolbar>
             <Link to='/'>
               <IconButton >
-                <Home style={{ color: 'white' }} />
+                <img
+                  src={homeIcon}
+                  style={{ height: '1.2em', width: '1.2em', borderRadius: '50%' }}
+                  title="Home"
+                  alt="Home icon"
+                />
               </IconButton>
             </Link>
             <Typography variant="h5">TI4 Companion</Typography>
