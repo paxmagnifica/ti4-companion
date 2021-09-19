@@ -41,6 +41,7 @@ const useStyles = makeStyles(theme => ({
   condition: {
     marginTop: '13% !important',
     height: '40%',
+    overflow: 'auto',
   },
   points: {
     marginTop: '5% !important',
@@ -135,17 +136,17 @@ function Objective({
     <img
       src={background}
       className={classes.objective}
-      alt={title || translation.name}
-      title={title || translation.name}
+      alt={title || translation?.name || slug}
+      title={title || translation?.name || slug}
     />
     <p className={classes.objectiveName}>
-      {renderer(translation.name)}
+      {renderer(translation?.name || slug)}
     </p>
     <p className={classes.phase}>
       {translations.general.phase[when]}
     </p>
     <p className={classes.condition}>
-      {renderer(translation.condition)}
+      {renderer(translation?.condition)}
     </p>
     <p className={classes.points}>
       {points}
