@@ -6,9 +6,9 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import useSmallViewport from '../../shared/useSmallViewport'
-import { StateContext, ComboDispatchContext } from '../../state'
-import Objective from '../../shared/Objective'
+import useSmallViewport from '../../../shared/useSmallViewport'
+import { StateContext, ComboDispatchContext } from '../../../state'
+import Objective from '../../../shared/Objective'
 
 import AddObjective from './AddObjective'
 import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'

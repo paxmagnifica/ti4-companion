@@ -3,8 +3,8 @@ import {
   Grid,
 } from '@material-ui/core'
 
-import FactionFlag from '../../shared/FactionFlag'
-import victoryPointsBackground from '../../assets/victory-points-background.jpg'
+import FactionFlag from '../../../shared/FactionFlag'
+import victoryPointsBackground from '../../../assets/victory-points-background.jpg'
 
 const DRAGGABLE = {
   FLAG: 'flag'
