@@ -14,7 +14,10 @@ namespace server.Controllers
             Factions = GetFactions(session.Events);
             Points = GetPoints(session.Events);
             Objectives = GetObjectives(session.Events);
+            Map = "https://via.placeholder.com/800x800";
         }
+
+        public string Map { get; internal set; }
 
         public List<ScorableObjectiveDto> Objectives { get; internal set; }
         private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)

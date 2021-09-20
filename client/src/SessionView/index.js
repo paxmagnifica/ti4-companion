@@ -5,7 +5,7 @@ import {
   Tab,
   Tabs,
 } from '@material-ui/core'
-import { Assistant, Map } from '@material-ui/icons'
+import { Assistant, Map as MapIcon } from '@material-ui/icons'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 
 import * as factions from '../gameInfo/factions'
@@ -15,6 +15,7 @@ import useRealTimeSession from './useRealTimeSession'
 import Overview from './Overview'
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
+import Map from './Map'
 
 const StyledTabs = withStyles({
   indicator: {
@@ -91,7 +92,7 @@ function SessionView({
       <Grid item xs={6}>
         <StyledTabs value={view} onChange={handleChange} aria-label="styled tabs example">
           <StyledTab icon={<Assistant />} label="Overview" title="Overview" />
-          <StyledTab icon={<Map />} label="Map" title="Map" />
+          <StyledTab icon={<MapIcon />} label="Map" title="Map" />
         </StyledTabs>
       </Grid>
       <Grid item container xs={6} justifyContent="flex-end">
@@ -113,7 +114,9 @@ function SessionView({
       />
     </div>
     <div hidden={view !== VIEW.map }>
-      <p>hello map here</p>
+      <Map
+        session={session}
+      />
     </div>
   </>
 }
