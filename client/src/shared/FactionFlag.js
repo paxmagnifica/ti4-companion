@@ -7,7 +7,7 @@ const useFlagStyles = makeStyles({
   root: {
     width: ({ width }) => width,
     height: ({ height }) => height,
-    backgroundColor: ({ selected }) => `rgba(255, 255, 255, ${selected ? '1' : '0.3'})`,
+    backgroundColor: ({ selected }) => `rgba(255, 255, 255, ${selected ? '0.9' : '0.3'})`,
     borderRadius: '4%',
     cursor: 'pointer',
     display: 'flex',
