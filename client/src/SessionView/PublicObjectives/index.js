@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState, useContext } from 'react'
+import clsx from 'clsx'
 import {
   Grid,
   IconButton,
@@ -18,6 +19,11 @@ const useStyles = makeStyles({
     margin: ({ small }) => small ? 6 : 12,
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
+    width: 150,
+  },
+  small: {
+    width: 'unset',
   }
 })
 
@@ -53,7 +59,7 @@ function PublicObjectives({
   return <>
     <Grid container justifyContent='center'>
       {sessionObjectives.map(sessionObjective => <div
-        className={classes.objectiveContainer}
+        className={clsx(classes.objectiveContainer, { [classes.small]: smallViewport })}
         key={sessionObjective.slug}
       >
         <ObjectiveWithFactionSelector
