@@ -7,6 +7,8 @@ import {
 import { Map as MapIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
+import useSmallViewport from '../../shared/useSmallViewport'
+
 const useStyles = makeStyles({
   dropzone: {
     textAlign: 'center',
@@ -29,7 +31,7 @@ const useStyles = makeStyles({
     transform: 'translateY(-50%) rotate(45deg)',
     transformOrigin: 'center center',
     opacity: .2,
-    fontSize: '10em',
+    fontSize: ({ small }) => small ? '3em' : '10em',
     margin: 0,
     padding: 0,
   },
@@ -42,7 +44,8 @@ const useStyles = makeStyles({
 function MapUpload({
   sessionId
 }) {
-  const classes = useStyles()
+  const small = useSmallViewport()
+  const classes = useStyles({ small })
   const [file, setFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
 

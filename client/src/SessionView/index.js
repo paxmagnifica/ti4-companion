@@ -89,13 +89,13 @@ function SessionView({
     </Helmet>
 
     <Grid container className={classes.header}>
-      <Grid item xs={6}>
+      <Grid item xs={8}>
         <StyledTabs value={view} onChange={handleChange} aria-label="styled tabs example">
           <StyledTab icon={<Assistant />} label="Overview" title="Overview" />
           <StyledTab icon={<MapIcon />} label="Map" title="Map" />
         </StyledTabs>
       </Grid>
-      <Grid item container xs={6} justifyContent="flex-end">
+      <Grid item container xs={4} justifyContent="flex-end">
         <ShuffleFactionsButton
           factions={session.factions}
           shuffleFactions={() => shuffleFactions(session.id)}
