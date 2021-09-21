@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import clsx from 'clsx'
 import {
   Divider,
@@ -12,9 +12,11 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import stageIObjectiveReverse from '../assets/objective-1-reverse.jpg'
 import stageIIObjectiveReverse from '../assets/objective-2-reverse.jpg'
 import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
+import explorationReverseSprite from '../assets/exploration-reverse-sprite.png'
 import StrategyCard from '../gameInfo/strategyCards'
 
 import Objectives from './Objectives'
+import ExplorationCards from './ExplorationCards'
 import StrategyCards from './StrategyCards'
 import StrategyBack from './StrategyBack'
 
@@ -30,6 +32,10 @@ const TABS = {
   STAGE_II_OBJ: 1,
   SECRET_OBJ: 2,
   STRATEGY_CARDS: 3,
+  EXPLORATION_BLUE: 4,
+  EXPLORATION_RED: 5,
+  EXPLORATION_GREEN: 6,
+  EXPLORATION_FRONTIER: 7,
 }
 
 function TabPanel({ small, children, value, index, title }) {
@@ -77,6 +83,7 @@ const useStyles = makeStyles(theme => ({
     }),
   },
   card: {
+    position: 'relative',
     cursor: 'pointer',
     opacity: .8,
     marginLeft: -30,
@@ -88,6 +95,10 @@ const useStyles = makeStyles(theme => ({
         duration: theme.transitions.duration.leavingScreen,
       }),
     }
+  },
+  spriteCard: {
+    backgroundImage: `url(${explorationReverseSprite})`,
+    backgroundSize: 'auto 100%',
   },
   hoverableCard: {
     '&:hover': {
@@ -137,6 +148,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+
 function KnowledgeBase() {
   const smallCards = useMediaQuery('(max-width:599px)')
   const hoverable = useMediaQuery('(hover: hover)')
@@ -145,7 +157,20 @@ function KnowledgeBase() {
   const classes = useStyles({ gapWidth, drawerWidth })
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [chosenTab, setChosenTab] = useState(TABS.STAGE_I_OBJ)
-  const [filters, setFilters] = useState({ stageI: true, stageII: false, secrets: false })
+  const [objectiveFilters, setObjectiveFilters] = useState({ stageI: true, stageII: false, secrets: false })
+  const [explorationFilters, setExplorationFilters] = useState({ cultural: false, warfare: false, biotic: false, frontier: false })
+
+  const explorationCards = useMemo(() => {
+    return smallCards
+      ? [
+      ]
+      : [
+        { type: 'cultural', tab: TABS.EXPLORATION_BLUE, height: 80, width: 52, backgroundPosition: -158},
+        { type: 'warfare', tab: TABS.EXPLORATION_RED, height: 80, width: 52, backgroundPosition: -106},
+        { type: 'biotic', tab: TABS.EXPLORATION_GREEN, height: 80, width: 52, backgroundPosition: -53},
+        { type: 'frontier', tab: TABS.EXPLORATION_FRONTIER, height: 80, width: 52},
+      ]
+  }, [smallCards]);
 
   const open = useCallback(index => {
     if (drawerOpen && index === chosenTab) {
@@ -183,7 +208,7 @@ function KnowledgeBase() {
           <img
             height={80}
             onClick={() => {
-              setFilters({ stageI: true })
+              setObjectiveFilters({ stageI: true })
               open(TABS.STAGE_I_OBJ)
             }}
             alt="Browse stage I objectives"
@@ -201,7 +226,7 @@ function KnowledgeBase() {
           <img
             height={80}
             onClick={() => {
-              setFilters({ stageII: true })
+              setObjectiveFilters({ stageII: true })
               open(TABS.STAGE_II_OBJ)
             }}
             alt="Browse stage II objectives"
@@ -219,7 +244,7 @@ function KnowledgeBase() {
           <img
             height={80}
             onClick={() => {
-              setFilters({ secrets: true })
+              setObjectiveFilters({ secrets: true })
               open(TABS.SECRET_OBJ)
             }}
             alt="Browse secret objectives"
@@ -227,6 +252,33 @@ function KnowledgeBase() {
             src={secretObjectiveReverse}
           />
         </div>
+        {explorationCards.map(({ type, tab, width, height, backgroundPosition }) =>
+          <div
+            key={type}
+            className={clsx(classes.card, {
+              [classes.hoverableCard]: hoverable,
+              [classes.smallCard]: smallCards,
+              [classes.cardActive]: drawerOpen && chosenTab === tab,
+            })}
+          >
+            <div
+              onClick={() => {
+                setExplorationFilters({
+                  cultural: false, warfare: false, biotic: false, frontier: false,
+                  [type]: true,
+                })
+                open(tab)
+              }}
+              title={`Browse ${type} exploration cards`}
+              className={classes.spriteCard}
+              style={{
+                backgroundPosition,
+                height,
+                width,
+              }}
+            />
+          </div>
+        )}
         <div
           className={clsx(classes.card, {
             [classes.hoverableCard]: hoverable,
@@ -235,11 +287,11 @@ function KnowledgeBase() {
           })}
         >
           <StrategyBack
+            height={smallCards ? 64 : 80}
             onClick={() => open(TABS.STRATEGY_CARDS)}
             alt="Browse strategy cards"
             title="Browse strategy cards"
             strategy={StrategyCard.Leadership}
-            height={smallCards ? 64 : 80}
           />
         </div>
       </span>
@@ -263,8 +315,8 @@ function KnowledgeBase() {
         index={TABS.STAGE_I_OBJ}
       >
         <Objectives
-          onFilterChange={setFilters}
-          {...filters}
+          onFilterChange={setObjectiveFilters}
+          {...objectiveFilters}
         />
       </TabPanel>
       <TabPanel
@@ -274,8 +326,8 @@ function KnowledgeBase() {
         index={TABS.STAGE_II_OBJ}
       >
         <Objectives
-          onFilterChange={setFilters}
-          {...filters}
+          onFilterChange={setObjectiveFilters}
+          {...objectiveFilters}
         />
       </TabPanel>
       <TabPanel
@@ -285,10 +337,24 @@ function KnowledgeBase() {
         index={TABS.SECRET_OBJ}
       >
         <Objectives
-          onFilterChange={setFilters}
-          {...filters}
+          onFilterChange={setObjectiveFilters}
+          {...objectiveFilters}
         />
       </TabPanel>
+      {explorationCards.map(({ type, tab, width, height, backgroundPosition }) =>
+        <TabPanel
+          key={`${type}-tabpanel`}
+          small={smallCards}
+          title={`${type} exploration cards`}
+          value={chosenTab}
+          index={tab}
+        >
+          <ExplorationCards
+            onFilterChange={setExplorationFilters}
+            {...explorationFilters}
+          />
+        </TabPanel>
+      )}
       <TabPanel
         small={smallCards}
         title='Strategy cards'
