@@ -39,6 +39,9 @@ namespace server.Migrations
                     b.Property<int>("Resources")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("TechSkip")
+                        .HasColumnType("integer");
+
                     b.HasKey("Slug");
 
                     b.ToTable("Explorations");

@@ -15,6 +15,7 @@ namespace server.Migrations
                     NumberOfCards = table.Column<int>(type: "integer", nullable: false),
                     Resources = table.Column<int>(type: "integer", nullable: false),
                     Influence = table.Column<int>(type: "integer", nullable: false),
+                    TechSkip = table.Column<int>(type: "integer", nullable: true),
                     GameVersion = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

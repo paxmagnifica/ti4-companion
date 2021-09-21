@@ -16,19 +16,22 @@ namespace server.Domain
             PlanetType planetType,
             int numberOfCards,
             int additionalInfluence,
-            int additionalResources
+            int additionalResources,
+            Technology? techSkip = null
         ) : base(slug, gameVersion)
         {
             PlanetType = planetType;
             NumberOfCards = numberOfCards;
             Influence = additionalInfluence;
             Resources = additionalResources;
+            TechSkip = techSkip;
         }
 
         public PlanetType PlanetType { get; set; }
         public int NumberOfCards { get; set; }
         public int Resources { get; set; }
         public int Influence { get; set; }
+        public Technology? TechSkip { get; set; }
         [NotMapped]
         public bool Relic => Slug.Contains("-relic-");
         [NotMapped]

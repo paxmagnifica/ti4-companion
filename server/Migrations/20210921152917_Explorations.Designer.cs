@@ -10,7 +10,7 @@ using server.Persistence;
 namespace server.Migrations
 {
     [DbContext(typeof(SessionContext))]
-    [Migration("20210921145756_Explorations")]
+    [Migration("20210921152917_Explorations")]
     partial class Explorations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,9 @@ namespace server.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("Resources")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TechSkip")
                         .HasColumnType("integer");
 
                     b.HasKey("Slug");

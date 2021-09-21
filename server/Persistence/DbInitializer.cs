@@ -102,41 +102,42 @@ namespace server.Persistence
             if (!context.Explorations.Any())
             {
                 var explorations = new Exploration[] {
-                    new Exploration("demilitarized-zone", GameVersion.PoK, PlanetType.Cultural, 1, 0, 0),
-                    new Exploration("dyson-sphere", GameVersion.PoK, PlanetType.Cultural, 1, 1, 2),
-                    new Exploration("freelancers", GameVersion.PoK, PlanetType.Cultural, 3, 0, 0),
-                    new Exploration("gamma-wormhole", GameVersion.PoK, PlanetType.Cultural, 1, 0, 0),
-                    new Exploration("mercenary-outfit", GameVersion.PoK, PlanetType.Cultural, 3, 0, 0),
-                    new Exploration("paradise-world", GameVersion.PoK, PlanetType.Cultural, 1, 2, 0),
-                    new Exploration("tomb-of-emphidia", GameVersion.PoK, PlanetType.Cultural, 1, 1, 0),
-                    new Exploration("cultural-relic-fragment", GameVersion.PoK, PlanetType.Cultural, 9, 0, 0),
-                    new Exploration("abandoned-warehouses", GameVersion.PoK, PlanetType.Industrial, 4, 0, 0),
-                    new Exploration("biotic-research-facility", GameVersion.PoK, PlanetType.Industrial, 1, 0, 0),
-                    new Exploration("cybernetic-research-facility", GameVersion.PoK, PlanetType.Industrial, 1, 0, 0),
-                    new Exploration("functioning-base", GameVersion.PoK, PlanetType.Industrial, 4, 0, 0),
-                    new Exploration("local-fabricators", GameVersion.PoK, PlanetType.Industrial, 4, 0, 0),
-                    new Exploration("propulsion-research-facility", GameVersion.PoK, PlanetType.Industrial, 1, 0, 0),
-                    new Exploration("industrial-relic-fragment", GameVersion.PoK, PlanetType.Industrial, 5, 0, 0),
-                    new Exploration("core-mine", GameVersion.PoK, PlanetType.Hazardous, 3, 0, 0),
-                    new Exploration("expedition", GameVersion.PoK, PlanetType.Hazardous, 3, 0, 0),
-                    new Exploration("lazax-survivors", GameVersion.PoK, PlanetType.Hazardous, 1, 2, 1),
-                    new Exploration("mining-world", GameVersion.PoK, PlanetType.Hazardous, 1, 0, 2),
-                    new Exploration("rich-world", GameVersion.PoK, PlanetType.Hazardous, 1, 0, 1),
-                    new Exploration("volatile-fuel-source", GameVersion.PoK, PlanetType.Hazardous, 3, 0, 0),
-                    new Exploration("warfare-research-facility", GameVersion.PoK, PlanetType.Hazardous, 1, 0, 0),
-                    new Exploration("hazardous-relic-fragment", GameVersion.PoK, PlanetType.Hazardous, 7, 0, 0),
-                    new Exploration("derelict-vessel", GameVersion.PoK, PlanetType.Frontier, 2, 0, 0),
-                    new Exploration("enigmatic-device", GameVersion.PoK, PlanetType.Frontier, 2, 0, 0),
-                    new Exploration("gamma-relay", GameVersion.PoK, PlanetType.Frontier, 1, 0, 0),
-                    new Exploration("ion-storm", GameVersion.PoK, PlanetType.Frontier, 1, 0, 0),
-                    new Exploration("lost-crew", GameVersion.PoK, PlanetType.Frontier, 2, 0, 0),
-                    new Exploration("merchant-station", GameVersion.PoK, PlanetType.Frontier, 2, 0, 0),
-                    new Exploration("mirage", GameVersion.PoK, PlanetType.Frontier, 1, 0, 0),
+                    new Exploration("demilitarized-zone", GameVersion.PoK_Codex2, PlanetType.Cultural, 1, 0, 0),
+                    new Exploration("dyson-sphere", GameVersion.PoK_Codex2, PlanetType.Cultural, 1, 1, 2),
+                    new Exploration("freelancers", GameVersion.PoK_Codex2, PlanetType.Cultural, 3, 0, 0),
+                    new Exploration("gamma-wormhole", GameVersion.PoK_Codex2, PlanetType.Cultural, 1, 0, 0),
+                    new Exploration("mercenary-outfit", GameVersion.PoK_Codex2, PlanetType.Cultural, 3, 0, 0),
+                    new Exploration("paradise-world", GameVersion.PoK_Codex2, PlanetType.Cultural, 1, 2, 0),
+                    new Exploration("tomb-of-emphidia", GameVersion.PoK_Codex2, PlanetType.Cultural, 1, 1, 0),
+                    new Exploration("cultural-relic-fragment", GameVersion.PoK_Codex2, PlanetType.Cultural, 9, 0, 0),
+                    new Exploration("abandoned-warehouses", GameVersion.PoK_Codex2, PlanetType.Industrial, 4, 0, 0),
+                    new Exploration("biotic-research-facility", GameVersion.PoK_Codex2, PlanetType.Industrial, 1, 0, 0, Technology.Biotic),
+                    new Exploration("cybernetic-research-facility", GameVersion.PoK_Codex2, PlanetType.Industrial, 1, 0, 0, Technology.Cybernetic),
+                    new Exploration("functioning-base", GameVersion.PoK_Codex2, PlanetType.Industrial, 4, 0, 0),
+                    new Exploration("local-fabricators", GameVersion.PoK_Codex2, PlanetType.Industrial, 4, 0, 0),
+                    new Exploration("propulsion-research-facility", GameVersion.PoK_Codex2, PlanetType.Industrial, 1, 0, 0, Technology.Propulsion),
+                    new Exploration("industrial-relic-fragment", GameVersion.PoK_Codex2, PlanetType.Industrial, 5, 0, 0),
+                    new Exploration("core-mine", GameVersion.PoK_Codex2, PlanetType.Hazardous, 3, 0, 0),
+                    new Exploration("expedition", GameVersion.PoK_Codex2, PlanetType.Hazardous, 3, 0, 0),
+                    new Exploration("lazax-survivors", GameVersion.PoK_Codex2, PlanetType.Hazardous, 1, 2, 1),
+                    new Exploration("mining-world", GameVersion.PoK_Codex2, PlanetType.Hazardous, 1, 0, 2),
+                    new Exploration("rich-world", GameVersion.PoK_Codex2, PlanetType.Hazardous, 1, 0, 1),
+                    new Exploration("volatile-fuel-source", GameVersion.PoK_Codex2, PlanetType.Hazardous, 3, 0, 0),
+                    new Exploration("warfare-research-facility", GameVersion.PoK_Codex2, PlanetType.Hazardous, 1, 0, 0, Technology.Warfare),
+                    new Exploration("hazardous-relic-fragment", GameVersion.PoK_Codex2, PlanetType.Hazardous, 7, 0, 0),
+                    new Exploration("derelict-vessel", GameVersion.PoK_Codex2, PlanetType.Frontier, 2, 0, 0),
+                    new Exploration("enigmatic-device", GameVersion.PoK_Codex2, PlanetType.Frontier, 2, 0, 0),
+                    new Exploration("gamma-relay", GameVersion.PoK_Codex2, PlanetType.Frontier, 1, 0, 0),
+                    new Exploration("ion-storm", GameVersion.PoK_Codex2, PlanetType.Frontier, 1, 0, 0),
+                    new Exploration("lost-crew", GameVersion.PoK_Codex2, PlanetType.Frontier, 2, 0, 0),
+                    new Exploration("merchant-station", GameVersion.PoK_Codex2, PlanetType.Frontier, 2, 0, 0),
+                    new Exploration("mirage", GameVersion.PoK_Codex2, PlanetType.Frontier, 1, 0, 0),
                 };
                 context.Explorations.AddRange(explorations);
             }
 
-            if (!context.Sessions.Any()) {
+            if (!context.Sessions.Any())
+            {
                 var sessionId = Guid.Parse("6fd5c725-30cd-4320-8889-c2f6427ba365");
                 context.Sessions.Add(new Session()
                 {
