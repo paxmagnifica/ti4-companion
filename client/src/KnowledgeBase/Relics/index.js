@@ -12,6 +12,7 @@ import DebouncedTextField from '../../shared/DebouncedTextField'
 import translations from '../../i18n'
 
 import * as relicService from './service'
+import Relic from './Relic'
 
 function RelicsProvider(props) {
   const { relics: { loading, loaded, data: availableRelics }} = useContext(StateContext)
@@ -97,7 +98,11 @@ function Relics({
       </Grid>
     </Grid>
     {filtered.map(card => <Grid item key={card.slug}>
-      <p>{card.slug}</p>
+      <Relic
+        {...card}
+        small={smallViewport}
+        highlight={searchValue.split(' ')}
+      />
     </Grid>)}
   </Grid>
 }
