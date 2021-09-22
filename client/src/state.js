@@ -8,6 +8,12 @@ export const DispatchContext = React.createContext();
 
 export const init = () => {
   return {
+    relics: {
+      loading: false,
+      loaded: false,
+      data: {},
+      slugs: [],
+    },
     explorationCards: {
       loading: false,
       loaded: false,
@@ -48,6 +54,24 @@ export const reducer = (state, action) => {
           loaded: true,
           data: action.objectives.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
           slugs: action.objectives.map(({ slug }) => slug),
+        }
+      }
+    case 'LoadingRelics':
+      return {
+        ...state,
+        relics: {
+          loading: true,
+          loaded: false,
+        }
+      }
+    case 'LoadRelics':
+      return {
+        ...state,
+        relics: {
+          loading: false,
+          loaded: true,
+          data: action.relics.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
+          slugs: action.relics.map(({ slug }) => slug),
         }
       }
     case 'LoadingExplorationCards':
