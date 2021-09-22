@@ -1,13 +1,17 @@
-import { useState, useCallback } from 'react'
+import { useContext, useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import {
   Button,
   Grid,
+  CircularProgress,
 } from '@material-ui/core'
 import { Map as MapIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../shared/useSmallViewport'
+import { DispatchContext } from '../../state'
+
+import * as service from './service'
 
 const useStyles = makeStyles({
   dropzone: {
@@ -48,18 +52,28 @@ function MapUpload({
   const classes = useStyles({ small })
   const [file, setFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
+  const dispatch = useContext(DispatchContext)
+
+  const [uploading, setUploading] = useState(false)
 
   const onDrop = useCallback(acceptedFiles => {
     const [theFile] = acceptedFiles
     setFile(theFile)
     setPreviewUrl(URL.createObjectURL(theFile))
   }, [])
+
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
     maxFiles: 1,
     multiple: false,
     accept: ['image/jpg', 'image/png'],
   })
+
+  const upload = useCallback(async () => {
+    setUploading(true)
+    await service.uploadMap(file, sessionId)
+    dispatch({ type: 'SetSessionMap', payload: { sessionId, map: previewUrl }})
+  }, [file, sessionId, dispatch, previewUrl])
 
   return (
     <Grid
@@ -92,6 +106,8 @@ function MapUpload({
           disabled={!Boolean(file)}
           variant='contained'
           color='secondary'
+          onClick={upload}
+          endIcon={uploading ? <CircularProgress size={20} /> : null}
         >
           Upload
         </Button>

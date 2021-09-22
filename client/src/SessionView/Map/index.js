@@ -9,7 +9,11 @@ function Map({
 }) {
   if (session.map) {
     return <Grid justifyContent="center" container >
-      <img src={session.map} alt="TI4 map"/>
+      <img
+        style={{ maxWidth: '86vw' }}
+        src={session.map}
+        alt="TI4 map"
+      />
     </Grid>
   }
 
