@@ -87,7 +87,7 @@ namespace server.Controllers
         {
             var mapFile = HttpContext.Request.Form.Files["map"];
 
-            if (mapFile.Length > 1500000) {
+            if (mapFile.Length > 3000000) {
                 return new BadRequestResult();
             }
 
