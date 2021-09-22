@@ -1,77 +1,15 @@
 import { DndProvider } from 'react-dnd'
 import { TouchBackend } from 'react-dnd-touch-backend'
-import { useDrag, useDrop } from 'react-dnd'
 import {
   Grid,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import useSmallViewport from '../shared/useSmallViewport'
-import FactionFlag from '../shared/FactionFlag'
-import victoryPointsBackground from '../assets/victory-points-background.jpg'
+import useSmallViewport from '../../shared/useSmallViewport'
 
-const DRAGGABLE = {
-  FLAG: 'flag'
-}
+import { PointContainer, DraggableFlag } from './draggableIndicators'
 
-function DraggableFlag({
-  factionKey,
-  updatePoints,
-}) {
-  const [, drag] = useDrag(() => ({
-    type: DRAGGABLE.FLAG,
-    collect: monitor => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-    end: (_, monitor) => {
-      const result = monitor.getDropResult()
-
-      if (result) {
-        updatePoints(monitor.getDropResult().points)
-      }
-    },
-  }), [updatePoints])
-
-  return <FactionFlag
-    ref={drag}
-    factionKey={factionKey}
-    selected
-    height='25%'
-    width='50%'
-  />
-}
-
-function PointContainer({
-  className,
-  imgStyles,
-  children,
-  points,
-}) {
-  const [, drop] = useDrop(() => ({
-    accept: DRAGGABLE.FLAG,
-    drop: () => ({ points, }),
-    collect: monitor => ({
-      isOver: !!monitor.isOver(),
-    }),
-  }), [])
-
-  return <Grid
-    ref={drop}
-    className={className}
-    item
-    container
-    direction='column'
-  >
-    {<img
-      src={victoryPointsBackground}
-      style={imgStyles}
-      alt={`victory points backgroudn ${points}`}
-    />}
-    {children}
-  </Grid>
-}
-
-const useVPStyles = makeStyles({
+const useStyles = makeStyles({
   points: {
     position: 'relative',
     width: props => props.containerWidth,
@@ -107,7 +45,7 @@ function VictoryPoints({
   const smallViewport = useSmallViewport()
   const spriteValues = smallViewport ? VICTORY_POINTS_SPRITE_SMALL : VICTORY_POINTS_SPRITE_BIG
 
-  const classes = useVPStyles(spriteValues)
+  const classes = useStyles(spriteValues)
 
   return <DndProvider
     backend={TouchBackend}
@@ -149,6 +87,7 @@ function VictoryPoints({
             key={faction}
             factionKey={faction}
             updatePoints={points => onChange(faction, points)}
+            onClick={() => onChange(faction, numberOfPoints + 1)}
           />)}
         </PointContainer>
       })}
