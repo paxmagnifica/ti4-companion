@@ -327,8 +327,8 @@ function generateDbInitialization() {
 }
 
 function generateTranslations() {
-  scrapedData.forEach(datum => console.log(`"${datum.title.toLowerCase().replace(/\s+/g, '-')}": { "title": "${datum.title}", "effect": "${datum.effect}"},`))
+  scrapedData.forEach(datum => console.log(`"${datum.title.toLowerCase().replace(/\s+/g, '-')}": { "slug": "${datum.title.toLowerCase().replace(/\s+/g, '-')}", "title": "${datum.title}", "effect": "${datum.effect}"},`))
 }
 
-generateDbInitialization()
-// generateTranslations()
+// generateDbInitialization()
+generateTranslations()

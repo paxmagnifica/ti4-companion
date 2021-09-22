@@ -13,8 +13,7 @@ import { StateContext } from '../state'
 import translations from '../i18n'
 import Objective from '../shared/Objective'
 import useSmallViewport from '../shared/useSmallViewport'
-
-import DebouncedTextField from './DebouncedTextField'
+import DebouncedTextField from '../shared/DebouncedTextField'
 
 const useStyles = makeStyles(theme => ({
   objectivesGrid: {

@@ -11,7 +11,7 @@ import industrialSprite from '../../assets/exploration-green-sprite.jpg'
 import frontierSprite from '../../assets/exploration-frontier-sprite.jpg'
 import translations from '../../i18n'
 
-const PLANET_TYPE = {
+export const PLANET_TYPE = {
   cultural: 0,
   industrial: 1,
   hazardous: 2,
@@ -42,6 +42,11 @@ const useStyles = makeStyles({
       lineHeight: 1.5,
       fontSize: '0.9em',
     },
+  },
+  number: {
+    marginTop: 0,
+    textAlign: 'center',
+    fontSize: ({ fontSize }) => fontSize,
   },
   mask: {
     backgroundColor: '#06050b',
@@ -194,16 +199,19 @@ function ExplorationCard({
 
   const { title, effect } = translations.explorationCards[slug]
 
-  return <div
-    onClick={onClick}
-    className={clsx(className, classes.root)}
-    style={styles}
-  >
-    <div className={clsx(classes.mask, classes.titleMask, { techSkip: techSkip || techSkip === 0 })}><p>{title}</p></div>
-    <div className={clsx(classes.mask, classes.effectMask, { relic, attachment, techSkip: techSkip || techSkip === 0 })}><p>{effect}</p></div>
-    { attachment && <div className={clsx(classes.mask, classes.resourcesMask)}><p>{resources}</p></div> }
-    { attachment && <div className={clsx(classes.mask, classes.influenceMask)}><p>{influence}</p></div>}
-  </div>
+  return <>
+    <div
+      onClick={onClick}
+      className={clsx(className, classes.root)}
+      style={styles}
+    >
+      <div className={clsx(classes.mask, classes.titleMask, { techSkip: techSkip || techSkip === 0 })}><p>{title}</p></div>
+      <div className={clsx(classes.mask, classes.effectMask, { relic, attachment, techSkip: techSkip || techSkip === 0 })}><p>{effect}</p></div>
+      { attachment && <div className={clsx(classes.mask, classes.resourcesMask)}><p>{resources}</p></div> }
+      { attachment && <div className={clsx(classes.mask, classes.influenceMask)}><p>{influence}</p></div>}
+    </div>
+    <p className={classes.number}><strong>{numberOfCards}</strong> in deck</p>
+  </>
 }
 
 const useWithModalStyles = makeStyles({

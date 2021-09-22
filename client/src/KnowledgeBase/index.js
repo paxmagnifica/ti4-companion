@@ -158,23 +158,23 @@ function KnowledgeBase() {
   const gapWidth = smallCards ? '70px' : '17%'
   const drawerWidth = `calc(100% - ${gapWidth})`
   const classes = useStyles({ gapWidth, drawerWidth })
-  const [drawerOpen, setDrawerOpen] = useState(true)
-  const [chosenTab, setChosenTab] = useState(TABS.EXPLORATION_CULTURAL)
-  const [objectiveFilters, setObjectiveFilters] = useState({ stageI: true, stageII: false, secrets: false })
-  const [explorationFilters, setExplorationFilters] = useState({ cultural: false, hazardous: false, biotic: false, frontier: false })
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [chosenTab, setChosenTab] = useState(TABS.SECRET_OBJ)
+  const [objectiveFilters, setObjectiveFilters] = useState({ stageI: false, stageII: false, secrets: false })
+  const [explorationFilters, setExplorationFilters] = useState({ cultural: false, hazardous: false, industrial: false, frontier: false })
 
   const explorationCards = useMemo(() => {
     return smallCards
       ? [
         { type: 'cultural', tab: TABS.EXPLORATION_CULTURAL, height: 64, width: 41.6, backgroundPosition: -127},
         { type: 'hazardous', tab: TABS.EXPLORATION_HAZARDOUS, height: 64, width: 41.6, backgroundPosition: -85},
-        { type: 'biotic', tab: TABS.EXPLORATION_BIOTIC, height: 64, width: 41.6, backgroundPosition: -42},
+        { type: 'industrial', tab: TABS.EXPLORATION_BIOTIC, height: 64, width: 41.6, backgroundPosition: -42},
         { type: 'frontier', tab: TABS.EXPLORATION_FRONTIER, height: 64, width: 41.6},
       ]
       : [
         { type: 'cultural', tab: TABS.EXPLORATION_CULTURAL, height: 80, width: 52, backgroundPosition: -158},
         { type: 'hazardous', tab: TABS.EXPLORATION_HAZARDOUS, height: 80, width: 52, backgroundPosition: -106},
-        { type: 'biotic', tab: TABS.EXPLORATION_BIOTIC, height: 80, width: 52, backgroundPosition: -53},
+        { type: 'industrial', tab: TABS.EXPLORATION_BIOTIC, height: 80, width: 52, backgroundPosition: -53},
         { type: 'frontier', tab: TABS.EXPLORATION_FRONTIER, height: 80, width: 52},
       ]
   }, [smallCards]);
@@ -271,7 +271,7 @@ function KnowledgeBase() {
             <div
               onClick={() => {
                 setExplorationFilters({
-                  cultural: false, hazardous: false, biotic: false, frontier: false,
+                  cultural: false, hazardous: false, industrial: false, frontier: false,
                   [type]: true,
                 })
                 open(tab)

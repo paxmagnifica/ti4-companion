@@ -7,6 +7,7 @@ const i18n = {
   objectivesArray: Object.values(objectives),
   strategyCards,
   explorationCards,
+  explorationCardsArray: Object.values(explorationCards),
   general: {
     phase: {
       0: 'status phase',
