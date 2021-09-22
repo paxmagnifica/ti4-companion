@@ -77,7 +77,7 @@ function MapUpload({
     onDropAccepted,
     onDropRejected,
     maxFiles: 1,
-    maxSize: 1000000,
+    maxSize: 1500000,
     multiple: false,
     accept: ['image/jpg', 'image/png', 'image/jpeg'],
   })
