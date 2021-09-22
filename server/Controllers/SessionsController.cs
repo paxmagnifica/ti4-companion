@@ -86,6 +86,11 @@ namespace server.Controllers
         public async Task<ActionResult> UploadMap(Guid id)
         {
             var mapFile = HttpContext.Request.Form.Files["map"];
+
+            if (mapFile.Length > 1000000) {
+                return new BadRequestResult();
+            }
+
             var sessionBlobContainer = new BlobContainerClient(_configuration.GetConnectionString("BlobStorage"), id.ToString());
             await sessionBlobContainer.CreateIfNotExistsAsync(PublicAccessType.Blob);
 

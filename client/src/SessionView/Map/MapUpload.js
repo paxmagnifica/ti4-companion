@@ -3,8 +3,10 @@ import { useDropzone } from 'react-dropzone'
 import {
   Button,
   Grid,
+  Snackbar,
   CircularProgress,
 } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert';
 import { Map as MapIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -52,30 +54,48 @@ function MapUpload({
   const classes = useStyles({ small })
   const [file, setFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
+  const [fileErrors, setFileErrors] = useState(null)
   const dispatch = useContext(DispatchContext)
 
   const [uploading, setUploading] = useState(false)
 
-  const onDrop = useCallback(acceptedFiles => {
+  const onDropAccepted = useCallback(acceptedFiles => {
+    setFileErrors(null)
     const [theFile] = acceptedFiles
+
     setFile(theFile)
     setPreviewUrl(URL.createObjectURL(theFile))
   }, [])
 
+  const onDropRejected = useCallback(fileRejections => {
+    const [rejection] = fileRejections
+
+    setFileErrors(rejection.errors)
+  }, [])
+
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
-    onDrop,
+    onDropAccepted,
+    onDropRejected,
     maxFiles: 1,
+    maxSize: 1000000,
     multiple: false,
     accept: ['image/jpg', 'image/png', 'image/jpeg'],
   })
+  const handleSnackbarClose = useCallback((_, reason) => {
+    if (reason === 'timeout') {
+      setFileErrors(null)
+    }
+  }, [])
 
   const upload = useCallback(async () => {
     setUploading(true)
-    await service.uploadMap(file, sessionId)
-    dispatch({ type: 'SetSessionMap', payload: { sessionId, map: previewUrl }})
+    const result = await service.uploadMap(file, sessionId)
+    if (result.ok) {
+      dispatch({ type: 'SetSessionMap', payload: { sessionId, map: previewUrl }})
+    }
   }, [file, sessionId, dispatch, previewUrl])
 
-  return (
+  return <>
     <Grid
       container
       alignItems='center'
@@ -126,7 +146,21 @@ function MapUpload({
         <p className={classes.previewWatermark}>preview</p>
       </Grid>}
     </Grid>
-  )
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      open={fileErrors}
+      autoHideDuration={5000}
+      onClose={handleSnackbarClose}
+    >
+      <MuiAlert
+        elevation={6}
+        variant="filled"
+        severity="error"
+      >
+        {(fileErrors || []).map(fe => fe.message).join(';')}
+      </MuiAlert>
+    </Snackbar>
+  </>
 }
 
 export default MapUpload
