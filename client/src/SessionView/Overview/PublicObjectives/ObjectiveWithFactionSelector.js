@@ -1,4 +1,5 @@
-import Objective from '../../shared/Objective'
+import Objective from '../../../shared/Objective'
+
 import FactionSelector from './FactionSelector'
 
 function ObjectiveWithFactionSelector({

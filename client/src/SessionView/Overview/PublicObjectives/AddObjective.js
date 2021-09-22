@@ -14,9 +14,9 @@ import {
 } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { StateContext } from '../../state'
-import translations from '../../i18n'
-import Objective from '../../shared/Objective'
+import { StateContext } from '../../../state'
+import translations from '../../../i18n'
+import Objective from '../../../shared/Objective'
 
 function AddObjective({
   open,

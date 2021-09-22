@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react'
 
-import { StateContext, ComboDispatchContext } from '../../state'
+import { StateContext, ComboDispatchContext } from '../../../state'
 
 import PublicObjectives from './index'
 

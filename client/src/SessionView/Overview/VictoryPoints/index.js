@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import useSmallViewport from '../../shared/useSmallViewport'
+import useSmallViewport from '../../../shared/useSmallViewport'
 
 import { PointContainer, DraggableFlag } from './draggableIndicators'
 

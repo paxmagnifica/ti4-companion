@@ -9,8 +9,8 @@ import {
 import QRCode from 'react-qr-code'
 import { Share } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+
 const useStyles = makeStyles({
   button: {
     color: 'white',

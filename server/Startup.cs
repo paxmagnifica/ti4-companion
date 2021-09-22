@@ -39,6 +39,8 @@ namespace server
                 });
             });
 
+            services.AddScoped<IRepository, Repository>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -52,8 +54,6 @@ namespace server
             services.AddScoped<SessionHub>();
             services.AddScoped<ITimeProvider, TimeProvider>();
             services.AddScoped<Dispatcher>();
-
-            services.AddScoped<IRepository, Repository>();
 
             AddAllHandlers(services);
         }

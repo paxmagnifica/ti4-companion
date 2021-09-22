@@ -11,5 +11,6 @@ namespace server.Domain
         public string SerializedPayload { get; set; }
 
         public const string GameStarted = "GameStarted";
+        public const string MapAdded = "MapAdded";
     }
 }

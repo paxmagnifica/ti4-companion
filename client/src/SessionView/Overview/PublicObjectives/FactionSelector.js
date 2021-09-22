@@ -3,7 +3,7 @@ import {
   Grid,
 } from '@material-ui/core'
 
-import FactionFlag from '../../shared/FactionFlag'
+import FactionFlag from '../../../shared/FactionFlag'
 
 function FactionSelector({
   factions,

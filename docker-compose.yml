@@ -19,12 +19,14 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       - ConnectionStrings__SessionContext
+      - ConnectionStrings__BlobStorage
       - AllowedOrigin
     ports:
       - "5000:5000"
       - "5001:5001"
     depends_on:
       - postgres
+      - storage-emulator
     volumes:
       - "./server:/source"
   postgres:
@@ -33,3 +35,9 @@ services:
       - POSTGRES_PASSWORD=companion
     ports:
       - "5432:5432"
+  storage-emulator:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"

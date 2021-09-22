@@ -130,6 +130,8 @@ export const reducer = (state, action) => {
           data: set_sessions,
         }
       }
+    case 'SetSessionMap':
+      return setMap(state, action.payload)
     case 'ObjectiveAdded':
       return addObjective(state, action.payload)
     case 'ObjectiveScored':
@@ -147,6 +149,23 @@ const updateVictoryPoints = (state, payload) => {
   const session = state.sessions.data[sessionIndex]
 
   session.points = session.points.map(({faction, points: previousPoints}) => faction === payload.faction ? {faction, points: payload.points} : {faction, points: previousPoints})
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, {...session})
+
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
+  }
+}
+
+const setMap = (state, payload) => {
+  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const session = state.sessions.data[sessionIndex]
+
+  session.map = payload.map
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, {...session})
 
