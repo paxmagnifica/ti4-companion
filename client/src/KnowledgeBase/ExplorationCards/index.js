@@ -1,11 +1,14 @@
 import { useEffect, useContext } from 'react'
-
-import { DispatchContext, StateContext } from '../../state'
 import {
+  Grid,
   CircularProgress,
 } from '@material-ui/core'
 
+import { DispatchContext, StateContext } from '../../state'
+import useSmallViewport from '../../shared/useSmallViewport'
+
 import * as explorationCardsService from './service'
+import ExplorationCard from './ExplorationCard'
 
 function ExplorationCardsProvider(props) {
   const { explorationCards: { loading, loaded, data: availableCards }} = useContext(StateContext)
@@ -45,9 +48,13 @@ function ExplorationCards({
   biotic,
   frontier,
 }) {
-  return <pre>
-    {JSON.stringify(availableCards, null, 2)}
-  </pre>
+  const smallViewport = useSmallViewport()
+
+  return <Grid container spacing={2}>
+    {Object.values(availableCards).map(card => <Grid item key={card.slug}>
+      <ExplorationCard {...card} small={smallViewport} />
+    </Grid>)}
+  </Grid>
 }
 
 export default ExplorationCardsProvider

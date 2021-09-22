@@ -28,7 +28,7 @@ namespace server.Controllers
         {
             var objectivesFromDb = _sessionContext.Explorations.ToList();
 
-            return objectivesFromDb.Select(fromDb => new ExplorationCardDto(fromDb));
+            return objectivesFromDb.Select(fromDb => new ExplorationCardDto(fromDb)).OrderBy(f => f.PlanetType);
         }
     }
 
@@ -42,6 +42,7 @@ namespace server.Controllers
             NumberOfCards = exploration.NumberOfCards;
             Resources = exploration.Resources;
             Influence = exploration.Influence;
+            TechSkip = exploration.TechSkip;
         }
     }
 }

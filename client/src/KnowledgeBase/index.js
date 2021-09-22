@@ -25,6 +25,9 @@ const useTabPanelStyles = makeStyles({
     padding: '2em',
     overflowX: 'hidden',
   },
+  title: {
+    whiteSpace: 'normal',
+  }
 })
 
 const TABS = {
@@ -32,9 +35,9 @@ const TABS = {
   STAGE_II_OBJ: 1,
   SECRET_OBJ: 2,
   STRATEGY_CARDS: 3,
-  EXPLORATION_BLUE: 4,
-  EXPLORATION_RED: 5,
-  EXPLORATION_GREEN: 6,
+  EXPLORATION_CULTURAL: 4,
+  EXPLORATION_HAZARDOUS: 5,
+  EXPLORATION_BIOTIC: 6,
   EXPLORATION_FRONTIER: 7,
 }
 
@@ -45,7 +48,7 @@ function TabPanel({ small, children, value, index, title }) {
   }
 
   return <div className={classes.root}>
-    <Typography variant="h4" component="div" gutterBottom>
+    <Typography variant="h4" component="div" gutterBottom className={classes.title}>
       {!small && 'Knowledge base: '}<i>{title}</i>
     </Typography>
     <Divider />
@@ -155,19 +158,23 @@ function KnowledgeBase() {
   const gapWidth = smallCards ? '70px' : '17%'
   const drawerWidth = `calc(100% - ${gapWidth})`
   const classes = useStyles({ gapWidth, drawerWidth })
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const [chosenTab, setChosenTab] = useState(TABS.STAGE_I_OBJ)
+  const [drawerOpen, setDrawerOpen] = useState(true)
+  const [chosenTab, setChosenTab] = useState(TABS.EXPLORATION_CULTURAL)
   const [objectiveFilters, setObjectiveFilters] = useState({ stageI: true, stageII: false, secrets: false })
-  const [explorationFilters, setExplorationFilters] = useState({ cultural: false, warfare: false, biotic: false, frontier: false })
+  const [explorationFilters, setExplorationFilters] = useState({ cultural: false, hazardous: false, biotic: false, frontier: false })
 
   const explorationCards = useMemo(() => {
     return smallCards
       ? [
+        { type: 'cultural', tab: TABS.EXPLORATION_CULTURAL, height: 64, width: 41.6, backgroundPosition: -127},
+        { type: 'hazardous', tab: TABS.EXPLORATION_HAZARDOUS, height: 64, width: 41.6, backgroundPosition: -85},
+        { type: 'biotic', tab: TABS.EXPLORATION_BIOTIC, height: 64, width: 41.6, backgroundPosition: -42},
+        { type: 'frontier', tab: TABS.EXPLORATION_FRONTIER, height: 64, width: 41.6},
       ]
       : [
-        { type: 'cultural', tab: TABS.EXPLORATION_BLUE, height: 80, width: 52, backgroundPosition: -158},
-        { type: 'warfare', tab: TABS.EXPLORATION_RED, height: 80, width: 52, backgroundPosition: -106},
-        { type: 'biotic', tab: TABS.EXPLORATION_GREEN, height: 80, width: 52, backgroundPosition: -53},
+        { type: 'cultural', tab: TABS.EXPLORATION_CULTURAL, height: 80, width: 52, backgroundPosition: -158},
+        { type: 'hazardous', tab: TABS.EXPLORATION_HAZARDOUS, height: 80, width: 52, backgroundPosition: -106},
+        { type: 'biotic', tab: TABS.EXPLORATION_BIOTIC, height: 80, width: 52, backgroundPosition: -53},
         { type: 'frontier', tab: TABS.EXPLORATION_FRONTIER, height: 80, width: 52},
       ]
   }, [smallCards]);
@@ -264,7 +271,7 @@ function KnowledgeBase() {
             <div
               onClick={() => {
                 setExplorationFilters({
-                  cultural: false, warfare: false, biotic: false, frontier: false,
+                  cultural: false, hazardous: false, biotic: false, frontier: false,
                   [type]: true,
                 })
                 open(tab)
