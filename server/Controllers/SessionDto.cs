@@ -14,9 +14,23 @@ namespace server.Controllers
             Factions = GetFactions(session.Events);
             Points = GetPoints(session.Events);
             Objectives = GetObjectives(session.Events);
-            Map = "https://via.placeholder.com/800x800";
+            Map = GetMap(session.Events);
         }
 
+        private string GetMap(List<GameEvent> events)
+        {
+            var mapEvent = (events ?? new List<GameEvent>()).OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == GameEvent.MapAdded);
+
+            if (mapEvent == null) {
+                return string.Empty;
+            }
+
+#if DEBUG
+    return mapEvent.SerializedPayload.Replace("storage-emulator", "localhost");
+#endif
+
+            return mapEvent.SerializedPayload;
+        }
         public string Map { get; internal set; }
 
         public List<ScorableObjectiveDto> Objectives { get; internal set; }

@@ -9,6 +9,9 @@ using server.Domain;
 using server.Persistence;
 using server.Infra;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs;
 
 namespace server.Controllers
 {
@@ -19,12 +22,19 @@ namespace server.Controllers
         private readonly ILogger<SessionsController> _logger;
         private readonly SessionContext _sessionContext;
         private readonly ITimeProvider _timeProvider;
+        private readonly IConfiguration _configuration;
 
-        public SessionsController(ILogger<SessionsController> logger, SessionContext sessionContext, ITimeProvider timeProvider)
+        public SessionsController(
+            ILogger<SessionsController> logger,
+            SessionContext sessionContext,
+            ITimeProvider timeProvider,
+            IConfiguration configuration
+        )
         {
             _logger = logger;
             _sessionContext = sessionContext;
             _timeProvider = timeProvider;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -69,6 +79,32 @@ namespace server.Controllers
             }
 
             return new SessionDto(sessionFromDb);
+        }
+
+        // TODO not cool, direct Events and stuff
+        [HttpPost("{id}/map")]
+        public async Task<ActionResult> UploadMap(Guid id)
+        {
+            var mapFile = HttpContext.Request.Form.Files["map"];
+            var sessionBlobContainer = new BlobContainerClient(_configuration.GetConnectionString("BlobStorage"), id.ToString());
+            await sessionBlobContainer.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+            var mapBlobClient = sessionBlobContainer.GetBlobClient("map");
+            var blobHttpHeader = new BlobHttpHeaders();
+            blobHttpHeader.ContentType = mapFile.ContentType;
+            await mapBlobClient.UploadAsync(mapFile.OpenReadStream(), blobHttpHeader);
+
+            var gameEvent = new GameEvent{
+                Id = Guid.NewGuid(),
+                SessionId = id,
+                HappenedAt = _timeProvider.Now,
+                EventType = GameEvent.MapAdded,
+                SerializedPayload = mapBlobClient.Uri.ToString(),
+            };
+            await _sessionContext.Events.AddAsync(gameEvent);
+            await _sessionContext.SaveChangesAsync();
+
+            return new OkResult();
         }
     }
 }
