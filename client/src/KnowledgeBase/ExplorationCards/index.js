@@ -131,7 +131,11 @@ function ExplorationCards({
       </FormGroup>
     </Grid>
     {filtered.map(card => <Grid item key={card.slug}>
-      <ExplorationCard {...card} small={smallViewport} />
+      <ExplorationCard
+        {...card}
+        small={smallViewport}
+        highlight={searchValue.split(' ')}
+      />
     </Grid>)}
   </Grid>
 }

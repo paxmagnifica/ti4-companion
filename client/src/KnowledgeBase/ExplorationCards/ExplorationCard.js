@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
+import Highlighter from 'react-highlight-words'
 
 import culturalSprite from '../../assets/exploration-blue-sprite.jpg'
 import hazardousSprite from '../../assets/exploration-red-sprite.jpg'
@@ -148,6 +149,7 @@ function ExplorationCard({
   big,
   onClick,
   className,
+  highlight,
 }) {
   const stylesInit = small
       ? SMALL_SIZE
@@ -197,6 +199,14 @@ function ExplorationCard({
     return {}
   }, [relic, attachment, techSkip, planetType])
 
+  const textRenderer = useMemo(() => text => highlight
+    ? <Highlighter
+      searchWords={highlight}
+      autoEscape={true}
+      textToHighlight={text}
+    />
+    : text, [highlight])
+
   const { title, effect } = translations.explorationCards[slug]
 
   return <>
@@ -205,8 +215,8 @@ function ExplorationCard({
       className={clsx(className, classes.root)}
       style={styles}
     >
-      <div className={clsx(classes.mask, classes.titleMask, { techSkip: techSkip || techSkip === 0 })}><p>{title}</p></div>
-      <div className={clsx(classes.mask, classes.effectMask, { relic, attachment, techSkip: techSkip || techSkip === 0 })}><p>{effect}</p></div>
+      <div className={clsx(classes.mask, classes.titleMask, { techSkip: techSkip || techSkip === 0 })}><p>{textRenderer(title)}</p></div>
+      <div className={clsx(classes.mask, classes.effectMask, { relic, attachment, techSkip: techSkip || techSkip === 0 })}><p>{textRenderer(effect)}</p></div>
       { attachment && <div className={clsx(classes.mask, classes.resourcesMask)}><p>{resources}</p></div> }
       { attachment && <div className={clsx(classes.mask, classes.influenceMask)}><p>{influence}</p></div>}
     </div>
