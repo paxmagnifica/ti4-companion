@@ -205,7 +205,6 @@ function ObjectiveWithModal({
       />
     </Dialog>
   </>
-
 }
 
 export default ObjectiveWithModal

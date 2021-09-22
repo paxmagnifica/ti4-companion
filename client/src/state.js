@@ -8,6 +8,12 @@ export const DispatchContext = React.createContext();
 
 export const init = () => {
   return {
+    explorationCards: {
+      loading: false,
+      loaded: false,
+      data: {},
+      slugs: [],
+    },
     objectives: {
       loading: true,
       loaded: false,
@@ -42,6 +48,24 @@ export const reducer = (state, action) => {
           loaded: true,
           data: action.objectives.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
           slugs: action.objectives.map(({ slug }) => slug),
+        }
+      }
+    case 'LoadingExplorationCards':
+      return {
+        ...state,
+        explorationCards: {
+          loading: true,
+          loaded: false,
+        }
+      }
+    case 'LoadExplorationCards':
+      return {
+        ...state,
+        explorationCards: {
+          loading: false,
+          loaded: true,
+          data: action.explorationCards.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
+          slugs: action.explorationCards.map(({ slug }) => slug),
         }
       }
     case 'CreateGameSession':
