@@ -1,6 +1,7 @@
 import { objectives } from './objectives'
 import { strategyCards } from './strategyCards'
 import { explorationCards } from './explorationCards'
+import { relics } from './relics'
 
 const i18n = {
   objectivesDictionary: objectives,
@@ -8,6 +9,8 @@ const i18n = {
   strategyCards,
   explorationCards,
   explorationCardsArray: Object.values(explorationCards),
+  relics,
+  relicsArray: Object.values(relics),
   general: {
     phase: {
       0: 'status phase',
