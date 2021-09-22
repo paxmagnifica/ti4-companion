@@ -10,7 +10,6 @@ namespace server.Persistence
     {
         public static void Initialize(SessionContext context)
         {
-            // Look for any students.
             if (!context.Objectives.Any())
             {
                 var objectives = new Objective[]
@@ -135,6 +134,26 @@ namespace server.Persistence
                     new Exploration("unknown-relic-fragment", GameVersion.PoK_Codex2, PlanetType.Frontier, 3, 0, 0),
                 };
                 context.Explorations.AddRange(explorations);
+            }
+
+            if (!context.Relics.Any())
+            {
+                var relics = new Relic[] {
+                    new Relic("dominus-orb", GameVersion.PoK),
+                    new Relic("maw-of-worlds", GameVersion.PoK),
+                    new Relic("scepter-of-emelpar", GameVersion.PoK),
+                    new Relic("shard-of-the-throne", GameVersion.PoK),
+                    new Relic("stellar-converter", GameVersion.PoK),
+                    new Relic("the-codex", GameVersion.PoK),
+                    new Relic("the-crown-of-emphidia", GameVersion.PoK),
+                    new Relic("the-crown-of-thalnos", GameVersion.PoK),
+                    new Relic("the-obsidian", GameVersion.PoK),
+                    new Relic("the-prophets-tears", GameVersion.PoK),
+                    new Relic("dynamis-core", GameVersion.PoK_Codex2),
+                    new Relic("jr-xs455-o", GameVersion.PoK_Codex2),
+                    new Relic("nano-forge", GameVersion.PoK_Codex2),
+                };
+                context.Relics.AddRange(relics);
             }
 
             if (!context.Sessions.Any())

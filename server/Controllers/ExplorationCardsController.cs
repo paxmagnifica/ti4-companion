@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using server.Domain;
 using server.Persistence;
-using server.Infra;
 
 namespace server.Controllers
 {
@@ -14,13 +13,11 @@ namespace server.Controllers
     {
         private readonly ILogger<ExplorationCardsController> _logger;
         private readonly SessionContext _sessionContext;
-        private readonly ITimeProvider _timeProvider;
 
-        public ExplorationCardsController(ILogger<ExplorationCardsController> logger, SessionContext sessionContext, ITimeProvider timeProvider)
+        public ExplorationCardsController(ILogger<ExplorationCardsController> logger, SessionContext sessionContext)
         {
             _logger = logger;
             _sessionContext = sessionContext;
-            _timeProvider = timeProvider;
         }
 
         [HttpGet]

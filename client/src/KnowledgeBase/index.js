@@ -13,10 +13,12 @@ import stageIObjectiveReverse from '../assets/objective-1-reverse.jpg'
 import stageIIObjectiveReverse from '../assets/objective-2-reverse.jpg'
 import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
 import explorationReverseSprite from '../assets/exploration-reverse-sprite.png'
+import relicSprite from '../assets/relic-sprite.jpg'
 import StrategyCard from '../gameInfo/strategyCards'
 
 import Objectives from './Objectives'
 import ExplorationCards from './ExplorationCards'
+import Relics from './Relics'
 import StrategyCards from './StrategyCards'
 import StrategyBack from './StrategyBack'
 
@@ -39,6 +41,7 @@ const TABS = {
   EXPLORATION_HAZARDOUS: 5,
   EXPLORATION_BIOTIC: 6,
   EXPLORATION_FRONTIER: 7,
+  RELICS: 8,
 }
 
 function TabPanel({ small, children, value, index, title }) {
@@ -99,8 +102,12 @@ const useStyles = makeStyles(theme => ({
       }),
     }
   },
-  spriteCard: {
+  explorationCard: {
     backgroundImage: `url(${explorationReverseSprite})`,
+    backgroundSize: 'auto 100%',
+  },
+  relicCard: {
+    backgroundImage: `url(${relicSprite})`,
     backgroundSize: 'auto 100%',
   },
   hoverableCard: {
@@ -277,7 +284,7 @@ function KnowledgeBase() {
                 open(tab)
               }}
               title={`Browse ${type} exploration cards`}
-              className={classes.spriteCard}
+              className={classes.explorationCard}
               style={{
                 backgroundPosition,
                 height,
@@ -286,6 +293,24 @@ function KnowledgeBase() {
             />
           </div>
         )}
+        <div
+          className={clsx(classes.card, {
+            [classes.hoverableCard]: hoverable,
+            [classes.smallCard]: smallCards,
+            [classes.cardActive]: drawerOpen && chosenTab === TABS.RELICS,
+          })}
+        >
+          <div
+            onClick={() => open(TABS.RELICS)}
+            title="Browse relics"
+            className={classes.relicCard}
+            style={{
+              backgroundPosition: '100%',
+              height: smallCards ? 64 : 80,
+              width: smallCards ? 41.6 : 52,
+            }}
+          />
+        </div>
         <div
           className={clsx(classes.card, {
             [classes.hoverableCard]: hoverable,
@@ -362,6 +387,14 @@ function KnowledgeBase() {
           />
         </TabPanel>
       )}
+      <TabPanel
+        small={smallCards}
+        title='Relics'
+        value={chosenTab}
+        index={TABS.RELICS}
+      >
+        <Relics />
+      </TabPanel>
       <TabPanel
         small={smallCards}
         title='Strategy cards'
