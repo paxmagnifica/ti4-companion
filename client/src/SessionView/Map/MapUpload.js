@@ -66,7 +66,7 @@ function MapUpload({
     onDrop,
     maxFiles: 1,
     multiple: false,
-    accept: ['image/jpg', 'image/png'],
+    accept: ['image/jpg', 'image/png', 'image/jpeg'],
   })
 
   const upload = useCallback(async () => {
