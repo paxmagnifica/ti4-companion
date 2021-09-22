@@ -27,7 +27,7 @@ export function SessionProvider({
       try {
         const session = await sessionService.get(id)
         session.remote = true
-        dispatch({ type: 'LoadSessions', sessions: [session, ...state.sessions.data.filter(s => s.id !== session.id)]});
+        dispatch({ type: 'AddSession', session});
       } catch (e) {
         console.error(e)
       } finally {

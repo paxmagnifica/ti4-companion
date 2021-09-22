@@ -37,13 +37,24 @@ export const init = () => {
 export const reducer = (state, action) => {
   switch (action.type) {
     case 'LoadSessions':
-      saveAllSessions(action.sessions)
       return {
         ...state,
         sessions: {
           loading: false,
           loaded: true,
           data: action.sessions,
+        }
+      }
+    case 'AddSession':
+      const sessions = [action.session, ...state.sessions.data.filter(s => s.id !== action.session.id)]
+      saveAllSessions(sessions)
+
+      return {
+        ...state,
+        sessions: {
+          loading: false,
+          loaded: true,
+          data: sessions,
         }
       }
     case 'LoadObjectives':
