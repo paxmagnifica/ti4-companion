@@ -11,9 +11,8 @@ import {
   InputLabel,
   Paper,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
-import { DispatchContext } from '../state'
+import { ComboDispatchContext } from '../state'
 
 const getNow = () => {
   const now = new Date()
@@ -23,18 +22,11 @@ const getNow = () => {
   return nowString
 }
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    // paddingBottom: theme.spacing(3),
-  }
-}))
-
 function DetailsForm({
   session
 }) {
-  const classes = useStyles()
-
-  const [sessionDisplayname, setSessionDisplayname] = useState(session.displayName || '')
+  const comboDispatch = useContext(ComboDispatchContext)
+  const [sessionDisplayName, setSessionDisplayname] = useState(session.displayName || '')
   const [isTTS, setIsTTS] = useState(session.tts || false)
   const [isSplit, setIsSplit] = useState(session.split || false)
   const [sessionStart, setSessionStart] = useState(session.start)
@@ -46,21 +38,30 @@ function DetailsForm({
     setter(v)
   }, [])
   const handleSave = useCallback(() => {
-    const changed = (sessionDisplayname && sessionDisplayname !== session.displayName)
+    const changed = (sessionDisplayName && sessionDisplayName !== session.displayName)
       || isTTS !== Boolean(session.tts)
       || isSplit !== Boolean(session.split)
       || (sessionStart && sessionStart !== session.start)
       || (sessionEnd && sessionEnd !== session.end)
       || (duration && duration !== session.duration)
 
-    if (changed) {
-
+    if (!changed) {
+      return
     }
 
-    // TODO show success popper?
-  }, [session, sessionDisplayname, isTTS, isSplit, sessionStart, sessionEnd, duration])
+    const payload = {
+      sessionId: session.id,
+      sessionDisplayName,
+      isTTS,
+      isSplit,
+      sessionStart,
+      sessionEnd: sessionEnd || getNow(),
+      duration,
+    }
+    comboDispatch({ type: 'MetadataUpdated', payload })
+  }, [session, sessionDisplayName, isTTS, isSplit, sessionStart, sessionEnd, duration, comboDispatch])
 
-  return <Paper><Container className={classes.root}>
+  return <Paper><Container>
     <form noValidate autoComplete="off">
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -68,7 +69,7 @@ function DetailsForm({
             <InputLabel htmlFor="sessionName">Your session name</InputLabel>
             <Input
               id="sessionName"
-              value={sessionDisplayname}
+              value={sessionDisplayName}
               onChange={getChangeHandler(setSessionDisplayname)}
             />
           </FormControl>
@@ -126,7 +127,7 @@ function DetailsForm({
           <Button
             variant='contained'
             color='secondary'
-            onChange={handleSave}
+            onClick={handleSave}
           >Save</Button>
         </Grid>
       </Grid>
