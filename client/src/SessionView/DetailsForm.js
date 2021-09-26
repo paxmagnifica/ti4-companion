@@ -42,27 +42,16 @@ function DetailsForm({
     setter(v)
   }, [])
   const handleSave = useCallback(() => {
-    const changed = (sessionDisplayName && sessionDisplayName !== session.displayName)
-      || isTTS !== Boolean(session.tts)
-      || isSplit !== Boolean(session.split)
-      || (sessionStart && sessionStart !== session.start)
-      || (sessionEnd && sessionEnd !== session.end)
-      || (duration && duration !== session.duration)
-
-    if (!changed) {
-      setShowSuccess(true)
-      return
-    }
-
     const payload = {
       sessionId: session.id,
       sessionDisplayName,
       isTTS,
       isSplit,
-      sessionStart,
+      sessionStart: sessionStart || getNow(),
       sessionEnd: sessionEnd || getNow(),
       duration: Number(duration),
     }
+
     comboDispatch({ type: 'MetadataUpdated', payload })
     setShowSuccess(true)
   }, [session, sessionDisplayName, isTTS, isSplit, sessionStart, sessionEnd, duration, comboDispatch])
@@ -99,7 +88,6 @@ function DetailsForm({
                 <InputLabel htmlFor="sessionStart">Session date</InputLabel>
                 <Input
                   id="sessionStart"
-                  defaultValue={getNow()}
                   value={sessionStart || getNow()}
                   onChange={getChangeHandler(setSessionStart)}
                   type="date"
@@ -111,7 +99,6 @@ function DetailsForm({
                 <InputLabel htmlFor="sessionEnd">Session end date</InputLabel>
                 <Input
                   id="sessionEnd"
-                  defaultValue={getNow()}
                   value={sessionEnd || getNow()}
                   onChange={getChangeHandler(setSessionEnd)}
                   type="date"

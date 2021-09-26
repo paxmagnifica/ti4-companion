@@ -57,18 +57,20 @@ function SessionsList({
           </ListSubheader>
         }
       >
-        {sessions.map(session =>
-          <ListItem
+        {sessions.map(session => {
+          const factionList = session.factions.map(factionKey => factions.getName(factionKey)).join(', ')
+
+          return <ListItem
             button
             key={session.id}
             onClick={() => history.push(`/${session.id}`)}
           >
             <ListItemText
-              primary={session.factions.map(factionKey => factions.getName(factionKey)).join(', ')}
-              secondary={`${new Date(session.createdAt).toLocaleDateString()} ${new Date(session.createdAt).toLocaleTimeString()}`}
+              primary={session.displayName || factionList}
+              secondary={`${session.start || ''}${session.displayName ? ` (factions: ${factionList})` : ''}`}
             />
           </ListItem>
-        )}
+        })}
       </List>
       <Link to='/new'>
         <Fab
