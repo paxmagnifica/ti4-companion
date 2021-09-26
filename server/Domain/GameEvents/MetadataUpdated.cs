@@ -47,6 +47,7 @@ namespace server.Domain
                 IsSplit = payload.IsSplit,
                 SessionStart = payload.SessionStart,
                 SessionEnd = payload.IsSplit ? payload.SessionEnd : string.Empty,
+                Duration = payload.Duration,
             };
         }
 
@@ -70,6 +71,6 @@ namespace server.Domain
       public bool IsSplit { get; set; }
       public string SessionStart { get; set; }
       public string SessionEnd { get; set; }
-      public double Duration { get; set; }
+      public decimal Duration { get; set; }
     }
 }

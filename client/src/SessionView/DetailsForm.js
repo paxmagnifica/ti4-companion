@@ -61,7 +61,7 @@ function DetailsForm({
       isSplit,
       sessionStart,
       sessionEnd: sessionEnd || getNow(),
-      duration,
+      duration: Number(duration),
     }
     comboDispatch({ type: 'MetadataUpdated', payload })
     setShowSuccess(true)

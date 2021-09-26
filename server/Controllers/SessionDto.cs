@@ -23,7 +23,7 @@ namespace server.Controllers
         public bool Split { get; internal set; }
         public string Start { get; internal set; }
         public string End { get; internal set; }
-        public double Duration {get; internal set; }
+        public decimal Duration {get; internal set; }
         private void SetSessionDetails(List<GameEvent> events)
         {
             var latestMetadataEvent = (events ?? new List<GameEvent>())
