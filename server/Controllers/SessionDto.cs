@@ -15,8 +15,36 @@ namespace server.Controllers
             Points = GetPoints(session.Events);
             Objectives = GetObjectives(session.Events);
             Map = GetMap(session.Events);
+            SetSessionDetails(session.Events);
         }
 
+        public string DisplayName { get; internal set; }
+        public bool TTS { get; internal set; }
+        public bool Split { get; internal set; }
+        public string Start { get; internal set; }
+        public string End { get; internal set; }
+        public double Duration {get; internal set; }
+        private void SetSessionDetails(List<GameEvent> events)
+        {
+            var latestMetadataEvent = (events ?? new List<GameEvent>())
+                .OrderByDescending(e => e.HappenedAt)
+                .FirstOrDefault(e => e.EventType == nameof(MetadataUpdated));
+
+            if (latestMetadataEvent == null)
+            {
+              return;
+            }
+
+            var payload = MetadataUpdated.GetPayload(latestMetadataEvent);
+            DisplayName = payload.SessionDisplayName;
+            TTS = payload.IsTTS;
+            Split = payload.IsSplit;
+            Start = payload.SessionStart;
+            End = payload.SessionEnd;
+            Duration = payload.Duration;
+        }
+
+        public string Map { get; internal set; }
         private string GetMap(List<GameEvent> events)
         {
             var mapEvent = (events ?? new List<GameEvent>()).OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == GameEvent.MapAdded);
@@ -31,7 +59,6 @@ namespace server.Controllers
 
             return mapEvent.SerializedPayload;
         }
-        public string Map { get; internal set; }
 
         public List<ScorableObjectiveDto> Objectives { get; internal set; }
         private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)
