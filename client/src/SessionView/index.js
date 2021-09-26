@@ -18,6 +18,7 @@ import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
 import Map from './Map'
 import SessionNavigation from './SessionNavigation'
+import DetailsForm from './DetailsForm'
 
 const useStyles = makeStyles({
   header: {
@@ -81,7 +82,9 @@ function SessionView({
         />
       </Route>
       <Route exact path={`${path}/details`}>
-        <p>hello world details here</p>
+        <DetailsForm
+          session={session}
+        />
       </Route>
     </Switch>
   </>
