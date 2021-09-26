@@ -138,6 +138,8 @@ export const reducer = (state, action) => {
       return scoreObjective(state, action.payload)
     case 'ObjectiveDescored':
       return descoreObjective(state, action.payload)
+    case 'MetadataUpdated':
+      return updatedMetadata(state, action.payload)
     default:
       console.error('unhandled action', action)
       return state
@@ -228,6 +230,38 @@ const descoreObjective = (state, payload) => {
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, {...session})
 
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
+  }
+}
+
+const updatedMetadata = (state, payload) => {
+  const {
+    sessionId,
+    sessionDisplayName,
+    isTTS,
+    isSplit,
+    sessionStart,
+    sessionEnd,
+    duration,
+  } = payload
+
+  const sessionIndex = state.sessions.data.findIndex(session => session.id === sessionId)
+  const session = state.sessions.data[sessionIndex]
+
+  session.displayName =  sessionDisplayName
+  session.tts = isTTS
+  session.split = isSplit
+  session.start = sessionStart
+  session.end = sessionEnd
+  session.duration = duration
+
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, {...session})
   return {
     ...state,
     sessions: {
