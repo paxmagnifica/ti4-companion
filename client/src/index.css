@@ -1,28 +1,36 @@
-html {
-    background-image: url('./assets/background-1.png');
+html:-webkit-full-screen-ancestor {
+  background-color: inherit;
+}
+
+html:-moz-full-screen-ancestor {
+  background-color: inherit;
 }
 
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
 }
 
 /* mui override */
 
-body {
+body, *:fullscreen {
   background-color: transparent !important;
+  background-image: url('./assets/background-1.png');
+  min-height: 100vh;
+  position: relative;
+  z-index: 0;
 }
 
 .MuiAppBar-root {
-    background-color: transparent !important;
-    box-shadow: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
