@@ -1,4 +1,3 @@
-import { useCallback, useRef } from 'react'
 import { Helmet } from 'react-helmet'
 import {
   Grid,
