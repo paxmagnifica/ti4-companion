@@ -4,7 +4,6 @@ import {
 } from '@material-ui/core'
 
 import FactionFlag from '../../../shared/FactionFlag'
-import victoryPointsBackground from '../../../assets/victory-points-background.jpg'
 
 const DRAGGABLE = {
   FLAG: 'flag'
@@ -41,7 +40,6 @@ export function DraggableFlag({
 
 export function PointContainer({
   className,
-  imgStyles,
   children,
   points,
 }) {
@@ -60,12 +58,6 @@ export function PointContainer({
     container
     direction='column'
   >
-    {<img
-      src={victoryPointsBackground}
-      style={imgStyles}
-      alt={`victory points backgroudn ${points}`}
-    />}
     {children}
   </Grid>
 }
-
