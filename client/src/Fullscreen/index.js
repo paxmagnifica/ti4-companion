@@ -9,8 +9,14 @@ import { Fullscreen } from '@material-ui/icons';
 export const useFullscreen = () => {
   const [fullscreen, setFullscreen] = useState(false)
 
-  const handleFullscreenChange = useCallback(() => {
-    setFullscreen(Boolean(document.fullscreenElement))
+  const handleFullscreenChange = useCallback(async () => {
+    const isFullscreen = Boolean(document.fullscreenElement)
+    setFullscreen(isFullscreen)
+
+    if (!isFullscreen && document.ti4CompanionWakeLock) {
+      await document.ti4CompanionWakeLock.release()
+      document.ti4CompanionWakeLock = null
+    }
   }, [])
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullscreenChange)
@@ -40,8 +46,10 @@ export const HideInFullscreen = ({ children }) => {
 const FullscreenButton = () => {
   const classes = useStyles()
 
-  const goFullscreen = useCallback(() => {
+  const goFullscreen = useCallback(async () => {
     document.documentElement.requestFullscreen()
+
+    document.ti4CompanionWakeLock = await navigator.wakeLock.request('screen')
   }, [])
 
   return <Tooltip title="show in fullscreen mode" placement="bottom">
