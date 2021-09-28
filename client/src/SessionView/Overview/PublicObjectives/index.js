@@ -63,7 +63,7 @@ function PublicObjectives({
         key={sessionObjective.slug}
       >
         <ObjectiveWithFactionSelector
-          small={smallViewport}
+          size={smallViewport ? 'small' : 'default'}
           objective={sessionObjective}
           selector={{
             factions: session.factions,
@@ -78,7 +78,7 @@ function PublicObjectives({
           style={{ padding: 0, margin: 0 }}
         >
           <Objective
-            small={smallViewport}
+            size={smallViewport ? 'small' : 'default'}
             reverse
             title='new Stage I objective'
           />

@@ -3,17 +3,17 @@ import Objective from '../../../shared/Objective'
 import FactionSelector from './FactionSelector'
 
 function ObjectiveWithFactionSelector({
-  small,
+  size,
   objective,
   selector,
 }) {
   return <>
     <Objective
-      small={small}
+      size={size}
       {...objective}
     />
     <FactionSelector
-      small={small}
+      size={size}
       {...selector}
     />
   </>
