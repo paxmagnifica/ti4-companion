@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import useSmallViewport from '../../../shared/useSmallViewport'
 import { StateContext, ComboDispatchContext } from '../../../state'
 import Objective from '../../../shared/Objective'
+import { useFullscreen } from '../../../Fullscreen'
 
 import AddObjective from './AddObjective'
 import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
@@ -22,6 +23,9 @@ const useStyles = makeStyles({
     alignItems: 'center',
     width: 150,
   },
+  fullScreenObjectiveContainer: {
+    width: 200,
+  },
   small: {
     width: 'unset',
   }
@@ -32,6 +36,7 @@ function PublicObjectives({
   updateFactionPoints,
 }) {
   const smallViewport = useSmallViewport()
+  const fullscreen = useFullscreen()
   const classes = useStyles({ small: smallViewport })
   const comboDispatch = useContext(ComboDispatchContext)
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
@@ -59,11 +64,14 @@ function PublicObjectives({
   return <>
     <Grid container justifyContent='center'>
       {sessionObjectives.map(sessionObjective => <div
-        className={clsx(classes.objectiveContainer, { [classes.small]: smallViewport })}
+        className={clsx(classes.objectiveContainer, {
+          [classes.fullScreenObjectiveContainer]: fullscreen,
+          [classes.small]: smallViewport,
+        })}
         key={sessionObjective.slug}
       >
         <ObjectiveWithFactionSelector
-          size={smallViewport ? 'small' : 'default'}
+          size={smallViewport ? 'small' : fullscreen ? 'fullscreen' : 'default'}
           objective={sessionObjective}
           selector={{
             factions: session.factions,
@@ -72,13 +80,13 @@ function PublicObjectives({
           }}
         />
       </div>)}
-      <div className={classes.objectiveContainer}>
+      <div className={clsx(classes.objectiveContainer, { [classes.fullScreenObjectiveContainer]: fullscreen })}>
         <IconButton
           onClick={() => setAddObjectiveOpen(true)}
           style={{ padding: 0, margin: 0 }}
         >
           <Objective
-            size={smallViewport ? 'small' : 'default'}
+            size={smallViewport ? 'small' : fullscreen ? 'fullscreen' : 'default'}
             reverse
             title='new Stage I objective'
           />

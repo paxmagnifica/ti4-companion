@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     width: ({ width }) => width,
     height: ({ height }) => height,
+    maxHeight: '90vh',
     position: 'relative',
     fontSize: ({ fontSize }) => fontSize,
     '& > p': {
@@ -32,30 +33,37 @@ const useStyles = makeStyles(theme => ({
     }
   },
   objectiveName: {
+    position: 'absolute',
+    top: '1%',
     height: '16%',
   },
   phase: {
+    position: 'absolute',
+    top: '16%',
     height: '8%',
     fontSize: '.9em',
   },
   condition: {
-    marginTop: '13% !important',
+    position: 'absolute',
+    top: '30%',
     height: '40%',
     overflow: 'auto',
   },
   points: {
-    marginTop: '5% !important',
+    position: 'absolute',
+    top: '74%',
     height: '13%',
     fontSize: '1.5em',
   },
-  reward: {
-    marginTop: '3% !important',
+  rewards: {
+    position: 'absolute',
+    top: '90%',
     fontSize: '.9em',
   },
   objective: {
-    position: 'absolute',
     width: ({ width }) => width,
     height: ({ height }) => height,
+    maxHeight: '90vh',
     pointerEvents: 'none',
     zIndex: 0,
     borderRadius: '5%',
@@ -75,9 +83,9 @@ const NORMAL_SIZE = {
 }
 
 const FULLSCREEN_SIZE = {
-  width: 150,
-  height: 225,
-  fontSize: '1em',
+  width: 200,
+  height: 300,
+  fontSize: '1.3em',
 }
 
 const GINORMOUS_SIZE = {

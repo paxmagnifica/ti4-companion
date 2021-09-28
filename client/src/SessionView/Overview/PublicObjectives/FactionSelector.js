@@ -24,7 +24,7 @@ function FactionSelector({
   return <Grid container>
     {factions.map(factionKey => <FactionFlag
       width='25%'
-      height={{ small: '1em' }[size] || '2em'}
+      height={{ small: '1em', fullscreen: '3.3vh' }[size] || '2em'}
       key={factionKey}
       factionKey={factionKey}
       selected={value.includes(factionKey)}
