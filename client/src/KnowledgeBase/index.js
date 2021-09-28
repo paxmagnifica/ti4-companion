@@ -9,6 +9,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 
+import { useFullscreen } from '../Fullscreen'
 import stageIObjectiveReverse from '../assets/objective-1-reverse.jpg'
 import stageIIObjectiveReverse from '../assets/objective-2-reverse.jpg'
 import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
@@ -149,6 +150,16 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
+  fullscreen: {
+    opacity: .3,
+    transition: theme.transitions.create(['opacity'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    '&:hover': {
+      opacity: 1,
+    },
+  },
   drawerBackdrop: {
     position: 'fixed',
     top: 0,
@@ -160,6 +171,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function KnowledgeBase() {
+  const fullscreen = useFullscreen()
   const smallCards = useMediaQuery('(max-width:599px)')
   const hoverable = useMediaQuery('(hover: hover)')
   const gapWidth = smallCards ? '70px' : '17%'
@@ -206,6 +218,7 @@ function KnowledgeBase() {
       container
       className={clsx(classes.root, {
         [classes.rootActive]: drawerOpen,
+        [classes.fullscreen]: !drawerOpen && fullscreen,
       })}
       alignItems='center'
       justifyContent='center'
