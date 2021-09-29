@@ -32,12 +32,13 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: '1%',
     height: '16%',
+    fontSize: '.9em',
   },
   phase: {
     position: 'absolute',
     top: '16%',
     height: '8%',
-    fontSize: '.9em',
+    fontSize: '.8em',
   },
   condition: {
     position: 'absolute',
@@ -54,7 +55,7 @@ const useStyles = makeStyles(theme => ({
   rewards: {
     position: 'absolute',
     top: '90%',
-    fontSize: '.9em',
+    fontSize: '.8em',
   },
   objective: {
     width: ({ width }) => width,
