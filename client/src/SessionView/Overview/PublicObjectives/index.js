@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState, useContext } from 'react'
-import clsx from 'clsx'
 import {
   Grid,
   IconButton,
@@ -19,16 +18,8 @@ const useStyles = makeStyles({
     padding: 0,
     margin: ({ small }) => small ? 6 : 12,
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: 150,
+    alignItems: 'flex-start',
   },
-  fullScreenObjectiveContainer: {
-    width: 200,
-  },
-  small: {
-    width: 'unset',
-  }
 })
 
 function PublicObjectives({
@@ -64,10 +55,7 @@ function PublicObjectives({
   return <>
     <Grid container justifyContent='center'>
       {sessionObjectives.map(sessionObjective => <div
-        className={clsx(classes.objectiveContainer, {
-          [classes.fullScreenObjectiveContainer]: fullscreen,
-          [classes.small]: smallViewport,
-        })}
+        className={classes.objectiveContainer}
         key={sessionObjective.slug}
       >
         <ObjectiveWithFactionSelector
@@ -80,7 +68,7 @@ function PublicObjectives({
           }}
         />
       </div>)}
-      <div className={clsx(classes.objectiveContainer, { [classes.fullScreenObjectiveContainer]: fullscreen })}>
+      <div className={classes.objectiveContainer}>
         <IconButton
           onClick={() => setAddObjectiveOpen(true)}
           style={{ padding: 0, margin: 0 }}

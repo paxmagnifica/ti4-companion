@@ -18,7 +18,6 @@ import vp7 from '../../../assets/victory-points-10/7.jpg'
 import vp8 from '../../../assets/victory-points-10/8.jpg'
 import vp9 from '../../../assets/victory-points-10/9.jpg'
 import vp10 from '../../../assets/victory-points-10/10.jpg'
-import { useFullscreen } from '../../../Fullscreen'
 
 import { PointContainer, DraggableFlag } from './draggableIndicators'
 
@@ -31,10 +30,6 @@ const useStyles = makeStyles({
   },
   fullWidth: {
     width: '100%',
-  },
-  fullscreen: {
-    width: '130%',
-    marginLeft: '-15%',
   },
   img: {
     minWidth: 50,
@@ -70,14 +65,13 @@ function VictoryPoints({
   points,
 }) {
   const smallViewport = useSmallViewport()
-  const fullscreen = useFullscreen()
-  const classes = useStyles({ smallViewport, fullscreen })
+  const classes = useStyles({ smallViewport })
 
   return <DndProvider
     backend={TouchBackend}
     options={{ enableMouseEvents: true }}
   >
-    <Grid container justifyContent='center' className={clsx(classes.root, { [classes.fullWidth]: smallViewport || fullscreen, [classes.fullscreen]: fullscreen })}>
+    <Grid container justifyContent='center' className={clsx(classes.root, { [classes.fullWidth]: smallViewport })}>
       {[...Array(11).keys()].map(numberOfPoints => {
         const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
 

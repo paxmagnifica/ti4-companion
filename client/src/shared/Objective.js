@@ -14,10 +14,6 @@ import { StateContext } from '../state'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: ({ width }) => width,
-    height: ({ height }) => height,
     maxHeight: '90vh',
     position: 'relative',
     fontSize: ({ fontSize }) => fontSize,
@@ -83,8 +79,8 @@ const NORMAL_SIZE = {
 }
 
 const FULLSCREEN_SIZE = {
-  width: 200,
-  height: 300,
+  width: 'auto',
+  height: '26vh',
   fontSize: '1.3em',
 }
 

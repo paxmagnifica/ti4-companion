@@ -28,6 +28,7 @@ import * as objectivesService from './objectivesService'
 import { ComboDispatchContext, DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
+import { useFullscreen } from './Fullscreen'
 
 function App() {
   const [state, dispatch] = useReducer(reducer, null, init)
@@ -72,7 +73,9 @@ function App() {
     palette: {
       type: 'dark',
     },
-  }), []);
+  }), [])
+
+  const fullscreen = useFullscreen()
 
   return (
     <ThemeProvider theme={theme}>
@@ -101,7 +104,7 @@ function App() {
           </Toolbar>
         </AppBar>
         <Toolbar/>
-        <Container>
+        <Container maxWidth={fullscreen ? 'xl' : 'lg'}>
           <StateContext.Provider value={state}>
           <ComboDispatchContext.Provider value={comboDispatch}>
           <DispatchContext.Provider value={dispatch}>

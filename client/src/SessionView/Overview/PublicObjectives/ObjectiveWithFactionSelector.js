@@ -1,3 +1,7 @@
+import {
+  Grid,
+} from '@material-ui/core'
+
 import Objective from '../../../shared/Objective'
 
 import FactionSelector from './FactionSelector'
@@ -8,13 +12,13 @@ function ObjectiveWithFactionSelector({
   selector,
 }) {
   return <>
-    <Objective
-      size={size}
-      {...objective}
-    />
     <FactionSelector
       size={size}
       {...selector}
+    />
+    <Objective
+      size={size}
+      {...objective}
     />
   </>
 }

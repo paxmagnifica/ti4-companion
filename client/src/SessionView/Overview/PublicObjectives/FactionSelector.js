@@ -21,9 +21,9 @@ function FactionSelector({
     return
   }, [onChange])
 
-  return <Grid container>
+  return <Grid container direction='column'>
     {factions.map(factionKey => <FactionFlag
-      width='25%'
+      width='auto'
       height={{ small: '1em', fullscreen: '3.3vh' }[size] || '2em'}
       key={factionKey}
       factionKey={factionKey}
