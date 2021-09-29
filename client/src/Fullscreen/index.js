@@ -24,7 +24,15 @@ export const useFullscreen = () => {
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
   }, [handleFullscreenChange])
 
-  return fullscreen
+  const exitFullscreen = useCallback(() => {
+    if (!fullscreen) {
+      return
+    }
+
+    document.exitFullscreen()
+  }, [fullscreen])
+
+  return { fullscreen, exitFullscreen }
 }
 
 const useStyles = makeStyles({
@@ -34,7 +42,7 @@ const useStyles = makeStyles({
 })
 
 export const HideInFullscreen = ({ children }) => {
-  const fullscreen = useFullscreen()
+  const { fullscreen } = useFullscreen()
 
   if (fullscreen) {
     return null

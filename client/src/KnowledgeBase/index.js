@@ -171,7 +171,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function KnowledgeBase() {
-  const fullscreen = useFullscreen()
+  const { fullscreen } = useFullscreen()
   const smallCards = useMediaQuery('(max-width:599px)')
   const hoverable = useMediaQuery('(hover: hover)')
   const gapWidth = smallCards ? '70px' : '17%'

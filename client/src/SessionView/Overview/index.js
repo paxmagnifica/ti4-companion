@@ -102,7 +102,7 @@ function Overview({
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
   const [faction, setFaction] = useState(null)
-  const fullscreen = useFullscreen()
+  const { fullscreen } = useFullscreen()
 
   const updateFactionPointsInSession = useCallback((faction, points) => updateFactionPoints({
     sessionId: session.id,

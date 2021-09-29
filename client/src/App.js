@@ -75,7 +75,7 @@ function App() {
     },
   }), [])
 
-  const fullscreen = useFullscreen()
+  const { fullscreen, exitFullscreen } = useFullscreen()
 
   return (
     <ThemeProvider theme={theme}>
@@ -90,7 +90,7 @@ function App() {
         <CssBaseline />
         <AppBar>
           <Toolbar>
-            <Link to='/'>
+            <Link to='/' onClick={exitFullscreen}>
               <IconButton >
                 <img
                   src={homeIcon}
