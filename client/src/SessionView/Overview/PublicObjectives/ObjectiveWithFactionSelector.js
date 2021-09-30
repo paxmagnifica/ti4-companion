@@ -1,7 +1,3 @@
-import {
-  Grid,
-} from '@material-ui/core'
-
 import Objective from '../../../shared/Objective'
 
 import FactionSelector from './FactionSelector'
