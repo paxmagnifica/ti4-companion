@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   fullscreen: {
     height: 'calc(100vh - 64px)', // TODO bad hack for header height, use theme, I think
   },
+  fullWidth: {
+    width: '100%',
+  },
   factionCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     color: 'white',
@@ -132,7 +135,7 @@ function Overview({
       direction='column'
       spacing={4}
     >
-      <Grid item>
+      <Grid item className={clsx({ [classes.fullWidth]: fullscreen })}>
         <VictoryPoints
           onChange={updateFactionPointsInSession}
           points={session.points}
