@@ -16,7 +16,7 @@ import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
 const useStyles = makeStyles({
   objectiveContainer: {
     padding: 0,
-    margin: ({ small }) => small ? 6 : 12,
+    margin: ({ small, fullscreen }) => small ? 6 : fullscreen ? '1vw' : 18,
     display: 'flex',
     alignItems: 'flex-start',
   },
@@ -28,7 +28,7 @@ function PublicObjectives({
 }) {
   const smallViewport = useSmallViewport()
   const fullscreen = useFullscreen()
-  const classes = useStyles({ small: smallViewport })
+  const classes = useStyles({ small: smallViewport, fullscreen })
   const comboDispatch = useContext(ComboDispatchContext)
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
   const sessionObjectives = useMemo(() => session.objectives || [], [session])
