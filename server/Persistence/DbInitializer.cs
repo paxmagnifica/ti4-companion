@@ -169,6 +169,19 @@ namespace server.Persistence
                             HappenedAt = DateTimeOffset.Now,
                             EventType = GameEvent.GameStarted,
                             SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" })
+                        },
+                        new GameEvent {
+                            Id = Guid.NewGuid(),
+                            SessionId = sessionId,
+                            HappenedAt = DateTimeOffset.Now,
+                            EventType = nameof(MetadataUpdated),
+                            SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload {
+                              SessionDisplayName = "4 man game",
+                              IsTTS = false,
+                              IsSplit = false,
+                              SessionStart = "2021-09-25",
+                              Duration = 9
+                            })
                         }
                     },
                     CreatedAt = DateTimeOffset.Now,
@@ -184,7 +197,20 @@ namespace server.Persistence
                             SessionId = sessionId2,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = GameEvent.GameStarted,
-                            SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance" })
+                            SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance", "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" })
+                        },
+                        new GameEvent {
+                            Id = Guid.NewGuid(),
+                            SessionId = sessionId,
+                            HappenedAt = DateTimeOffset.Now,
+                            EventType = nameof(MetadataUpdated),
+                            SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload {
+                              SessionDisplayName = "8 man game",
+                              IsTTS = false,
+                              IsSplit = false,
+                              SessionStart = "2021-09-26",
+                              Duration = 9
+                            })
                         }
                     },
                     CreatedAt = DateTimeOffset.Now,

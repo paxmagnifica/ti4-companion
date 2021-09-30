@@ -95,7 +95,7 @@ function Objectives({
         </FormGroup>
       </Grid>
       {filteredObjectives.map(({ slug }) => <Grid item key={slug}><Objective
-        small={smallViewport}
+        size={smallViewport ? 'small' : 'default'}
         slug={slug}
         highlight={searchValue.split(' ')}
       /></Grid>)}

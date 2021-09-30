@@ -19,6 +19,7 @@ import ShareButton from './ShareButton'
 import Map from './Map'
 import SessionNavigation from './SessionNavigation'
 import DetailsForm from './DetailsForm'
+import FullscreenButton, { HideInFullscreen } from '../Fullscreen'
 
 const useStyles = makeStyles({
   header: {
@@ -31,11 +32,10 @@ function SessionView({
   shuffleFactions,
   setFactions,
   updateFactionPoints,
-  updateObjectives,
 }) {
   useRealTimeSession(session.id)
   const classes = useStyles()
-  const { path } = useRouteMatch()
+  const { path } = useRouteMatch('/:sessionId')
 
   const sortedPoints = [...session.points]
   sortedPoints.sort((a, b) => b.points - a.points)
@@ -51,21 +51,24 @@ function SessionView({
       <meta property="og:image" content={`${window.location.origin}${getFactionCheatSheetPath(winningFaction)}`} />
     </Helmet>
 
-    <Grid container className={classes.header}>
-      <Grid item xs={8}>
-        <SessionNavigation
-          sessionId={session.id}
-        />
+    <HideInFullscreen>
+      <Grid container className={classes.header}>
+        <Grid item xs={8}>
+          <SessionNavigation
+            sessionId={session.id}
+          />
+        </Grid>
+        <Grid item container xs={4} justifyContent="flex-end">
+          <FullscreenButton />
+          <ShuffleFactionsButton
+            factions={session.factions}
+            shuffleFactions={() => shuffleFactions(session.id)}
+            setFactions={factions => setFactions(session.id, factions)}
+          />
+          <ShareButton id={session.id} />
+        </Grid>
       </Grid>
-      <Grid item container xs={4} justifyContent="flex-end">
-        <ShuffleFactionsButton
-          factions={session.factions}
-          shuffleFactions={() => shuffleFactions(session.id)}
-          setFactions={factions => setFactions(session.id, factions)}
-        />
-        <ShareButton id={session.id} />
-      </Grid>
-    </Grid>
+    </HideInFullscreen>
 
     <Switch>
       <Route exact path={path}>

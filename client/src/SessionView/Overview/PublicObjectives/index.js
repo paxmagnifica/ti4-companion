@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState, useContext } from 'react'
-import clsx from 'clsx'
 import {
   Grid,
   IconButton,
@@ -9,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import useSmallViewport from '../../../shared/useSmallViewport'
 import { StateContext, ComboDispatchContext } from '../../../state'
 import Objective from '../../../shared/Objective'
+import { useFullscreen } from '../../../Fullscreen'
 
 import AddObjective from './AddObjective'
 import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
@@ -18,13 +18,8 @@ const useStyles = makeStyles({
     padding: 0,
     margin: ({ small }) => small ? 6 : 12,
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: 150,
+    alignItems: 'flex-start',
   },
-  small: {
-    width: 'unset',
-  }
 })
 
 function PublicObjectives({
@@ -32,6 +27,7 @@ function PublicObjectives({
   updateFactionPoints,
 }) {
   const smallViewport = useSmallViewport()
+  const fullscreen = useFullscreen()
   const classes = useStyles({ small: smallViewport })
   const comboDispatch = useContext(ComboDispatchContext)
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
@@ -59,11 +55,11 @@ function PublicObjectives({
   return <>
     <Grid container justifyContent='center'>
       {sessionObjectives.map(sessionObjective => <div
-        className={clsx(classes.objectiveContainer, { [classes.small]: smallViewport })}
+        className={classes.objectiveContainer}
         key={sessionObjective.slug}
       >
         <ObjectiveWithFactionSelector
-          small={smallViewport}
+          size={smallViewport ? 'small' : fullscreen ? 'fullscreen' : 'default'}
           objective={sessionObjective}
           selector={{
             factions: session.factions,
@@ -78,7 +74,7 @@ function PublicObjectives({
           style={{ padding: 0, margin: 0 }}
         >
           <Objective
-            small={smallViewport}
+            size={smallViewport ? 'small' : fullscreen ? 'fullscreen' : 'default'}
             reverse
             title='new Stage I objective'
           />

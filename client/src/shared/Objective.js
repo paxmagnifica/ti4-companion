@@ -14,10 +14,7 @@ import { StateContext } from '../state'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: ({ width }) => width,
-    height: ({ height }) => height,
+    maxHeight: '90vh',
     position: 'relative',
     fontSize: ({ fontSize }) => fontSize,
     '& > p': {
@@ -32,30 +29,38 @@ const useStyles = makeStyles(theme => ({
     }
   },
   objectiveName: {
+    position: 'absolute',
+    top: '1%',
     height: '16%',
-  },
-  phase: {
-    height: '8%',
     fontSize: '.9em',
   },
+  phase: {
+    position: 'absolute',
+    top: '16%',
+    height: '8%',
+    fontSize: '.8em',
+  },
   condition: {
-    marginTop: '13% !important',
+    position: 'absolute',
+    top: '30%',
     height: '40%',
     overflow: 'auto',
   },
   points: {
-    marginTop: '5% !important',
+    position: 'absolute',
+    top: '74%',
     height: '13%',
     fontSize: '1.5em',
   },
-  reward: {
-    marginTop: '3% !important',
-    fontSize: '.9em',
+  rewards: {
+    position: 'absolute',
+    top: '90%',
+    fontSize: '.8em',
   },
   objective: {
-    position: 'absolute',
     width: ({ width }) => width,
     height: ({ height }) => height,
+    maxHeight: '90vh',
     pointerEvents: 'none',
     zIndex: 0,
     borderRadius: '5%',
@@ -74,29 +79,39 @@ const NORMAL_SIZE = {
   fontSize: '1em',
 }
 
+const FULLSCREEN_SIZE = {
+  width: 'auto',
+  height: '26vh',
+  fontSize: '1.7vh',
+}
+
 const GINORMOUS_SIZE = {
   width: '80vw',
   height: '120vw',
   fontSize: '2em',
 }
 
+const getStyles = size => {
+  return {
+    default: NORMAL_SIZE,
+    small: SMALL_SIZE,
+    big: GINORMOUS_SIZE,
+    fullscreen: FULLSCREEN_SIZE,
+  }[size] || NORMAL_SIZE
+}
+
 function Objective({
+  size,
   title,
   slug,
   reverse,
-  small,
-  big,
   className,
   highlight,
   onClick,
 }) {
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
   const { secret, points, reward, when } = availableObjectives[slug] || {}
-  const styles = small
-      ? SMALL_SIZE
-      : big
-        ? GINORMOUS_SIZE
-        : NORMAL_SIZE
+  const styles = getStyles(size)
   const classes = useStyles(styles)
 
   const background = useMemo(() => secret
@@ -169,18 +184,18 @@ const useWithModalStyles = makeStyles({
 })
 
 function ObjectiveWithModal({
-  small,
+  size,
   reverse,
   ...other
 }) {
   const classes = useWithModalStyles()
   const [bigObjectiveOpen, setBigObjectiveOpen] = useState(false)
 
-  if (reverse || !small) {
+  if (reverse || size !== 'small') {
     return <>
       <Objective
         reverse={reverse}
-        small={small}
+        size={size}
         {...other}
       />
     </>
@@ -190,7 +205,7 @@ function ObjectiveWithModal({
     <Objective
       reverse={reverse}
       className={classes.clickableObjective}
-      small={small}
+      size={size}
       onClick={() => setBigObjectiveOpen(true)}
       {...other}
     />
@@ -200,7 +215,7 @@ function ObjectiveWithModal({
       onClose={() => setBigObjectiveOpen(false)}
     >
       <Objective
-        big={true}
+        size='big'
         {...other}
       />
     </Dialog>

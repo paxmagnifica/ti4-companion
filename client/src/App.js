@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useReducer, useCallback } from 'react'
+import clsx from 'clsx'
 import {
   BrowserRouter as Router,
   Link,
@@ -16,7 +17,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import shuffle from 'lodash.shuffle'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles'
+import { makeStyles, createTheme, ThemeProvider } from '@material-ui/core/styles'
 
 import homeIcon from './assets/icon.jpg'
 import { getAllSessions } from './shared/persistence'
@@ -28,8 +29,17 @@ import * as objectivesService from './objectivesService'
 import { ComboDispatchContext, DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
+import { useFullscreen } from './Fullscreen'
+
+const useStyles = makeStyles({
+  fullWidth: {
+    width: '100%',
+    maxWidth: '100%',
+  }
+})
 
 function App() {
+  const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
   const comboDispatch = useCallback(action => {
     const { payload } = action
@@ -72,7 +82,9 @@ function App() {
     palette: {
       type: 'dark',
     },
-  }), []);
+  }), [])
+
+  const { fullscreen, exitFullscreen } = useFullscreen()
 
   return (
     <ThemeProvider theme={theme}>
@@ -87,7 +99,7 @@ function App() {
         <CssBaseline />
         <AppBar>
           <Toolbar>
-            <Link to='/'>
+            <Link to='/' onClick={exitFullscreen}>
               <IconButton >
                 <img
                   src={homeIcon}
@@ -101,7 +113,7 @@ function App() {
           </Toolbar>
         </AppBar>
         <Toolbar/>
-        <Container>
+        <Container className={clsx({ [classes.fullWidth]: fullscreen })}>
           <StateContext.Provider value={state}>
           <ComboDispatchContext.Provider value={comboDispatch}>
           <DispatchContext.Provider value={dispatch}>

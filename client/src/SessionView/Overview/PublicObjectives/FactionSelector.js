@@ -9,7 +9,7 @@ function FactionSelector({
   factions,
   value,
   onChange,
-  small,
+  size
 }) {
   const clicked = useCallback((factionKey, selected) => {
     if (selected) {
@@ -21,10 +21,10 @@ function FactionSelector({
     return
   }, [onChange])
 
-  return <Grid container>
+  return <Grid container direction='column'>
     {factions.map(factionKey => <FactionFlag
-      width='25%'
-      height={small ? '1em' : '2em'}
+      width='auto'
+      height={{ small: '1em', fullscreen: '3.3vh' }[size] || '2em'}
       key={factionKey}
       factionKey={factionKey}
       selected={value.includes(factionKey)}
