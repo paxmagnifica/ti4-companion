@@ -11,7 +11,6 @@ using server.Domain;
 using System;
 using System.Reflection;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace server
 {
@@ -97,17 +96,6 @@ namespace server
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<SessionHub>("/sessionHub");
-            });
-        }
-
-        private void AllowOnlyWithSecret(IApplicationBuilder app)
-        {
-            app.Use(async (ctx, next) =>
-            {
-                Console.WriteLine(ctx.Request.Path);
-                Console.WriteLine(JsonConvert.SerializeObject(ctx.Request.RouteValues));
-
-                await next();
             });
         }
     }
