@@ -41,7 +41,7 @@ namespace server.Controllers
         public async Task<ActionResult<Session>> Post(List<string> factions)
         {
             var sessionId = Guid.NewGuid();
-            var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now };
+            var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now, Secret = Guid.NewGuid() };
             newSession.Events = new List<GameEvent> {
                 new GameEvent {
                     Id = Guid.NewGuid(),
@@ -54,7 +54,10 @@ namespace server.Controllers
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetSession), new { id = newSession.Id }, new SessionDto(newSession));
+            var dto = new SessionDto(newSession);
+            dto.Secret = newSession.Secret;
+
+            return CreatedAtAction(nameof(GetSession), new { id = newSession.Id }, dto);
         }
 
         [HttpGet]
@@ -82,8 +85,8 @@ namespace server.Controllers
         }
 
         // TODO not cool, direct Events and stuff
-        [HttpPost("{id}/map")]
-        public async Task<ActionResult> UploadMap(Guid id)
+        [HttpPost("{sessionId}/map")]
+        public async Task<ActionResult> UploadMap(Guid sessionId)
         {
             var mapFile = HttpContext.Request.Form.Files["map"];
 
@@ -91,7 +94,7 @@ namespace server.Controllers
                 return new BadRequestResult();
             }
 
-            var sessionBlobContainer = new BlobContainerClient(_configuration.GetConnectionString("BlobStorage"), id.ToString());
+            var sessionBlobContainer = new BlobContainerClient(_configuration.GetConnectionString("BlobStorage"), sessionId.ToString());
             await sessionBlobContainer.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
             var mapBlobClient = sessionBlobContainer.GetBlobClient("map");
@@ -101,7 +104,7 @@ namespace server.Controllers
 
             var gameEvent = new GameEvent{
                 Id = Guid.NewGuid(),
-                SessionId = id,
+                SessionId = sessionId,
                 HappenedAt = _timeProvider.Now,
                 EventType = GameEvent.MapAdded,
                 SerializedPayload = mapBlobClient.Uri.ToString(),

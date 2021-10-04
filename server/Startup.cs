@@ -11,6 +11,7 @@ using server.Domain;
 using System;
 using System.Reflection;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace server
 {
@@ -54,6 +55,7 @@ namespace server
             services.AddScoped<SessionHub>();
             services.AddScoped<ITimeProvider, TimeProvider>();
             services.AddScoped<Dispatcher>();
+            services.AddScoped<HeaderAuthorization>();
 
             AddAllHandlers(services);
         }
@@ -71,7 +73,7 @@ namespace server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, HeaderAuthorization headerAuthorization)
         {
             if (env.IsDevelopment())
             {
@@ -89,12 +91,23 @@ namespace server
 
             app.UseCors("_localhostCors");
 
-            app.UseAuthorization();
+            headerAuthorization.Setup(app);
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<SessionHub>("/sessionHub");
+            });
+        }
+
+        private void AllowOnlyWithSecret(IApplicationBuilder app)
+        {
+            app.Use(async (ctx, next) =>
+            {
+                Console.WriteLine(ctx.Request.Path);
+                Console.WriteLine(JsonConvert.SerializeObject(ctx.Request.RouteValues));
+
+                await next();
             });
         }
     }
