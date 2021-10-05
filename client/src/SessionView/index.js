@@ -73,10 +73,10 @@ function SessionView({
         />
       </Route>
       <Route exact path={SESSION_VIEW_ROUTES.details}>
-        {!editable && <pre>{JSON.stringify(session, null, 2)}</pre>}
-        {editable && <DetailsForm
+        <DetailsForm
+          disabled={!editable}
           session={session}
-        />}
+        />
       </Route>
       <Route exact path={SESSION_VIEW_ROUTES.main}>
         <Overview
