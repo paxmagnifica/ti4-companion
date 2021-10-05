@@ -13,8 +13,12 @@ export const createSession = async factions => {
   return session
 }
 
-export const get = async id => {
-  const result = await fetch(`${CONFIG.apiUrl}/api/sessions/${id}`)
+export const get = async (id, secret) => {
+  const result = await fetch(`${CONFIG.apiUrl}/api/sessions/${id}`, {
+    headers: {
+      'x-ti4companion-session-secret': secret,
+    },
+  })
 
   // TODO check status code
 

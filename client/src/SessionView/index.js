@@ -25,6 +25,7 @@ const useStyles = makeStyles({
 })
 
 function SessionView({
+  editable,
   session,
   shuffleFactions,
   setFactions,

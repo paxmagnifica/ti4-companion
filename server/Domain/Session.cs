@@ -10,5 +10,10 @@ namespace server.Domain
         public List<GameEvent> Events { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
+
+        internal bool CanEditWith(Guid secret)
+        {
+            return secret == Secret;
+        }
     }
 }

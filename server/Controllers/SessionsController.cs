@@ -68,10 +68,10 @@ namespace server.Controllers
             return sessionsFromDb.Select(fromDb => new SessionDto(fromDb));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SessionDto>> GetSession(Guid id)
+        [HttpGet("{sessionId}")]
+        public async Task<ActionResult<SessionDto>> GetSession(Guid sessionId)
         {
-            var sessionFromDb = await _sessionContext.Sessions.FindAsync(id);
+            var sessionFromDb = await _sessionContext.Sessions.FindAsync(sessionId);
             _sessionContext.Entry(sessionFromDb)
                 .Collection(session => session.Events)
                 .Load();
@@ -81,7 +81,9 @@ namespace server.Controllers
                 return new NotFoundResult();
             }
 
-            return new SessionDto(sessionFromDb);
+            var sessionDto = new SessionDto(sessionFromDb, (Guid?)HttpContext.Items["SessionSecret"] ?? (Guid?)null);
+
+            return sessionDto;
         }
 
         // TODO not cool, direct Events and stuff

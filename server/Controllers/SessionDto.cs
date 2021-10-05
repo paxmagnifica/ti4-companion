@@ -15,8 +15,16 @@ namespace server.Controllers
             Points = GetPoints(session.Events);
             Objectives = GetObjectives(session.Events);
             Map = GetMap(session.Events);
+            CreatedAt = session.CreatedAt;
             SetSessionDetails(session.Events);
         }
+
+        public SessionDto(Session session, Guid? secret) : this(session)
+        {
+            Editable = secret.HasValue && session.CanEditWith(secret.Value);
+        }
+
+        public bool Editable { get; internal set; }
 
         public string DisplayName { get; internal set; }
         public bool TTS { get; internal set; }
