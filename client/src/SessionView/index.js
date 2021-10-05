@@ -55,11 +55,11 @@ function SessionView({
         </Grid>
         <Grid item container xs={4} justifyContent="flex-end">
           <FullscreenButton />
-          <ShuffleFactionsButton
-            factions={session.factions}
-            shuffleFactions={() => shuffleFactions(session.id)}
-            setFactions={factions => setFactions(session.id, factions)}
-          />
+          {editable && <ShuffleFactionsButton
+              factions={session.factions}
+              shuffleFactions={() => shuffleFactions(session.id)}
+              setFactions={factions => setFactions(session.id, factions)}
+          />}
           <ShareButton id={session.id} />
         </Grid>
       </Grid>
@@ -68,16 +68,19 @@ function SessionView({
     <Switch>
       <Route exact path={SESSION_VIEW_ROUTES.map}>
         <Map
+          editable={editable}
           session={session}
         />
       </Route>
       <Route exact path={SESSION_VIEW_ROUTES.details}>
-        <DetailsForm
+        {!editable && <pre>{JSON.stringify(session, null, 2)}</pre>}
+        {editable && <DetailsForm
           session={session}
-        />
+        />}
       </Route>
       <Route exact path={SESSION_VIEW_ROUTES.main}>
         <Overview
+          editable={editable}
           session={session}
           shuffleFactions={shuffleFactions}
           setFactions={setFactions}

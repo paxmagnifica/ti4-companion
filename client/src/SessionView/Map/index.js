@@ -5,7 +5,8 @@ import {
 import MapUpload from './MapUpload'
 
 function Map({
-  session
+  editable,
+  session,
 }) {
   if (session.map) {
     return <Grid justifyContent="center" container >
@@ -17,7 +18,9 @@ function Map({
     </Grid>
   }
 
-  return <MapUpload sessionId={session.id} />
+  return editable
+    ? <MapUpload sessionId={session.id} />
+    : <p>no map yet</p>
 }
 
 export default Map
