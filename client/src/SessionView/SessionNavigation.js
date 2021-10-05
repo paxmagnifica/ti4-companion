@@ -13,12 +13,13 @@ import {
 import { Menu, Assistant, Map as MapIcon, Details, ChevronRight, ChevronLeft } from '@material-ui/icons'
 import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles'
 import {
-  useLocation,
   useHistory,
   useRouteMatch,
+  generatePath,
 } from 'react-router-dom'
 
 import useSmallViewport from '../shared/useSmallViewport'
+import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
 const StyledTabs = withStyles({
   indicator: {
@@ -65,31 +66,41 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SessionNavigation({ sessionId }) {
+function SessionNavigation() {
   const [drawerOpen, setDrawerOpen] = useState()
   const classes = useStyles()
   const theme = useTheme()
   const small = useSmallViewport()
-  const { isExact } = useRouteMatch()
-  const location = useLocation()
-  const history = useHistory()
-  const view = useMemo(() => {
-    if (isExact) {
-      return VIEW.overview
+  const { params } = useRouteMatch(SESSION_VIEW_ROUTES.main)
+  const mapRoute = useRouteMatch(SESSION_VIEW_ROUTES.map)
+  const detailsRoute = useRouteMatch(SESSION_VIEW_ROUTES.details)
+  const sanitizedParams = useMemo(() => {
+    const { secret, ...otherParams } = params
+
+    if (['map', 'details'].includes(secret)) {
+      return otherParams
     }
 
-    if (location.pathname.endsWith('map') || location.pathname.endsWith('map/')) {
+    return { secret, ...otherParams}
+  }, [params])
+  const history = useHistory()
+  const view = useMemo(() => {
+    if (mapRoute?.isExact) {
       return VIEW.map
     }
 
-    return VIEW.details
-  }, [isExact, location])
+    if (detailsRoute?.isExact) {
+      return VIEW.details
+    }
+
+    return VIEW.overview
+  }, [mapRoute, detailsRoute])
 
   const go = useMemo(() => ({
-    [VIEW.overview]: () => history.push(`/${sessionId}`),
-    [VIEW.map]: () => history.push(`/${sessionId}/map`),
-    [VIEW.details]: () => history.push(`/${sessionId}/details`),
-  }), [history, sessionId])
+    [VIEW.overview]: () => history.push(generatePath(SESSION_VIEW_ROUTES.main, sanitizedParams)),
+    [VIEW.map]: () => history.push(generatePath(SESSION_VIEW_ROUTES.map, sanitizedParams)),
+    [VIEW.details]: () => history.push(generatePath(SESSION_VIEW_ROUTES.details, sanitizedParams)),
+  }), [history, sanitizedParams])
   const handleChange = useCallback((event, newView) => go[newView](), [go]);
   const goAndCloseDrawer = useCallback(view => {
     go[view]()

@@ -8,12 +8,12 @@ export function SessionProvider({
   state,
   dispatch,
 }) {
-  const { id } = useParams()
+  const { sessionId, secret } = useParams()
 
   const [loading, setLoading] = useState(null)
 
   useEffect(() => {
-    if (!id) {
+    if (!sessionId) {
       return
     }
 
@@ -25,7 +25,7 @@ export function SessionProvider({
       setLoading(true)
 
       try {
-        const session = await sessionService.get(id)
+        const session = await sessionService.get(sessionId)
         session.remote = true
         dispatch({ type: 'AddSession', session});
       } catch (e) {
@@ -36,11 +36,11 @@ export function SessionProvider({
     }
 
     loadSession()
-  }, [loading, dispatch, state.sessions.data, id])
+  }, [loading, dispatch, state.sessions.data, sessionId])
 
-  const session = useMemo(() => state.sessions.data.find(s => s.id === id), [state, id])
+  const session = useMemo(() => state.sessions.data.find(s => s.id === sessionId), [state, sessionId])
 
-  if (!id) {
+  if (!sessionId) {
     return null
   }
 

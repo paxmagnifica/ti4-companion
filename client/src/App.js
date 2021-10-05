@@ -123,7 +123,7 @@ function App() {
                 <Route path="/new">
                   <NewSession dispatch={dispatch} />
                 </Route>
-                <Route path="/:id">
+                <Route path="/:sessionId/:secret?">
                   <SessionProvider state={state} dispatch={dispatch}>
                     {(session, loading) => (loading || !session) ? null : <SessionView
                       session={session}
