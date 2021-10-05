@@ -10,6 +10,7 @@ const DRAGGABLE = {
 }
 
 export function DraggableFlag({
+  editable,
   factionKey,
   updatePoints,
   onClick,
@@ -19,6 +20,7 @@ export function DraggableFlag({
     collect: monitor => ({
       isDragging: Boolean(monitor.isDragging()),
     }),
+    canDrag: () => editable,
     end: (_, monitor) => {
       const result = monitor.getDropResult()
 
@@ -29,6 +31,7 @@ export function DraggableFlag({
   }), [updatePoints])
 
   return <FactionFlag
+    disabled={!editable}
     ref={drag}
     factionKey={factionKey}
     selected
