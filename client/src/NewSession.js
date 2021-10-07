@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useMemo, useCallback, useState } from 'react'
 import {
   Avatar,
   Box,
@@ -12,7 +12,7 @@ import { Check } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom'
 
-import * as sessionService from './shared/sessionService'
+import sessionFactory from './shared/sessionService'
 
 import { factionsList } from './gameInfo/factions'
 
@@ -47,11 +47,12 @@ function NewSession({
   )
 
   const history = useHistory()
+  const sessionService = useMemo(() => sessionFactory({ fetch }), [])
   const createGameSession = useCallback(async () => {
     const session = await sessionService.createSession(selectedFactions)
     dispatch({type: 'CreateGameSession', session})
     history.push(`/${session.id}`)
-  }, [history, dispatch, selectedFactions])
+  }, [history, dispatch, selectedFactions, sessionService])
 
   return <>
     <Box

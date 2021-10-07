@@ -97,6 +97,7 @@ function FactionNutshells({
 }
 
 function Overview({
+  editable,
   session,
   shuffleFactions,
   setFactions,
@@ -137,6 +138,7 @@ function Overview({
     >
       <Grid item className={clsx({ [classes.fullWidth]: fullscreen })}>
         <VictoryPoints
+          editable={editable}
           onChange={updateFactionPointsInSession}
           points={session.points}
           factions={session.factions}
@@ -144,6 +146,7 @@ function Overview({
       </Grid>
       <Grid item>
         <PublicObjectives
+          editable={editable}
           session={session}
           updateFactionPoints={updateFactionPoints}
         />

@@ -23,6 +23,7 @@ const useStyles = makeStyles({
 })
 
 function PublicObjectives({
+  editable,
   session,
   updateFactionPoints,
 }) {
@@ -68,7 +69,7 @@ function PublicObjectives({
           }}
         />
       </div>)}
-      <div className={classes.objectiveContainer}>
+      {editable && <div className={classes.objectiveContainer}>
         <IconButton
           onClick={() => setAddObjectiveOpen(true)}
           style={{ padding: 0, margin: 0 }}
@@ -79,13 +80,13 @@ function PublicObjectives({
             title='new Stage I objective'
           />
         </IconButton>
-      </div>
+      </div>}
     </Grid>
-    <AddObjective
+    {editable && <AddObjective
       open={addObjectiveOpen}
       onCancel={() => setAddObjectiveOpen(false)}
       onSelect={objectiveAdded}
-    />
+    />}
   </>
 }
 

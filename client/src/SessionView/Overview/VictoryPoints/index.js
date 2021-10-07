@@ -60,6 +60,7 @@ const useStyles = makeStyles({
 })
 
 function VictoryPoints({
+  editable,
   onChange,
   factions,
   points,
@@ -84,10 +85,11 @@ function VictoryPoints({
               id={numberOfPoints}
             >
               {factionsWithThisManyPoints.map(({faction}) => <DraggableFlag
+                editable={editable}
                 key={faction}
                 factionKey={faction}
-                updatePoints={points => onChange(faction, points)}
-                onClick={() => onChange(faction, numberOfPoints + 1)}
+                updatePoints={editable ? points => onChange(faction, points) : undefined}
+                onClick={editable ? () => onChange(faction, numberOfPoints + 1) : undefined}
               />)}
             </PointContainer>
           </Grid>

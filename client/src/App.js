@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useReducer, useCallback } from 'react'
+import { useEffect, useMemo, useReducer } from 'react'
 import clsx from 'clsx'
 import {
   BrowserRouter as Router,
@@ -16,17 +16,15 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core'
-import shuffle from 'lodash.shuffle'
 import { makeStyles, createTheme, ThemeProvider } from '@material-ui/core/styles'
 
-import homeIcon from './assets/icon.jpg'
 import { getAllSessions } from './shared/persistence'
-import * as sessionService from './shared/sessionService'
+import homeIcon from './assets/icon.jpg'
 import NewSession from './NewSession'
 import SessionsList from './SessionsList'
 import SessionView, { SessionProvider } from './SessionView'
 import * as objectivesService from './objectivesService'
-import { ComboDispatchContext, DispatchContext, StateContext, reducer, init } from './state'
+import { DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
@@ -41,29 +39,15 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
-  const comboDispatch = useCallback(action => {
-    const { payload } = action
-    sessionService.pushEvent(payload.sessionId, { type: action.type, payload })
-    dispatch(action)
-  }, [dispatch])
   const { sessions } = state
 
-  const shuffleFactions = useCallback(sessionId => {
-    const session = sessions.data.find(s => s.id === sessionId)
-    const shuffledFactions = shuffle(session.factions)
-    const payload = { factions: shuffledFactions, sessionId }
-    comboDispatch({ type: 'FactionsShuffled', payload })
-  }, [sessions.data, comboDispatch])
+  const theme = useMemo(() => createTheme({
+    palette: {
+      type: 'dark',
+    },
+  }), [])
 
-  const setFactions = useCallback((sessionId, factions) => {
-    const payload = { factions, sessionId }
-    comboDispatch({ type: 'FactionsShuffled', payload })
-  }, [comboDispatch])
-
-  const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
-    const payload = { sessionId, faction, points }
-    comboDispatch({ type: 'VictoryPointsUpdated', payload })
-  }, [comboDispatch])
+  const { fullscreen, exitFullscreen } = useFullscreen()
 
   useEffect(() => {
     const sessions = getAllSessions()
@@ -77,14 +61,6 @@ function App() {
 
     load()
   }, [])
-
-  const theme = useMemo(() => createTheme({
-    palette: {
-      type: 'dark',
-    },
-  }), [])
-
-  const { fullscreen, exitFullscreen } = useFullscreen()
 
   return (
     <ThemeProvider theme={theme}>
@@ -115,7 +91,6 @@ function App() {
         <Toolbar/>
         <Container className={clsx({ [classes.fullWidth]: fullscreen })}>
           <StateContext.Provider value={state}>
-          <ComboDispatchContext.Provider value={comboDispatch}>
           <DispatchContext.Provider value={dispatch}>
             <KnowledgeBase />
             <Box m={2}>
@@ -123,10 +98,18 @@ function App() {
                 <Route path="/new">
                   <NewSession dispatch={dispatch} />
                 </Route>
-                <Route path="/:id">
+                <Route path="/:sessionId/:secret?">
                   <SessionProvider state={state} dispatch={dispatch}>
-                    {(session, loading) => (loading || !session) ? null : <SessionView
+                    {({
+                      session,
+                      loading,
+                      editable,
+                      shuffleFactions,
+                      setFactions,
+                      updateFactionPoints,
+                    }) => (loading || !session) ? null : <SessionView
                       session={session}
+                      editable={editable}
                       shuffleFactions={shuffleFactions}
                       setFactions={setFactions}
                       updateFactionPoints={updateFactionPoints}
@@ -142,7 +125,6 @@ function App() {
               </Switch>
             </Box>
           </DispatchContext.Provider>
-          </ComboDispatchContext.Provider>
           </StateContext.Provider>
         </Container>
       </Router>

@@ -25,7 +25,8 @@ const getNow = () => {
 }
 
 function DetailsForm({
-  session
+  disabled,
+  session,
 }) {
   const [showSuccess, setShowSuccess] = useState(false)
   const handleSnackbarClose = useCallback(() => setShowSuccess(false), [])
@@ -62,7 +63,7 @@ function DetailsForm({
         <form noValidate autoComplete="off">
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <FormControl fullWidth color='secondary'>
+              <FormControl fullWidth color='secondary' disabled={disabled}>
                 <InputLabel htmlFor="sessionName">Your session name</InputLabel>
                 <Input
                   id="sessionName"
@@ -74,17 +75,19 @@ function DetailsForm({
             <Grid item xs={12}>
               <FormGroup row>
                 <FormControlLabel
+                  disabled={disabled}
                   control={<Checkbox checked={isTTS} onChange={getChangeHandler(setIsTTS, 'checked')}/>}
                   label="TTS"
                 />
                 <FormControlLabel
+                  disabled={disabled}
                   control={<Checkbox checked={isSplit} onChange={getChangeHandler(setIsSplit, 'checked')}/>}
                   label="Split"
                 />
               </FormGroup>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth color='secondary'>
+              <FormControl fullWidth color='secondary' disabled={disabled}>
                 <InputLabel htmlFor="sessionStart">Session date</InputLabel>
                 <Input
                   id="sessionStart"
@@ -95,7 +98,7 @@ function DetailsForm({
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              {isSplit && <FormControl fullWidth color='secondary'>
+              {isSplit && <FormControl fullWidth color='secondary' disabled={disabled}>
                 <InputLabel htmlFor="sessionEnd">Session end date</InputLabel>
                 <Input
                   id="sessionEnd"
@@ -106,7 +109,7 @@ function DetailsForm({
               </FormControl>}
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth color='secondary'>
+              <FormControl fullWidth color='secondary' disabled={disabled}>
                 <InputLabel htmlFor="sessionDuration">How long did you play? (roughly)</InputLabel>
                 <Input
                   id="sessionDuration"
@@ -119,11 +122,11 @@ function DetailsForm({
               </FormControl>
             </Grid>
             <Grid item xs={12} container justifyContent='flex-end'>
-              <Button
+              {!disabled && <Button
                 variant='contained'
                 color='secondary'
                 onClick={handleSave}
-              >Save</Button>
+              >Save</Button>}
             </Grid>
           </Grid>
         </form>

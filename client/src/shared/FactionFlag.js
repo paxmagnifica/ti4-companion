@@ -9,7 +9,7 @@ const useFlagStyles = makeStyles({
     height: ({ height }) => `calc(${height} - 2px)`,
     backgroundColor: ({ selected }) => `rgba(255, 255, 255, ${selected ? '0.9' : '0.3'})`,
     borderRadius: '7%',
-    cursor: 'pointer',
+    cursor: ({ disabled }) => disabled ? 'default' : 'pointer',
     display: 'flex',
     justifyContent: 'center',
     margin: '1px 1px',
@@ -24,6 +24,7 @@ const useFlagStyles = makeStyles({
 })
 
 function FactionFlag({
+  disabled,
   factionKey,
   selected,
   onClick,
@@ -34,6 +35,7 @@ function FactionFlag({
     selected,
     width,
     height,
+    disabled,
   })
   const factionData = factions.getData(factionKey)
 
