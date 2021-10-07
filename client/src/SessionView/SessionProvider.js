@@ -22,7 +22,7 @@ export function SessionProvider({
         ...options,
         headers: {
           'x-ti4companion-session-secret': secret,
-          ...options.headers,
+          ...options?.headers,
         },
       }
 

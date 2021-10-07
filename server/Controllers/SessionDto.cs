@@ -22,6 +22,9 @@ namespace server.Controllers
         public SessionDto(Session session, Guid? secret) : this(session)
         {
             Editable = secret.HasValue && session.CanEditWith(secret.Value);
+            if (Editable) {
+                Secret = secret.Value;
+            }
         }
 
         public bool Editable { get; internal set; }
