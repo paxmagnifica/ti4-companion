@@ -96,56 +96,48 @@ function MapUpload({
   }, [file, sessionId, dispatch, previewUrl])
 
   return <>
-    <Grid
-      container
-      alignItems='center'
-      justifyContent='center'
-      direction='column'
-      spacing={2}
-    >
-      <Grid item>
-        <div
-          {...getRootProps()}
-          className={classes.dropzone}
-        >
-          <input {...getInputProps()} />
-          <MapIcon style={{ fontSize: 60 }}/>
-          {
-            file && <p>Change the map file</p>
-          }
-          {
-            (!file && isDragActive) ?
-              <p>Drop your map here...</p> :
-              <p>Drag 'n' drop your map file here, or click to select the map file</p>
-          }
-          <p>Keep in mind that maps smaller than 800x800px are going to be small and unreadable</p>
-        </div>
-      </Grid>
-      <Grid item>
-        <Button
-          disabled={!Boolean(file)}
-          variant='contained'
-          color='secondary'
-          onClick={upload}
-          endIcon={uploading ? <CircularProgress size={20} /> : null}
-        >
-          Upload
-        </Button>
-      </Grid>
-      {file && <Grid
-        item
-        className={classes.previewContainer}
-        container
-        justifyContent="center"
+    <Grid item>
+      <div
+        {...getRootProps()}
+        className={classes.dropzone}
       >
-        <img
-          className={classes.mapPreview}
-          src={previewUrl}
-          alt='your map'
-        />
-        <p className={classes.previewWatermark}>preview</p>
-      </Grid>}
+        <input {...getInputProps()} />
+        <MapIcon style={{ fontSize: 60 }}/>
+        {
+          file && <p>Change the map file</p>
+        }
+        {
+          (!file && isDragActive) ?
+            <p>Drop your map here...</p> :
+            <p>Drag 'n' drop your map file here, or click to select the map file</p>
+        }
+        <p>Keep in mind that maps smaller than 800x800px are going to be small and unreadable</p>
+      </div>
     </Grid>
+    <Grid item>
+      <Button
+        disabled={!Boolean(file)}
+        variant='contained'
+        color='secondary'
+        onClick={upload}
+        endIcon={uploading ? <CircularProgress size={20} /> : null}
+      >
+        Upload
+      </Button>
+    </Grid>
+    {file && <Grid
+      item
+      className={classes.previewContainer}
+      container
+      justifyContent="center"
+    >
+      <img
+        className={classes.mapPreview}
+        src={previewUrl}
+        alt='your map'
+      />
+      <p className={classes.previewWatermark}>preview</p>
+    </Grid>}
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       open={fileErrors}
