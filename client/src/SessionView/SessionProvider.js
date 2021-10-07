@@ -73,7 +73,7 @@ export function SessionProvider({
 
       try {
         const session = await sessionService.get(sessionId)
-        setEditable(Boolean(session.editable))
+        setEditable(secret && Boolean(session.editable))
         session.remote = true
         dispatch({ type: 'AddSession', session});
       } catch (e) {
@@ -84,7 +84,7 @@ export function SessionProvider({
     }
 
     loadSession()
-  }, [loading, dispatch, state.sessions.data, sessionId, sessionService])
+  }, [loading, dispatch, state.sessions.data, sessionId, sessionService, secret])
 
   const session = useMemo(() => state.sessions.data.find(s => s.id === sessionId), [state, sessionId])
 

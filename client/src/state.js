@@ -46,7 +46,16 @@ export const reducer = (state, action) => {
         }
       }
     case 'AddSession':
-      const sessions = [action.session, ...state.sessions.data.filter(s => s.id !== action.session.id)]
+      const oldSession = state.sessions.data.find(s => s.id === action.session.id)
+      const newSession = { ...action.session }
+      if (oldSession) {
+        newSession.editable = oldSession.editable || action.session.editable
+        newSession.secret = action.session.editable
+          ? action.session.secret
+          : oldSession.secret
+      }
+
+      const sessions = [newSession, ...state.sessions.data.filter(s => s.id !== action.session.id)]
       saveAllSessions(sessions)
 
       return {

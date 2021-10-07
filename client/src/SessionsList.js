@@ -1,15 +1,18 @@
 import {
-  List,
-  ListItem,
-  ListItemText,
-  ListSubheader,
+  Chip,
   CircularProgress,
   Fab,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Add } from '@material-ui/icons'
-import { Link, useHistory } from 'react-router-dom'
+import { Add, Done } from '@material-ui/icons'
+import { Link, useHistory, generatePath } from 'react-router-dom'
 
+import { SESSION_VIEW_ROUTES } from './shared/constants'
 import * as factions from './gameInfo/factions'
 
 const useStyles = makeStyles(theme => ({
@@ -63,12 +66,15 @@ function SessionsList({
           return <ListItem
             button
             key={session.id}
-            onClick={() => history.push(`/${session.id}`)}
+            onClick={() => history.push(generatePath(SESSION_VIEW_ROUTES.main, { sessionId: session.id, secret: session.editable ? session.secret : undefined }))}
           >
             <ListItemText
               primary={session.displayName || factionList}
               secondary={`${session.start || ''}${session.displayName ? ` (factions: ${factionList})` : ''}`}
             />
+            {session.editable && <ListItemIcon>
+              <Chip color='secondary' label='Full Access' icon={<Done />} />
+            </ListItemIcon>}
           </ListItem>
         })}
       </List>
