@@ -60,7 +60,10 @@ function SessionView({
               shuffleFactions={() => shuffleFactions(session.id)}
               setFactions={factions => setFactions(session.id, factions)}
           />}
-          <ShareButton id={session.id} />
+          <ShareButton
+            editable={editable}
+            session={session}
+          />
         </Grid>
       </Grid>
     </HideInFullscreen>
