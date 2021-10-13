@@ -11,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Add, Done } from '@material-ui/icons'
 import { Link, useHistory, generatePath } from 'react-router-dom'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from './shared/constants'
 import * as factions from './gameInfo/factions'
@@ -48,6 +49,7 @@ function SessionsList({
 }) {
   const classes = useStyles()
   const history = useHistory()
+  const { t } = useTranslation()
 
   return loading
     ? <CircularProgress />
@@ -56,7 +58,7 @@ function SessionsList({
         className={classes.list}
         subheader={
           <ListSubheader>
-            Your remembered sessions
+            <Trans i18nKey='general.sessionList.title' />
           </ListSubheader>
         }
       >
@@ -73,7 +75,7 @@ function SessionsList({
               secondary={`${session.start || ''}${session.displayName ? ` (factions: ${factionList})` : ''}`}
             />
             {session.editable && <ListItemIcon>
-              <Chip color='secondary' label='Full Access' icon={<Done />} />
+              <Chip color='secondary' label={t('general.sessionList.fullAccess')} icon={<Done />} />
             </ListItemIcon>}
           </ListItem>
         })}
@@ -81,7 +83,8 @@ function SessionsList({
       <Link to='/new'>
         <Fab
           color="primary"
-          aria-label="add"
+          aria-label={t('general.sessionList.new')}
+          title={t('general.sessionList.new')}
           className={classes.fab}
         >
           <Add />
