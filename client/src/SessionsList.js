@@ -58,7 +58,7 @@ function SessionsList({
         className={classes.list}
         subheader={
           <ListSubheader>
-            <Trans i18nKey='general.sessionList.title' />
+            <Trans i18nKey='sessionList.title' />
           </ListSubheader>
         }
       >
@@ -75,7 +75,7 @@ function SessionsList({
               secondary={`${session.start || ''}${session.displayName ? ` (factions: ${factionList})` : ''}`}
             />
             {session.editable && <ListItemIcon>
-              <Chip color='secondary' label={t('general.sessionList.fullAccess')} icon={<Done />} />
+              <Chip color='secondary' label={t('sessionList.fullAccess')} icon={<Done />} />
             </ListItemIcon>}
           </ListItem>
         })}
@@ -83,8 +83,8 @@ function SessionsList({
       <Link to='/new'>
         <Fab
           color="primary"
-          aria-label={t('general.sessionList.new')}
-          title={t('general.sessionList.new')}
+          aria-label={t('sessionList.new')}
+          title={t('sessionList.new')}
           className={classes.fab}
         >
           <Add />

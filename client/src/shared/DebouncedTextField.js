@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core'
 import { Clear } from '@material-ui/icons'
 import debounce from 'lodash.debounce'
+import { useTranslation } from 'react-i18next'
 
 function DebouncedTextField({
   onChange,
@@ -12,6 +13,7 @@ function DebouncedTextField({
   debounceTime,
   ...others
 }) {
+  const { t } = useTranslation()
   const [value, setValue] = useState('')
   const debouncedOnChange = useMemo(() => debounce(search => {
     onChange(search)
@@ -32,6 +34,7 @@ function DebouncedTextField({
   }, [debouncedOnChange, setLoading])
 
   return <TextField
+    placeholder={t('general.labels.search')}
     {...others}
     value={value}
     onChange={magic}

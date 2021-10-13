@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 
 import { useFullscreen } from '../Fullscreen'
 import stageIObjectiveReverse from '../assets/objective-1-reverse.jpg'
@@ -47,13 +48,15 @@ const TABS = {
 
 function TabPanel({ small, children, value, index, title }) {
   const classes = useTabPanelStyles()
+  const { t } = useTranslation()
+
   if (value !== index) {
     return null
   }
 
   return <div className={classes.root}>
     <Typography variant="h4" component="div" gutterBottom className={classes.title}>
-      {!small && 'Knowledge base: '}<i>{title}</i>
+      {!small && `${t('kb.title')}: `}<i>{title}</i>
     </Typography>
     <Divider />
     {children}
@@ -171,6 +174,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function KnowledgeBase() {
+  const { t } = useTranslation(0)
   const { fullscreen } = useFullscreen()
   const smallCards = useMediaQuery('(max-width:599px)')
   const hoverable = useMediaQuery('(hover: hover)')
@@ -238,8 +242,8 @@ function KnowledgeBase() {
               setObjectiveFilters({ stageI: true })
               open(TABS.STAGE_I_OBJ)
             }}
-            alt="Browse stage I objectives"
-            title="Browse stage I objectives"
+            alt={t('kb.panels.sI.button')}
+            title={t('kb.panels.sI.button')}
             src={stageIObjectiveReverse}
           />
         </div>
@@ -256,8 +260,8 @@ function KnowledgeBase() {
               setObjectiveFilters({ stageII: true })
               open(TABS.STAGE_II_OBJ)
             }}
-            alt="Browse stage II objectives"
-            title="Browse stage II objectives"
+            alt={t('kb.panels.sII.button')}
+            title={t('kb.panels.sII.button')}
             src={stageIIObjectiveReverse}
           />
         </div>
@@ -274,8 +278,8 @@ function KnowledgeBase() {
               setObjectiveFilters({ secrets: true })
               open(TABS.SECRET_OBJ)
             }}
-            alt="Browse secret objectives"
-            title="Browse secret objectives"
+            alt={t('kb.panels.secretObj.button')}
+            title={t('kb.panels.secretObj.button')}
             src={secretObjectiveReverse}
           />
         </div>
@@ -355,7 +359,7 @@ function KnowledgeBase() {
     >
       <TabPanel
         small={smallCards}
-        title='Stage I objectives'
+        title={t('kb.panels.sI.title')}
         value={chosenTab}
         index={TABS.STAGE_I_OBJ}
       >
@@ -366,7 +370,7 @@ function KnowledgeBase() {
       </TabPanel>
       <TabPanel
         small={smallCards}
-        title='Stage II objectives'
+        title={t('kb.panels.sII.title')}
         value={chosenTab}
         index={TABS.STAGE_II_OBJ}
       >
@@ -377,7 +381,7 @@ function KnowledgeBase() {
       </TabPanel>
       <TabPanel
         small={smallCards}
-        title='Secret objectives'
+        title={t('kb.panels.secretObj.title')}
         value={chosenTab}
         index={TABS.SECRET_OBJ}
       >
@@ -386,6 +390,7 @@ function KnowledgeBase() {
           {...objectiveFilters}
         />
       </TabPanel>
+      {/*
       {explorationCards.map(({ type, tab, width, height, backgroundPosition }) =>
         <TabPanel
           key={`${type}-tabpanel`}
@@ -416,6 +421,7 @@ function KnowledgeBase() {
       >
         <StrategyCards />
       </TabPanel>
+      */}
     </Drawer>
   </>
 }

@@ -8,9 +8,9 @@ import {
   Checkbox,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 import { StateContext } from '../state'
-import translations from '../i18n'
 import Objective from '../shared/Objective'
 import useSmallViewport from '../shared/useSmallViewport'
 import DebouncedTextField from '../shared/DebouncedTextField'
@@ -36,12 +36,21 @@ function Objectives({
   const smallViewport = useSmallViewport()
   const classes = useStyles()
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
+  const { t } = useTranslation()
 
   const [searchValue, setSearchValue] = useState('')
   const [filtering, setFiltering] = useState(false)
 
   const filteredObjectives = useMemo(() => {
-    const  withMeta = translations.objectivesArray.map(obj => ({ ...obj, ...availableObjectives[obj.slug]}))
+    if (!availableObjectives) {
+      return []
+    }
+
+    const withMeta = Object.values(availableObjectives).map(availableObjective => ({
+      ...availableObjective,
+      name: t(`objectives.${availableObjective.slug}.name`),
+      condition: t(`objectives.${availableObjective.slug}.condition`),
+    }))
 
     return [
       ...(stageI ? withMeta.filter(obj => obj.points === 1 && !obj.secret) : []),
@@ -50,7 +59,7 @@ function Objectives({
     ].filter(obj =>
       obj.name.toLowerCase().includes(searchValue.toLowerCase()) ||
       obj.condition.toLowerCase().includes(searchValue.toLowerCase()) )
-  }, [availableObjectives, searchValue, stageI, stageII, secrets]);
+  }, [t, availableObjectives, searchValue, stageI, stageII, secrets]);
 
   return <>
     <Grid
@@ -67,7 +76,6 @@ function Objectives({
           justifyContent="center"
         >
           <DebouncedTextField
-            placeholder='search'
             onChange={setSearchValue}
             setLoading={setFiltering}
           />
@@ -82,15 +90,15 @@ function Objectives({
         <FormGroup row>
           <FormControlLabel
             control={<Checkbox checked={stageI} onChange={() => onFilterChange(filters => ({ ...filters, stageI: !filters.stageI}))} />}
-            label="Stage I"
+            label={t('general.labels.stageI')}
           />
           <FormControlLabel
             control={<Checkbox checked={stageII} onChange={() => onFilterChange(filters => ({ ...filters, stageII: !filters.stageII}))} />}
-            label="Stage II"
+            label={t('general.labels.stageII')}
           />
           <FormControlLabel
             control={<Checkbox checked={secrets} onChange={() => onFilterChange(filters => ({ ...filters, secrets: !filters.secrets}))} />}
-            label="Secret"
+            label={t('general.labels.secretObj')}
           />
         </FormGroup>
       </Grid>

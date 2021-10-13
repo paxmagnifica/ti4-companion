@@ -1,4 +1,4 @@
-import { objectives } from './objectives'
+import { en as objectivesEn } from './objectives'
 import { strategyCards } from './strategyCards'
 import { explorationCards } from './explorationCards'
 import { relics } from './relics'
@@ -24,41 +24,51 @@ i18n
     resources: {
       en: {
         translation: {
-          objectives,
+          objectives: objectivesEn,
           explorationCards,
+          strategyCards,
           relics,
           general: {
-            sessionList: {
-              title: 'Your remembered sessions',
-              fullAccess: 'Full Access',
-              new: 'New session',
+            labels: {
+              search: 'search',
+              stageI: 'Stage I',
+              stageII: 'Stage II',
+              secretObj: 'Secret',
             },
+            phase: {
+              0: 'status phase',
+              1: 'action phase',
+              2: 'agenda phase'
+            },
+            reward: {
+              0: 'victory point'
+            }
           },
+          sessionList: {
+            title: 'Your remembered sessions',
+            fullAccess: 'Full Access',
+            new: 'New session',
+          },
+          kb: {
+            title: 'Knowledge base',
+            panels: {
+              sI: {
+                button: 'Browse stage I objectives',
+                title: 'Stage I objectives',
+              },
+              sII: {
+                button: 'Browse stage II objectives',
+                title: 'Stage II objectives',
+              },
+              secretObj: {
+                button: 'Browse secret objectives',
+                title: 'Secret objectives',
+              },
+            }
+          }
         },
       },
     },
   });
 
 export default i18n;
-
-// const i18n = {
-  // objectivesDictionary: objectives,
-  // objectivesArray: Object.values(objectives),
-  // strategyCards,
-  // explorationCards,
-  // explorationCardsArray: Object.values(explorationCards),
-  // relics,
-  // relicsArray: Object.values(relics),
-  // general: {
-    // phase: {
-      // 0: 'status phase',
-      // 1: 'action phase',
-      // 2: 'agenda phase'
-    // },
-    // reward: {
-      // 0: 'victory point'
-    // }
-  // }
-// }
-
-// export default i18n

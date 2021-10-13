@@ -4,12 +4,12 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
+import { useTranslation } from 'react-i18next'
 
 import publicObjectiveI from '../assets/objective-1.png'
 import publicObjectiveII from '../assets/objective-2.png'
 import secretObjective from '../assets/objective-secret.png'
 import reverseObjective from '../assets/objective-1-reverse.jpg'
-import translations from '../i18n/index'
 import { StateContext } from '../state'
 
 const useStyles = makeStyles(theme => ({
@@ -113,6 +113,7 @@ function Objective({
   const { secret, points, reward, when } = availableObjectives[slug] || {}
   const styles = getStyles(size)
   const classes = useStyles(styles)
+  const { t } = useTranslation()
 
   const background = useMemo(() => secret
     ? secretObjective
@@ -120,7 +121,10 @@ function Objective({
       ? publicObjectiveI
       : publicObjectiveII, [secret, points])
 
-  const translation = useMemo(() => translations.objectivesDictionary[slug], [slug])
+  const translation = useMemo(() => ({
+    name: t(`objectives.${slug}.name`),
+    condition: t(`objectives.${slug}.condition`),
+  }), [t, slug])
 
   const renderer = useMemo(() => text => highlight
     ? <Highlighter
@@ -151,23 +155,23 @@ function Objective({
     <img
       src={background}
       className={classes.objective}
-      alt={title || translation?.name || slug}
-      title={title || translation?.name || slug}
+      alt={title || translation.name}
+      title={title || translation.name}
     />
     <p className={classes.objectiveName}>
-      {renderer(translation?.name || slug)}
+      {renderer(translation.name)}
     </p>
     <p className={classes.phase}>
-      {translations.general.phase[when]}
+      {t(`general.phase.${when}`)}
     </p>
     <p className={classes.condition}>
-      {renderer(translation?.condition)}
+      {renderer(translation.condition)}
     </p>
     <p className={classes.points}>
       {points}
     </p>
     <p className={classes.rewards}>
-      {translations.general.reward[reward]}
+      {t(`general.reward.${reward}`)}
     </p>
   </div>
 }
