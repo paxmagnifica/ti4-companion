@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 function Map({
   editable,
   session,
+  sessionService,
 }) {
   const { t } = useTranslation()
   const classes = useStyles()
@@ -42,7 +43,10 @@ function Map({
     spacing={2}
   >
     {editable
-      ? <MapUpload sessionId={session.id} />
+      ? <MapUpload
+        sessionId={session.id}
+        sessionService={sessionService}
+      />
       : <Grid item>
         <div
           className={classes.dropzone}
