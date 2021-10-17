@@ -30,12 +30,16 @@ import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
 import './i18n'
+import LanguageSwitcher from './i18n/languageSwitcher'
 
 const useStyles = makeStyles({
   fullWidth: {
     width: '100%',
     maxWidth: '100%',
-  }
+  },
+  title: {
+    flexGrow: 1,
+  },
 })
 
 function App() {
@@ -79,7 +83,7 @@ function App() {
         <AppBar>
           <Toolbar>
             <Link to='/' onClick={exitFullscreen}>
-              <IconButton >
+              <IconButton>
                 <img
                   src={homeIcon}
                   style={{ height: '1.2em', width: '1.2em', borderRadius: '50%' }}
@@ -88,7 +92,8 @@ function App() {
                 />
               </IconButton>
             </Link>
-            <Typography variant="h5"><Trans i18nKey='general.title' /></Typography>
+            <Typography className={classes.title} variant="h5"><Trans i18nKey='general.title' /></Typography>
+            { false && <LanguageSwitcher />}
           </Toolbar>
         </AppBar>
         <Toolbar/>

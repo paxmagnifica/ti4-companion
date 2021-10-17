@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "clsx": "^1.1.1",
+    "country-flag-icons": "^1.4.11",
     "i18next": "^21.3.0",
     "i18next-browser-languagedetector": "^6.1.2",
     "lodash.debounce": "^4.0.8",
