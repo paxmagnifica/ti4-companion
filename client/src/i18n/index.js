@@ -8,7 +8,7 @@ import { strategyCards } from './strategyCards'
 import { explorationCards } from './explorationCards'
 import { relics } from './relics'
 
-i18n
+const factory = (options = { debug: true }) => i18n
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
   .use(LanguageDetector)
@@ -17,7 +17,7 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    debug: true,
+    ...options,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
@@ -145,4 +145,4 @@ i18n
     },
   });
 
-export default i18n;
+export default factory;

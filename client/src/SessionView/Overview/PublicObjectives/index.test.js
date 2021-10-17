@@ -30,6 +30,7 @@ test('should add one point to faction when stage one objective is scored', async
     <ComboDispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
         <PublicObjectives
+          editable={true}
           session={session}
           updateFactionPoints={updateFactionPoints}
         />
@@ -58,6 +59,7 @@ test('should add two points to faction when second stage objective is scored', a
     <ComboDispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
         <PublicObjectives
+          editable={true}
           session={session}
           updateFactionPoints={updateFactionPoints}
         />

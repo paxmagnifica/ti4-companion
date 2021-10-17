@@ -29,8 +29,10 @@ import { DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
-import './i18n'
+import i18nFactory from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
+
+i18nFactory()
 
 const useStyles = makeStyles({
   fullWidth: {
