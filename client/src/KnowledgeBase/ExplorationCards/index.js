@@ -8,11 +8,11 @@ import {
   Checkbox,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 import { DispatchContext, StateContext } from '../../state'
 import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
-import translations from '../../i18n'
 
 import * as explorationCardsService from './service'
 import ExplorationCard, { PLANET_TYPE } from './ExplorationCard'
@@ -67,6 +67,7 @@ function ExplorationCards({
   hazardous,
   frontier,
 }) {
+  const { t } = useTranslation()
   const classes = useStyles()
   const smallViewport = useSmallViewport()
 
@@ -74,7 +75,11 @@ function ExplorationCards({
   const [filtering, setFiltering] = useState(false)
 
   const filtered = useMemo(() => {
-    const  withMeta = translations.explorationCardsArray.map(obj => ({ ...obj, ...availableCards[obj.slug]}))
+    const withMeta = Object.values(availableCards).map(availableCard => ({
+      ...availableCard,
+      title: t(`explorationCards.${availableCard.slug}.title`),
+      effect: t(`explorationCards.${availableCard.slug}.effect`),
+    }))
 
     return [
       ...(cultural ? withMeta.filter(obj => obj.planetType === PLANET_TYPE.cultural) : []),
@@ -84,7 +89,7 @@ function ExplorationCards({
     ].filter(obj =>
       obj.title.toLowerCase().includes(searchValue.toLowerCase()) ||
       obj.effect.toLowerCase().includes(searchValue.toLowerCase()) )
-  }, [availableCards, searchValue, cultural, industrial, hazardous, frontier]);
+  }, [availableCards, searchValue, cultural, industrial, hazardous, frontier, t]);
 
   return <Grid
     className={classes.grid}
@@ -99,7 +104,7 @@ function ExplorationCards({
         justifyContent="center"
       >
         <DebouncedTextField
-          placeholder='search'
+          placeholder={t('general.labels.search')}
           onChange={setSearchValue}
           setLoading={setFiltering}
         />
@@ -114,19 +119,19 @@ function ExplorationCards({
       <FormGroup row>
         <FormControlLabel
           control={<Checkbox checked={cultural} onChange={() => onFilterChange(filters => ({ ...filters, cultural: !filters.cultural}))} />}
-          label="Cultural"
+          label={t('kb.panels.exploration.types.cultural')}
         />
         <FormControlLabel
           control={<Checkbox checked={industrial} onChange={() => onFilterChange(filters => ({ ...filters, industrial: !filters.industrial}))} />}
-          label="Industrial"
+          label={t('kb.panels.exploration.types.industrial')}
         />
         <FormControlLabel
           control={<Checkbox checked={hazardous} onChange={() => onFilterChange(filters => ({ ...filters, hazardous: !filters.hazardous}))} />}
-          label="Hazardous"
+          label={t('kb.panels.exploration.types.hazardous')}
         />
         <FormControlLabel
           control={<Checkbox checked={frontier} onChange={() => onFilterChange(filters => ({ ...filters, frontier: !filters.frontier}))} />}
-          label="Frontier"
+          label={t('kb.panels.exploration.types.frontier')}
         />
       </FormGroup>
     </Grid>

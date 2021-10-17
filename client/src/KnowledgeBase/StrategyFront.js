@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 import { images } from '../gameInfo/strategyCards'
-import translations from '../i18n'
 
 const referenceWidth = 805
 const referenceHeight = 1000
@@ -207,6 +207,8 @@ function StrategyFront({
   strategy,
   small,
 }) {
+  const { t } = useTranslation()
+
   // TODO this is all total magic, btw
   // and we should've just used cropped images (which we will use in the future, I wanted to have some fun)
   const height = small ? 400 : 550
@@ -232,10 +234,10 @@ function StrategyFront({
     <div className={clsx(classes.mask, classes.card, classes.secondary1, strategy)} />
     <div className={clsx(classes.mask, classes.card, classes.secondary2, strategy)} />
     <ul className={clsx(classes.primaryAbility, strategy)}>
-      {translations.strategyCards[strategy].primary.map((t, i) => <li key={i}>{t}</li>)}
+      {t(`strategyCards.${strategy}.primary`).split('\n').map((t, i) => <li key={i}>{t}</li>)}
     </ul>
     <ul className={clsx(classes.secondaryAbility, strategy)}>
-      {translations.strategyCards[strategy].secondary.map((t, i) => <li key={i}>{t}</li>)}
+      {t(`strategyCards.${strategy}.secondary`).split('\n').map((t, i) => <li key={i}>{t}</li>)}
     </ul>
     <img alt={strategy} title={strategy} src={img} />
   </div>

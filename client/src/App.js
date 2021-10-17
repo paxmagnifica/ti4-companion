@@ -17,6 +17,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { makeStyles, createTheme, ThemeProvider } from '@material-ui/core/styles'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { getAllSessions } from './shared/persistence'
 import homeIcon from './assets/icon.jpg'
@@ -28,15 +29,23 @@ import { DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
+import i18nFactory from './i18n'
+import LanguageSwitcher from './i18n/languageSwitcher'
+
+i18nFactory()
 
 const useStyles = makeStyles({
   fullWidth: {
     width: '100%',
     maxWidth: '100%',
-  }
+  },
+  title: {
+    flexGrow: 1,
+  },
 })
 
 function App() {
+  const { t } = useTranslation()
   const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
   const { sessions } = state
@@ -76,16 +85,17 @@ function App() {
         <AppBar>
           <Toolbar>
             <Link to='/' onClick={exitFullscreen}>
-              <IconButton >
+              <IconButton>
                 <img
                   src={homeIcon}
                   style={{ height: '1.2em', width: '1.2em', borderRadius: '50%' }}
-                  title="Home"
-                  alt="Home icon"
+                  title={t('general.home')}
+                  alt={t('general.home')}
                 />
               </IconButton>
             </Link>
-            <Typography variant="h5">TI4 Companion</Typography>
+            <Typography className={classes.title} variant="h5"><Trans i18nKey='general.title' /></Typography>
+            { false && <LanguageSwitcher />}
           </Toolbar>
         </AppBar>
         <Toolbar/>

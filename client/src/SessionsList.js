@@ -11,9 +11,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Add, Done } from '@material-ui/icons'
 import { Link, useHistory, generatePath } from 'react-router-dom'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from './shared/constants'
-import * as factions from './gameInfo/factions'
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -48,6 +48,7 @@ function SessionsList({
 }) {
   const classes = useStyles()
   const history = useHistory()
+  const { t } = useTranslation()
 
   return loading
     ? <CircularProgress />
@@ -56,12 +57,12 @@ function SessionsList({
         className={classes.list}
         subheader={
           <ListSubheader>
-            Your remembered sessions
+            <Trans i18nKey='sessionList.title' />
           </ListSubheader>
         }
       >
         {sessions.map(session => {
-          const factionList = session.factions.map(factionKey => factions.getName(factionKey)).join(', ')
+          const factionList = session.factions.map(factionKey => t(`factions.${factionKey}.name`)).join(', ')
 
           return <ListItem
             button
@@ -70,10 +71,10 @@ function SessionsList({
           >
             <ListItemText
               primary={session.displayName || factionList}
-              secondary={`${session.start || ''}${session.displayName ? ` (factions: ${factionList})` : ''}`}
+              secondary={`${session.start || ''} ${session.displayName ? t('sessionList.secondaryTitle', { factionList }) : ''}`}
             />
             {session.editable && <ListItemIcon>
-              <Chip color='secondary' label='Full Access' icon={<Done />} />
+              <Chip color='secondary' label={t('sessionList.fullAccess')} icon={<Done />} />
             </ListItemIcon>}
           </ListItem>
         })}
@@ -81,7 +82,8 @@ function SessionsList({
       <Link to='/new'>
         <Fab
           color="primary"
-          aria-label="add"
+          aria-label={t('sessionList.new')}
+          title={t('sessionList.new')}
           className={classes.fab}
         >
           <Add />

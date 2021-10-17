@@ -4,6 +4,7 @@ import {
   IconButton,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 import useSmallViewport from '../../../shared/useSmallViewport'
 import { StateContext, ComboDispatchContext } from '../../../state'
@@ -27,6 +28,7 @@ function PublicObjectives({
   session,
   updateFactionPoints,
 }) {
+  const { t } = useTranslation()
   const smallViewport = useSmallViewport()
   const fullscreen = useFullscreen()
   const classes = useStyles({ small: smallViewport, fullscreen })
@@ -77,7 +79,7 @@ function PublicObjectives({
           <Objective
             size={smallViewport ? 'small' : fullscreen ? 'fullscreen' : 'default'}
             reverse
-            title='new Stage I objective'
+            title={t('publicObjectives.labels.new')}
           />
         </IconButton>
       </div>}

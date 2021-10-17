@@ -9,6 +9,7 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 import { Map as MapIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation, Trans } from 'react-i18next'
 
 import useSmallViewport from '../../shared/useSmallViewport'
 import { DispatchContext } from '../../state'
@@ -50,6 +51,7 @@ const useStyles = makeStyles({
 function MapUpload({
   sessionId
 }) {
+  const { t } = useTranslation()
   const small = useSmallViewport()
   const classes = useStyles({ small })
   const [file, setFile] = useState(null)
@@ -104,14 +106,14 @@ function MapUpload({
         <input {...getInputProps()} />
         <MapIcon style={{ fontSize: 60 }}/>
         {
-          file && <p>Change the map file</p>
+          file && <p><Trans i18nKey='sessionMap.changeFile'/></p>
         }
         {
-          (!file && isDragActive) ?
-            <p>Drop your map here...</p> :
-            <p>Drag 'n' drop your map file here, or click to select the map file</p>
+          (!file && isDragActive)
+            ? <p><Trans i18nKey='sessionMap.dropHere'/></p>
+            : <p><Trans i18nKey='sessionMap.dragHere'/></p>
         }
-        <p>Keep in mind that maps smaller than 800x800px are going to be small and unreadable</p>
+        <p><Trans i18nKey='sessionMap.sizeHint'/></p>
       </div>
     </Grid>
     <Grid item>
@@ -134,9 +136,9 @@ function MapUpload({
       <img
         className={classes.mapPreview}
         src={previewUrl}
-        alt='your map'
+        alt={t('sessionMap.map')}
       />
-      <p className={classes.previewWatermark}>preview</p>
+      <p className={classes.previewWatermark}><Trans i18nKey='sessionMap.preview' /></p>
     </Grid>}
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

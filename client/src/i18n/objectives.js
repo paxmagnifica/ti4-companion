@@ -1,4 +1,4 @@
-export const objectives = {
+export const en = {
   "corner-the-market": { slug: "corner-the-market", name: "Corner the Market", condition: "Control 4 planets that each have the same planet trait." },
   "develop-weaponry": { slug: "develop-weaponry", name: "Develop Weaponry", condition: "Own 2 unit upgrade technologies." },
   "diversify-research": { slug: "diversify-research", name: "Diversify Research", condition: "Own 2 technologies in each of 2 colors." },

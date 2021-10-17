@@ -5,9 +5,9 @@ import {
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
+import { useTranslation } from 'react-i18next'
 
 import sprite from '../../assets/relic-sprite.jpg'
-import translations from '../../i18n'
 
 const useStyles = makeStyles({
   root: {
@@ -84,6 +84,7 @@ function Relic({
   className,
   highlight,
 }) {
+  const { t } = useTranslation()
   const stylesInit = small
       ? SMALL_SIZE
       : big
@@ -100,7 +101,10 @@ function Relic({
     />
     : text, [highlight])
 
-  const { title, effect } = translations.relics[slug]
+  const { title, effect } = useMemo(() => ({
+    title: t(`relics.${slug}.title`),
+    effect: t(`relics.${slug}.effect`),
+  }), [slug, t])
 
   return <div
     onClick={onClick}

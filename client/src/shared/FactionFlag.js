@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 import * as factions from '../gameInfo/factions'
 
@@ -31,6 +32,7 @@ function FactionFlag({
   width,
   height,
 }, ref) {
+  const { t } = useTranslation()
   const classes = useFlagStyles({
     selected,
     width,
@@ -48,7 +50,7 @@ function FactionFlag({
       className={classes.factionImage}
       src={factionData.image}
       alt={factionKey}
-      title={factionData.name}
+      title={t(`factions.${factionKey}.name`)}
     />
   </div>
 }
