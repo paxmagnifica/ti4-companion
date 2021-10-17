@@ -1,12 +1,12 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
 import { en as objectivesEn } from './objectives'
 import { en as factionsEn } from './factions'
 import { strategyCards } from './strategyCards'
 import { explorationCards } from './explorationCards'
 import { relics } from './relics'
-
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
   // detect user language
@@ -55,6 +55,15 @@ i18n
               openOriginal: 'open original image',
               sessionStart: 'session from {{date}} {{time}}'
             },
+          },
+          sessionMap: {
+            map: 'TI4 map',
+            none: 'no map has been uploaded yet',
+            changeFile: 'Change the map file',
+            dropHere: 'Drop your map here...',
+            dragHere: 'Drag \'n\' drop your map file here, or click to select the map file',
+            sizeHint: 'Keep in mind that maps smaller than 800x800px are going to be small and unreadable',
+            preview: 'preview',
           },
           publicObjectives: {
             labels: {

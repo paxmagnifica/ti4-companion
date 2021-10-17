@@ -3,6 +3,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Map as MapIcon } from '@material-ui/icons'
+import { useTranslation, Trans } from 'react-i18next'
 
 import MapUpload from './MapUpload'
 
@@ -20,6 +21,7 @@ function Map({
   editable,
   session,
 }) {
+  const { t } = useTranslation()
   const classes = useStyles()
 
   if (session.map) {
@@ -27,7 +29,7 @@ function Map({
       <img
         style={{ maxWidth: '86vw' }}
         src={session.map}
-        alt="TI4 map"
+        alt={t('sessionMap.map')}
       />
     </Grid>
   }
@@ -46,7 +48,7 @@ function Map({
           className={classes.dropzone}
         >
           <MapIcon style={{ fontSize: 60 }}/>
-          <p>No map has been uploaded yet</p>
+          <p><Trans i18nKey='sessionMap.none'/></p>
         </div>
       </Grid>
     }
