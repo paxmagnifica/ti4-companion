@@ -1,4 +1,4 @@
-export const explorationCards = {
+export const en = {
   "demilitarized-zone": { "slug": "demilitarized-zone", "title": "Demilitarized Zone", "effect": "Return all structures on this planet to your reinforcements. Then, return all ground forces on this planet to the space area. ATTACH: Units cannot be committed to, produced on or placed on this planet. During the agenda phase, this planet's planet card can be traded as part of a transaction."},
 "dyson-sphere": { "slug": "dyson-sphere", "title": "Dyson Sphere", "effect": "ATTACH: This planet's resource value is increased by 2 and its influence value is increased by 1."},
 "freelancers": { "slug": "freelancers", "title": "Freelancers", "effect": "You may produce 1 unit in this system; you may spend influence as if it were resources to produce this unit."},
