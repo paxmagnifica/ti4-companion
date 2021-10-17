@@ -57,7 +57,7 @@ namespace server.Controllers
             var dto = new SessionDto(newSession);
             dto.Secret = newSession.Secret;
 
-            return CreatedAtAction(nameof(GetSession), new { id = newSession.Id }, dto);
+            return CreatedAtAction(nameof(GetSession), new { sessionId = newSession.Id }, dto);
         }
 
         [HttpGet]
