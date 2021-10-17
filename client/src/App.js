@@ -17,6 +17,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { makeStyles, createTheme, ThemeProvider } from '@material-ui/core/styles'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { getAllSessions } from './shared/persistence'
 import homeIcon from './assets/icon.jpg'
@@ -38,6 +39,7 @@ const useStyles = makeStyles({
 })
 
 function App() {
+  const { t } = useTranslation()
   const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
   const { sessions } = state
@@ -81,12 +83,12 @@ function App() {
                 <img
                   src={homeIcon}
                   style={{ height: '1.2em', width: '1.2em', borderRadius: '50%' }}
-                  title="Home"
-                  alt="Home icon"
+                  title={t('general.home')}
+                  alt={t('general.home')}
                 />
               </IconButton>
             </Link>
-            <Typography variant="h5">TI4 Companion</Typography>
+            <Typography variant="h5"><Trans i18nKey='general.title' /></Typography>
           </Toolbar>
         </AppBar>
         <Toolbar/>

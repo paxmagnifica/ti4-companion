@@ -31,6 +31,8 @@ i18n
           strategyCards,
           relics,
           general: {
+            home: 'Home',
+            title: 'TI4 Companion',
             labels: {
               add: 'add',
               cancel: 'cancel',
