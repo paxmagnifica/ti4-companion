@@ -57,6 +57,11 @@ const factory = (options = { debug: true }) => i18n
             },
           },
           sessionView: {
+            nav: {
+              overview: 'Overview',
+              map: 'Map',
+              details: 'Details',
+            },
             overview: {
               goToWiki: 'go to wiki',
               openOriginal: 'open original image',
