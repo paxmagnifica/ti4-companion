@@ -43,7 +43,7 @@ function FactionFlag({
 
   return <div
     className={classes.root}
-    onClick={onClick}
+    onClick={disabled ? undefined : onClick}
     ref={ref}
   >
     <img
