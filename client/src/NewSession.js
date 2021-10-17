@@ -9,11 +9,11 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Check } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles'
+import { generatePath, useHistory } from 'react-router-dom'
 
+import { SESSION_VIEW_ROUTES } from './shared/constants'
 import sessionFactory from './shared/sessionService'
-
 import { factionsList } from './gameInfo/factions'
 
 const useStyles = makeStyles(theme => ({
@@ -51,7 +51,10 @@ function NewSession({
   const createGameSession = useCallback(async () => {
     const session = await sessionService.createSession(selectedFactions)
     dispatch({type: 'CreateGameSession', session})
-    history.push(`/${session.id}`)
+    history.push(generatePath(SESSION_VIEW_ROUTES.main, {
+      sessionId: session.id,
+      secret: session.secret,
+    }))
   }, [history, dispatch, selectedFactions, sessionService])
 
   return <>
