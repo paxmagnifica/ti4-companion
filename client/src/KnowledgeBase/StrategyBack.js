@@ -58,7 +58,12 @@ function StrategyBack({
   >
     <div className={clsx(classes.mask, classes.bottomLeft)} />
     <div className={clsx(classes.mask, classes.topLeft)} />
-    <img alt={strategy} title={strategy} src={img} />
+    <img
+      alt={strategy}
+      title={strategy}
+      src={img}
+      {...others}
+    />
   </div>
 }
 

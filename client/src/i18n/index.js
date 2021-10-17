@@ -78,6 +78,10 @@ i18n
                 button: 'Browse relics',
                 title: 'Relics',
               },
+              strategy: {
+                button: 'Browse Strategy Cards',
+                title: 'Strategy Cards',
+              },
             }
           }
         },

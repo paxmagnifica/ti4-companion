@@ -339,8 +339,8 @@ function KnowledgeBase() {
           <StrategyBack
             height={smallCards ? 64 : 80}
             onClick={() => open(TABS.STRATEGY_CARDS)}
-            alt="Browse strategy cards"
-            title="Browse strategy cards"
+            alt={t('kb.panels.strategy.button')}
+            title={t('kb.panels.strategy.button')}
             strategy={StrategyCard.Leadership}
           />
         </div>
@@ -413,16 +413,14 @@ function KnowledgeBase() {
       >
         <Relics />
       </TabPanel>
-      {/*
       <TabPanel
         small={smallCards}
-        title='Strategy cards'
+        title={t('kb.panels.strategy.title')}
         value={chosenTab}
         index={TABS.STRATEGY_CARDS}
       >
         <StrategyCards />
       </TabPanel>
-      */}
     </Drawer>
   </>
 }
