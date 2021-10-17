@@ -76,6 +76,9 @@ i18n
             durationUnit: 'hours',
             detailsSavedCorrectly: 'Details saved correctly',
           },
+          fullscreen: {
+            tooltip: 'show in fullscreen mode',
+          },
           publicObjectives: {
             labels: {
               add: 'add objective',

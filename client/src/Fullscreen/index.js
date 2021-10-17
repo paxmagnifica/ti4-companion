@@ -4,7 +4,8 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Fullscreen } from '@material-ui/icons';
+import { Fullscreen } from '@material-ui/icons'
+import { useTranslation } from 'react-i18next'
 
 export const useFullscreen = () => {
   const [fullscreen, setFullscreen] = useState(false)
@@ -53,6 +54,7 @@ export const HideInFullscreen = ({ children }) => {
 
 const FullscreenButton = () => {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   const goFullscreen = useCallback(async () => {
     document.documentElement.requestFullscreen()
@@ -60,11 +62,11 @@ const FullscreenButton = () => {
     document.ti4CompanionWakeLock = await navigator.wakeLock.request('screen')
   }, [])
 
-  return <Tooltip title="show in fullscreen mode" placement="bottom">
+  return <Tooltip title={t('fullscreen.tooltip')} placement="bottom">
     <IconButton
       className={classes.button}
       onClick={goFullscreen}
-      aria-label="show in fullscreen mode"
+      aria-label={t('fullscreen.tooltip')}
     >
       <Fullscreen />
     </IconButton>
