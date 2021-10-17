@@ -4,9 +4,9 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import { en as objectivesEn } from './objectives'
 import { en as factionsEn } from './factions'
-import { strategyCards } from './strategyCards'
-import { explorationCards } from './explorationCards'
-import { relics } from './relics'
+import { en as strategyCardsEn } from './strategyCards'
+import { en as explorationCardsEn } from './explorationCards'
+import { en as relicsEn } from './relics'
 
 const factory = (options = { debug: true }) => i18n
   // detect user language
@@ -27,9 +27,9 @@ const factory = (options = { debug: true }) => i18n
         translation: {
           factions: factionsEn,
           objectives: objectivesEn,
-          explorationCards,
-          strategyCards,
-          relics,
+          explorationCards: explorationCardsEn,
+          strategyCards: strategyCardsEn,
+          relics: relicsEn,
           general: {
             switchLanguage: 'Change language',
             home: 'Home',

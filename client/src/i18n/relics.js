@@ -1,4 +1,4 @@
-export const relics = {
+export const en = {
   "dominus-orb": { "slug": "dominus-orb", "title": "Dominus Orb", "effect": "Before you move units during a tactical action, you may purge this card to move and transport units that are in systems that contain 1 of your command tokens."},
 "maw-of-worlds": { "slug": "maw-of-worlds", "title": "Maw of Worlds", "effect": "At the start of the agenda phase, you may purge this card and exhaust all of your planets to gain any 1 technology."},
 "scepter-of-emelpar": { "slug": "scepter-of-emelpar", "title": "Scepter of Emelpar", "effect": "When you would spend a token from your strategy pool, you may exhaust this card to spend a token from your reinforcements instead."},

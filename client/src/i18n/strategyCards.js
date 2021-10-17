@@ -1,6 +1,6 @@
 import StrategyCard from '../gameInfo/strategyCards'
 
-export const strategyCards = {
+export const en = {
   [StrategyCard.Leadership]: {
     primary: 'Gain 3 command tokens.\nSpend any amount of influence to gain 1 command token for every 3 influence spent',
     secondary: 'Spend any amount of influence to gain 1 command token for every 3 influence spent',
@@ -34,5 +34,3 @@ export const strategyCards = {
     secondary: 'Spend 1 token from your strategy pool to draw 1 secret objective.',
   },
 }
-
-export default strategyCards
