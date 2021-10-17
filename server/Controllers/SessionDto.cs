@@ -38,6 +38,7 @@ namespace server.Controllers
         public int VpCount { get; internal set; }
         private void SetSessionDetails(List<GameEvent> events)
         {
+            VpCount = 10;
             var latestMetadataEvent = (events ?? new List<GameEvent>())
                 .OrderByDescending(e => e.HappenedAt)
                 .FirstOrDefault(e => e.EventType == nameof(MetadataUpdated));

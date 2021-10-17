@@ -145,6 +145,7 @@ function Overview({
         <VictoryPoints
           editable={editable}
           onChange={updateFactionPointsInSession}
+          target={session.vpCount}
           points={session.points}
           factions={session.factions}
         />
