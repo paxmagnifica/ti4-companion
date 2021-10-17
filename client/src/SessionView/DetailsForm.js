@@ -12,7 +12,8 @@ import {
   Paper,
   Snackbar,
 } from '@material-ui/core'
-import MuiAlert from '@material-ui/lab/Alert';
+import MuiAlert from '@material-ui/lab/Alert'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { ComboDispatchContext } from '../state'
 
@@ -28,6 +29,7 @@ function DetailsForm({
   disabled,
   session,
 }) {
+  const { t } = useTranslation()
   const [showSuccess, setShowSuccess] = useState(false)
   const handleSnackbarClose = useCallback(() => setShowSuccess(false), [])
   const comboDispatch = useContext(ComboDispatchContext)
@@ -64,7 +66,7 @@ function DetailsForm({
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <FormControl fullWidth color='secondary' disabled={disabled}>
-                <InputLabel htmlFor="sessionName">Your session name</InputLabel>
+                <InputLabel htmlFor="sessionName"><Trans i18nKey='sessionDetails.name' /></InputLabel>
                 <Input
                   id="sessionName"
                   value={sessionDisplayName}
@@ -77,18 +79,18 @@ function DetailsForm({
                 <FormControlLabel
                   disabled={disabled}
                   control={<Checkbox checked={isTTS} onChange={getChangeHandler(setIsTTS, 'checked')}/>}
-                  label="TTS"
+                  label={t('sessionDetails.tts')}
                 />
                 <FormControlLabel
                   disabled={disabled}
                   control={<Checkbox checked={isSplit} onChange={getChangeHandler(setIsSplit, 'checked')}/>}
-                  label="Split"
+                  label={t('sessionDetails.split')}
                 />
               </FormGroup>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth color='secondary' disabled={disabled}>
-                <InputLabel htmlFor="sessionStart">Session date</InputLabel>
+                <InputLabel htmlFor="sessionStart"><Trans i18nKey='sessionDetails.startDate' /></InputLabel>
                 <Input
                   id="sessionStart"
                   value={sessionStart || getNow()}
@@ -99,7 +101,7 @@ function DetailsForm({
             </Grid>
             <Grid item xs={12} sm={6}>
               {isSplit && <FormControl fullWidth color='secondary' disabled={disabled}>
-                <InputLabel htmlFor="sessionEnd">Session end date</InputLabel>
+                <InputLabel htmlFor="sessionEnd"><Trans i18nKey='sessionDetails.endDate' /></InputLabel>
                 <Input
                   id="sessionEnd"
                   value={sessionEnd || getNow()}
@@ -110,14 +112,14 @@ function DetailsForm({
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth color='secondary' disabled={disabled}>
-                <InputLabel htmlFor="sessionDuration">How long did you play? (roughly)</InputLabel>
+                <InputLabel htmlFor="sessionDuration"><Trans i18nKey='sessionDetails.duration' /></InputLabel>
                 <Input
                   id="sessionDuration"
                   value={duration}
                   inputProps={{ step: 0.25, min: 0}}
                   type="number"
                   onChange={getChangeHandler(setDuration)}
-                  endAdornment='hours'
+                  endAdornment={t('sessionDetails.durationUnit')}
                 />
               </FormControl>
             </Grid>
@@ -126,7 +128,7 @@ function DetailsForm({
                 variant='contained'
                 color='secondary'
                 onClick={handleSave}
-              >Save</Button>}
+              ><Trans i18nKey='general.labels.save' /></Button>}
             </Grid>
           </Grid>
         </form>
@@ -143,7 +145,7 @@ function DetailsForm({
         variant="filled"
         severity="success"
       >
-        Details saved correctly
+        <Trans i18nKey='sessionDetails.detailsSavedCorrectly' />
       </MuiAlert>
     </Snackbar>
   </>

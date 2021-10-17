@@ -138,7 +138,7 @@ function MapUpload({
         src={previewUrl}
         alt={t('sessionMap.map')}
       />
-      <p className={classes.previewWatermark}>preview</p>
+      <p className={classes.previewWatermark}><Trans i18nKey='sessionMap.preview' /></p>
     </Grid>}
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
