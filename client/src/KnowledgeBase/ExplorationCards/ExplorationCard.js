@@ -5,12 +5,12 @@ import {
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
+import { useTranslation } from 'react-i18next'
 
 import culturalSprite from '../../assets/exploration-blue-sprite.jpg'
 import hazardousSprite from '../../assets/exploration-red-sprite.jpg'
 import industrialSprite from '../../assets/exploration-green-sprite.jpg'
 import frontierSprite from '../../assets/exploration-frontier-sprite.jpg'
-import translations from '../../i18n'
 
 export const PLANET_TYPE = {
   cultural: 0,
@@ -158,6 +158,7 @@ function ExplorationCard({
         : NORMAL_SIZE
   const background = SPRITES[planetType]
   const classes = useStyles({ background, ...stylesInit })
+  const { t } = useTranslation()
 
   const styles = useMemo(() => {
     if (relic) {
@@ -207,7 +208,10 @@ function ExplorationCard({
     />
     : text, [highlight])
 
-  const { title, effect } = translations.explorationCards[slug]
+  const { title, effect } = useMemo(() => ({
+    title: t(`explorationCards.${slug}.title`),
+    effect: t(`explorationCards.${slug}.effect`),
+  }), [t, slug])
 
   return <>
     <div

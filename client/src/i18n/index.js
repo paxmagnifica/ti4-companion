@@ -42,7 +42,7 @@ i18n
             },
             reward: {
               0: 'victory point'
-            }
+            },
           },
           sessionList: {
             title: 'Your remembered sessions',
@@ -63,6 +63,16 @@ i18n
               secretObj: {
                 button: 'Browse secret objectives',
                 title: 'Secret objectives',
+              },
+              exploration: {
+                button: 'Browse {{type}} exploration cards',
+                title: '{{type}} exploration cards',
+                types: {
+                  cultural: 'cultural',
+                  hazardous: 'hazardous',
+                  industrial: 'industrial',
+                  frontier: 'frontier',
+                },
               },
             }
           }

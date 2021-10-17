@@ -174,7 +174,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function KnowledgeBase() {
-  const { t } = useTranslation(0)
+  const { t } = useTranslation()
   const { fullscreen } = useFullscreen()
   const smallCards = useMediaQuery('(max-width:599px)')
   const hoverable = useMediaQuery('(hover: hover)')
@@ -300,7 +300,7 @@ function KnowledgeBase() {
                 })
                 open(tab)
               }}
-              title={`Browse ${type} exploration cards`}
+              title={t('kb.panels.exploration.button', { type: t(`kb.panels.exploration.types.${type}`) })}
               className={classes.explorationCard}
               style={{
                 backgroundPosition,
@@ -390,7 +390,6 @@ function KnowledgeBase() {
           {...objectiveFilters}
         />
       </TabPanel>
-      {/*
       {explorationCards.map(({ type, tab, width, height, backgroundPosition }) =>
         <TabPanel
           key={`${type}-tabpanel`}
@@ -405,6 +404,7 @@ function KnowledgeBase() {
           />
         </TabPanel>
       )}
+      {/*
       <TabPanel
         small={smallCards}
         title='Relics'
