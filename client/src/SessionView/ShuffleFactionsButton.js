@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { Casino, Close } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation, Trans } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
   button: {
@@ -25,6 +26,7 @@ function ShuffleFactionsButton({
   shuffleFactions,
   setFactions,
 }) {
+  const { t } = useTranslation()
   const classes = useStyles()
 
   const [undoOptionOpen, setUndoOptionOpen] = useState(false)
@@ -51,11 +53,11 @@ function ShuffleFactionsButton({
   }, [factionsBeforeShuffle, setFactions])
 
   return <>
-    <Tooltip title="shuffle faction order" placement="bottom">
+    <Tooltip title={t('shuffle.tooltip')} placement="bottom">
       <IconButton
         className={classes.button}
         onClick={shuffleMultipleTimes}
-        aria-label="shuffle faction order"
+        aria-label={t('shuffle.tooltip')}
       >
         <Casino />
       </IconButton>
@@ -71,11 +73,11 @@ function ShuffleFactionsButton({
       open={undoOptionOpen}
       autoHideDuration={10000}
       onClose={() => setUndoOptionOpen(false)}
-      message="Factions shuffled"
+      message={t('shuffle.shuffled')}
       action={
         <>
           <Button color="secondary" size="small" onClick={undoLastShuffle}>
-            UNDO
+            <Trans i18nKey='general.labels.undo' />
           </Button>
           <IconButton size="small" aria-label="close" color="inherit" onClick={() => setUndoOptionOpen(false)}>
             <Close fontSize="small" />

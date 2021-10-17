@@ -40,6 +40,7 @@ i18n
               stageII: 'stage II',
               secretObj: 'secret',
               save: 'save',
+              undo: 'undo',
             },
             phase: {
               0: 'status phase',
@@ -78,6 +79,10 @@ i18n
           },
           fullscreen: {
             tooltip: 'show in fullscreen mode',
+          },
+          shuffle: {
+            tooltip: 'shuffle faction order',
+            shuffled: 'Factions shuffled',
           },
           publicObjectives: {
             labels: {
