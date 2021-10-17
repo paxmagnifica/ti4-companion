@@ -5,11 +5,11 @@ import {
   CircularProgress,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 import { DispatchContext, StateContext } from '../../state'
 import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
-import translations from '../../i18n'
 
 import * as relicService from './service'
 import Relic from './Relic'
@@ -61,17 +61,22 @@ function Relics({
 }) {
   const classes = useStyles()
   const smallViewport = useSmallViewport()
+  const { t } = useTranslation()
 
   const [searchValue, setSearchValue] = useState('')
   const [filtering, setFiltering] = useState(false)
 
   const filtered = useMemo(() => {
-    const  withMeta = translations.relicsArray.map(obj => ({ ...obj, ...availableRelics[obj.slug]}))
+    const withMeta = Object.values(availableRelics).map(availableRelic => ({
+      ...availableRelic,
+      title: t(`relics.${availableRelic.slug}.title`),
+      effect: t(`relics.${availableRelic.slug}.effect`),
+    }))
 
     return withMeta.filter(obj =>
       obj.title.toLowerCase().includes(searchValue.toLowerCase()) ||
       obj.effect.toLowerCase().includes(searchValue.toLowerCase()) )
-  }, [availableRelics, searchValue]);
+  }, [availableRelics, searchValue, t]);
 
   return <Grid
     className={classes.grid}
@@ -86,7 +91,7 @@ function Relics({
         justifyContent="center"
       >
         <DebouncedTextField
-          placeholder='search'
+          placeholder={t('general.labels.search')}
           onChange={setSearchValue}
           setLoading={setFiltering}
         />

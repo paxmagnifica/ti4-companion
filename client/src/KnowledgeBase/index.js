@@ -319,7 +319,8 @@ function KnowledgeBase() {
         >
           <div
             onClick={() => open(TABS.RELICS)}
-            title="Browse relics"
+            title={t('kb.panels.relics.button')}
+            alt={t('kb.panels.relics.button')}
             className={classes.relicCard}
             style={{
               backgroundPosition: '100%',
@@ -404,15 +405,15 @@ function KnowledgeBase() {
           />
         </TabPanel>
       )}
-      {/*
       <TabPanel
         small={smallCards}
-        title='Relics'
+        title={t('kb.panels.relics.title')}
         value={chosenTab}
         index={TABS.RELICS}
       >
         <Relics />
       </TabPanel>
+      {/*
       <TabPanel
         small={smallCards}
         title='Strategy cards'

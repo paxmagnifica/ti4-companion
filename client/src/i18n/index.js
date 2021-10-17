@@ -74,6 +74,10 @@ i18n
                   frontier: 'frontier',
                 },
               },
+              relics: {
+                button: 'Browse relics',
+                title: 'Relics',
+              },
             }
           }
         },
