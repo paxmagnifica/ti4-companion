@@ -48,6 +48,7 @@ namespace server.Domain
                 SessionStart = payload.SessionStart,
                 SessionEnd = payload.IsSplit ? payload.SessionEnd : string.Empty,
                 Duration = payload.Duration,
+                VpCount = payload.VpCount > 0 ? payload.VpCount : 10,
             };
         }
 
@@ -56,6 +57,7 @@ namespace server.Domain
             // TODO TDD this stuff:
             // TODO validate format of start and end (if and present)
             // TODO validate if end >= start (if end present)
+            // TODO validate that VpCount > 10 && VpCount <= 14
         }
 
         internal static MetadataUpdatedPayload GetPayload(GameEvent gameEvent)
@@ -72,5 +74,6 @@ namespace server.Domain
       public string SessionStart { get; set; }
       public string SessionEnd { get; set; }
       public decimal Duration { get; set; }
+      public int VpCount { get; set; }
     }
 }

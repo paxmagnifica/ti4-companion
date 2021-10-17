@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Tab,
   Tabs,
@@ -67,6 +68,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function SessionNavigation() {
+  const { t } = useTranslation()
   const [drawerOpen, setDrawerOpen] = useState()
   const classes = useStyles()
   const theme = useTheme()
@@ -123,20 +125,19 @@ function SessionNavigation() {
         <List>
           <ListItem button onClick={() => goAndCloseDrawer(VIEW.overview)}>
             <ListItemIcon><Assistant /></ListItemIcon>
-            <ListItemText primary="Overview" />
+            <ListItemText primary={t('sessionView.nav.overview')} />
           </ListItem>
           <ListItem button onClick={() => goAndCloseDrawer(VIEW.map)}>
             <ListItemIcon><MapIcon /></ListItemIcon>
-            <ListItemText primary="Map" />
+            <ListItemText primary={t('sessionView.nav.map')} />
           </ListItem>
           <ListItem button onClick={() => goAndCloseDrawer(VIEW.details)}>
             <ListItemIcon><Details /></ListItemIcon>
-            <ListItemText primary="Details" />
+            <ListItemText primary={t('sessionView.nav.details')} />
           </ListItem>
         </List>
       </Drawer>
       <IconButton
-        aria-label="open drawer"
         onClick={() => setDrawerOpen(true)}
         edge="start"
       >
@@ -145,10 +146,10 @@ function SessionNavigation() {
     </>
   }
 
-  return <StyledTabs value={view} onChange={handleChange} aria-label="styled tabs example">
-    <StyledTab value={VIEW.overview} icon={<Assistant />} label="Overview" title="Overview" />
-    <StyledTab value={VIEW.map} icon={<MapIcon />} label="Map" title="Map" />
-    <StyledTab value={VIEW.details} icon={<Details />} label="Details" title="Details" />
+  return <StyledTabs value={view} onChange={handleChange}>
+    <StyledTab value={VIEW.overview} icon={<Assistant />} label={t('sessionView.nav.overview')} title={t('sessionView.nav.overview')} />
+    <StyledTab value={VIEW.map} icon={<MapIcon />} label={t('sessionView.nav.map')} title={t('sessionView.nav.map')} />
+    <StyledTab value={VIEW.details} icon={<Details />} label={t('sessionView.nav.details')} title={t('sessionView.nav.details')} />
   </StyledTabs>
 }
 

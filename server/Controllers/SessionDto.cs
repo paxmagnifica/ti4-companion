@@ -35,8 +35,10 @@ namespace server.Controllers
         public string Start { get; internal set; }
         public string End { get; internal set; }
         public decimal Duration {get; internal set; }
+        public int VpCount { get; internal set; }
         private void SetSessionDetails(List<GameEvent> events)
         {
+            VpCount = 10;
             var latestMetadataEvent = (events ?? new List<GameEvent>())
                 .OrderByDescending(e => e.HappenedAt)
                 .FirstOrDefault(e => e.EventType == nameof(MetadataUpdated));
@@ -53,6 +55,7 @@ namespace server.Controllers
             Start = payload.SessionStart;
             End = payload.SessionEnd;
             Duration = payload.Duration;
+            VpCount = payload.VpCount == 0 ? 10 : payload.VpCount;
         }
 
         public string Map { get; internal set; }
