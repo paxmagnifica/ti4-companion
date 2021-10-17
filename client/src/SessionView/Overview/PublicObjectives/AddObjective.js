@@ -12,10 +12,10 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { useTranslation } from 'react-i18next'
 
 import { StateContext } from '../../../state'
-import translations from '../../../i18n'
 import Objective from '../../../shared/Objective'
 
 function AddObjective({
@@ -23,6 +23,7 @@ function AddObjective({
   onSelect,
   onCancel,
 }) {
+  const { t } = useTranslation()
   const { objectives: { data: availableObjectives } } = useContext(StateContext)
 
   const [stageISelected, setStageI] = useState(true)
@@ -39,34 +40,38 @@ function AddObjective({
   }, [selected, onSelect])
 
   const filteredObjectives = useMemo(() => {
-    const  withMeta = translations.objectivesArray.map(obj => ({ ...obj, ...availableObjectives[obj.slug]}))
+    const withMeta = Object.values(availableObjectives).map(availableObjective => ({
+      ...availableObjective,
+      name: t(`objectives.${availableObjective.slug}.name`),
+      condition: t(`objectives.${availableObjective.slug}.condition`),
+    }))
 
     return [
       ...(stageISelected ? withMeta.filter(obj => obj.points === 1 && !obj.secret) : []),
       ...(stageIISelected ? withMeta.filter(obj => obj.points === 2 && !obj.secret) : []),
       ...(secretSelected ? withMeta.filter(obj => obj.secret) : []),
     ]
-  }, [availableObjectives, stageISelected, stageIISelected, secretSelected]);
+  }, [availableObjectives, stageISelected, stageIISelected, secretSelected, t]);
 
   return <Dialog
     open={open}
     onClose={onCancel}
   >
-    <DialogTitle id="form-dialog-title">Add objective</DialogTitle>
+    <DialogTitle id="form-dialog-title">{t('publicObjectives.labels.add')}</DialogTitle>
     <DialogContent>
       <Box m={1}>
         <FormGroup row>
           <FormControlLabel
             control={<Checkbox checked={stageISelected} onChange={() => setStageI(x => !x)} />}
-            label="Stage I"
+            label={t('general.labels.stageI')}
           />
           <FormControlLabel
             control={<Checkbox checked={stageIISelected} onChange={() => setStageII(x => !x)} />}
-            label="Stage II"
+            label={t('general.labels.stageII')}
           />
           <FormControlLabel
             control={<Checkbox checked={secretSelected} onChange={() => setSecret(x => !x)} />}
-            label="Secret"
+            label={t('general.labels.secretObj')}
           />
         </FormGroup>
       </Box>
@@ -77,7 +82,7 @@ function AddObjective({
             options={filteredObjectives}
             getOptionLabel={(option) => option.name}
             style={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Objective" variant="outlined" />}
+            renderInput={(params) => <TextField {...params} label={t('general.labels.objective')} variant="outlined" />}
             onChange={(event, value, reason) => setSelected(value)}
           />
         </FormGroup>
@@ -88,10 +93,10 @@ function AddObjective({
     </DialogContent>
     <DialogActions>
       <Button onClick={select}>
-        Add
+        {t('general.labels.add')}
       </Button>
       <Button onClick={onCancel} color="primary">
-        Cancel
+        {t('general.labels.cancel')}
       </Button>
     </DialogActions>
   </Dialog>

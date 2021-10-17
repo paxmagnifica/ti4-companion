@@ -32,10 +32,13 @@ i18n
           relics,
           general: {
             labels: {
+              add: 'add',
+              cancel: 'cancel',
+              objective: 'objective',
               search: 'search',
-              stageI: 'Stage I',
-              stageII: 'Stage II',
-              secretObj: 'Secret',
+              stageI: 'stage I',
+              stageII: 'stage II',
+              secretObj: 'secret',
             },
             phase: {
               0: 'status phase',
@@ -51,6 +54,12 @@ i18n
               goToWiki: 'go to wiki',
               openOriginal: 'open original image',
               sessionStart: 'session from {{date}} {{time}}'
+            },
+          },
+          publicObjectives: {
+            labels: {
+              add: 'add objective',
+              new: 'new objective',
             },
           },
           sessionList: {
