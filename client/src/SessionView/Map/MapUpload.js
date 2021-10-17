@@ -14,8 +14,6 @@ import { useTranslation, Trans } from 'react-i18next'
 import useSmallViewport from '../../shared/useSmallViewport'
 import { DispatchContext } from '../../state'
 
-import * as service from './service'
-
 const useStyles = makeStyles({
   dropzone: {
     textAlign: 'center',
@@ -49,7 +47,8 @@ const useStyles = makeStyles({
 })
 
 function MapUpload({
-  sessionId
+  sessionService,
+  sessionId,
 }) {
   const { t } = useTranslation()
   const small = useSmallViewport()
@@ -91,11 +90,11 @@ function MapUpload({
 
   const upload = useCallback(async () => {
     setUploading(true)
-    const result = await service.uploadMap(file, sessionId)
+    const result = await sessionService.uploadMap(file, sessionId)
     if (result.ok) {
       dispatch({ type: 'SetSessionMap', payload: { sessionId, map: previewUrl }})
     }
-  }, [file, sessionId, dispatch, previewUrl])
+  }, [file, sessionId, dispatch, previewUrl, sessionService])
 
   return <>
     <Grid item>

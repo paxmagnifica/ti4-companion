@@ -25,6 +25,7 @@ const useStyles = makeStyles({
 })
 
 function SessionView({
+  sessionService,
   editable,
   session,
   shuffleFactions,
@@ -73,6 +74,7 @@ function SessionView({
         <Map
           editable={editable}
           session={session}
+          sessionService={sessionService}
         />
       </Route>
       <Route exact path={SESSION_VIEW_ROUTES.details}>

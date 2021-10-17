@@ -100,6 +100,7 @@ export function SessionProvider({
       shuffleFactions,
       setFactions,
       updateFactionPoints,
+      sessionService,
     })}
   </ComboDispatchContext.Provider>
 }

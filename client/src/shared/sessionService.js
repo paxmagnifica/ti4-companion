@@ -28,6 +28,15 @@ const factory = ({ fetch }) => {
 
     pushEventImmediately,
     pushEvent,
+    uploadMap: (mapFile, sessionId) => {
+      const formData = new FormData()
+      formData.append('map', mapFile)
+
+      return fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/map`, {
+        method: 'POST',
+        body: formData,
+      })
+    },
   }
 }
 

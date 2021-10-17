@@ -111,6 +111,7 @@ function App() {
                 <Route path="/:sessionId/:secret?">
                   <SessionProvider state={state} dispatch={dispatch}>
                     {({
+                      sessionService,
                       session,
                       loading,
                       editable,
@@ -118,6 +119,7 @@ function App() {
                       setFactions,
                       updateFactionPoints,
                     }) => (loading || !session) ? null : <SessionView
+                      sessionService={sessionService}
                       session={session}
                       editable={editable}
                       shuffleFactions={shuffleFactions}
