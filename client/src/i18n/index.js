@@ -1,4 +1,5 @@
 import { en as objectivesEn } from './objectives'
+import { en as factionsEn } from './factions'
 import { strategyCards } from './strategyCards'
 import { explorationCards } from './explorationCards'
 import { relics } from './relics'
@@ -24,6 +25,7 @@ i18n
     resources: {
       en: {
         translation: {
+          factions: factionsEn,
           objectives: objectivesEn,
           explorationCards,
           strategyCards,
@@ -42,6 +44,13 @@ i18n
             },
             reward: {
               0: 'victory point'
+            },
+          },
+          sessionView: {
+            overview: {
+              goToWiki: 'go to wiki',
+              openOriginal: 'open original image',
+              sessionStart: 'session from {{date}} {{time}}'
             },
           },
           sessionList: {

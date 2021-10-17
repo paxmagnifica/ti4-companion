@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core'
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
+import { useTranslation } from 'react-i18next'
 
 import * as factions from '../../gameInfo/factions'
 import { getFactionCheatSheetPath } from '../../gameInfo/factions'
@@ -51,14 +52,17 @@ function FactionNutshells({
   setFaction,
   setFactionDialogOpen,
 }) {
+  const { t } = useTranslation()
+
   return factionsList.map(faction => {
     const factionData = factions.getData(faction)
+    const factionName = t(`factions.${faction}.name`)
 
     return <Grid item xs={12} sm={6} key={factionData.key}>
       <Card className={classes.factionCard}>
         <CardHeader
-          avatar={<Avatar alt={factionData.name} src={factionData.image}/>}
-          title={factionData.name}
+          avatar={<Avatar alt={factionName} src={factionData.image}/>}
+          title={factionName}
         />
         <CardMedia
           onClick={() => {
@@ -66,24 +70,24 @@ function FactionNutshells({
             setFactionDialogOpen(open => !open)
           }}
           className={classes.media}
-          title={factionData.name}
+          title={factionName}
           image={getFactionCheatSheetPath(factionData.key)}
         />
         <CardActions disableSpacing>
-          <Tooltip title="go to wiki" placement="top">
+          <Tooltip title={t('sessionView.overview.goToWiki')} placement="top">
             <IconButton
               className={classes.factionCardIcon}
-              aria-label="go to wiki"
-              href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(factionData.name)}`}
+              aria-label={t('sessionView.overview.goToWiki')}
+              href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(factionName)}`}
               target="about:blank"
             >
               <LocalLibrary />
             </IconButton>
           </Tooltip>
-          <Tooltip title="open original image" placement="top">
+          <Tooltip title={t('sessionView.overview.openOriginal')} placement="top">
             <IconButton
               className={classes.factionCardIcon}
-              aria-label="open original image"
+              aria-label={t('sessionView.overview.openOriginal')}
               href={getFactionCheatSheetPath(factionData.key)}
               target="about:blank"
             >
@@ -107,6 +111,7 @@ function Overview({
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
   const [faction, setFaction] = useState(null)
   const { fullscreen } = useFullscreen()
+  const { t } = useTranslation()
 
   const updateFactionPointsInSession = useCallback((faction, points) => updateFactionPoints({
     sessionId: session.id,
@@ -124,7 +129,7 @@ function Overview({
         spacing={4}
       >
         <Grid item xs={12} style={{ textAlign: 'right' }}>
-          session from: {new Date(session.createdAt).toLocaleDateString()} {new Date(session.createdAt).toLocaleTimeString()}
+          {t('sessionView.overview.sessionStart', { date: new Date(session.createdAt).toLocaleDateString(), time: new Date(session.createdAt).toLocaleTimeString() })},
         </Grid>
       </Grid>
     </HideInFullscreen>
