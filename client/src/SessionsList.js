@@ -14,7 +14,6 @@ import { Link, useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from './shared/constants'
-import * as factions from './gameInfo/factions'
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -63,7 +62,7 @@ function SessionsList({
         }
       >
         {sessions.map(session => {
-          const factionList = session.factions.map(factionKey => factions.getName(factionKey)).join(', ')
+          const factionList = session.factions.map(factionKey => t(`factions.${factionKey}.name`)).join(', ')
 
           return <ListItem
             button
@@ -72,7 +71,7 @@ function SessionsList({
           >
             <ListItemText
               primary={session.displayName || factionList}
-              secondary={`${session.start || ''}${session.displayName ? ` (factions: ${factionList})` : ''}`}
+              secondary={`${session.start || ''} ${session.displayName ? t('sessionList.secondaryTitle', { factionList }) : ''}`}
             />
             {session.editable && <ListItemIcon>
               <Chip color='secondary' label={t('sessionList.fullAccess')} icon={<Done />} />

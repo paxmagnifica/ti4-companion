@@ -102,6 +102,7 @@ i18n
             title: 'Your remembered sessions',
             fullAccess: 'Full Access',
             new: 'New session',
+            secondaryTitle: '(factions: {{factionList}})',
           },
           kb: {
             title: 'Knowledge base',
