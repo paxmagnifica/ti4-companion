@@ -257,6 +257,7 @@ const updatedMetadata = (state, payload) => {
     sessionStart,
     sessionEnd,
     duration,
+    vpCount,
   } = payload
 
   const sessionIndex = state.sessions.data.findIndex(session => session.id === sessionId)
@@ -268,6 +269,7 @@ const updatedMetadata = (state, payload) => {
   session.start = sessionStart
   session.end = sessionEnd
   session.duration = duration
+  session.vpCount = vpCount
 
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, {...session})

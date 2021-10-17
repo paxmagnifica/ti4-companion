@@ -37,6 +37,7 @@ const factory = (options = { debug: true }) => i18n
             labels: {
               add: 'add',
               cancel: 'cancel',
+              ok: 'ok',
               objective: 'objective',
               search: 'search',
               stageI: 'stage I',
@@ -85,6 +86,10 @@ const factory = (options = { debug: true }) => i18n
             duration: 'How long did you play? (roughly)',
             durationUnit: 'hours',
             detailsSavedCorrectly: 'Details saved correctly',
+            vpChangeConfirmation: {
+              title: 'You changed the VP target',
+              content: 'You changed the Victory Point target.\nSome people already scored, so the game is probably in progress.\nAre you sure you want to change the Victory Point target of this game?',
+            },
           },
           fullscreen: {
             tooltip: 'show in fullscreen mode',
