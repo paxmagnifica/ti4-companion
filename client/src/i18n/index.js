@@ -41,6 +41,7 @@ i18n
               secretObj: 'secret',
               save: 'save',
               undo: 'undo',
+              copy: 'copy',
             },
             phase: {
               0: 'status phase',
@@ -66,6 +67,11 @@ i18n
             dragHere: 'Drag \'n\' drop your map file here, or click to select the map file',
             sizeHint: 'Keep in mind that maps smaller than 800x800px are going to be small and unreadable',
             preview: 'preview',
+          },
+          share: {
+            copied: 'Copied!',
+            tooltip: 'show qr code',
+            allowEdit: 'allow edit',
           },
           sessionDetails: {
             name: 'Your session name',

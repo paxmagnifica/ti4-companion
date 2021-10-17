@@ -14,6 +14,7 @@ import { Share } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import { generatePath } from 'react-router-dom'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
@@ -27,6 +28,7 @@ function ShareButton({
   editable,
   session,
 }) {
+  const { t } = useTranslation()
   const classes = useStyles()
   const [showQr, setShowQr] = useState(false)
   const [allowEdit, setAllowEdit] = useState(false)
@@ -40,16 +42,16 @@ function ShareButton({
 
 	const copyLink = useCallback(e => {
 		navigator.clipboard.writeText(fullUrl)
-		const copyButton = e.target;
-		copyButton.innerText = "Copied!";
-	}, [fullUrl])
+		const copyButton = e.target
+		copyButton.innerText = t('share.copied')
+	}, [fullUrl, t])
 
   return <>
-    <Tooltip title="show qr code" placement="bottom">
+    <Tooltip title={t('share.tooltip')} placement="bottom">
       <IconButton
         className={classes.button}
         onClick={() => setShowQr(true)}
-        aria-label="show qr code"
+        aria-label={t('share.tooltip')}
       >
         <Share />
       </IconButton>
@@ -61,13 +63,13 @@ function ShareButton({
       {editable && <DialogTitle>
         <FormControlLabel
           control={<Switch color='secondary' checked={allowEdit} onChange={toggleAllowEdit} />}
-          label="Allow edit"
+          label={t('share.allowEdit')}
         />
       </DialogTitle>}
       <DialogContent>
         <QRCode value={fullUrl} />
       </DialogContent>
-	  <Button onClick={copyLink} variant="contained">Copy <FileCopyIcon/> </Button>
+      <Button onClick={copyLink} variant='contained'><Trans i18nKey='general.labels.copy' /> <FileCopyIcon/> </Button>
     </Dialog>
   </>
 }
