@@ -129,7 +129,7 @@ function Overview({
         spacing={4}
       >
         <Grid item xs={12} style={{ textAlign: 'right' }}>
-          {t('sessionView.overview.sessionStart', { date: new Date(session.createdAt).toLocaleDateString(), time: new Date(session.createdAt).toLocaleTimeString() })},
+          {t('sessionView.overview.sessionStart', { date: new Date(session.createdAt).toLocaleDateString(), time: new Date(session.createdAt).toLocaleTimeString() })}
         </Grid>
       </Grid>
     </HideInFullscreen>
