@@ -62,6 +62,7 @@ function PublicObjectives({
         key={sessionObjective.slug}
       >
         <ObjectiveWithFactionSelector
+          disabled={!editable}
           size={smallViewport ? 'small' : fullscreen ? 'fullscreen' : 'default'}
           objective={sessionObjective}
           selector={{

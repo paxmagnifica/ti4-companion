@@ -6,6 +6,7 @@ import {
 import FactionFlag from '../../../shared/FactionFlag'
 
 function FactionSelector({
+  disabled,
   factions,
   value,
   onChange,
@@ -23,6 +24,7 @@ function FactionSelector({
 
   return <Grid container direction='column'>
     {factions.map(factionKey => <FactionFlag
+      disabled={disabled}
       width='auto'
       height={{ small: '1em', fullscreen: '3.3vh' }[size] || '2em'}
       key={factionKey}
