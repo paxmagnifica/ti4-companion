@@ -11,6 +11,7 @@ import {
 import { Check } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { generatePath, useHistory } from 'react-router-dom'
+import { Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from './shared/constants'
 import sessionFactory from './shared/sessionService'
@@ -77,7 +78,7 @@ function NewSession({
           color={isSelected(faction.key) ? 'secondary' : 'default'}
           startIcon={<Avatar alt={faction.name} src={faction.image} />}
         >
-            {faction.name}
+          <Trans i18nKey={`factions.${faction.key}.name`} />
         </Button>
       </Grid>)}
       <Fab
