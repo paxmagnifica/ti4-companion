@@ -35,7 +35,7 @@ export const en = {
     name: 'The Nekro Virus',
   },
   [FACTION.Sardakk_Norr]: {
-    name: 'Sardakk N\'orr',
+    name: "Sardakk N'orr",
   },
   [FACTION.The_Universities_of_Jol__Nar]: {
     name: 'The Universities of Jol-Nar',
@@ -71,6 +71,6 @@ export const en = {
     name: 'The Titans of Ul',
   },
   [FACTION.The_VuilRaith_Cabal]: {
-    name: 'The Vuil\'Raith Cabal',
+    name: "The Vuil'Raith Cabal",
   },
 }

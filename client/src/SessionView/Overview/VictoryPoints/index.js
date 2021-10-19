@@ -1,9 +1,7 @@
 import { DndProvider } from 'react-dnd'
 import { TouchBackend } from 'react-dnd-touch-backend'
 import clsx from 'clsx'
-import {
-  Grid,
-} from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../../shared/useSmallViewport'
@@ -37,8 +35,36 @@ import vp14_14 from '../../../assets/victory-points-14/14.jpg'
 
 import { PointContainer, DraggableFlag } from './draggableIndicators'
 
-const vp10_images = [vp10_0, vp10_1, vp10_2, vp10_3, vp10_4, vp10_5, vp10_6, vp10_7, vp10_8, vp10_9, vp10_10]
-const vp14_images = [vp14_0, vp14_1, vp14_2, vp14_3, vp14_4, vp14_5, vp14_6, vp14_7, vp14_8, vp14_9, vp14_10, vp14_11, vp14_12, vp14_13, vp14_14]
+const vp10_images = [
+  vp10_0,
+  vp10_1,
+  vp10_2,
+  vp10_3,
+  vp10_4,
+  vp10_5,
+  vp10_6,
+  vp10_7,
+  vp10_8,
+  vp10_9,
+  vp10_10,
+]
+const vp14_images = [
+  vp14_0,
+  vp14_1,
+  vp14_2,
+  vp14_3,
+  vp14_4,
+  vp14_5,
+  vp14_6,
+  vp14_7,
+  vp14_8,
+  vp14_9,
+  vp14_10,
+  vp14_11,
+  vp14_12,
+  vp14_13,
+  vp14_14,
+]
 
 const useStyles = makeStyles({
   root: {
@@ -76,49 +102,67 @@ const useStyles = makeStyles({
   },
 })
 
-function VictoryPoints({
-  editable,
-  target,
-  onChange,
-  factions,
-  points,
-}) {
+function VictoryPoints({ editable, target, onChange, factions, points }) {
   const smallViewport = useSmallViewport()
   const inputWidth = 100 / (target + 1)
   const classes = useStyles({ inputWidth })
-  const vpImages = target === 10
-    ? vp10_images
-    : vp14_images
+  const vpImages = target === 10 ? vp10_images : vp14_images
 
-  return <DndProvider
-    backend={TouchBackend}
-    options={{ enableMouseEvents: true }}
-  >
-    <Grid container justifyContent='center' className={clsx(classes.root, { [classes.fullWidth]: smallViewport })}>
-      {[...Array(target + 1).keys()].map(numberOfPoints => {
-        const factionsWithThisManyPoints = points.filter(({faction, points}) => points === numberOfPoints)
+  return (
+    <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+      <Grid
+        className={clsx(classes.root, { [classes.fullWidth]: smallViewport })}
+        container
+        justifyContent="center"
+      >
+        {[...Array(target + 1).keys()].map((numberOfPoints) => {
+          const factionsWithThisManyPoints = points.filter(
+            ({ faction, points }) => points === numberOfPoints,
+          )
 
-        return <Grid item className={classes.img} key={numberOfPoints}>
-          <img src={vpImages[numberOfPoints]} alt={`${numberOfPoints} victory points background`} />
-          <Grid container className={classes.dropContainerWrapper} direction="column" alignItems="center" justifyContent="center">
-            <PointContainer
-              className={classes.dropContainer}
-              points={numberOfPoints}
-              id={numberOfPoints}
-            >
-              {factionsWithThisManyPoints.map(({faction}) => <DraggableFlag
-                editable={editable}
-                key={faction}
-                factionKey={faction}
-                updatePoints={editable ? points => onChange(faction, points) : undefined}
-                onClick={editable ? () => onChange(faction, numberOfPoints + 1) : undefined}
-              />)}
-            </PointContainer>
-          </Grid>
-        </Grid>
-      })}
-    </Grid>
-  </DndProvider>
+          return (
+            <Grid key={numberOfPoints} className={classes.img} item>
+              <img
+                alt={`${numberOfPoints} victory points background`}
+                src={vpImages[numberOfPoints]}
+              />
+              <Grid
+                alignItems="center"
+                className={classes.dropContainerWrapper}
+                container
+                direction="column"
+                justifyContent="center"
+              >
+                <PointContainer
+                  className={classes.dropContainer}
+                  id={numberOfPoints}
+                  points={numberOfPoints}
+                >
+                  {factionsWithThisManyPoints.map(({ faction }) => (
+                    <DraggableFlag
+                      key={faction}
+                      editable={editable}
+                      factionKey={faction}
+                      onClick={
+                        editable
+                          ? () => onChange(faction, numberOfPoints + 1)
+                          : undefined
+                      }
+                      updatePoints={
+                        editable
+                          ? (points) => onChange(faction, points)
+                          : undefined
+                      }
+                    />
+                  ))}
+                </PointContainer>
+              </Grid>
+            </Grid>
+          )
+        })}
+      </Grid>
+    </DndProvider>
+  )
 }
 
 export default VictoryPoints

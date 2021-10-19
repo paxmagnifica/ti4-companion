@@ -24,54 +24,67 @@ const useStyles = makeStyles({
   },
 })
 
-function ShareButton({
-  editable,
-  session,
-}) {
+function ShareButton({ editable, session }) {
   const { t } = useTranslation()
   const classes = useStyles()
   const [showQr, setShowQr] = useState(false)
   const [allowEdit, setAllowEdit] = useState(false)
-  const toggleAllowEdit = useCallback(() => setAllowEdit(x => !x), [])
+  const toggleAllowEdit = useCallback(() => setAllowEdit((x) => !x), [])
 
-  const path = useMemo(() => generatePath(SESSION_VIEW_ROUTES.main, {
-    sessionId: session.id,
-    secret: allowEdit ? session.secret : undefined,
-  }), [session, allowEdit])
+  const path = useMemo(
+    () =>
+      generatePath(SESSION_VIEW_ROUTES.main, {
+        sessionId: session.id,
+        secret: allowEdit ? session.secret : undefined,
+      }),
+    [session, allowEdit],
+  )
   const fullUrl = useMemo(() => `${window.location.origin}${path}`, [path])
 
-	const copyLink = useCallback(e => {
-		navigator.clipboard.writeText(fullUrl)
-		const copyButton = e.target
-		copyButton.innerText = t('share.copied')
-	}, [fullUrl, t])
+  const copyLink = useCallback(
+    (e) => {
+      navigator.clipboard.writeText(fullUrl)
+      const copyButton = e.target
+      copyButton.innerText = t('share.copied')
+    },
+    [fullUrl, t],
+  )
 
-  return <>
-    <Tooltip title={t('share.tooltip')} placement="bottom">
-      <IconButton
-        className={classes.button}
-        onClick={() => setShowQr(true)}
-        aria-label={t('share.tooltip')}
-      >
-        <Share />
-      </IconButton>
-    </Tooltip>
-    <Dialog
-      open={showQr}
-      onClose={() => setShowQr(false)}
-    >
-      {editable && <DialogTitle>
-        <FormControlLabel
-          control={<Switch color='secondary' checked={allowEdit} onChange={toggleAllowEdit} />}
-          label={t('share.allowEdit')}
-        />
-      </DialogTitle>}
-      <DialogContent>
-        <QRCode value={fullUrl} />
-      </DialogContent>
-      <Button onClick={copyLink} variant='contained'><Trans i18nKey='general.labels.copy' /> <FileCopyIcon/> </Button>
-    </Dialog>
-  </>
+  return (
+    <>
+      <Tooltip placement="bottom" title={t('share.tooltip')}>
+        <IconButton
+          aria-label={t('share.tooltip')}
+          className={classes.button}
+          onClick={() => setShowQr(true)}
+        >
+          <Share />
+        </IconButton>
+      </Tooltip>
+      <Dialog onClose={() => setShowQr(false)} open={showQr}>
+        {editable && (
+          <DialogTitle>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={allowEdit}
+                  color="secondary"
+                  onChange={toggleAllowEdit}
+                />
+              }
+              label={t('share.allowEdit')}
+            />
+          </DialogTitle>
+        )}
+        <DialogContent>
+          <QRCode value={fullUrl} />
+        </DialogContent>
+        <Button onClick={copyLink} variant="contained">
+          <Trans i18nKey="general.labels.copy" /> <FileCopyIcon />{' '}
+        </Button>
+      </Dialog>
+    </>
+  )
 }
 
 export default ShareButton

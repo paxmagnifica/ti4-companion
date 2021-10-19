@@ -22,7 +22,7 @@ import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
 import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     color: 'white',
   },
@@ -54,49 +54,56 @@ function FactionNutshells({
 }) {
   const { t } = useTranslation()
 
-  return factionsList.map(faction => {
+  return factionsList.map((faction) => {
     const factionData = factions.getData(faction)
     const factionName = t(`factions.${faction}.name`)
 
-    return <Grid item xs={12} sm={6} key={factionData.key}>
-      <Card className={classes.factionCard}>
-        <CardHeader
-          avatar={<Avatar alt={factionName} src={factionData.image}/>}
-          title={factionName}
-        />
-        <CardMedia
-          onClick={() => {
-            setFaction(factionData.key)
-            setFactionDialogOpen(open => !open)
-          }}
-          className={classes.media}
-          title={factionName}
-          image={getFactionCheatSheetPath(factionData.key)}
-        />
-        <CardActions disableSpacing>
-          <Tooltip title={t('sessionView.overview.goToWiki')} placement="top">
-            <IconButton
-              className={classes.factionCardIcon}
-              aria-label={t('sessionView.overview.goToWiki')}
-              href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(factionName)}`}
-              target="about:blank"
+    return (
+      <Grid key={factionData.key} item sm={6} xs={12}>
+        <Card className={classes.factionCard}>
+          <CardHeader
+            avatar={<Avatar alt={factionName} src={factionData.image} />}
+            title={factionName}
+          />
+          <CardMedia
+            className={classes.media}
+            image={getFactionCheatSheetPath(factionData.key)}
+            onClick={() => {
+              setFaction(factionData.key)
+              setFactionDialogOpen((open) => !open)
+            }}
+            title={factionName}
+          />
+          <CardActions disableSpacing>
+            <Tooltip placement="top" title={t('sessionView.overview.goToWiki')}>
+              <IconButton
+                aria-label={t('sessionView.overview.goToWiki')}
+                className={classes.factionCardIcon}
+                href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(
+                  factionName,
+                )}`}
+                target="about:blank"
+              >
+                <LocalLibrary />
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              placement="top"
+              title={t('sessionView.overview.openOriginal')}
             >
-              <LocalLibrary />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={t('sessionView.overview.openOriginal')} placement="top">
-            <IconButton
-              className={classes.factionCardIcon}
-              aria-label={t('sessionView.overview.openOriginal')}
-              href={getFactionCheatSheetPath(factionData.key)}
-              target="about:blank"
-            >
-              <PhotoLibrary />
-            </IconButton>
-          </Tooltip>
-        </CardActions>
-      </Card>
-    </Grid>
+              <IconButton
+                aria-label={t('sessionView.overview.openOriginal')}
+                className={classes.factionCardIcon}
+                href={getFactionCheatSheetPath(factionData.key)}
+                target="about:blank"
+              >
+                <PhotoLibrary />
+              </IconButton>
+            </Tooltip>
+          </CardActions>
+        </Card>
+      </Grid>
+    )
   })
 }
 
@@ -113,75 +120,86 @@ function Overview({
   const { fullscreen } = useFullscreen()
   const { t } = useTranslation()
 
-  const updateFactionPointsInSession = useCallback((faction, points) => updateFactionPoints({
-    sessionId: session.id,
-    faction,
-    points
-  }), [session.id, updateFactionPoints])
+  const updateFactionPointsInSession = useCallback(
+    (faction, points) =>
+      updateFactionPoints({
+        sessionId: session.id,
+        faction,
+        points,
+      }),
+    [session.id, updateFactionPoints],
+  )
 
-  return <>
-    <HideInFullscreen>
+  return (
+    <>
+      <HideInFullscreen>
+        <Grid
+          alignItems="center"
+          className={classes.root}
+          container
+          justifyContent="center"
+          spacing={4}
+        >
+          <Grid item style={{ textAlign: 'right' }} xs={12}>
+            {t('sessionView.overview.sessionStart', {
+              date: new Date(session.createdAt).toLocaleDateString(),
+              time: new Date(session.createdAt).toLocaleTimeString(),
+            })}
+          </Grid>
+        </Grid>
+      </HideInFullscreen>
       <Grid
-        className={classes.root}
-        container
         alignItems="center"
+        className={clsx(classes.root, { [classes.fullscreen]: fullscreen })}
+        container
+        direction="column"
         justifyContent="center"
         spacing={4}
       >
-        <Grid item xs={12} style={{ textAlign: 'right' }}>
-          {t('sessionView.overview.sessionStart', { date: new Date(session.createdAt).toLocaleDateString(), time: new Date(session.createdAt).toLocaleTimeString() })}
+        <Grid className={clsx({ [classes.fullWidth]: fullscreen })} item>
+          <VictoryPoints
+            editable={editable}
+            factions={session.factions}
+            onChange={updateFactionPointsInSession}
+            points={session.points}
+            target={session.vpCount}
+          />
+        </Grid>
+        <Grid item>
+          <PublicObjectives
+            editable={editable}
+            session={session}
+            updateFactionPoints={updateFactionPoints}
+          />
         </Grid>
       </Grid>
-    </HideInFullscreen>
-    <Grid
-      className={clsx(classes.root, { [classes.fullscreen]: fullscreen })}
-      container
-      alignItems="center"
-      justifyContent="center"
-      direction='column'
-      spacing={4}
-    >
-      <Grid item className={clsx({ [classes.fullWidth]: fullscreen })}>
-        <VictoryPoints
-          editable={editable}
-          onChange={updateFactionPointsInSession}
-          target={session.vpCount}
-          points={session.points}
-          factions={session.factions}
-        />
-      </Grid>
-      <Grid item>
-        <PublicObjectives
-          editable={editable}
-          session={session}
-          updateFactionPoints={updateFactionPoints}
-        />
-      </Grid>
-    </Grid>
-    <HideInFullscreen>
-      <Grid
-        className={classes.root}
-        container
-        alignItems="center"
-        justifyContent="center"
-        spacing={4}
-      >
-        <FactionNutshells
-          factionsList={session.factions}
-          classes={classes}
-          setFaction={setFaction}
-          setFactionDialogOpen={setFactionDialogOpen}
-        />
-      </Grid>
-      <Dialog
-        open={factionDialogOpen}
-        onClose={() => setFactionDialogOpen(false)}
-        maxWidth='lg'
-      >
-        {faction && <img src={getFactionCheatSheetPath(faction)} alt={faction} />}
-      </Dialog>
-    </HideInFullscreen>
-  </>
+      <HideInFullscreen>
+        <Grid
+          alignItems="center"
+          className={classes.root}
+          container
+          justifyContent="center"
+          spacing={4}
+        >
+          <FactionNutshells
+            classes={classes}
+            factionsList={session.factions}
+            setFaction={setFaction}
+            setFactionDialogOpen={setFactionDialogOpen}
+          />
+        </Grid>
+        <Dialog
+          maxWidth="lg"
+          onClose={() => setFactionDialogOpen(false)}
+          open={factionDialogOpen}
+        >
+          {faction && (
+            <img alt={faction} src={getFactionCheatSheetPath(faction)} />
+          )}
+        </Dialog>
+      </HideInFullscreen>
+    </>
+  )
 }
 
 export default Overview
