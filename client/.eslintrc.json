@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "react-app",
+    "airbnb",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "no-param-reassign": "off",
+    "no-use-before-define": ["error", { "functions": false, "variables": false }],
+    "no-underscore-dangle": "off",
+    "no-unused-vars": "warn",
+    "padding-line-between-statements": ["error", { "blankLine": "always", "prev": "*", "next": "return" }],
+    "react/jsx-filename-extension": ["warn", { "extensions": [".js", ".jsx"] }],
+    "react/jsx-one-expression-per-line": "off",
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react/sort-prop-types": "error",
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-sort-props": "warn",
+    "react/no-did-mount-set-state": "off",
+    "react/no-did-update-set-state": "warn",
+    "react/prop-types": "warn",
+    "import/prefer-default-export": "off",
+    "prettier/prettier": ["error", {
+      "semi": false,
+      "singleQuote": true,
+      "trailingComma": "all",
+      "bracketSpacing": true
+    }]
+  },
+  "env": {
+    "jest": true,
+    "browser": true
+  }
+}

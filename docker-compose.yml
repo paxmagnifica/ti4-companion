@@ -1,10 +1,11 @@
 version: "3.9"
 services:
   client:
-    image: "node:14"
+    image: "node:16"
     user: "node"
     working_dir: /home/node/app
     environment:
+      - DISABLE_ESLINT_PLUGIN=true
       - REACT_APP_API_URL=http://localhost:5000
     volumes:
       - ./client:/home/node/app
