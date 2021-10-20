@@ -18,5 +18,6 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: client/yarn.lock
       - run: yarn --cwd client install
-      - run: yarn --cwd client build
+      - run: DISABLE_ESLINT_PLUGIN=true yarn --cwd client build
+      - run: yarn --cwd client eslint --quiet --config .eslintrc.json .
       - run: yarn --cwd client test
