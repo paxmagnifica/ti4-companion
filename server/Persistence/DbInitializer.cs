@@ -162,6 +162,7 @@ namespace server.Persistence
                 context.Sessions.Add(new Session()
                 {
                     Id = sessionId,
+                    Secret = sessionId,
                     Events = new List<GameEvent>() {
                         new GameEvent {
                             Id = Guid.NewGuid(),
@@ -191,6 +192,7 @@ namespace server.Persistence
                 context.Sessions.Add(new Session()
                 {
                     Id = sessionId2,
+                    Secret = sessionId2,
                     Events = new List<GameEvent>() {
                         new GameEvent {
                             Id = Guid.NewGuid(),

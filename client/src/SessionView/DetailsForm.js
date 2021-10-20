@@ -14,15 +14,12 @@ import {
   InputLabel,
   Paper,
   Snackbar,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { ComboDispatchContext } from '../state'
+import Confirmation from '../shared/Confirmation'
 
 const getNow = () => {
   const now = new Date()
@@ -66,7 +63,7 @@ function DetailsForm({ disabled, session }) {
   const [vpConfirmationOpen, setVpConfirmationOpen] = useState(false)
   const getChangeHandler = useCallback(
     (setter, propertyName = 'value') =>
-      (changeEvent, ...others) => {
+      (changeEvent) => {
         const v = changeEvent.target[propertyName]
 
         setter(v)
@@ -249,26 +246,18 @@ function DetailsForm({ disabled, session }) {
           <Trans i18nKey="sessionDetails.detailsSavedCorrectly" />
         </MuiAlert>
       </Snackbar>
-      <Dialog maxWidth="xs" open={vpConfirmationOpen}>
-        <DialogTitle>
-          <Trans i18nKey="sessionDetails.vpChangeConfirmation.title" />
-        </DialogTitle>
-        <DialogContent>
-          {t('sessionDetails.vpChangeConfirmation.content')
-            .split('\n')
-            .map((thing) => (
-              <Typography key={thing}>{thing}</Typography>
-            ))}
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus color="secondary" onClick={closeConfirmation}>
-            <Trans i18nKey="general.labels.cancel" />
-          </Button>
-          <Button color="secondary" onClick={handleSave}>
-            <Trans i18nKey="general.labels.ok" />
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Confirmation
+        cancel={closeConfirmation}
+        confirm={handleSave}
+        open={vpConfirmationOpen}
+        title={<Trans i18nKey="sessionDetails.vpChangeConfirmation.title" />}
+      >
+        {t('sessionDetails.vpChangeConfirmation.content')
+          .split('\n')
+          .map((thing) => (
+            <Typography key={thing}>{thing}</Typography>
+          ))}
+      </Confirmation>
     </>
   )
 }

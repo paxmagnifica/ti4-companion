@@ -10,7 +10,9 @@ import secretObjective from '../assets/objective-secret.png'
 import reverseObjective from '../assets/objective-1-reverse.jpg'
 import { StateContext } from '../state'
 
-const useStyles = makeStyles((theme) => ({
+import DeleteObjectiveButton from './DeleteObjectiveButton'
+
+const useStyles = makeStyles({
   root: {
     maxHeight: '90vh',
     position: 'relative',
@@ -63,7 +65,13 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 0,
     borderRadius: '5%',
   },
-}))
+  deleteButton: {
+    position: 'absolute',
+    top: '-1.25em',
+    right: '-1.25em',
+    zIndex: 2,
+  },
+})
 
 const SMALL_SIZE = {
   width: 100,
@@ -98,6 +106,8 @@ const getStyles = (size) =>
   }[size] || NORMAL_SIZE)
 
 function Objective({
+  deletable,
+  session,
   size,
   title,
   slug,
@@ -172,6 +182,13 @@ function Objective({
       <p className={classes.condition}>{renderer(translation.condition)}</p>
       <p className={classes.points}>{points}</p>
       <p className={classes.rewards}>{t(`general.reward.${reward}`)}</p>
+      {deletable && (
+        <DeleteObjectiveButton
+          className={classes.deleteButton}
+          objectiveSlug={slug}
+          session={session}
+        />
+      )}
     </div>
   )
 }
@@ -192,11 +209,7 @@ function ObjectiveWithModal({ size, reverse, ...other }) {
   const [bigObjectiveOpen, setBigObjectiveOpen] = useState(false)
 
   if (reverse || size !== 'small') {
-    return (
-      <>
-        <Objective reverse={reverse} size={size} {...other} />
-      </>
-    )
+    return <Objective reverse={reverse} size={size} {...other} />
   }
 
   return (

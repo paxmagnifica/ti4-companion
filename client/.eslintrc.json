@@ -26,7 +26,7 @@
     "react/jsx-sort-props": "warn",
     "react/no-did-mount-set-state": "off",
     "react/no-did-update-set-state": "warn",
-    "react/prop-types": "warn",
+    "react/prop-types": "off",
     "import/prefer-default-export": "off",
     "prettier/prettier": ["error", {
       "semi": false,

@@ -108,6 +108,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
             className={classes.objectiveContainer}
           >
             <ObjectiveWithFactionSelector
+              deletable={editable}
               disabled={!editable}
               objective={sessionObjective}
               selector={{
@@ -116,6 +117,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
                 onChange: (change) =>
                   objectiveScored({ change, objective: sessionObjective }),
               }}
+              session={session}
               size={
                 smallViewport ? 'small' : fullscreen ? 'fullscreen' : 'default'
               }

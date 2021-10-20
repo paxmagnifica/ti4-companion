@@ -2,11 +2,23 @@ import Objective from '../../../shared/Objective'
 
 import FactionSelector from './FactionSelector'
 
-function ObjectiveWithFactionSelector({ disabled, size, objective, selector }) {
+function ObjectiveWithFactionSelector({
+  disabled,
+  size,
+  objective,
+  selector,
+  session,
+  deletable,
+}) {
   return (
     <>
       <FactionSelector disabled={disabled} size={size} {...selector} />
-      <Objective size={size} {...objective} />
+      <Objective
+        deletable={deletable}
+        session={session}
+        size={size}
+        {...objective}
+      />
     </>
   )
 }
