@@ -5,11 +5,7 @@ import shuffle from 'lodash.shuffle'
 import sessionServiceFactory from '../shared/sessionService'
 import { ComboDispatchContext } from '../state'
 
-export function SessionProvider({
-  children,
-  state,
-  dispatch,
-}) {
+export function SessionProvider({ children, state, dispatch }) {
   const { sessionId, secret } = useParams()
 
   const authorizedFetch = useMemo(() => {
@@ -30,31 +26,52 @@ export function SessionProvider({
     }
   }, [secret])
 
-  const sessionService = useMemo(() => sessionServiceFactory({ fetch: authorizedFetch }), [authorizedFetch])
+  const sessionService = useMemo(
+    () => sessionServiceFactory({ fetch: authorizedFetch }),
+    [authorizedFetch],
+  )
 
-  const comboDispatch = useCallback(action => {
-    const { payload } = action
-    sessionService.pushEvent(payload.sessionId, { type: action.type, payload })
-    dispatch(action)
-  }, [dispatch, sessionService])
+  const comboDispatch = useCallback(
+    (action) => {
+      const { payload } = action
+      sessionService.pushEvent(payload.sessionId, {
+        type: action.type,
+        payload,
+      })
+      dispatch(action)
+    },
+    [dispatch, sessionService],
+  )
   const { sessions } = state
 
-  const shuffleFactions = useCallback(sessionId => {
-    const session = sessions.data.find(s => s.id === sessionId)
-    const shuffledFactions = shuffle(session.factions)
-    const payload = { factions: shuffledFactions, sessionId }
-    comboDispatch({ type: 'FactionsShuffled', payload })
-  }, [sessions.data, comboDispatch])
+  const shuffleFactions = useCallback(
+    (sessionToShuffleId) => {
+      const session = sessions.data.find((s) => s.id === sessionToShuffleId)
+      const shuffledFactions = shuffle(session.factions)
+      const payload = {
+        factions: shuffledFactions,
+        sessionId: sessionToShuffleId,
+      }
+      comboDispatch({ type: 'FactionsShuffled', payload })
+    },
+    [sessions.data, comboDispatch],
+  )
 
-  const setFactions = useCallback((sessionId, factions) => {
-    const payload = { factions, sessionId }
-    comboDispatch({ type: 'FactionsShuffled', payload })
-  }, [comboDispatch])
+  const setFactions = useCallback(
+    (targetSessionId, factions) => {
+      const payload = { factions, sessionId: targetSessionId }
+      comboDispatch({ type: 'FactionsShuffled', payload })
+    },
+    [comboDispatch],
+  )
 
-  const updateFactionPoints = useCallback(({ sessionId, faction, points }) => {
-    const payload = { sessionId, faction, points }
-    comboDispatch({ type: 'VictoryPointsUpdated', payload })
-  }, [comboDispatch])
+  const updateFactionPoints = useCallback(
+    ({ sessionId: targetSessionId, faction, points }) => {
+      const payload = { sessionId: targetSessionId, faction, points }
+      comboDispatch({ type: 'VictoryPointsUpdated', payload })
+    },
+    [comboDispatch],
+  )
 
   const [loading, setLoading] = useState(null)
   const [editable, setEditable] = useState(false)
@@ -75,7 +92,7 @@ export function SessionProvider({
         const session = await sessionService.get(sessionId)
         setEditable(secret && Boolean(session.editable))
         session.remote = true
-        dispatch({ type: 'AddSession', session});
+        dispatch({ type: 'AddSession', session })
       } catch (e) {
         console.error(e)
       } finally {
@@ -84,23 +101,35 @@ export function SessionProvider({
     }
 
     loadSession()
-  }, [loading, dispatch, state.sessions.data, sessionId, sessionService, secret])
+  }, [
+    loading,
+    dispatch,
+    state.sessions.data,
+    sessionId,
+    sessionService,
+    secret,
+  ])
 
-  const session = useMemo(() => state.sessions.data.find(s => s.id === sessionId), [state, sessionId])
+  const session = useMemo(
+    () => state.sessions.data.find((s) => s.id === sessionId),
+    [state, sessionId],
+  )
 
   if (!sessionId) {
     return null
   }
 
-  return <ComboDispatchContext.Provider value={comboDispatch}>
-    {children({
-      session,
-      loading: loading || state.objectives.loading,
-      editable,
-      shuffleFactions,
-      setFactions,
-      updateFactionPoints,
-      sessionService,
-    })}
-  </ComboDispatchContext.Provider>
+  return (
+    <ComboDispatchContext.Provider value={comboDispatch}>
+      {children({
+        session,
+        loading: loading || state.objectives.loading,
+        editable,
+        shuffleFactions,
+        setFactions,
+        updateFactionPoints,
+        sessionService,
+      })}
+    </ComboDispatchContext.Provider>
+  )
 }

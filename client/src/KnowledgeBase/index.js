@@ -1,11 +1,6 @@
 import { useState, useMemo, useCallback } from 'react'
 import clsx from 'clsx'
-import {
-  Divider,
-  Drawer,
-  Grid,
-  Typography,
-} from '@material-ui/core'
+import { Divider, Drawer, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTranslation } from 'react-i18next'
@@ -31,7 +26,7 @@ const useTabPanelStyles = makeStyles({
   },
   title: {
     whiteSpace: 'normal',
-  }
+  },
 })
 
 const TABS = {
@@ -54,16 +49,24 @@ function TabPanel({ small, children, value, index, title }) {
     return null
   }
 
-  return <div className={classes.root}>
-    <Typography variant="h4" component="div" gutterBottom className={classes.title}>
-      {!small && `${t('kb.title')}: `}<i>{title}</i>
-    </Typography>
-    <Divider />
-    {children}
-  </div>
+  return (
+    <div className={classes.root}>
+      <Typography
+        className={classes.title}
+        component="div"
+        gutterBottom
+        variant="h4"
+      >
+        {!small && `${t('kb.title')}: `}
+        <i>{title}</i>
+      </Typography>
+      <Divider />
+      {children}
+    </div>
+  )
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'fixed',
     right: 0,
@@ -78,11 +81,11 @@ const useStyles = makeStyles(theme => ({
   },
   cardContainer: {
     '&:hover > *:not(:hover)': {
-      opacity: .8,
+      opacity: 0.8,
       '& > *': {
         transform: 'rotate(-90deg)',
         transformOrigin: 'center center',
-      }
+      },
     },
   },
   rootActive: {
@@ -95,7 +98,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     position: 'relative',
     cursor: 'pointer',
-    opacity: .8,
+    opacity: 0.8,
     marginLeft: -30,
     '& > *': {
       transform: 'rotate(-90deg)',
@@ -104,7 +107,7 @@ const useStyles = makeStyles(theme => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
-    }
+    },
   },
   explorationCard: {
     backgroundImage: `url(${explorationReverseSprite})`,
@@ -120,7 +123,7 @@ const useStyles = makeStyles(theme => ({
       '& > *': {
         transform: 'translateX(-30%) scale(1.4) rotate(-90deg)',
         transformOrigin: 'center center',
-      }
+      },
     },
   },
   cardActive: {
@@ -128,13 +131,13 @@ const useStyles = makeStyles(theme => ({
     '& > *': {
       transform: 'translateX(-30%) scale(1.4) rotate(-90deg)',
       transformOrigin: 'center center',
-    }
+    },
   },
   smallCard: {
     marginLeft: -22,
     '& > *': {
       height: 64,
-    }
+    },
   },
   drawer: {
     width: 0,
@@ -154,7 +157,7 @@ const useStyles = makeStyles(theme => ({
     }),
   },
   fullscreen: {
-    opacity: .3,
+    opacity: 0.3,
     transition: theme.transitions.create(['opacity'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -172,7 +175,6 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-
 function KnowledgeBase() {
   const { t } = useTranslation()
   const { fullscreen } = useFullscreen()
@@ -183,246 +185,324 @@ function KnowledgeBase() {
   const classes = useStyles({ gapWidth, drawerWidth })
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [chosenTab, setChosenTab] = useState(TABS.SECRET_OBJ)
-  const [objectiveFilters, setObjectiveFilters] = useState({ stageI: false, stageII: false, secrets: false })
-  const [explorationFilters, setExplorationFilters] = useState({ cultural: false, hazardous: false, industrial: false, frontier: false })
+  const [objectiveFilters, setObjectiveFilters] = useState({
+    stageI: false,
+    stageII: false,
+    secrets: false,
+  })
+  const [explorationFilters, setExplorationFilters] = useState({
+    cultural: false,
+    hazardous: false,
+    industrial: false,
+    frontier: false,
+  })
 
-  const explorationCards = useMemo(() => {
-    return smallCards
-      ? [
-        { type: 'cultural', tab: TABS.EXPLORATION_CULTURAL, height: 64, width: 41.6, backgroundPosition: -127},
-        { type: 'hazardous', tab: TABS.EXPLORATION_HAZARDOUS, height: 64, width: 41.6, backgroundPosition: -85},
-        { type: 'industrial', tab: TABS.EXPLORATION_BIOTIC, height: 64, width: 41.6, backgroundPosition: -42},
-        { type: 'frontier', tab: TABS.EXPLORATION_FRONTIER, height: 64, width: 41.6},
-      ]
-      : [
-        { type: 'cultural', tab: TABS.EXPLORATION_CULTURAL, height: 80, width: 52, backgroundPosition: -158},
-        { type: 'hazardous', tab: TABS.EXPLORATION_HAZARDOUS, height: 80, width: 52, backgroundPosition: -106},
-        { type: 'industrial', tab: TABS.EXPLORATION_BIOTIC, height: 80, width: 52, backgroundPosition: -53},
-        { type: 'frontier', tab: TABS.EXPLORATION_FRONTIER, height: 80, width: 52},
-      ]
-  }, [smallCards]);
+  const explorationCards = useMemo(
+    () =>
+      smallCards
+        ? [
+            {
+              type: 'cultural',
+              tab: TABS.EXPLORATION_CULTURAL,
+              height: 64,
+              width: 41.6,
+              backgroundPosition: -127,
+            },
+            {
+              type: 'hazardous',
+              tab: TABS.EXPLORATION_HAZARDOUS,
+              height: 64,
+              width: 41.6,
+              backgroundPosition: -85,
+            },
+            {
+              type: 'industrial',
+              tab: TABS.EXPLORATION_BIOTIC,
+              height: 64,
+              width: 41.6,
+              backgroundPosition: -42,
+            },
+            {
+              type: 'frontier',
+              tab: TABS.EXPLORATION_FRONTIER,
+              height: 64,
+              width: 41.6,
+            },
+          ]
+        : [
+            {
+              type: 'cultural',
+              tab: TABS.EXPLORATION_CULTURAL,
+              height: 80,
+              width: 52,
+              backgroundPosition: -158,
+            },
+            {
+              type: 'hazardous',
+              tab: TABS.EXPLORATION_HAZARDOUS,
+              height: 80,
+              width: 52,
+              backgroundPosition: -106,
+            },
+            {
+              type: 'industrial',
+              tab: TABS.EXPLORATION_BIOTIC,
+              height: 80,
+              width: 52,
+              backgroundPosition: -53,
+            },
+            {
+              type: 'frontier',
+              tab: TABS.EXPLORATION_FRONTIER,
+              height: 80,
+              width: 52,
+            },
+          ],
+    [smallCards],
+  )
 
-  const open = useCallback(index => {
-    if (drawerOpen && index === chosenTab) {
-      setDrawerOpen(false)
-      return
-    }
+  const open = useCallback(
+    (index) => {
+      if (drawerOpen && index === chosenTab) {
+        setDrawerOpen(false)
 
-    if (!drawerOpen) {
-      setDrawerOpen(true)
-    }
+        return
+      }
 
-    if (index !== chosenTab) {
-      setChosenTab(index)
-    }
-  }, [chosenTab, drawerOpen])
+      if (!drawerOpen) {
+        setDrawerOpen(true)
+      }
 
-  return <>
-    <Grid
-      container
-      className={clsx(classes.root, {
-        [classes.rootActive]: drawerOpen,
-        [classes.fullscreen]: !drawerOpen && fullscreen,
-      })}
-      alignItems='center'
-      justifyContent='center'
-      direction='column'
-    >
-      <span className={classes.cardContainer}>
-        <div
-          className={clsx(classes.card, {
-            [classes.hoverableCard]: hoverable,
-            [classes.smallCard]: smallCards,
-            [classes.cardActive]: drawerOpen && chosenTab === TABS.STAGE_I_OBJ,
-          })}
-        >
-          <img
-            height={80}
-            onClick={() => {
-              setObjectiveFilters({ stageI: true })
-              open(TABS.STAGE_I_OBJ)
-            }}
-            alt={t('kb.panels.sI.button')}
-            title={t('kb.panels.sI.button')}
-            src={stageIObjectiveReverse}
-          />
-        </div>
-        <div
-          className={clsx(classes.card, {
-            [classes.hoverableCard]: hoverable,
-            [classes.smallCard]: smallCards,
-            [classes.cardActive]: drawerOpen && chosenTab === TABS.STAGE_II_OBJ,
-          })}
-        >
-          <img
-            height={80}
-            onClick={() => {
-              setObjectiveFilters({ stageII: true })
-              open(TABS.STAGE_II_OBJ)
-            }}
-            alt={t('kb.panels.sII.button')}
-            title={t('kb.panels.sII.button')}
-            src={stageIIObjectiveReverse}
-          />
-        </div>
-        <div
-          className={clsx(classes.card, {
-            [classes.hoverableCard]: hoverable,
-            [classes.smallCard]: smallCards,
-            [classes.cardActive]: drawerOpen && chosenTab === TABS.SECRET_OBJ,
-          })}
-        >
-          <img
-            height={80}
-            onClick={() => {
-              setObjectiveFilters({ secrets: true })
-              open(TABS.SECRET_OBJ)
-            }}
-            alt={t('kb.panels.secretObj.button')}
-            title={t('kb.panels.secretObj.button')}
-            src={secretObjectiveReverse}
-          />
-        </div>
-        {explorationCards.map(({ type, tab, width, height, backgroundPosition }) =>
+      if (index !== chosenTab) {
+        setChosenTab(index)
+      }
+    },
+    [chosenTab, drawerOpen],
+  )
+
+  return (
+    <>
+      <Grid
+        alignItems="center"
+        className={clsx(classes.root, {
+          [classes.rootActive]: drawerOpen,
+          [classes.fullscreen]: !drawerOpen && fullscreen,
+        })}
+        container
+        direction="column"
+        justifyContent="center"
+      >
+        <span className={classes.cardContainer}>
           <div
-            key={type}
             className={clsx(classes.card, {
               [classes.hoverableCard]: hoverable,
               [classes.smallCard]: smallCards,
-              [classes.cardActive]: drawerOpen && chosenTab === tab,
+              [classes.cardActive]:
+                drawerOpen && chosenTab === TABS.STAGE_I_OBJ,
+            })}
+          >
+            <img
+              alt={t('kb.panels.sI.button')}
+              height={80}
+              onClick={() => {
+                setObjectiveFilters({ stageI: true })
+                open(TABS.STAGE_I_OBJ)
+              }}
+              src={stageIObjectiveReverse}
+              title={t('kb.panels.sI.button')}
+            />
+          </div>
+          <div
+            className={clsx(classes.card, {
+              [classes.hoverableCard]: hoverable,
+              [classes.smallCard]: smallCards,
+              [classes.cardActive]:
+                drawerOpen && chosenTab === TABS.STAGE_II_OBJ,
+            })}
+          >
+            <img
+              alt={t('kb.panels.sII.button')}
+              height={80}
+              onClick={() => {
+                setObjectiveFilters({ stageII: true })
+                open(TABS.STAGE_II_OBJ)
+              }}
+              src={stageIIObjectiveReverse}
+              title={t('kb.panels.sII.button')}
+            />
+          </div>
+          <div
+            className={clsx(classes.card, {
+              [classes.hoverableCard]: hoverable,
+              [classes.smallCard]: smallCards,
+              [classes.cardActive]: drawerOpen && chosenTab === TABS.SECRET_OBJ,
+            })}
+          >
+            <img
+              alt={t('kb.panels.secretObj.button')}
+              height={80}
+              onClick={() => {
+                setObjectiveFilters({ secrets: true })
+                open(TABS.SECRET_OBJ)
+              }}
+              src={secretObjectiveReverse}
+              title={t('kb.panels.secretObj.button')}
+            />
+          </div>
+          {explorationCards.map(
+            ({ type, tab, width, height, backgroundPosition }) => (
+              <div
+                key={type}
+                className={clsx(classes.card, {
+                  [classes.hoverableCard]: hoverable,
+                  [classes.smallCard]: smallCards,
+                  [classes.cardActive]: drawerOpen && chosenTab === tab,
+                })}
+              >
+                <div
+                  className={classes.explorationCard}
+                  onClick={() => {
+                    setExplorationFilters({
+                      cultural: false,
+                      hazardous: false,
+                      industrial: false,
+                      frontier: false,
+                      [type]: true,
+                    })
+                    open(tab)
+                  }}
+                  style={{
+                    backgroundPosition,
+                    height,
+                    width,
+                  }}
+                  title={t('kb.panels.exploration.button', {
+                    type: t(`kb.panels.exploration.types.${type}`),
+                  })}
+                />
+              </div>
+            ),
+          )}
+          <div
+            className={clsx(classes.card, {
+              [classes.hoverableCard]: hoverable,
+              [classes.smallCard]: smallCards,
+              [classes.cardActive]: drawerOpen && chosenTab === TABS.RELICS,
             })}
           >
             <div
-              onClick={() => {
-                setExplorationFilters({
-                  cultural: false, hazardous: false, industrial: false, frontier: false,
-                  [type]: true,
-                })
-                open(tab)
-              }}
-              title={t('kb.panels.exploration.button', { type: t(`kb.panels.exploration.types.${type}`) })}
-              className={classes.explorationCard}
+              alt={t('kb.panels.relics.button')}
+              className={classes.relicCard}
+              onClick={() => open(TABS.RELICS)}
               style={{
-                backgroundPosition,
-                height,
-                width,
+                backgroundPosition: '100%',
+                height: smallCards ? 64 : 80,
+                width: smallCards ? 41.6 : 52,
               }}
+              title={t('kb.panels.relics.button')}
             />
           </div>
-        )}
-        <div
-          className={clsx(classes.card, {
-            [classes.hoverableCard]: hoverable,
-            [classes.smallCard]: smallCards,
-            [classes.cardActive]: drawerOpen && chosenTab === TABS.RELICS,
-          })}
-        >
           <div
-            onClick={() => open(TABS.RELICS)}
-            title={t('kb.panels.relics.button')}
-            alt={t('kb.panels.relics.button')}
-            className={classes.relicCard}
-            style={{
-              backgroundPosition: '100%',
-              height: smallCards ? 64 : 80,
-              width: smallCards ? 41.6 : 52,
-            }}
-          />
-        </div>
+            className={clsx(classes.card, {
+              [classes.hoverableCard]: hoverable,
+              [classes.smallCard]: smallCards,
+              [classes.cardActive]:
+                drawerOpen && chosenTab === TABS.STRATEGY_CARDS,
+            })}
+          >
+            <StrategyBack
+              alt={t('kb.panels.strategy.button')}
+              height={smallCards ? 64 : 80}
+              onClick={() => open(TABS.STRATEGY_CARDS)}
+              strategy={StrategyCard.Leadership}
+              title={t('kb.panels.strategy.button')}
+            />
+          </div>
+        </span>
+      </Grid>
+      {drawerOpen && (
         <div
-          className={clsx(classes.card, {
-            [classes.hoverableCard]: hoverable,
-            [classes.smallCard]: smallCards,
-            [classes.cardActive]: drawerOpen && chosenTab === TABS.STRATEGY_CARDS,
-          })}
-        >
-          <StrategyBack
-            height={smallCards ? 64 : 80}
-            onClick={() => open(TABS.STRATEGY_CARDS)}
-            alt={t('kb.panels.strategy.button')}
-            title={t('kb.panels.strategy.button')}
-            strategy={StrategyCard.Leadership}
-          />
-        </div>
-      </span>
-    </Grid>
-    { drawerOpen && <div
-      className={classes.drawerBackdrop}
-      onClick={() => setDrawerOpen(false)}/>}
-    <Drawer
-      classes={{
-        paper: clsx(classes.drawer, {
-          [classes.drawerOpen]: drawerOpen,
-        }),
-      }}
-      variant='permanent'
-      anchor='right'
-    >
-      <TabPanel
-        small={smallCards}
-        title={t('kb.panels.sI.title')}
-        value={chosenTab}
-        index={TABS.STAGE_I_OBJ}
-      >
-        <Objectives
-          onFilterChange={setObjectiveFilters}
-          {...objectiveFilters}
+          className={classes.drawerBackdrop}
+          onClick={() => setDrawerOpen(false)}
         />
-      </TabPanel>
-      <TabPanel
-        small={smallCards}
-        title={t('kb.panels.sII.title')}
-        value={chosenTab}
-        index={TABS.STAGE_II_OBJ}
+      )}
+      <Drawer
+        anchor="right"
+        classes={{
+          paper: clsx(classes.drawer, {
+            [classes.drawerOpen]: drawerOpen,
+          }),
+        }}
+        variant="permanent"
       >
-        <Objectives
-          onFilterChange={setObjectiveFilters}
-          {...objectiveFilters}
-        />
-      </TabPanel>
-      <TabPanel
-        small={smallCards}
-        title={t('kb.panels.secretObj.title')}
-        value={chosenTab}
-        index={TABS.SECRET_OBJ}
-      >
-        <Objectives
-          onFilterChange={setObjectiveFilters}
-          {...objectiveFilters}
-        />
-      </TabPanel>
-      {explorationCards.map(({ type, tab, width, height, backgroundPosition }) =>
         <TabPanel
-          key={`${type}-tabpanel`}
+          index={TABS.STAGE_I_OBJ}
           small={smallCards}
-          title={`${type} exploration cards`}
+          title={t('kb.panels.sI.title')}
           value={chosenTab}
-          index={tab}
         >
-          <ExplorationCards
-            onFilterChange={setExplorationFilters}
-            {...explorationFilters}
+          <Objectives
+            onFilterChange={setObjectiveFilters}
+            {...objectiveFilters}
           />
         </TabPanel>
-      )}
-      <TabPanel
-        small={smallCards}
-        title={t('kb.panels.relics.title')}
-        value={chosenTab}
-        index={TABS.RELICS}
-      >
-        <Relics />
-      </TabPanel>
-      <TabPanel
-        small={smallCards}
-        title={t('kb.panels.strategy.title')}
-        value={chosenTab}
-        index={TABS.STRATEGY_CARDS}
-      >
-        <StrategyCards />
-      </TabPanel>
-    </Drawer>
-  </>
+        <TabPanel
+          index={TABS.STAGE_II_OBJ}
+          small={smallCards}
+          title={t('kb.panels.sII.title')}
+          value={chosenTab}
+        >
+          <Objectives
+            onFilterChange={setObjectiveFilters}
+            {...objectiveFilters}
+          />
+        </TabPanel>
+        <TabPanel
+          index={TABS.SECRET_OBJ}
+          small={smallCards}
+          title={t('kb.panels.secretObj.title')}
+          value={chosenTab}
+        >
+          <Objectives
+            onFilterChange={setObjectiveFilters}
+            {...objectiveFilters}
+          />
+        </TabPanel>
+        {explorationCards.map(
+          ({ type, tab, width, height, backgroundPosition }) => (
+            <TabPanel
+              key={`${type}-tabpanel`}
+              index={tab}
+              small={smallCards}
+              title={`${type} exploration cards`}
+              value={chosenTab}
+            >
+              <ExplorationCards
+                onFilterChange={setExplorationFilters}
+                {...explorationFilters}
+              />
+            </TabPanel>
+          ),
+        )}
+        <TabPanel
+          index={TABS.RELICS}
+          small={smallCards}
+          title={t('kb.panels.relics.title')}
+          value={chosenTab}
+        >
+          <Relics />
+        </TabPanel>
+        <TabPanel
+          index={TABS.STRATEGY_CARDS}
+          small={smallCards}
+          title={t('kb.panels.strategy.title')}
+          value={chosenTab}
+        >
+          <StrategyCards />
+        </TabPanel>
+      </Drawer>
+    </>
+  )
 }
 
 export default KnowledgeBase

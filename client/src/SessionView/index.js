@@ -1,7 +1,5 @@
 import { Helmet } from 'react-helmet'
-import {
-  Grid,
-} from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Route, Switch } from 'react-router-dom'
 
@@ -39,61 +37,85 @@ function SessionView({
   sortedPoints.sort((a, b) => b.points - a.points)
   const winningFaction = sortedPoints[0].faction
 
-  return <>
-    <Helmet>
-      <title>{`TI4 Companion session- ${session.factions.length} players - 10VP`}</title>
-      <meta name="description" content={sortedPoints.map(({ faction, points }) => `${factions.getData(faction).name}(${points}vp)`).join(', ')} />
+  return (
+    <>
+      <Helmet>
+        <title>{`TI4 Companion session- ${session.factions.length} players - 10VP`}</title>
+        <meta
+          content={sortedPoints
+            .map(
+              ({ faction, points }) =>
+                `${factions.getData(faction).name}(${points}vp)`,
+            )
+            .join(', ')}
+          name="description"
+        />
 
-      <meta property="og:title" content={`TI4 Companion session - ${session.factions.length} players - 10VP`} />
-      <meta property="og:description" content={sortedPoints.map(({ faction, points }) => `${factions.getData(faction).name}(${points}vp)`).join(', ')} />
-      <meta property="og:image" content={`${window.location.origin}${getFactionCheatSheetPath(winningFaction)}`} />
-    </Helmet>
+        <meta
+          content={`TI4 Companion session - ${session.factions.length} players - 10VP`}
+          property="og:title"
+        />
+        <meta
+          content={sortedPoints
+            .map(
+              ({ faction, points }) =>
+                `${factions.getData(faction).name}(${points}vp)`,
+            )
+            .join(', ')}
+          property="og:description"
+        />
+        <meta
+          content={`${window.location.origin}${getFactionCheatSheetPath(
+            winningFaction,
+          )}`}
+          property="og:image"
+        />
+      </Helmet>
 
-    <HideInFullscreen>
-      <Grid container className={classes.header}>
-        <Grid item xs={8}>
-          <SessionNavigation />
+      <HideInFullscreen>
+        <Grid className={classes.header} container>
+          <Grid item xs={8}>
+            <SessionNavigation />
+          </Grid>
+          <Grid container item justifyContent="flex-end" xs={4}>
+            <FullscreenButton />
+            {editable && (
+              <ShuffleFactionsButton
+                factions={session.factions}
+                setFactions={(factionsToSet) =>
+                  setFactions(session.id, factionsToSet)
+                }
+                shuffleFactions={() => shuffleFactions(session.id)}
+              />
+            )}
+            <ShareButton editable={editable} session={session} />
+          </Grid>
         </Grid>
-        <Grid item container xs={4} justifyContent="flex-end">
-          <FullscreenButton />
-          {editable && <ShuffleFactionsButton
-              factions={session.factions}
-              shuffleFactions={() => shuffleFactions(session.id)}
-              setFactions={factions => setFactions(session.id, factions)}
-          />}
-          <ShareButton
+      </HideInFullscreen>
+
+      <Switch>
+        <Route exact path={SESSION_VIEW_ROUTES.map}>
+          <Map
             editable={editable}
             session={session}
+            sessionService={sessionService}
           />
-        </Grid>
-      </Grid>
-    </HideInFullscreen>
-
-    <Switch>
-      <Route exact path={SESSION_VIEW_ROUTES.map}>
-        <Map
-          editable={editable}
-          session={session}
-          sessionService={sessionService}
-        />
-      </Route>
-      <Route exact path={SESSION_VIEW_ROUTES.details}>
-        <DetailsForm
-          disabled={!editable}
-          session={session}
-        />
-      </Route>
-      <Route exact path={SESSION_VIEW_ROUTES.main}>
-        <Overview
-          editable={editable}
-          session={session}
-          shuffleFactions={shuffleFactions}
-          setFactions={setFactions}
-          updateFactionPoints={updateFactionPoints}
-        />
-      </Route>
-    </Switch>
-  </>
+        </Route>
+        <Route exact path={SESSION_VIEW_ROUTES.details}>
+          <DetailsForm disabled={!editable} session={session} />
+        </Route>
+        <Route exact path={SESSION_VIEW_ROUTES.main}>
+          <Overview
+            editable={editable}
+            session={session}
+            setFactions={setFactions}
+            shuffleFactions={shuffleFactions}
+            updateFactionPoints={updateFactionPoints}
+          />
+        </Route>
+      </Switch>
+    </>
+  )
 }
 
 export default SessionView

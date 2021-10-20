@@ -2,37 +2,35 @@ import React from 'react'
 
 import { saveAllSessions } from './shared/persistence'
 
-export const StateContext = React.createContext();
-export const ComboDispatchContext = React.createContext();
-export const DispatchContext = React.createContext();
+export const StateContext = React.createContext()
+export const ComboDispatchContext = React.createContext()
+export const DispatchContext = React.createContext()
 
-export const init = () => {
-  return {
-    relics: {
-      loading: false,
-      loaded: false,
-      data: {},
-      slugs: [],
-    },
-    explorationCards: {
-      loading: false,
-      loaded: false,
-      data: {},
-      slugs: [],
-    },
-    objectives: {
-      loading: true,
-      loaded: false,
-      data: {},
-      slugs: [],
-    },
-    sessions: {
-      loading: true,
-      loaded: false,
-      data: [],
-    }
-  }
-}
+export const init = () => ({
+  relics: {
+    loading: false,
+    loaded: false,
+    data: {},
+    slugs: [],
+  },
+  explorationCards: {
+    loading: false,
+    loaded: false,
+    data: {},
+    slugs: [],
+  },
+  objectives: {
+    loading: true,
+    loaded: false,
+    data: {},
+    slugs: [],
+  },
+  sessions: {
+    loading: true,
+    loaded: false,
+    data: [],
+  },
+})
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -43,38 +41,22 @@ export const reducer = (state, action) => {
           loading: false,
           loaded: true,
           data: action.sessions,
-        }
+        },
       }
     case 'AddSession':
-      const oldSession = state.sessions.data.find(s => s.id === action.session.id)
-      const newSession = { ...action.session }
-      if (oldSession) {
-        newSession.editable = oldSession.editable || action.session.editable
-        newSession.secret = action.session.editable
-          ? action.session.secret
-          : oldSession.secret
-      }
-
-      const sessions = [newSession, ...state.sessions.data.filter(s => s.id !== action.session.id)]
-      saveAllSessions(sessions)
-
-      return {
-        ...state,
-        sessions: {
-          loading: false,
-          loaded: true,
-          data: sessions,
-        }
-      }
+      return addSession(state, action)
     case 'LoadObjectives':
       return {
         ...state,
         objectives: {
           loading: false,
           loaded: true,
-          data: action.objectives.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
+          data: action.objectives.reduce(
+            (accu, obj) => ({ ...accu, [obj.slug]: obj }),
+            {},
+          ),
           slugs: action.objectives.map(({ slug }) => slug),
-        }
+        },
       }
     case 'LoadingRelics':
       return {
@@ -82,7 +64,7 @@ export const reducer = (state, action) => {
         relics: {
           loading: true,
           loaded: false,
-        }
+        },
       }
     case 'LoadRelics':
       return {
@@ -90,9 +72,12 @@ export const reducer = (state, action) => {
         relics: {
           loading: false,
           loaded: true,
-          data: action.relics.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
+          data: action.relics.reduce(
+            (accu, obj) => ({ ...accu, [obj.slug]: obj }),
+            {},
+          ),
           slugs: action.relics.map(({ slug }) => slug),
-        }
+        },
       }
     case 'LoadingExplorationCards':
       return {
@@ -100,7 +85,7 @@ export const reducer = (state, action) => {
         explorationCards: {
           loading: true,
           loaded: false,
-        }
+        },
       }
     case 'LoadExplorationCards':
       return {
@@ -108,9 +93,12 @@ export const reducer = (state, action) => {
         explorationCards: {
           loading: false,
           loaded: true,
-          data: action.explorationCards.reduce((accu, obj) => ({...accu, [obj.slug]: obj}), {}),
+          data: action.explorationCards.reduce(
+            (accu, obj) => ({ ...accu, [obj.slug]: obj }),
+            {},
+          ),
           slugs: action.explorationCards.map(({ slug }) => slug),
-        }
+        },
       }
     case 'CreateGameSession':
       return {
@@ -118,27 +106,13 @@ export const reducer = (state, action) => {
         sessions: {
           loading: false,
           loaded: true,
-          data: [action.session, ...state.sessions.data]
+          data: [action.session, ...state.sessions.data],
         },
       }
     case 'VictoryPointsUpdated':
       return updateVictoryPoints(state, action.payload)
     case 'FactionsShuffled':
-      const set_sessionIndex = state.sessions.data.findIndex(session => session.id === action.payload.sessionId)
-      const set_session = state.sessions.data[set_sessionIndex]
-
-      set_session.factions = action.payload.factions
-
-      const set_sessions = [...state.sessions.data]
-      set_sessions.splice(set_sessionIndex, 1, {...set_session})
-
-      return {
-        ...state,
-        sessions: {
-          ...state.sessions,
-          data: set_sessions,
-        }
-      }
+      return factionsShuffled(state, action)
     case 'SetSessionMap':
       return setMap(state, action.payload)
     case 'ObjectiveAdded':
@@ -151,17 +125,24 @@ export const reducer = (state, action) => {
       return updatedMetadata(state, action.payload)
     default:
       console.error('unhandled action', action)
+
       return state
   }
 }
 
 const updateVictoryPoints = (state, payload) => {
-  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === payload.sessionId,
+  )
   const session = state.sessions.data[sessionIndex]
 
-  session.points = session.points.map(({faction, points: previousPoints}) => faction === payload.faction ? {faction, points: payload.points} : {faction, points: previousPoints})
+  session.points = session.points.map(({ faction, points: previousPoints }) =>
+    faction === payload.faction
+      ? { faction, points: payload.points }
+      : { faction, points: previousPoints },
+  )
   const sessions = [...state.sessions.data]
-  sessions.splice(sessionIndex, 1, {...session})
+  sessions.splice(sessionIndex, 1, { ...session })
 
   return {
     ...state,
@@ -173,12 +154,14 @@ const updateVictoryPoints = (state, payload) => {
 }
 
 const setMap = (state, payload) => {
-  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === payload.sessionId,
+  )
   const session = state.sessions.data[sessionIndex]
 
   session.map = payload.map
   const sessions = [...state.sessions.data]
-  sessions.splice(sessionIndex, 1, {...session})
+  sessions.splice(sessionIndex, 1, { ...session })
 
   return {
     ...state,
@@ -190,16 +173,21 @@ const setMap = (state, payload) => {
 }
 
 const addObjective = (state, payload) => {
-  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === payload.sessionId,
+  )
   const session = state.sessions.data[sessionIndex]
 
-  if (session.objectives.find(obj => obj.slug === payload.slug)) {
+  if (session.objectives.find((obj) => obj.slug === payload.slug)) {
     return state
   }
 
-  session.objectives = [...session.objectives, {slug: payload.slug, scoredBy: []}]
+  session.objectives = [
+    ...session.objectives,
+    { slug: payload.slug, scoredBy: [] },
+  ]
   const sessions = [...state.sessions.data]
-  sessions.splice(sessionIndex, 1, {...session})
+  sessions.splice(sessionIndex, 1, { ...session })
 
   return {
     ...state,
@@ -211,14 +199,18 @@ const addObjective = (state, payload) => {
 }
 
 const scoreObjective = (state, payload) => {
-  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === payload.sessionId,
+  )
   const session = state.sessions.data[sessionIndex]
 
-  session.objectives = session.objectives.map(obj => obj.slug === payload.slug
-    ? {...obj, scoredBy: [...obj.scoredBy, payload.faction] }
-    : obj)
+  session.objectives = session.objectives.map((obj) =>
+    obj.slug === payload.slug
+      ? { ...obj, scoredBy: [...obj.scoredBy, payload.faction] }
+      : obj,
+  )
   const sessions = [...state.sessions.data]
-  sessions.splice(sessionIndex, 1, {...session})
+  sessions.splice(sessionIndex, 1, { ...session })
 
   return {
     ...state,
@@ -230,14 +222,21 @@ const scoreObjective = (state, payload) => {
 }
 
 const descoreObjective = (state, payload) => {
-  const sessionIndex = state.sessions.data.findIndex(session => session.id === payload.sessionId)
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === payload.sessionId,
+  )
   const session = state.sessions.data[sessionIndex]
 
-  session.objectives = session.objectives.map(obj => obj.slug === payload.slug
-    ? {...obj, scoredBy: obj.scoredBy.filter(sb => sb !== payload.faction) }
-    : obj)
+  session.objectives = session.objectives.map((obj) =>
+    obj.slug === payload.slug
+      ? {
+          ...obj,
+          scoredBy: obj.scoredBy.filter((sb) => sb !== payload.faction),
+        }
+      : obj,
+  )
   const sessions = [...state.sessions.data]
-  sessions.splice(sessionIndex, 1, {...session})
+  sessions.splice(sessionIndex, 1, { ...session })
 
   return {
     ...state,
@@ -260,10 +259,12 @@ const updatedMetadata = (state, payload) => {
     vpCount,
   } = payload
 
-  const sessionIndex = state.sessions.data.findIndex(session => session.id === sessionId)
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === sessionId,
+  )
   const session = state.sessions.data[sessionIndex]
 
-  session.displayName =  sessionDisplayName
+  session.displayName = sessionDisplayName
   session.tts = isTTS
   session.split = isSplit
   session.start = sessionStart
@@ -272,7 +273,54 @@ const updatedMetadata = (state, payload) => {
   session.vpCount = vpCount
 
   const sessions = [...state.sessions.data]
-  sessions.splice(sessionIndex, 1, {...session})
+  sessions.splice(sessionIndex, 1, { ...session })
+
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
+  }
+}
+
+const addSession = (state, action) => {
+  const oldSession = state.sessions.data.find((s) => s.id === action.session.id)
+  const newSession = { ...action.session }
+  if (oldSession) {
+    newSession.editable = oldSession.editable || action.session.editable
+    newSession.secret = action.session.editable
+      ? action.session.secret
+      : oldSession.secret
+  }
+
+  const sessions = [
+    newSession,
+    ...state.sessions.data.filter((s) => s.id !== action.session.id),
+  ]
+  saveAllSessions(sessions)
+
+  return {
+    ...state,
+    sessions: {
+      loading: false,
+      loaded: true,
+      data: sessions,
+    },
+  }
+}
+
+const factionsShuffled = (state, action) => {
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === action.payload.sessionId,
+  )
+  const session = state.sessions.data[sessionIndex]
+
+  session.factions = action.payload.factions
+
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, { ...session })
+
   return {
     ...state,
     sessions: {

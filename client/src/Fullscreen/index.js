@@ -1,8 +1,5 @@
 import { useEffect, useCallback, useState } from 'react'
-import {
-  IconButton,
-  Tooltip,
-} from '@material-ui/core'
+import { IconButton, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Fullscreen } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +19,8 @@ export const useFullscreen = () => {
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullscreenChange)
 
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+    return () =>
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
   }, [handleFullscreenChange])
 
   const exitFullscreen = useCallback(() => {
@@ -62,15 +60,17 @@ const FullscreenButton = () => {
     document.ti4CompanionWakeLock = await navigator.wakeLock.request('screen')
   }, [])
 
-  return <Tooltip title={t('fullscreen.tooltip')} placement="bottom">
-    <IconButton
-      className={classes.button}
-      onClick={goFullscreen}
-      aria-label={t('fullscreen.tooltip')}
-    >
-      <Fullscreen />
-    </IconButton>
-  </Tooltip>
+  return (
+    <Tooltip placement="bottom" title={t('fullscreen.tooltip')}>
+      <IconButton
+        aria-label={t('fullscreen.tooltip')}
+        className={classes.button}
+        onClick={goFullscreen}
+      >
+        <Fullscreen />
+      </IconButton>
+    </Tooltip>
+  )
 }
 
 export default FullscreenButton

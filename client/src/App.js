@@ -1,11 +1,6 @@
 import { useEffect, useMemo, useReducer } from 'react'
 import clsx from 'clsx'
-import {
-  BrowserRouter as Router,
-  Link,
-  Route,
-  Switch,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import {
   AppBar,
@@ -16,7 +11,11 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core'
-import { makeStyles, createTheme, ThemeProvider } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  createTheme,
+  ThemeProvider,
+} from '@material-ui/core/styles'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { getAllSessions } from './shared/persistence'
@@ -50,17 +49,21 @@ function App() {
   const [state, dispatch] = useReducer(reducer, null, init)
   const { sessions } = state
 
-  const theme = useMemo(() => createTheme({
-    palette: {
-      type: 'dark',
-    },
-  }), [])
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          type: 'dark',
+        },
+      }),
+    [],
+  )
 
   const { fullscreen, exitFullscreen } = useFullscreen()
 
   useEffect(() => {
-    const sessions = getAllSessions()
-    dispatch({ type: 'LoadSessions', sessions })
+    const allSessions = getAllSessions()
+    dispatch({ type: 'LoadSessions', sessions: allSessions })
 
     const load = async () => {
       const objectives = await objectivesService.getAll()
@@ -75,79 +78,97 @@ function App() {
     <ThemeProvider theme={theme}>
       <Helmet>
         <title>TI4 Companion</title>
-        <meta name="description" content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further." />
-        <meta property="og:title" content="TI4 Companion" />
-        <meta property="og:description" content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further." />
+        <meta
+          content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
+          name="description"
+        />
+        <meta content="TI4 Companion" property="og:title" />
+        <meta
+          content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
+          property="og:description"
+        />
       </Helmet>
 
       <Router>
         <CssBaseline />
         <AppBar>
           <Toolbar>
-            <Link to='/' onClick={exitFullscreen}>
+            <Link onClick={exitFullscreen} to="/">
               <IconButton>
                 <img
-                  src={homeIcon}
-                  style={{ height: '1.2em', width: '1.2em', borderRadius: '50%' }}
-                  title={t('general.home')}
                   alt={t('general.home')}
+                  src={homeIcon}
+                  style={{
+                    height: '1.2em',
+                    width: '1.2em',
+                    borderRadius: '50%',
+                  }}
+                  title={t('general.home')}
                 />
               </IconButton>
             </Link>
-            <Typography className={classes.title} variant="h5"><Trans i18nKey='general.title' /></Typography>
-            { false && <LanguageSwitcher />}
+            <Typography className={classes.title} variant="h5">
+              <Trans i18nKey="general.title" />
+            </Typography>
+            {false && <LanguageSwitcher />}
           </Toolbar>
         </AppBar>
-        <Toolbar/>
+        <Toolbar />
         <Container className={clsx({ [classes.fullWidth]: fullscreen })}>
           <StateContext.Provider value={state}>
-          <DispatchContext.Provider value={dispatch}>
-            <KnowledgeBase />
-            <Box m={2}>
-              <Switch>
-                <Route path="/new">
-                  <NewSession dispatch={dispatch} />
-                </Route>
-                <Route path="/:sessionId/:secret?">
-                  <SessionProvider state={state} dispatch={dispatch}>
-                    {({
-                      sessionService,
-                      session,
-                      loading,
-                      editable,
-                      shuffleFactions,
-                      setFactions,
-                      updateFactionPoints,
-                    }) => (loading || !session) ? null : <SessionView
-                      sessionService={sessionService}
-                      session={session}
-                      editable={editable}
-                      shuffleFactions={shuffleFactions}
-                      setFactions={setFactions}
-                      updateFactionPoints={updateFactionPoints}
-                    />}
-                  </SessionProvider>
-                </Route>
-                <Route path="/">
-                  <SessionsList
-                    sessions={sessions.data}
-                    loading={sessions.loading || !sessions.loaded}
-                  />
-                </Route>
-              </Switch>
-            </Box>
-          </DispatchContext.Provider>
+            <DispatchContext.Provider value={dispatch}>
+              <KnowledgeBase />
+              <Box m={2}>
+                <Switch>
+                  <Route path="/new">
+                    <NewSession dispatch={dispatch} />
+                  </Route>
+                  <Route path="/:sessionId/:secret?">
+                    <SessionProvider dispatch={dispatch} state={state}>
+                      {({
+                        sessionService,
+                        session,
+                        loading,
+                        editable,
+                        shuffleFactions,
+                        setFactions,
+                        updateFactionPoints,
+                      }) =>
+                        loading || !session ? null : (
+                          <SessionView
+                            editable={editable}
+                            session={session}
+                            sessionService={sessionService}
+                            setFactions={setFactions}
+                            shuffleFactions={shuffleFactions}
+                            updateFactionPoints={updateFactionPoints}
+                          />
+                        )
+                      }
+                    </SessionProvider>
+                  </Route>
+                  <Route path="/">
+                    <SessionsList
+                      loading={sessions.loading || !sessions.loaded}
+                      sessions={sessions.data}
+                    />
+                  </Route>
+                </Switch>
+              </Box>
+            </DispatchContext.Provider>
           </StateContext.Provider>
         </Container>
       </Router>
     </ThemeProvider>
-  );
+  )
 }
 
 function SignalRConnectedApp() {
-  return <SignalRConnectionProvider>
-    <App/>
-  </SignalRConnectionProvider>
+  return (
+    <SignalRConnectionProvider>
+      <App />
+    </SignalRConnectionProvider>
+  )
 }
 
 export default SignalRConnectedApp

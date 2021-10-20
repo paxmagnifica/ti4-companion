@@ -11,13 +11,16 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@material-ui/core'
-import { Menu, Assistant, Map as MapIcon, Details, ChevronRight, ChevronLeft } from '@material-ui/icons'
-import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles'
 import {
-  useHistory,
-  useRouteMatch,
-  generatePath,
-} from 'react-router-dom'
+  Menu,
+  Assistant,
+  Map as MapIcon,
+  Details,
+  ChevronRight,
+  ChevronLeft,
+} from '@material-ui/icons'
+import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles'
+import { useHistory, useRouteMatch, generatePath } from 'react-router-dom'
 
 import useSmallViewport from '../shared/useSmallViewport'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
@@ -33,7 +36,7 @@ const StyledTabs = withStyles({
       backgroundColor: '#fff',
     },
   },
-})((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+})((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />)
 
 const StyledTab = withStyles((theme) => ({
   root: {
@@ -50,7 +53,7 @@ const StyledTab = withStyles((theme) => ({
   wrapper: {
     flexDirection: 'row',
   },
-}))((props) => <Tab disableRipple {...props} />);
+}))((props) => <Tab disableRipple {...props} />)
 
 const VIEW = {
   overview: 0,
@@ -58,7 +61,7 @@ const VIEW = {
   details: 2,
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
@@ -83,7 +86,7 @@ function SessionNavigation() {
       return otherParams
     }
 
-    return { secret, ...otherParams}
+    return { secret, ...otherParams }
   }, [params])
   const history = useHistory()
   const view = useMemo(() => {
@@ -98,59 +101,92 @@ function SessionNavigation() {
     return VIEW.overview
   }, [mapRoute, detailsRoute])
 
-  const go = useMemo(() => ({
-    [VIEW.overview]: () => history.push(generatePath(SESSION_VIEW_ROUTES.main, sanitizedParams)),
-    [VIEW.map]: () => history.push(generatePath(SESSION_VIEW_ROUTES.map, sanitizedParams)),
-    [VIEW.details]: () => history.push(generatePath(SESSION_VIEW_ROUTES.details, sanitizedParams)),
-  }), [history, sanitizedParams])
-  const handleChange = useCallback((event, newView) => go[newView](), [go]);
-  const goAndCloseDrawer = useCallback(view => {
-    go[view]()
-    setDrawerOpen(false)
-  }, [go])
+  const go = useMemo(
+    () => ({
+      [VIEW.overview]: () =>
+        history.push(generatePath(SESSION_VIEW_ROUTES.main, sanitizedParams)),
+      [VIEW.map]: () =>
+        history.push(generatePath(SESSION_VIEW_ROUTES.map, sanitizedParams)),
+      [VIEW.details]: () =>
+        history.push(
+          generatePath(SESSION_VIEW_ROUTES.details, sanitizedParams),
+        ),
+    }),
+    [history, sanitizedParams],
+  )
+  const handleChange = useCallback((event, newView) => go[newView](), [go])
+  const goAndCloseDrawer = useCallback(
+    (goToView) => {
+      go[goToView]()
+      setDrawerOpen(false)
+    },
+    [go],
+  )
 
   if (small) {
-    return <>
-      <Drawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        anchor='left'
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={() => setDrawerOpen(false)}>
-            {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListItem button onClick={() => goAndCloseDrawer(VIEW.overview)}>
-            <ListItemIcon><Assistant /></ListItemIcon>
-            <ListItemText primary={t('sessionView.nav.overview')} />
-          </ListItem>
-          <ListItem button onClick={() => goAndCloseDrawer(VIEW.map)}>
-            <ListItemIcon><MapIcon /></ListItemIcon>
-            <ListItemText primary={t('sessionView.nav.map')} />
-          </ListItem>
-          <ListItem button onClick={() => goAndCloseDrawer(VIEW.details)}>
-            <ListItemIcon><Details /></ListItemIcon>
-            <ListItemText primary={t('sessionView.nav.details')} />
-          </ListItem>
-        </List>
-      </Drawer>
-      <IconButton
-        onClick={() => setDrawerOpen(true)}
-        edge="start"
-      >
-        <Menu />
-      </IconButton>
-    </>
+    return (
+      <>
+        <Drawer
+          anchor="left"
+          onClose={() => setDrawerOpen(false)}
+          open={drawerOpen}
+        >
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={() => setDrawerOpen(false)}>
+              {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <ListItem button onClick={() => goAndCloseDrawer(VIEW.overview)}>
+              <ListItemIcon>
+                <Assistant />
+              </ListItemIcon>
+              <ListItemText primary={t('sessionView.nav.overview')} />
+            </ListItem>
+            <ListItem button onClick={() => goAndCloseDrawer(VIEW.map)}>
+              <ListItemIcon>
+                <MapIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('sessionView.nav.map')} />
+            </ListItem>
+            <ListItem button onClick={() => goAndCloseDrawer(VIEW.details)}>
+              <ListItemIcon>
+                <Details />
+              </ListItemIcon>
+              <ListItemText primary={t('sessionView.nav.details')} />
+            </ListItem>
+          </List>
+        </Drawer>
+        <IconButton edge="start" onClick={() => setDrawerOpen(true)}>
+          <Menu />
+        </IconButton>
+      </>
+    )
   }
 
-  return <StyledTabs value={view} onChange={handleChange}>
-    <StyledTab value={VIEW.overview} icon={<Assistant />} label={t('sessionView.nav.overview')} title={t('sessionView.nav.overview')} />
-    <StyledTab value={VIEW.map} icon={<MapIcon />} label={t('sessionView.nav.map')} title={t('sessionView.nav.map')} />
-    <StyledTab value={VIEW.details} icon={<Details />} label={t('sessionView.nav.details')} title={t('sessionView.nav.details')} />
-  </StyledTabs>
+  return (
+    <StyledTabs onChange={handleChange} value={view}>
+      <StyledTab
+        icon={<Assistant />}
+        label={t('sessionView.nav.overview')}
+        title={t('sessionView.nav.overview')}
+        value={VIEW.overview}
+      />
+      <StyledTab
+        icon={<MapIcon />}
+        label={t('sessionView.nav.map')}
+        title={t('sessionView.nav.map')}
+        value={VIEW.map}
+      />
+      <StyledTab
+        icon={<Details />}
+        label={t('sessionView.nav.details')}
+        title={t('sessionView.nav.details')}
+        value={VIEW.details}
+      />
+    </StyledTabs>
+  )
 }
 
 export default SessionNavigation

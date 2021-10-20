@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import CONFIG from './config'
 
-export const SignalRConnectionContext = React.createContext();
+export const SignalRConnectionContext = React.createContext()
 
 export function SignalRConnectionProvider({ children }) {
   const [signalRConnection, setSignalRConnection] = useState(null)
@@ -17,15 +17,15 @@ export function SignalRConnectionProvider({ children }) {
       try {
         await connection.start()
         setSignalRConnection(connection)
-        console.log("SignalR Connected.")
+        console.log('SignalR Connected.')
       } catch (err) {
         console.log(err)
         setTimeout(start, 5000)
       }
-    };
+    }
 
     connection.onclose(async () => {
-        await start()
+      await start()
     })
 
     start()
@@ -37,7 +37,9 @@ export function SignalRConnectionProvider({ children }) {
     return null
   }
 
-  return <SignalRConnectionContext.Provider value={signalRConnection}>
-    {children}
-  </SignalRConnectionContext.Provider>
+  return (
+    <SignalRConnectionContext.Provider value={signalRConnection}>
+      {children}
+    </SignalRConnectionContext.Provider>
+  )
 }

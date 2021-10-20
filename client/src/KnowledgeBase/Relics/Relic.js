@@ -1,7 +1,5 @@
 import { useState, useMemo } from 'react'
-import {
-  Dialog,
-} from '@material-ui/core'
+import { Dialog } from '@material-ui/core'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
@@ -76,90 +74,91 @@ const GINORMOUS_SIZE = {
   fontSize: '2em',
 }
 
-function Relic({
-  slug,
-  small,
-  big,
-  onClick,
-  className,
-  highlight,
-}) {
+function Relic({ slug, small, big, onClick, className, highlight }) {
   const { t } = useTranslation()
-  const stylesInit = small
-      ? SMALL_SIZE
-      : big
-        ? GINORMOUS_SIZE
-        : NORMAL_SIZE
+  let stylesInit = NORMAL_SIZE
+  if (small) {
+    stylesInit = SMALL_SIZE
+  } else if (big) {
+    stylesInit = GINORMOUS_SIZE
+  }
   const background = sprite
   const classes = useStyles({ background, ...stylesInit })
 
-  const textRenderer = useMemo(() => text => highlight
-    ? <Highlighter
-      searchWords={highlight}
-      autoEscape={true}
-      textToHighlight={text}
-    />
-    : text, [highlight])
+  const textRenderer = useMemo(
+    () => (text) =>
+      highlight ? (
+        <Highlighter
+          autoEscape
+          searchWords={highlight}
+          textToHighlight={text}
+        />
+      ) : (
+        text
+      ),
+    [highlight],
+  )
 
-  const { title, effect } = useMemo(() => ({
-    title: t(`relics.${slug}.title`),
-    effect: t(`relics.${slug}.effect`),
-  }), [slug, t])
+  const { title, effect } = useMemo(
+    () => ({
+      title: t(`relics.${slug}.title`),
+      effect: t(`relics.${slug}.effect`),
+    }),
+    [slug, t],
+  )
 
-  return <div
-    onClick={onClick}
-    className={clsx(className, classes.root)}
-  >
-    <div className={clsx(classes.mask, classes.titleMask)}><p>{textRenderer(title)}</p></div>
-    <div className={clsx(classes.mask, classes.effectMask)}><p>{textRenderer(effect)}</p></div>
-  </div>
+  return (
+    <div className={clsx(className, classes.root)} onClick={onClick}>
+      <div className={clsx(classes.mask, classes.titleMask)}>
+        <p>{textRenderer(title)}</p>
+      </div>
+      <div className={clsx(classes.mask, classes.effectMask)}>
+        <p>{textRenderer(effect)}</p>
+      </div>
+    </div>
+  )
 }
 
 const useWithModalStyles = makeStyles({
   dialog: {
     '& .MuiPaper-root': {
       backgroundColor: 'transparent',
-    }
+    },
   },
   clickable: {
     cursor: 'pointer',
-  }
+  },
 })
 
-function RelicWithModal({
-  small,
-  ...other
-}) {
+function RelicWithModal({ small, ...other }) {
   const classes = useWithModalStyles()
   const [bigOpen, setBigOpen] = useState(false)
 
   if (!small) {
-    return <>
+    return (
+      <>
+        <Relic small={small} {...other} />
+      </>
+    )
+  }
+
+  return (
+    <>
       <Relic
+        className={classes.clickable}
+        onClick={() => setBigOpen(true)}
         small={small}
         {...other}
       />
+      <Dialog
+        className={classes.dialog}
+        onClose={() => setBigOpen(false)}
+        open={bigOpen}
+      >
+        <Relic big {...other} />
+      </Dialog>
     </>
-  }
-
-  return <>
-    <Relic
-      className={classes.clickable}
-      small={small}
-      onClick={() => setBigOpen(true)}
-      {...other}
-    />
-    <Dialog
-      className={classes.dialog}
-      open={bigOpen}
-      onClose={() => setBigOpen(false)}
-    >
-      <Relic
-        big={true}
-        {...other}
-      />
-    </Dialog>
-  </>
+  )
 }
 
 export default RelicWithModal

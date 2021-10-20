@@ -26,10 +26,13 @@ function LanguageSwitcher() {
   const { t, i18n } = useTranslation()
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const flags = useMemo(() => ({
-    pl: <Flags.PL className={classes.flag} />,
-    en: <Flags.GB className={classes.flag} />,
-  }), [classes.flag])
+  const flags = useMemo(
+    () => ({
+      pl: <Flags.PL className={classes.flag} />,
+      en: <Flags.GB className={classes.flag} />,
+    }),
+    [classes.flag],
+  )
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -39,36 +42,37 @@ function LanguageSwitcher() {
     setAnchorEl(null)
   }
 
-  const changeLang = useCallback(lng => {
-    i18n.changeLanguage(lng)
-    setAnchorEl(null)
-  }, [i18n, setAnchorEl])
+  const changeLang = useCallback(
+    (lng) => {
+      i18n.changeLanguage(lng)
+      setAnchorEl(null)
+    },
+    [i18n, setAnchorEl],
+  )
 
-  return <>
-    <Button onClick={handleClick} title={t('general.switchLanguage')}>
-      {flags[i18n.resolvedLanguage]}
-    </Button>
-    <Menu
-      getContentAnchorEl={null}
-      anchorEl={anchorEl}
-      keepMounted
-      open={Boolean(anchorEl)}
-      onClose={handleClose}
-    >
-      <MenuItem onClick={() => changeLang('en')}>
-        <ListItemIcon>
-          {flags.en}
-        </ListItemIcon>
-        <ListItemText>{langNames.en}</ListItemText>
-      </MenuItem>
-      <MenuItem onClick={() => changeLang('pl')}>
-        <ListItemIcon>
-          {flags.pl}
-        </ListItemIcon>
-        <ListItemText>{langNames.pl}</ListItemText>
-      </MenuItem>
-    </Menu>
-  </>
+  return (
+    <>
+      <Button onClick={handleClick} title={t('general.switchLanguage')}>
+        {flags[i18n.resolvedLanguage]}
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        getContentAnchorEl={null}
+        keepMounted
+        onClose={handleClose}
+        open={Boolean(anchorEl)}
+      >
+        <MenuItem onClick={() => changeLang('en')}>
+          <ListItemIcon>{flags.en}</ListItemIcon>
+          <ListItemText>{langNames.en}</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={() => changeLang('pl')}>
+          <ListItemIcon>{flags.pl}</ListItemIcon>
+          <ListItemText>{langNames.pl}</ListItemText>
+        </MenuItem>
+      </Menu>
+    </>
+  )
 }
 
 export default LanguageSwitcher

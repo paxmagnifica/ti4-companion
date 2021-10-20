@@ -1,7 +1,5 @@
 import { useState, useMemo } from 'react'
-import {
-  Dialog,
-} from '@material-ui/core'
+import { Dialog } from '@material-ui/core'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
@@ -66,7 +64,7 @@ const useStyles = makeStyles({
       top: '22%',
       left: '5%',
       width: '90%',
-    }
+    },
   },
   effectMask: {
     top: '24%',
@@ -87,7 +85,7 @@ const useStyles = makeStyles({
     '&.techSkip': {
       top: '39%',
       height: '39%',
-    }
+    },
   },
   resourcesMask: {
     left: '16%',
@@ -108,7 +106,7 @@ const useStyles = makeStyles({
     direction: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 })
 
 const SPRITES = {
@@ -151,11 +149,13 @@ function ExplorationCard({
   className,
   highlight,
 }) {
-  const stylesInit = small
-      ? SMALL_SIZE
-      : big
-        ? GINORMOUS_SIZE
-        : NORMAL_SIZE
+  let stylesInit = NORMAL_SIZE
+  if (small) {
+    stylesInit = SMALL_SIZE
+  } else if (big) {
+    stylesInit = GINORMOUS_SIZE
+  }
+
   const background = SPRITES[planetType]
   const classes = useStyles({ background, ...stylesInit })
   const { t } = useTranslation()
@@ -167,19 +167,28 @@ function ExplorationCard({
       }
     }
 
-    if (planetType === PLANET_TYPE.industrial && techSkip === TECHNOLOGY.propulsion) {
+    if (
+      planetType === PLANET_TYPE.industrial &&
+      techSkip === TECHNOLOGY.propulsion
+    ) {
       return {
         backgroundPosition: '-200% 0',
       }
     }
 
-    if (planetType === PLANET_TYPE.industrial && techSkip === TECHNOLOGY.biotic) {
+    if (
+      planetType === PLANET_TYPE.industrial &&
+      techSkip === TECHNOLOGY.biotic
+    ) {
       return {
         backgroundPosition: '-300% 0',
       }
     }
 
-    if (planetType === PLANET_TYPE.industrial && techSkip === TECHNOLOGY.cybernetic) {
+    if (
+      planetType === PLANET_TYPE.industrial &&
+      techSkip === TECHNOLOGY.cybernetic
+    ) {
       return {
         backgroundPosition: '-400% 0',
       }
@@ -200,79 +209,109 @@ function ExplorationCard({
     return {}
   }, [relic, attachment, techSkip, planetType])
 
-  const textRenderer = useMemo(() => text => highlight
-    ? <Highlighter
-      searchWords={highlight}
-      autoEscape={true}
-      textToHighlight={text}
-    />
-    : text, [highlight])
+  const textRenderer = useMemo(
+    () => (text) =>
+      highlight ? (
+        <Highlighter
+          autoEscape
+          searchWords={highlight}
+          textToHighlight={text}
+        />
+      ) : (
+        text
+      ),
+    [highlight],
+  )
 
-  const { title, effect } = useMemo(() => ({
-    title: t(`explorationCards.${slug}.title`),
-    effect: t(`explorationCards.${slug}.effect`),
-  }), [t, slug])
+  const { title, effect } = useMemo(
+    () => ({
+      title: t(`explorationCards.${slug}.title`),
+      effect: t(`explorationCards.${slug}.effect`),
+    }),
+    [t, slug],
+  )
 
-  return <>
-    <div
-      onClick={onClick}
-      className={clsx(className, classes.root)}
-      style={styles}
-    >
-      <div className={clsx(classes.mask, classes.titleMask, { techSkip: techSkip || techSkip === 0 })}><p>{textRenderer(title)}</p></div>
-      <div className={clsx(classes.mask, classes.effectMask, { relic, attachment, techSkip: techSkip || techSkip === 0 })}><p>{textRenderer(effect)}</p></div>
-      { attachment && <div className={clsx(classes.mask, classes.resourcesMask)}><p>{resources}</p></div> }
-      { attachment && <div className={clsx(classes.mask, classes.influenceMask)}><p>{influence}</p></div>}
-    </div>
-    <p className={classes.number}><strong>{numberOfCards}</strong> in deck</p>
-  </>
+  return (
+    <>
+      <div
+        className={clsx(className, classes.root)}
+        onClick={onClick}
+        style={styles}
+      >
+        <div
+          className={clsx(classes.mask, classes.titleMask, {
+            techSkip: techSkip || techSkip === 0,
+          })}
+        >
+          <p>{textRenderer(title)}</p>
+        </div>
+        <div
+          className={clsx(classes.mask, classes.effectMask, {
+            relic,
+            attachment,
+            techSkip: techSkip || techSkip === 0,
+          })}
+        >
+          <p>{textRenderer(effect)}</p>
+        </div>
+        {attachment && (
+          <div className={clsx(classes.mask, classes.resourcesMask)}>
+            <p>{resources}</p>
+          </div>
+        )}
+        {attachment && (
+          <div className={clsx(classes.mask, classes.influenceMask)}>
+            <p>{influence}</p>
+          </div>
+        )}
+      </div>
+      <p className={classes.number}>
+        <strong>{numberOfCards}</strong> in deck
+      </p>
+    </>
+  )
 }
 
 const useWithModalStyles = makeStyles({
   dialog: {
     '& .MuiPaper-root': {
       backgroundColor: 'transparent',
-    }
+    },
   },
   clickable: {
     cursor: 'pointer',
-  }
+  },
 })
 
-function ExplorationCardWithModal({
-  small,
-  ...other
-}) {
+function ExplorationCardWithModal({ small, ...other }) {
   const classes = useWithModalStyles()
   const [bigOpen, setBigOpen] = useState(false)
 
   if (!small) {
-    return <>
+    return (
+      <>
+        <ExplorationCard small={small} {...other} />
+      </>
+    )
+  }
+
+  return (
+    <>
       <ExplorationCard
+        className={classes.clickable}
+        onClick={() => setBigOpen(true)}
         small={small}
         {...other}
       />
+      <Dialog
+        className={classes.dialog}
+        onClose={() => setBigOpen(false)}
+        open={bigOpen}
+      >
+        <ExplorationCard big {...other} />
+      </Dialog>
     </>
-  }
-
-  return <>
-    <ExplorationCard
-      className={classes.clickable}
-      small={small}
-      onClick={() => setBigOpen(true)}
-      {...other}
-    />
-    <Dialog
-      className={classes.dialog}
-      open={bigOpen}
-      onClose={() => setBigOpen(false)}
-    >
-      <ExplorationCard
-        big={true}
-        {...other}
-      />
-    </Dialog>
-  </>
+  )
 }
 
 export default ExplorationCardWithModal
