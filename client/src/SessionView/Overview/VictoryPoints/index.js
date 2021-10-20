@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../../shared/useSmallViewport'
+/* eslint-disable camelcase */
 import vp10_0 from '../../../assets/victory-points-10/0.jpg'
 import vp10_1 from '../../../assets/victory-points-10/1.jpg'
 import vp10_2 from '../../../assets/victory-points-10/2.jpg'
@@ -117,7 +118,7 @@ function VictoryPoints({ editable, target, onChange, factions, points }) {
       >
         {[...Array(target + 1).keys()].map((numberOfPoints) => {
           const factionsWithThisManyPoints = points.filter(
-            ({ faction, points }) => points === numberOfPoints,
+            ({ points: factionPoints }) => factionPoints === numberOfPoints,
           )
 
           return (
@@ -150,7 +151,7 @@ function VictoryPoints({ editable, target, onChange, factions, points }) {
                       }
                       updatePoints={
                         editable
-                          ? (points) => onChange(faction, points)
+                          ? (factionPoints) => onChange(faction, factionPoints)
                           : undefined
                       }
                     />

@@ -45,26 +45,29 @@ export function SessionProvider({ children, state, dispatch }) {
   const { sessions } = state
 
   const shuffleFactions = useCallback(
-    (sessionId) => {
-      const session = sessions.data.find((s) => s.id === sessionId)
+    (sessionToShuffleId) => {
+      const session = sessions.data.find((s) => s.id === sessionToShuffleId)
       const shuffledFactions = shuffle(session.factions)
-      const payload = { factions: shuffledFactions, sessionId }
+      const payload = {
+        factions: shuffledFactions,
+        sessionId: sessionToShuffleId,
+      }
       comboDispatch({ type: 'FactionsShuffled', payload })
     },
     [sessions.data, comboDispatch],
   )
 
   const setFactions = useCallback(
-    (sessionId, factions) => {
-      const payload = { factions, sessionId }
+    (targetSessionId, factions) => {
+      const payload = { factions, sessionId: targetSessionId }
       comboDispatch({ type: 'FactionsShuffled', payload })
     },
     [comboDispatch],
   )
 
   const updateFactionPoints = useCallback(
-    ({ sessionId, faction, points }) => {
-      const payload = { sessionId, faction, points }
+    ({ sessionId: targetSessionId, faction, points }) => {
+      const payload = { sessionId: targetSessionId, faction, points }
       comboDispatch({ type: 'VictoryPointsUpdated', payload })
     },
     [comboDispatch],

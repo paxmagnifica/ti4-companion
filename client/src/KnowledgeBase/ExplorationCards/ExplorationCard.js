@@ -149,7 +149,13 @@ function ExplorationCard({
   className,
   highlight,
 }) {
-  const stylesInit = small ? SMALL_SIZE : big ? GINORMOUS_SIZE : NORMAL_SIZE
+  let stylesInit = NORMAL_SIZE
+  if (small) {
+    stylesInit = SMALL_SIZE
+  } else if (big) {
+    stylesInit = GINORMOUS_SIZE
+  }
+
   const background = SPRITES[planetType]
   const classes = useStyles({ background, ...stylesInit })
   const { t } = useTranslation()

@@ -44,31 +44,7 @@ export const reducer = (state, action) => {
         },
       }
     case 'AddSession':
-      const oldSession = state.sessions.data.find(
-        (s) => s.id === action.session.id,
-      )
-      const newSession = { ...action.session }
-      if (oldSession) {
-        newSession.editable = oldSession.editable || action.session.editable
-        newSession.secret = action.session.editable
-          ? action.session.secret
-          : oldSession.secret
-      }
-
-      const sessions = [
-        newSession,
-        ...state.sessions.data.filter((s) => s.id !== action.session.id),
-      ]
-      saveAllSessions(sessions)
-
-      return {
-        ...state,
-        sessions: {
-          loading: false,
-          loaded: true,
-          data: sessions,
-        },
-      }
+      return addSession(state, action)
     case 'LoadObjectives':
       return {
         ...state,
@@ -136,23 +112,7 @@ export const reducer = (state, action) => {
     case 'VictoryPointsUpdated':
       return updateVictoryPoints(state, action.payload)
     case 'FactionsShuffled':
-      const set_sessionIndex = state.sessions.data.findIndex(
-        (session) => session.id === action.payload.sessionId,
-      )
-      const set_session = state.sessions.data[set_sessionIndex]
-
-      set_session.factions = action.payload.factions
-
-      const set_sessions = [...state.sessions.data]
-      set_sessions.splice(set_sessionIndex, 1, { ...set_session })
-
-      return {
-        ...state,
-        sessions: {
-          ...state.sessions,
-          data: set_sessions,
-        },
-      }
+      return factionsShuffled(state, action)
     case 'SetSessionMap':
       return setMap(state, action.payload)
     case 'ObjectiveAdded':
@@ -311,6 +271,52 @@ const updatedMetadata = (state, payload) => {
   session.end = sessionEnd
   session.duration = duration
   session.vpCount = vpCount
+
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, { ...session })
+
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
+  }
+}
+
+const addSession = (state, action) => {
+  const oldSession = state.sessions.data.find((s) => s.id === action.session.id)
+  const newSession = { ...action.session }
+  if (oldSession) {
+    newSession.editable = oldSession.editable || action.session.editable
+    newSession.secret = action.session.editable
+      ? action.session.secret
+      : oldSession.secret
+  }
+
+  const sessions = [
+    newSession,
+    ...state.sessions.data.filter((s) => s.id !== action.session.id),
+  ]
+  saveAllSessions(sessions)
+
+  return {
+    ...state,
+    sessions: {
+      loading: false,
+      loaded: true,
+      data: sessions,
+    },
+  }
+}
+
+const factionsShuffled = (state, action) => {
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === action.payload.sessionId,
+  )
+  const session = state.sessions.data[sessionIndex]
+
+  session.factions = action.payload.factions
 
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, { ...session })

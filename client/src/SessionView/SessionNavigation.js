@@ -116,8 +116,8 @@ function SessionNavigation() {
   )
   const handleChange = useCallback((event, newView) => go[newView](), [go])
   const goAndCloseDrawer = useCallback(
-    (view) => {
-      go[view]()
+    (goToView) => {
+      go[goToView]()
       setDrawerOpen(false)
     },
     [go],

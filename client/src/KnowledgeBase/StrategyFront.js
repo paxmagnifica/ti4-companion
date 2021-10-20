@@ -260,15 +260,15 @@ function StrategyFront({ strategy, small }) {
       <ul className={clsx(classes.primaryAbility, strategy)}>
         {t(`strategyCards.${strategy}.primary`)
           .split('\n')
-          .map((t, i) => (
-            <li key={i}>{t}</li>
+          .map((l) => (
+            <li key={l}>{l}</li>
           ))}
       </ul>
       <ul className={clsx(classes.secondaryAbility, strategy)}>
         {t(`strategyCards.${strategy}.secondary`)
           .split('\n')
-          .map((t, i) => (
-            <li key={i}>{t}</li>
+          .map((l) => (
+            <li key={l}>{l}</li>
           ))}
       </ul>
       <img alt={strategy} src={img} title={strategy} />

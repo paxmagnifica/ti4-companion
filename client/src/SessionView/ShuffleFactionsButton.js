@@ -38,8 +38,9 @@ function ShuffleFactionsButton({ factions, shuffleFactions, setFactions }) {
 
     setFactionsBeforeShuffle(factions)
     setShuffling(true)
-    for (let i = 0; i < shuffles; ++i) {
+    for (let i = 0; i < shuffles; i += 1) {
       shuffleFactions()
+      // eslint-disable-next-line no-await-in-loop
       await new Promise((resolve) =>
         setTimeout(resolve, 80 + 40 * Math.floor(i / 10)),
       )

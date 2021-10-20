@@ -76,7 +76,12 @@ const GINORMOUS_SIZE = {
 
 function Relic({ slug, small, big, onClick, className, highlight }) {
   const { t } = useTranslation()
-  const stylesInit = small ? SMALL_SIZE : big ? GINORMOUS_SIZE : NORMAL_SIZE
+  let stylesInit = NORMAL_SIZE
+  if (small) {
+    stylesInit = SMALL_SIZE
+  } else if (big) {
+    stylesInit = GINORMOUS_SIZE
+  }
   const background = sprite
   const classes = useStyles({ background, ...stylesInit })
 

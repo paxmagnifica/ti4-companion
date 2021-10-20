@@ -14,7 +14,17 @@ import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
 const useStyles = makeStyles({
   objectiveContainer: {
     padding: 0,
-    margin: ({ small, fullscreen }) => (small ? 6 : fullscreen ? '1vw' : 18),
+    margin: ({ small, fullscreen }) => {
+      if (small) {
+        return 6
+      }
+
+      if (fullscreen) {
+        return '1vw'
+      }
+
+      return 18
+    },
     display: 'flex',
     alignItems: 'flex-start',
   },

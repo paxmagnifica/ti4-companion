@@ -82,7 +82,9 @@ function SessionView({
             {editable && (
               <ShuffleFactionsButton
                 factions={session.factions}
-                setFactions={(factions) => setFactions(session.id, factions)}
+                setFactions={(factionsToSet) =>
+                  setFactions(session.id, factionsToSet)
+                }
                 shuffleFactions={() => shuffleFactions(session.id)}
               />
             )}

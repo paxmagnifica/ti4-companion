@@ -16,7 +16,7 @@ const useRealTimeSession = (sessionId) => {
 
   useEffect(() => {
     if (!sessionId) {
-      return
+      return () => null
     }
 
     signalRConnection.invoke('UnsubscribeFromSession', sessionId)

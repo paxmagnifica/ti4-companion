@@ -121,10 +121,10 @@ function Overview({
   const { t } = useTranslation()
 
   const updateFactionPointsInSession = useCallback(
-    (faction, points) =>
+    (factionToUpdate, points) =>
       updateFactionPoints({
         sessionId: session.id,
-        faction,
+        faction: factionToUpdate,
         points,
       }),
     [session.id, updateFactionPoints],
