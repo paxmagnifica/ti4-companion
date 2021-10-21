@@ -32,8 +32,8 @@ Check docker-compose which services are available on which host ports.
 
 If you run the application against an empty database, 2 sessions will be created with static Guids:
 
-- `1811a152-b64c-41cd-bdfd-8885fdfb7620`
-- `6fd5c725-30cd-4320-8889-c2f6427ba365`
+- `1811a152-b64c-41cd-bdfd-8885fdfb7620` with the same secret
+- `6fd5c725-30cd-4320-8889-c2f6427ba365` with the same secret
 
 so you can check the installation by trying to hit `https://localhost:3000/6fd5c725-30cd-4320-8889-c2f6427ba365` or the other one
 

@@ -10,7 +10,7 @@ import secretObjective from '../assets/objective-secret.png'
 import reverseObjective from '../assets/objective-1-reverse.jpg'
 import { StateContext } from '../state'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     maxHeight: '90vh',
     position: 'relative',
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 0,
     borderRadius: '5%',
   },
-}))
+})
 
 const SMALL_SIZE = {
   width: 100,
@@ -98,6 +98,8 @@ const getStyles = (size) =>
   }[size] || NORMAL_SIZE)
 
 function Objective({
+  deletable,
+  session,
   size,
   title,
   slug,
@@ -192,11 +194,7 @@ function ObjectiveWithModal({ size, reverse, ...other }) {
   const [bigObjectiveOpen, setBigObjectiveOpen] = useState(false)
 
   if (reverse || size !== 'small') {
-    return (
-      <>
-        <Objective reverse={reverse} size={size} {...other} />
-      </>
-    )
+    return <Objective reverse={reverse} size={size} {...other} />
   }
 
   return (

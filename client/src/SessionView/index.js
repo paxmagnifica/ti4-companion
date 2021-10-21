@@ -81,6 +81,7 @@ function SessionView({
             <FullscreenButton />
             {editable && (
               <ShuffleFactionsButton
+                session={session}
                 factions={session.factions}
                 setFactions={(factionsToSet) =>
                   setFactions(session.id, factionsToSet)
@@ -108,8 +109,6 @@ function SessionView({
           <Overview
             editable={editable}
             session={session}
-            setFactions={setFactions}
-            shuffleFactions={shuffleFactions}
             updateFactionPoints={updateFactionPoints}
           />
         </Route>

@@ -117,6 +117,8 @@ export const reducer = (state, action) => {
       return setMap(state, action.payload)
     case 'ObjectiveAdded':
       return addObjective(state, action.payload)
+    case 'ObjectiveDeleted':
+      return deleteObjective(state, action.payload)
     case 'ObjectiveScored':
       return scoreObjective(state, action.payload)
     case 'ObjectiveDescored':
@@ -198,6 +200,25 @@ const addObjective = (state, payload) => {
   }
 }
 
+const deleteObjective = (state, payload) => {
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === payload.sessionId,
+  )
+  const session = state.sessions.data[sessionIndex]
+
+  session.objectives = session.objectives.filter((o) => o.slug !== payload.slug)
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, { ...session })
+
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
+  }
+}
+
 const scoreObjective = (state, payload) => {
   const sessionIndex = state.sessions.data.findIndex(
     (session) => session.id === payload.sessionId,
@@ -206,7 +227,13 @@ const scoreObjective = (state, payload) => {
 
   session.objectives = session.objectives.map((obj) =>
     obj.slug === payload.slug
-      ? { ...obj, scoredBy: [...obj.scoredBy, payload.faction] }
+      ? {
+          ...obj,
+          scoredBy: [
+            ...obj.scoredBy.filter((k) => k !== payload.faction),
+            payload.faction,
+          ],
+        }
       : obj,
   )
   const sessions = [...state.sessions.data]

@@ -107,13 +107,7 @@ function FactionNutshells({
   })
 }
 
-function Overview({
-  editable,
-  session,
-  shuffleFactions,
-  setFactions,
-  updateFactionPoints,
-}) {
+function Overview({ editable, session, updateFactionPoints }) {
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
   const [faction, setFaction] = useState(null)

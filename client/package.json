@@ -48,7 +48,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "lint": "eslint --fix --quiet --config .eslintrc.json ."
   },
   "browserslist": {
     "production": [

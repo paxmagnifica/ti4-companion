@@ -56,6 +56,9 @@ const factory = (options = { debug: true }) =>
               reward: {
                 0: 'victory point',
               },
+              confirmation: {
+                title: 'Are you sure?',
+              },
             },
             sessionView: {
               nav: {
@@ -153,6 +156,11 @@ const factory = (options = { debug: true }) =>
                   title: 'Strategy Cards',
                 },
               },
+            },
+            deletePO: {
+              tooltip: 'Remove Public Objective',
+              content:
+                'There are already points scored, are you sure you want to delete a Public Objective?',
             },
           },
         },

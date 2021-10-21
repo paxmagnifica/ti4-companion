@@ -77,16 +77,19 @@ namespace server.Controllers
         public List<ScorableObjectiveDto> Objectives { get; internal set; }
         private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)
         {
+            IEnumerable<string> deletedObjectives = (events ?? new List<GameEvent>())
+                .Where(ge => ge.EventType == nameof(ObjectiveDeleted))
+                .Select(ge => ObjectiveDeleted.GetPayload(ge).Slug);
             var objectiveDictionary = new Dictionary<string, List<string>>();
 
-            IEnumerable<GameEvent> objectivesAddedEvents = (events ?? new List<GameEvent>())
+            IEnumerable<string> objectiveSlugs = (events ?? new List<GameEvent>())
                 .Where(ge => ge.EventType == nameof(ObjectiveAdded))
-                .OrderBy(ge => ge.HappenedAt);
-            foreach (var gameEvent in objectivesAddedEvents)
+                .OrderBy(ge => ge.HappenedAt)
+                .Select(ge => ObjectiveAdded.GetPayload(ge).Slug)
+                .Except(deletedObjectives);
+            foreach (var objectiveSlug in objectiveSlugs)
             {
-                // TODO isn't this hacky and ugly? :(
-                var payload = ObjectiveAdded.GetPayload(gameEvent);
-                objectiveDictionary[payload.Slug] = new List<string>();
+                objectiveDictionary[objectiveSlug] = new List<string>();
             }
 
             IEnumerable<GameEvent> objectivesScoredEvents = (events ?? new List<GameEvent>())
@@ -97,13 +100,19 @@ namespace server.Controllers
                 if (gameEvent.EventType == nameof(ObjectiveScored))
                 {
                     var scoredPayload = ObjectiveScored.GetPayload(gameEvent);
-                    objectiveDictionary[scoredPayload.Slug].Add(scoredPayload.Faction);
+                    if (objectiveDictionary.ContainsKey(scoredPayload.Slug))
+                    {
+                        objectiveDictionary[scoredPayload.Slug].Add(scoredPayload.Faction);
+                    }
                 }
 
                 if (gameEvent.EventType == nameof(ObjectiveDescored))
                 {
                     var descoredPayload = ObjectiveDescored.GetPayload(gameEvent);
-                    objectiveDictionary[descoredPayload.Slug].Remove(descoredPayload.Faction);
+                    if (objectiveDictionary.ContainsKey(descoredPayload.Slug))
+                    {
+                        objectiveDictionary[descoredPayload.Slug].Remove(descoredPayload.Faction);
+                    }
                 }
             }
 
