@@ -1,6 +1,5 @@
 import { useMemo, useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
-import shuffle from 'lodash.shuffle'
 
 import sessionServiceFactory from '../shared/sessionService'
 import { ComboDispatchContext } from '../state'
@@ -41,28 +40,6 @@ export function SessionProvider({ children, state, dispatch }) {
       dispatch(action)
     },
     [dispatch, sessionService],
-  )
-  const { sessions } = state
-
-  const shuffleFactions = useCallback(
-    (sessionToShuffleId) => {
-      const session = sessions.data.find((s) => s.id === sessionToShuffleId)
-      const shuffledFactions = shuffle(session.factions)
-      const payload = {
-        factions: shuffledFactions,
-        sessionId: sessionToShuffleId,
-      }
-      comboDispatch({ type: 'FactionsShuffled', payload })
-    },
-    [sessions.data, comboDispatch],
-  )
-
-  const setFactions = useCallback(
-    (targetSessionId, factions) => {
-      const payload = { factions, sessionId: targetSessionId }
-      comboDispatch({ type: 'FactionsShuffled', payload })
-    },
-    [comboDispatch],
   )
 
   const updateFactionPoints = useCallback(
@@ -125,8 +102,6 @@ export function SessionProvider({ children, state, dispatch }) {
         session,
         loading: loading || state.objectives.loading,
         editable,
-        shuffleFactions,
-        setFactions,
         updateFactionPoints,
         sessionService,
       })}

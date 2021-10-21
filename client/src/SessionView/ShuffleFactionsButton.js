@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useContext, useCallback, useState } from 'react'
 import {
   Backdrop,
   Button,
@@ -10,6 +10,9 @@ import {
 import { Casino, Close } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation, Trans } from 'react-i18next'
+import shuffle from 'lodash.shuffle'
+
+import { DispatchContext, ComboDispatchContext } from '../state'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -21,13 +24,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function ShuffleFactionsButton({ factions, shuffleFactions, setFactions }) {
+function ShuffleFactionsButton({ session }) {
   const { t } = useTranslation()
   const classes = useStyles()
+  const { factions } = session
+  const dispatch = useContext(DispatchContext)
+  const comboDispatch = useContext(ComboDispatchContext)
 
   const [undoOptionOpen, setUndoOptionOpen] = useState(false)
   const [shuffling, setShuffling] = useState(false)
   const [factionsBeforeShuffle, setFactionsBeforeShuffle] = useState(factions)
+
+  const shuffleFactions = useCallback(
+    (dispatchStrategy) => {
+      const shuffledFactions = shuffle(factions)
+      const payload = {
+        factions: shuffledFactions,
+        sessionId: session.id,
+      }
+      dispatchStrategy({ type: 'FactionsShuffled', payload })
+    },
+    [session.id, factions],
+  )
+
   const shuffleMultipleTimes = useCallback(async () => {
     const MAX_SHUFFLES = 30
     const MIN_SHUFFLES = 10
@@ -38,16 +57,25 @@ function ShuffleFactionsButton({ factions, shuffleFactions, setFactions }) {
 
     setFactionsBeforeShuffle(factions)
     setShuffling(true)
-    for (let i = 0; i < shuffles; i += 1) {
-      shuffleFactions()
+    for (let i = 0; i < shuffles - 1; i += 1) {
+      shuffleFactions(dispatch)
       // eslint-disable-next-line no-await-in-loop
       await new Promise((resolve) =>
         setTimeout(resolve, 80 + 40 * Math.floor(i / 10)),
       )
     }
+    shuffleFactions(comboDispatch)
     setShuffling(false)
     setUndoOptionOpen(true)
-  }, [shuffleFactions, factions])
+  }, [shuffleFactions, factions, dispatch, comboDispatch])
+
+  const setFactions = useCallback(
+    (factionsToSet) => {
+      const payload = { factions: factionsToSet, sessionId: session.id }
+      comboDispatch({ type: 'FactionsShuffled', payload })
+    },
+    [session.id, comboDispatch],
+  )
 
   const undoLastShuffle = useCallback(() => {
     setFactions(factionsBeforeShuffle)
