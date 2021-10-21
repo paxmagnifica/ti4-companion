@@ -1,11 +1,9 @@
-import debounce from 'lodash.debounce'
-
 import CONFIG from '../config'
 
 import { saveSession } from './persistence'
 
 const factory = ({ fetch }) => {
-  const pushEventImmediately = (sessionId, gameEvent) =>
+  const pushEvent = (sessionId, gameEvent) =>
     fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -14,10 +12,6 @@ const factory = ({ fetch }) => {
         serializedPayload: JSON.stringify(gameEvent.payload),
       }),
     })
-  const pushEvent = debounce(pushEventImmediately, 400, {
-    trailing: true,
-    leading: true,
-  })
 
   return {
     createSession: async (factions) => {
@@ -41,7 +35,6 @@ const factory = ({ fetch }) => {
       return result.json()
     },
 
-    pushEventImmediately,
     pushEvent,
     uploadMap: (mapFile, sessionId) => {
       const formData = new FormData()

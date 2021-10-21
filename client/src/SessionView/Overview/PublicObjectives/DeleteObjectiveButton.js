@@ -4,11 +4,10 @@ import { Delete } from '@material-ui/icons'
 import { useTranslation, Trans } from 'react-i18next'
 
 import Confirmation from '../../../shared/Confirmation'
-import { ComboDispatchContext, DispatchContext } from '../../../state'
+import { ComboDispatchContext } from '../../../state'
 
 function DeleteObjectiveButton({ className, session, objective }) {
   const comboDispatch = useContext(ComboDispatchContext)
-  const dispatch = useContext(DispatchContext)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const { t } = useTranslation()
 
@@ -30,7 +29,7 @@ function DeleteObjectiveButton({ className, session, objective }) {
       }
     })
     setShowConfirmation(false)
-  }, [dispatch, session, objective, comboDispatch])
+  }, [session, objective, comboDispatch])
 
   const deletePo = useCallback(() => {
     const anyVpScored = session.points.some(({ points }) => points !== 0)

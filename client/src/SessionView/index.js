@@ -108,8 +108,6 @@ function SessionView({
           <Overview
             editable={editable}
             session={session}
-            setFactions={setFactions}
-            shuffleFactions={shuffleFactions}
             updateFactionPoints={updateFactionPoints}
           />
         </Route>

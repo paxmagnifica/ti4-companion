@@ -110,8 +110,6 @@ function FactionNutshells({
 function Overview({
   editable,
   session,
-  shuffleFactions,
-  setFactions,
   updateFactionPoints,
 }) {
   const classes = useStyles()

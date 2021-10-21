@@ -13,7 +13,6 @@
     "country-flag-icons": "^1.4.11",
     "i18next": "^21.3.0",
     "i18next-browser-languagedetector": "^6.1.2",
-    "lodash.debounce": "^4.0.8",
     "lodash.shuffle": "^4.2.0",
     "react": "^17.0.2",
     "react-dnd": "^14.0.3",
