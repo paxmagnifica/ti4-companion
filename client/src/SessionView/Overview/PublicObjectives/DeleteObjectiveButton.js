@@ -3,21 +3,34 @@ import { IconButton, Tooltip } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
 import { useTranslation, Trans } from 'react-i18next'
 
-import Confirmation from './Confirmation'
-import { ComboDispatchContext } from '../state'
+import Confirmation from '../../../shared/Confirmation'
+import { ComboDispatchContext, DispatchContext } from '../../../state'
 
-function DeleteObjectiveButton({ className, session, objectiveSlug }) {
+function DeleteObjectiveButton({ className, session, objective }) {
   const comboDispatch = useContext(ComboDispatchContext)
+  const dispatch = useContext(DispatchContext)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const { t } = useTranslation()
 
   const handleDelete = useCallback(() => {
     comboDispatch({
       type: 'ObjectiveDeleted',
-      payload: { sessionId: session.id, slug: objectiveSlug },
+      payload: { sessionId: session.id, slug: objective.slug },
+    })
+    session.points.forEach((scored) => {
+      if (objective.scoredBy.includes(scored.faction)) {
+        comboDispatch({
+          type: 'VictoryPointsUpdated',
+          payload: {
+            sessionId: session.id,
+            faction: scored.faction,
+            points: scored.points - 1,
+          },
+        })
+      }
     })
     setShowConfirmation(false)
-  }, [comboDispatch, session.id, objectiveSlug])
+  }, [dispatch, session, objective, comboDispatch])
 
   const deletePo = useCallback(() => {
     const anyVpScored = session.points.some(({ points }) => points !== 0)

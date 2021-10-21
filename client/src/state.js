@@ -206,20 +206,7 @@ const deleteObjective = (state, payload) => {
   )
   const session = state.sessions.data[sessionIndex]
 
-  const objective = session.objectives.find((obj) => obj.slug === payload.slug)
-
-  if (!objective) {
-    return state
-  }
-
   session.objectives = session.objectives.filter((o) => o.slug !== payload.slug)
-  session.points = session.points.map((scored) => {
-    if (objective.scoredBy.includes(scored.faction)) {
-      return { faction: scored.faction, points: scored.points - 1 }
-    }
-
-    return scored
-  })
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, { ...session })
 

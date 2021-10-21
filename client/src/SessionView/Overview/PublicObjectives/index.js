@@ -13,6 +13,7 @@ import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
 
 const useStyles = makeStyles({
   objectiveContainer: {
+    position: 'relative',
     padding: 0,
     margin: ({ small, fullscreen }) => {
       if (small) {

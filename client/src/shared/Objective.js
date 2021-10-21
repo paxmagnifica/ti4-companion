@@ -10,8 +10,6 @@ import secretObjective from '../assets/objective-secret.png'
 import reverseObjective from '../assets/objective-1-reverse.jpg'
 import { StateContext } from '../state'
 
-import DeleteObjectiveButton from './DeleteObjectiveButton'
-
 const useStyles = makeStyles({
   root: {
     maxHeight: '90vh',
@@ -64,12 +62,6 @@ const useStyles = makeStyles({
     pointerEvents: 'none',
     zIndex: 0,
     borderRadius: '5%',
-  },
-  deleteButton: {
-    position: 'absolute',
-    top: '-1.25em',
-    right: '-1.25em',
-    zIndex: 2,
   },
 })
 
@@ -182,13 +174,6 @@ function Objective({
       <p className={classes.condition}>{renderer(translation.condition)}</p>
       <p className={classes.points}>{points}</p>
       <p className={classes.rewards}>{t(`general.reward.${reward}`)}</p>
-      {deletable && (
-        <DeleteObjectiveButton
-          className={classes.deleteButton}
-          objectiveSlug={slug}
-          session={session}
-        />
-      )}
     </div>
   )
 }
