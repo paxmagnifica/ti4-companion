@@ -27,6 +27,8 @@ const factory = ({ fetch }) => {
       return session
     },
 
+    ping: () => fetch(`${CONFIG.apiUrl}/api/ping`, { method: 'post' }),
+
     get: async (id) => {
       const result = await fetch(`${CONFIG.apiUrl}/api/sessions/${id}`)
 

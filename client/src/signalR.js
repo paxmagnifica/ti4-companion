@@ -8,6 +8,12 @@ export function SignalRConnectionProvider({ children }) {
   const [signalRConnection, setSignalRConnection] = useState(null)
 
   useEffect(() => {
+    if (!window.signalR) {
+      console.log('signalR not available :(')
+
+      return () => null
+    }
+
     const connection = new window.signalR.HubConnectionBuilder()
       .withUrl(`${CONFIG.apiUrl}/sessionHub`)
       .configureLogging(window.signalR.LogLevel.Information)

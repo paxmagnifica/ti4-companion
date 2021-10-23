@@ -78,7 +78,7 @@ function SessionView({
             <SessionNavigation />
           </Grid>
           <Grid container item justifyContent="flex-end" xs={4}>
-            <FullscreenButton />
+            <FullscreenButton service={sessionService} />
             {editable && (
               <ShuffleFactionsButton
                 session={session}
