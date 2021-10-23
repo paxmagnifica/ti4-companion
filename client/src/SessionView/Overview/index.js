@@ -22,7 +22,7 @@ import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
 import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     color: 'white',
   },
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '71.25%',
     cursor: 'pointer',
   },
-}))
+})
 
 function FactionNutshells({
   factionsList,
