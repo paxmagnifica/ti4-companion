@@ -7,7 +7,6 @@ services:
     environment:
       - DISABLE_ESLINT_PLUGIN=true
       - REACT_APP_API_URL=http://localhost:5000
-      - REACT_APP_WAKELOCK_PING_INTERVAL=1000
     volumes:
       - ./client:/home/node/app
     ports:
