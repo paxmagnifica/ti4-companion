@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-import { en as objectivesEn } from './objectives'
+import { en as objectivesEn, pl as objectivesPl } from './objectives'
 import { en as factionsEn } from './factions'
 import { en as strategyCardsEn } from './strategyCards'
 import { en as explorationCardsEn } from './explorationCards'
@@ -161,6 +161,141 @@ const factory = (options = { debug: true }) =>
               tooltip: 'Remove Public Objective',
               content:
                 'There are already points scored, are you sure you want to delete a Public Objective?',
+            },
+          },
+        },
+        pl: {
+          translation: {
+            objectives: objectivesPl,
+            general: {
+              switchLanguage: 'Zmień język',
+              home: 'Home',
+              title: 'TI4 Companion',
+              labels: {
+                add: 'dodaj',
+                cancel: 'anuluj',
+                ok: 'ok',
+                objective: 'cel',
+                search: 'szukaj',
+                stageI: 'poziom I',
+                stageII: 'poziom II',
+                secretObj: 'sekretny',
+                save: 'zapisz',
+                undo: 'cofnij',
+                copy: 'kopiuj',
+              },
+              phase: {
+                0: 'faza statusu',
+                1: 'faza akcji',
+                2: 'faza polityki',
+              },
+              reward: {
+                0: 'punkt zwycięstwa',
+              },
+              confirmation: {
+                title: 'Jesteś pewny?',
+              },
+            },
+            sessionView: {
+              nav: {
+                overview: 'Podsumowanie',
+                map: 'Mapa',
+                details: 'Szczegóły',
+              },
+              overview: {
+                goToWiki: 'przejdź do wiki',
+                openOriginal: 'otwórz oryginalny obraz',
+                sessionStart: 'sesja od {{date}} {{time}}',
+              },
+            },
+            sessionMap: {
+              map: 'mapa TI4',
+              none: 'mapa nie została wszytana',
+              changeFile: 'Zmien plik mapy',
+              dropHere: 'Przeciągnij mapę tutaj...',
+              dragHere: 'Przeciądnij i upuść , or click to select the map file',
+              sizeHint:
+                'Miej na uwadze, że mapy mniejsze niż 800x800px mogą być nieczytelne',
+              preview: 'preview',
+            },
+            share: {
+              copied: 'Skopiowano!',
+              tooltip: 'pokaż kod qr',
+              allowEdit: 'zezwól na edycję',
+            },
+            sessionDetails: {
+              name: 'Nazwa Twojej sesji',
+              tts: 'TTS',
+              split: 'Split',
+              startDate: 'Data rozpoczęcia sesji',
+              endDate: 'Data zakończenia sesji',
+              duration: 'Jak długo trwała sesja? (roughly)',
+              durationUnit: 'godziny',
+              detailsSavedCorrectly: 'Detale zapisane pomyślnie',
+              vpChangeConfirmation: {
+                title: 'Zmieniłeś ilość punktów zwycięstwa',
+                content:
+                  'Zmieniłeś ilość punktów zwycięstwa.\nNiektórzy gracze zdążyli zdobyć punkwy zwycięstwa, co oznacza, że gra jest w trakcie.\nJesteś pewny, że chcesz zmienić ilość punktów zwycięstwa?',
+              },
+            },
+            fullscreen: {
+              tooltip: 'pokaż w trybie pełnoekranowym',
+            },
+            shuffle: {
+              tooltip: 'pomieszaj kolejność ras',
+              shuffled: 'rasy pomieszane',
+            },
+            publicObjectives: {
+              labels: {
+                add: 'dodaj cel',
+                new: 'nowy cel',
+              },
+            },
+            sessionList: {
+              title: 'Twoje zapamiętane sesje',
+              fullAccess: 'Pełen dostęp',
+              new: 'Nowa Sesja',
+              secondaryTitle: '(rasy: {{factionList}})',
+            },
+            kb: {
+              title: 'Baza wiedzy',
+              panels: {
+                sI: {
+                  button: 'Przeglądaj cele fazy I',
+                  title: 'Cele fazy I',
+                },
+                sII: {
+                  button: 'Przeglądaj cele fazy II',
+                  title: 'Cele fazy II',
+                },
+                secretObj: {
+                  button: 'Przeglądaj sekretne cele',
+                  title: 'Sekretne cele',
+                },
+                exploration: {
+                  button: 'Przeglądaj karty eksploracji {{type}}',
+                  title: 'karty eksploracji {{type}}',
+                  types: {
+                    cultural: 'kulturowe',
+                    hazardous: 'niegościnne',
+                    industrial: 'przemysłowe',
+                    frontier: 'pogranicza',
+                  },
+                },
+                relics: {
+                  button: 'Przeglądaj relikty',
+                  title: 'Relikty',
+                },
+                strategy: {
+                  button: 'Przeglądaj karty strategii',
+                  title: 'Karty strategii',
+                },
+              },
+            },
+            deletePO: {
+              tooltip: 'Usuń cel publiczny',
+              content:
+                'Ten cel publiczny został spełniony przez gracza. Jesteś pewny, że chcesz go usunąć?',
             },
           },
         },
