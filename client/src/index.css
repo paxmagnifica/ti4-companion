@@ -36,6 +36,10 @@ body, *:fullscreen {
 }
 
 /* GitHub Ribbon*/
+.github-corner {
+  opacity: 0.8;
+}
+
 .github-corner:hover .octo-arm {
 	animation: octocat-wave 560ms ease-in-out
 }

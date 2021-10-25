@@ -8,7 +8,7 @@ function GitHubRibbon() {
       className="github-corner"
       aria-label="View source on GitHub"
     >
-      <GitHubRibbonIcon onClick={() => console.log('Clicked!')} />
+      <GitHubRibbonIcon />
     </a>
   )
 }
