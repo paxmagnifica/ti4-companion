@@ -30,6 +30,7 @@ import KnowledgeBase from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
 import i18nFactory from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
+import GitHubRibbon from './GitHubRibbon'
 
 i18nFactory()
 
@@ -111,6 +112,7 @@ function App() {
               <Trans i18nKey="general.title" />
             </Typography>
             {false && <LanguageSwitcher />}
+            <GitHubRibbon />
           </Toolbar>
         </AppBar>
         <Toolbar />
