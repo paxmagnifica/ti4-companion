@@ -591,7 +591,7 @@ export const pl = {
   },
   'achieve-supremacy': {
     slug: 'achieve-supremacy',
-    name: 'Osiądnij supremację',
+    name: 'Osiągnij supremację',
     condition:
       'Musisz posiadać swój okręt flagowy lub słońce wojny w układzie macierzystym innego gracza lub w układzie Mecatol Rex.',
   },
