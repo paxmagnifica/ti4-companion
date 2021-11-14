@@ -266,7 +266,7 @@ const factory = (options = { debug: true }) =>
                 },
                 sII: {
                   button: 'Przeglądaj cele poziomu II',
-                  title: 'Cele fazy II',
+                  title: 'Cele poziomu II',
                 },
                 secretObj: {
                   button: 'Przeglądaj sekretne cele',
