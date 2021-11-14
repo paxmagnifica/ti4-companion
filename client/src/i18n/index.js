@@ -235,7 +235,7 @@ const factory = (options = { debug: true }) =>
               vpChangeConfirmation: {
                 title: 'Zmieniłeś ilość punktów zwycięstwa',
                 content:
-                  'Zmieniłeś ilość punktów zwycięstwa.\nNiektórzy gracze zdążyli zdobyć punkwy zwycięstwa, co oznacza, że gra jest w trakcie.\nJesteś pewny, że chcesz zmienić ilość punktów zwycięstwa?',
+                  'Ilość punktów zwycięstwa uległa zmianie.\nNiektórzy gracze zdążyli już zdobyć punkty zwycięstwa, co oznacza, że gra jest w trakcie.\nCzy na pewno chcesz zmienić ilość punktów zwycięstwa?',
               },
             },
             fullscreen: {
