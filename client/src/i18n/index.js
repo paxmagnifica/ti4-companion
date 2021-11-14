@@ -262,7 +262,7 @@ const factory = (options = { debug: true }) =>
               panels: {
                 sI: {
                   button: 'Przeglądaj cele poziomu I',
-                  title: 'Cele fazy I',
+                  title: 'Cele poziomu I',
                 },
                 sII: {
                   button: 'Przeglądaj cele fazy II',
