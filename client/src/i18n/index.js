@@ -295,7 +295,7 @@ const factory = (options = { debug: true }) =>
             deletePO: {
               tooltip: 'Usuń cel publiczny',
               content:
-                'Ten cel publiczny został spełniony przez gracza. Jesteś pewny, że chcesz go usunąć?',
+                'Ten cel publiczny został spełniony przez gracza. Czy na pewno chcesz go usunąć?',
             },
           },
         },
