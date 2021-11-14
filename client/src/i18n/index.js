@@ -216,7 +216,7 @@ const factory = (options = { debug: true }) =>
               dragHere: 'Przeciągnij i upuść, lub kliknij by wybrać plik',
               sizeHint:
                 'Miej na uwadze, że mapy mniejsze niż 800x800px mogą być nieczytelne',
-              preview: 'preview',
+              preview: 'podgląd',
             },
             share: {
               copied: 'Skopiowano!',
