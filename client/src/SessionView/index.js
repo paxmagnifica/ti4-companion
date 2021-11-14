@@ -81,8 +81,8 @@ function SessionView({
             <FullscreenButton service={sessionService} />
             {editable && (
               <ShuffleFactionsButton
-                session={session}
                 factions={session.factions}
+                session={session}
                 setFactions={(factionsToSet) =>
                   setFactions(session.id, factionsToSet)
                 }

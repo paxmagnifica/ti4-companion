@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import clsx from 'clsx'
 import {
   Avatar,
@@ -107,6 +107,12 @@ function FactionNutshells({
   })
 }
 
+const justifyBasedOnPublicObjectives = ({ editable, objectives }) => {
+  const whenToStretch = editable ? 5 : 6
+
+  return objectives.length > whenToStretch ? 'stretch' : 'center'
+}
+
 function Overview({ editable, session, updateFactionPoints }) {
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
@@ -122,6 +128,15 @@ function Overview({ editable, session, updateFactionPoints }) {
         points,
       }),
     [session.id, updateFactionPoints],
+  )
+
+  const justifyLayout = useMemo(
+    () =>
+      justifyBasedOnPublicObjectives({
+        editable,
+        objectives: session.objectives,
+      }),
+    [editable, session.objectives],
   )
 
   return (
@@ -147,7 +162,7 @@ function Overview({ editable, session, updateFactionPoints }) {
         className={clsx(classes.root, { [classes.fullscreen]: fullscreen })}
         container
         direction="column"
-        justifyContent="center"
+        justifyContent={justifyLayout}
         spacing={4}
       >
         <Grid className={clsx({ [classes.fullWidth]: fullscreen })} item>

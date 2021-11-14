@@ -11,6 +11,10 @@ const useStyles = makeStyles({
     top: '-1.5em',
     right: '-1.5em',
     zIndex: 2,
+    opacity: 0.4,
+    '&:hover': {
+      opacity: 1,
+    },
   },
 })
 

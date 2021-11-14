@@ -79,8 +79,8 @@ const NORMAL_SIZE = {
 
 const FULLSCREEN_SIZE = {
   width: 'auto',
-  height: '26vh',
-  fontSize: '1.7vh',
+  height: '30vh',
+  fontSize: '2vh',
 }
 
 const GINORMOUS_SIZE = {
@@ -98,8 +98,6 @@ const getStyles = (size) =>
   }[size] || NORMAL_SIZE)
 
 function Objective({
-  deletable,
-  session,
   size,
   title,
   slug,
