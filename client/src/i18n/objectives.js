@@ -567,7 +567,7 @@ export const pl = {
   'manipulate-galactic-law': {
     slug: 'manipulate-galactic-law',
     name: 'Zmanipuluj galaktyczne prawo',
-    condition: 'Musisz wydać 15 punktów wpływów.',
+    condition: 'Musisz wydać 16 punktów wpływów.',
   },
   'master-the-sciences': {
     slug: 'master-the-sciences',
