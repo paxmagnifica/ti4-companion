@@ -229,7 +229,7 @@ const factory = (options = { debug: true }) =>
               split: 'Split',
               startDate: 'Data rozpoczęcia sesji',
               endDate: 'Data zakończenia sesji',
-              duration: 'Jak długo trwała sesja? (roughly)',
+              duration: 'Jak długo trwała sesja? (plus minus)',
               durationUnit: 'godziny',
               detailsSavedCorrectly: 'Detale zapisane pomyślnie',
               vpChangeConfirmation: {
