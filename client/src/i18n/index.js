@@ -233,7 +233,7 @@ const factory = (options = { debug: true }) =>
               durationUnit: 'godziny',
               detailsSavedCorrectly: 'Detale zapisane pomyślnie',
               vpChangeConfirmation: {
-                title: 'Zmieniłeś ilość punktów zwycięstwa',
+                title: 'Ilość punktów zwycięstwa uległa zmianie',
                 content:
                   'Ilość punktów zwycięstwa uległa zmianie.\nNiektórzy gracze zdążyli już zdobyć punkty zwycięstwa, co oznacza, że gra jest w trakcie.\nCzy na pewno chcesz zmienić ilość punktów zwycięstwa?',
               },
