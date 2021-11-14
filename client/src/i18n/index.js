@@ -210,7 +210,7 @@ const factory = (options = { debug: true }) =>
             },
             sessionMap: {
               map: 'mapa TI4',
-              none: 'mapa nie została wszytana',
+              none: 'mapa nie została dodana',
               changeFile: 'Zmien plik mapy',
               dropHere: 'Przeciągnij mapę tutaj...',
               dragHere: 'Przeciądnij i upuść , or click to select the map file',
