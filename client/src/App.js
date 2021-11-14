@@ -111,7 +111,7 @@ function App() {
             <Typography className={classes.title} variant="h5">
               <Trans i18nKey="general.title" />
             </Typography>
-            {false && <LanguageSwitcher />}
+            <LanguageSwitcher />
             <GitHubRibbon />
           </Toolbar>
         </AppBar>

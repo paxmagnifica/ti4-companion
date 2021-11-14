@@ -19,6 +19,9 @@ const useStyles = makeStyles({
   flag: {
     height: '1em',
   },
+  switcher: {
+    marginRight: 50,
+  },
 })
 
 function LanguageSwitcher() {
@@ -52,7 +55,11 @@ function LanguageSwitcher() {
 
   return (
     <>
-      <Button onClick={handleClick} title={t('general.switchLanguage')}>
+      <Button
+        className={classes.switcher}
+        onClick={handleClick}
+        title={t('general.switchLanguage')}
+      >
         {flags[i18n.resolvedLanguage]}
       </Button>
       <Menu
