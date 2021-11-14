@@ -147,7 +147,7 @@ function Overview({ editable, session, updateFactionPoints }) {
         className={clsx(classes.root, { [classes.fullscreen]: fullscreen })}
         container
         direction="column"
-        justifyContent="center"
+        justifyContent="stretch"
         spacing={4}
       >
         <Grid className={clsx({ [classes.fullWidth]: fullscreen })} item>
