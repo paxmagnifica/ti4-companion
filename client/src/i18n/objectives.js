@@ -684,7 +684,7 @@ export const pl = {
     slug: 'betray-a-friend',
     name: 'Zdradź przyjaciela',
     condition:
-      'Musisz wygrać bitwę przeciwko graczowi, którego weksel miałeś na swoim obszarze gry na początki twojej akcji taktycznej.',
+      'Musisz wygrać bitwę przeciwko graczowi, którego weksel miałeś na swoim obszarze gry na początku twojej akcji taktycznej.',
   },
   'brave-the-void': {
     slug: 'brave-the-void',
