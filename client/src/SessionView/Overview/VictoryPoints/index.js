@@ -71,6 +71,7 @@ const useStyles = makeStyles({
   root: {
     width: '75%',
     margin: '0 auto',
+    maxHeight: '19vh',
   },
   fullWidth: {
     width: '100%',
