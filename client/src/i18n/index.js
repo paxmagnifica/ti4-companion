@@ -213,7 +213,7 @@ const factory = (options = { debug: true }) =>
               none: 'mapa nie została dodana',
               changeFile: 'Zmień plik mapy',
               dropHere: 'Przeciągnij mapę tutaj...',
-              dragHere: 'Przeciądnij i upuść , or click to select the map file',
+              dragHere: 'Przeciągnij i upuść, lub kliknij by wybrać plik',
               sizeHint:
                 'Miej na uwadze, że mapy mniejsze niż 800x800px mogą być nieczytelne',
               preview: 'preview',
