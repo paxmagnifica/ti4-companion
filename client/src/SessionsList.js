@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Add } from '@material-ui/icons'
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import { Link, useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -40,6 +40,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     zIndex: 1199,
   },
+  listItem: {
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'start',
+    },
+  },
 }))
 
 function SessionsList({ loading, sessions }) {
@@ -68,6 +74,7 @@ function SessionsList({ loading, sessions }) {
             <ListItem
               key={session.id}
               button
+              className={classes.list}
               onClick={() =>
                 history.push(
                   generatePath(SESSION_VIEW_ROUTES.main, {
