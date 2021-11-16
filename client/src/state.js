@@ -125,6 +125,10 @@ export const reducer = (state, action) => {
       return descoreObjective(state, action.payload)
     case 'MetadataUpdated':
       return updatedMetadata(state, action.payload)
+    case 'LockSession':
+      return setSessionLock(state, action.payload, true)
+    case 'UnlockSession':
+      return setSessionLock(state, action.payload, false)
     default:
       console.error('unhandled action', action)
 
@@ -143,6 +147,11 @@ const updateVictoryPoints = (state, payload) => {
       ? { faction, points: payload.points }
       : { faction, points: previousPoints },
   )
+
+  session.finished = session.points.some(
+    ({ points }) => points === session.vpCount,
+  )
+
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, { ...session })
 
@@ -344,6 +353,26 @@ const factionsShuffled = (state, action) => {
   const session = state.sessions.data[sessionIndex]
 
   session.factions = action.payload.factions
+
+  const sessions = [...state.sessions.data]
+  sessions.splice(sessionIndex, 1, { ...session })
+
+  return {
+    ...state,
+    sessions: {
+      ...state.sessions,
+      data: sessions,
+    },
+  }
+}
+
+const setSessionLock = (state, payload, sessionLock) => {
+  const sessionIndex = state.sessions.data.findIndex(
+    (session) => session.id === payload.sessionId,
+  )
+  const session = state.sessions.data[sessionIndex]
+
+  session.locked = sessionLock
 
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, { ...session })

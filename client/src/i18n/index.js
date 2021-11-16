@@ -61,6 +61,8 @@ const factory = (options = { debug: true }) =>
               },
             },
             sessionView: {
+              lock: 'Prevent further editing',
+              locked: 'Locked for editing',
               nav: {
                 overview: 'Overview',
                 map: 'Map',
