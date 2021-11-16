@@ -118,7 +118,7 @@ const factory = (options = { debug: true }) =>
             },
             sessionList: {
               title: 'Your remembered sessions',
-              fullAccess: 'Edit',
+              edit: 'Edit',
               new: 'New session',
               secondaryTitle: '(factions: {{factionList}})',
             },
@@ -253,7 +253,6 @@ const factory = (options = { debug: true }) =>
             },
             sessionList: {
               title: 'Twoje zapamiętane sesje',
-              fullAccess: 'Pełen dostęp',
               new: 'Nowa Sesja',
               secondaryTitle: '(rasy: {{factionList}})',
             },
