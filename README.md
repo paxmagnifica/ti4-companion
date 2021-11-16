@@ -45,6 +45,18 @@ If you run the application against an empty database, 2 sessions will be created
 
 so you can check the installation by trying to hit `https://localhost:3000/6fd5c725-30cd-4320-8889-c2f6427ba365` or the other one
 
+## to add a migration
+
+make sure you have [Entity Framework CLI](https://docs.microsoft.com/en-us/ef/core/cli/dotnet) installed on your machine
+
+make your changes to any class used in SessionContext (these are db entities)
+
+in `server` directory run
+```bash
+$ dotnet ef migrations add NameOfYourMigration
+```
+this will automatically add required changes to `server/Migrations/` directory
+
 ## extracting faction images from codex pdf
 
 The _nutshell_ images of factions (the ones shown on session view) are extracted from codex pdf.
