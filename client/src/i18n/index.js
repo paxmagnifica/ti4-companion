@@ -118,7 +118,7 @@ const factory = (options = { debug: true }) =>
             },
             sessionList: {
               title: 'Your remembered sessions',
-              fullAccess: 'Full Access',
+              edit: 'edit',
               new: 'New session',
               secondaryTitle: '(factions: {{factionList}})',
             },

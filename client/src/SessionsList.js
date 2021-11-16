@@ -9,7 +9,8 @@ import {
   ListSubheader,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Add, Done } from '@material-ui/icons'
+import { Add } from '@material-ui/icons'
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { Link, useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -88,8 +89,8 @@ function SessionsList({ loading, sessions }) {
                 <ListItemIcon>
                   <Chip
                     color="secondary"
-                    icon={<Done />}
-                    label={t('sessionList.fullAccess')}
+                    icon={<EditOutlinedIcon />}
+                    label={t('sessionList.edit')}
                   />
                 </ListItemIcon>
               )}
