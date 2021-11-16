@@ -16,6 +16,7 @@ namespace server.Controllers
             Objectives = GetObjectives(session.Events);
             Map = GetMap(session.Events);
             CreatedAt = session.CreatedAt;
+            Locked = session.Locked;
             SetSessionDetails(session.Events);
         }
 
@@ -28,6 +29,9 @@ namespace server.Controllers
         }
 
         public bool Editable { get; internal set; }
+        public bool Finished { get {
+            return Points.Any(point => point.Points == VpCount);
+        }}
 
         public string DisplayName { get; internal set; }
         public bool TTS { get; internal set; }
