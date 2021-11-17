@@ -22,7 +22,7 @@ import { useTranslation, Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from './shared/constants'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   list: {
     color: 'white',
     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -45,6 +45,12 @@ const useStyles = makeStyles(() => ({
     bottom: 10,
     marginTop: 10,
     zIndex: 1199,
+  },
+  listItem: {
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'start',
+    },
   },
 }))
 
@@ -74,6 +80,7 @@ function SessionsList({ loading, sessions }) {
             <ListItem
               key={session.id}
               button
+              className={classes.listItem}
               onClick={() =>
                 history.push(
                   generatePath(SESSION_VIEW_ROUTES.main, {
@@ -112,7 +119,7 @@ function SessionsList({ loading, sessions }) {
                   <Chip
                     color="secondary"
                     icon={<EditOutlined />}
-                    label={t('sessionList.fullAccess')}
+                    label={t('sessionList.edit')}
                   />
                 </ListItemIcon>
               )}
