@@ -93,7 +93,7 @@ function SessionsList({ loading, sessions }) {
                   <Chip
                     color="secondary"
                     icon={<EditOutlined />}
-                    label={t('sessionList.fullAccess')}
+                    label={t('sessionList.edit')}
                   />
                 </ListItemIcon>
               )}
