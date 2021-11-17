@@ -29,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiTypography-root': {
       color: 'white',
-    },EditOutlined
+    },
+  },
+  fab: {
+    position: 'sticky',
     float: 'right',
     right: 0,
     bottom: 10,
