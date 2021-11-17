@@ -9,7 +9,7 @@ import {
   ListSubheader,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Add, EditOutlinedIcon } from '@material-ui/icons'
+import { Add, EditOutlined } from '@material-ui/icons'
 import { Link, useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -29,10 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiTypography-root': {
       color: 'white',
-    },
-  },
-  fab: {
-    position: 'sticky',
+    },EditOutlined
     float: 'right',
     right: 0,
     bottom: 10,
@@ -95,7 +92,7 @@ function SessionsList({ loading, sessions }) {
                 <ListItemIcon>
                   <Chip
                     color="secondary"
-                    icon={<EditOutlinedIcon />}
+                    icon={<EditOutlined />}
                     label={t('sessionList.fullAccess')}
                   />
                 </ListItemIcon>
