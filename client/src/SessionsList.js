@@ -9,7 +9,7 @@ import {
   ListSubheader,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Add, Done } from '@material-ui/icons'
+import { Add, EditOutlined } from '@material-ui/icons'
 import { Link, useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     zIndex: 1199,
   },
+  listItem: {
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'start',
+    },
+  },
 }))
 
 function SessionsList({ loading, sessions }) {
@@ -67,6 +73,7 @@ function SessionsList({ loading, sessions }) {
             <ListItem
               key={session.id}
               button
+              className={classes.listItem}
               onClick={() =>
                 history.push(
                   generatePath(SESSION_VIEW_ROUTES.main, {
@@ -88,8 +95,8 @@ function SessionsList({ loading, sessions }) {
                 <ListItemIcon>
                   <Chip
                     color="secondary"
-                    icon={<Done />}
-                    label={t('sessionList.fullAccess')}
+                    icon={<EditOutlined />}
+                    label={t('sessionList.edit')}
                   />
                 </ListItemIcon>
               )}
