@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet'
-import { Grid } from '@material-ui/core'
+import { Grid, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Route, Switch } from 'react-router-dom'
 
@@ -15,6 +15,7 @@ import ShareButton from './ShareButton'
 import Map from './Map'
 import SessionNavigation from './SessionNavigation'
 import DetailsForm from './DetailsForm'
+import LockForEdit from './LockForEdit'
 
 const useStyles = makeStyles({
   header: {
@@ -93,6 +94,8 @@ function SessionView({
           </Grid>
         </Grid>
       </HideInFullscreen>
+
+      <LockForEdit session={session} />
 
       <Switch>
         <Route exact path={SESSION_VIEW_ROUTES.map}>

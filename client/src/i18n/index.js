@@ -61,6 +61,8 @@ const factory = (options = { debug: true }) =>
               },
             },
             sessionView: {
+              lock: 'Prevent further editing',
+              locked: 'Locked for editing',
               nav: {
                 overview: 'Overview',
                 map: 'Map',
@@ -118,6 +120,9 @@ const factory = (options = { debug: true }) =>
             },
             sessionList: {
               title: 'Your remembered sessions',
+              done: 'Finished',
+              inProgress: 'In progress',
+              locked: 'Locked for edit',
               edit: 'Edit',
               new: 'New session',
               secondaryTitle: '(factions: {{factionList}})',

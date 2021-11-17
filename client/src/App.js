@@ -138,7 +138,7 @@ function App() {
                       }) =>
                         loading || !session ? null : (
                           <SessionView
-                            editable={editable}
+                            editable={editable && !session.locked}
                             session={session}
                             sessionService={sessionService}
                             setFactions={setFactions}

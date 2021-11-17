@@ -7,9 +7,16 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  Tooltip,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { Add, EditOutlined } from '@material-ui/icons'
+import {
+  Add,
+  EditOutlined,
+  Lock,
+  Done,
+  Autorenew as InProgress,
+} from '@material-ui/icons'
 import { Link, useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from 'react-i18next'
 
@@ -83,6 +90,22 @@ function SessionsList({ loading, sessions }) {
                 )
               }
             >
+              <ListItemIcon>
+                {session.finished ? (
+                  <Tooltip placement="top" title={t('sessionList.done')}>
+                    <Done color="secondary" />
+                  </Tooltip>
+                ) : (
+                  <Tooltip placement="top" title={t('sessionList.inProgress')}>
+                    <InProgress />
+                  </Tooltip>
+                )}
+                {session.editable && session.locked && (
+                  <Tooltip placement="top" title={t('sessionList.locked')}>
+                    <Lock />
+                  </Tooltip>
+                )}
+              </ListItemIcon>
               <ListItemText
                 primary={session.displayName || factionList}
                 secondary={`${session.start || ''} ${
@@ -91,7 +114,7 @@ function SessionsList({ loading, sessions }) {
                     : ''
                 }`}
               />
-              {session.editable && (
+              {session.editable && !session.locked && (
                 <ListItemIcon>
                   <Chip
                     color="secondary"
