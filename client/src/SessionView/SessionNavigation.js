@@ -18,6 +18,7 @@ import {
   Details,
   ChevronRight,
   ChevronLeft,
+  Timeline,
 } from '@material-ui/icons'
 import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles'
 import { useHistory, useRouteMatch, generatePath } from 'react-router-dom'
@@ -59,6 +60,7 @@ const VIEW = {
   overview: 0,
   map: 1,
   details: 2,
+  timeline: 3,
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -79,6 +81,7 @@ function SessionNavigation() {
   const { params } = useRouteMatch(SESSION_VIEW_ROUTES.main)
   const mapRoute = useRouteMatch(SESSION_VIEW_ROUTES.map)
   const detailsRoute = useRouteMatch(SESSION_VIEW_ROUTES.details)
+  const timelineRoute = useRouteMatch(SESSION_VIEW_ROUTES.timeline)
   const sanitizedParams = useMemo(() => {
     const { secret, ...otherParams } = params
 
@@ -98,8 +101,12 @@ function SessionNavigation() {
       return VIEW.details
     }
 
+    if (timelineRoute?.isExact) {
+      return VIEW.timeline
+    }
+
     return VIEW.overview
-  }, [mapRoute, detailsRoute])
+  }, [mapRoute, detailsRoute, timelineRoute])
 
   const go = useMemo(
     () => ({
@@ -110,6 +117,10 @@ function SessionNavigation() {
       [VIEW.details]: () =>
         history.push(
           generatePath(SESSION_VIEW_ROUTES.details, sanitizedParams),
+        ),
+      [VIEW.timeline]: () =>
+        history.push(
+          generatePath(SESSION_VIEW_ROUTES.timeline, sanitizedParams),
         ),
     }),
     [history, sanitizedParams],
@@ -156,6 +167,12 @@ function SessionNavigation() {
               </ListItemIcon>
               <ListItemText primary={t('sessionView.nav.details')} />
             </ListItem>
+            <ListItem button onClick={() => goAndCloseDrawer(VIEW.timeline)}>
+              <ListItemIcon>
+                <Timeline />
+              </ListItemIcon>
+              <ListItemText primary={t('sessionView.nav.timeline')} />
+            </ListItem>
           </List>
         </Drawer>
         <IconButton edge="start" onClick={() => setDrawerOpen(true)}>
@@ -184,6 +201,12 @@ function SessionNavigation() {
         label={t('sessionView.nav.details')}
         title={t('sessionView.nav.details')}
         value={VIEW.details}
+      />
+      <StyledTab
+        icon={<Timeline />}
+        label={t('sessionView.nav.timeline')}
+        title={t('sessionView.nav.timeline')}
+        value={VIEW.timeline}
       />
     </StyledTabs>
   )

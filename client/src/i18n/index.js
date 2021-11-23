@@ -67,6 +67,7 @@ const factory = (options = { debug: true }) =>
                 overview: 'Overview',
                 map: 'Map',
                 details: 'Details',
+                timeline: 'Timeline',
               },
               overview: {
                 goToWiki: 'go to wiki',
