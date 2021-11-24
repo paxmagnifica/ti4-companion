@@ -12,6 +12,8 @@ import { StateContext } from '../state'
 
 const useStyles = makeStyles({
   root: {
+    width: ({ width }) => width,
+    height: ({ height }) => height,
     maxHeight: '90vh',
     position: 'relative',
     fontSize: ({ fontSize }) => fontSize,

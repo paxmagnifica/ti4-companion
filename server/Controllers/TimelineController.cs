@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using server.Domain;
-using server.Persistence;
 
 namespace server.Controllers
 {
@@ -24,7 +23,6 @@ namespace server.Controllers
     {
         private readonly ILogger<SessionsController> _logger;
         private readonly IRepository _repository;
-        private readonly SessionContext _sessionContext;
 
         public TimelineController(
             ILogger<SessionsController> logger,
@@ -41,32 +39,71 @@ namespace server.Controllers
             var sessionFromDb = await _repository.GetByIdWithEvents(sessionId);
 
             var previousVpCount = 10;
-            IEnumerable<TimelineEventDto> timelineEvents = sessionFromDb.Events.OrderBy(e => e.HappenedAt).Select((e, index) =>
+            var orderedEvents = sessionFromDb.Events.OrderBy(e => e.HappenedAt);
+
+            var timelineEvents = new List<KeyValuePair<GameEvent, TimelineEventDto>>();
+
+            foreach (var sessionEvent in orderedEvents)
             {
-                if (e.EventType == nameof(MetadataUpdated))
+                if (sessionEvent.EventType == nameof(MetadataUpdated))
                 {
-                    var payload = MetadataUpdated.GetPayload(e);
+                    var payload = MetadataUpdated.GetPayload(sessionEvent);
+                    if (payload.VpCount == previousVpCount)
+                    {
+                        continue;
+                    }
                     var newPayload = JsonConvert.SerializeObject(new { from = previousVpCount, to = payload.VpCount });
                     previousVpCount = payload.VpCount;
-                    return new TimelineEventDto
+                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
                     {
-                        Order = index,
                         EventType = "VpCountChanged",
                         SerializedPayload = newPayload,
-                        HappenedAt = e.HappenedAt
-                    };
+                        HappenedAt = sessionEvent.HappenedAt
+                    }));
 
+                    continue;
                 }
-                return new TimelineEventDto
-                {
-                    Order = index,
-                    EventType = e.EventType,
-                    SerializedPayload = e.SerializedPayload,
-                    HappenedAt = e.HappenedAt
-                };
-            });
 
-            return timelineEvents;
+                if (sessionEvent.EventType == nameof(ObjectiveScored))
+                {
+                    var payload = ObjectiveScored.GetPayload(sessionEvent);
+                    if (timelineEvents.Last().Value.EventType == nameof(VictoryPointsUpdated))
+                    {
+                        var lastPayload = VictoryPointsUpdated.GetPayload(timelineEvents.Last().Key);
+
+                        if (lastPayload.Faction == payload.Faction)
+                        {
+                            timelineEvents.RemoveAt(timelineEvents.Count - 1);
+                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                            {
+                                EventType = sessionEvent.EventType,
+                                SerializedPayload = JsonConvert.SerializeObject(new
+                                {
+                                    faction = payload.Faction,
+                                    points = lastPayload.Points,
+                                    slug = payload.Slug,
+                                }),
+                                HappenedAt = sessionEvent.HappenedAt
+                            }));
+
+                            continue;
+                        }
+                    }
+                }
+
+                timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                {
+                    EventType = sessionEvent.EventType,
+                    SerializedPayload = sessionEvent.SerializedPayload,
+                    HappenedAt = sessionEvent.HappenedAt
+                }));
+            }
+
+            return timelineEvents.Select(kvp => kvp.Value).Select((e, index) =>
+            {
+                e.Order = index;
+                return e;
+            });
         }
     }
 }

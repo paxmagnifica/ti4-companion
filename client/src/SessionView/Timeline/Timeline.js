@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core'
+import { Typography, Box } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
   TimelineOppositeContent,
@@ -9,12 +9,19 @@ import {
   TimelineContent,
 } from '@material-ui/lab'
 import { withStyles } from '@material-ui/core/styles'
+import { Trans, useTranslation } from 'react-i18next'
+
+import Objective from '../../shared/Objective'
 
 import { useTimelineEvents } from './queries'
 
 const Ti4TimelineContent = withStyles({
   root: {
     paddingTop: 0,
+    paddingBottom: '3em',
+    '& > h5:first-child': {
+      marginBottom: '0.5em',
+    },
   },
 })(TimelineContent)
 
@@ -24,7 +31,7 @@ const Ti4TimelineItem = withStyles({
   },
 })(TimelineItem)
 
-function GameStarted({ payload, happenedAt }) {
+function GameStarted({ payload, happenedAt, eventType }) {
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -37,14 +44,16 @@ function GameStarted({ payload, happenedAt }) {
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
-        <Typography variant="h5">Game started</Typography>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
         <pre>{JSON.stringify(payload, null, 2)}</pre>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
   )
 }
 
-function VpCountChanged({ payload, happenedAt }) {
+function VpCountChanged({ payload, happenedAt, eventType }) {
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -57,9 +66,110 @@ function VpCountChanged({ payload, happenedAt }) {
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
-        <Typography variant="h5">VP count changed</Typography>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
         <Typography variant="subtitle1">
-          {payload.from} -> {payload.to}
+          <Trans
+            i18nKey="sessionTimeline.vpCountChanged"
+            values={{ from: payload.from, to: payload.to }}
+          />
+        </Typography>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function ObjectiveAdded({ payload, happenedAt, eventType }) {
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
+        <Box style={{ display: 'inline-block' }}>
+          <Objective slug={payload.slug} />
+        </Box>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function ObjectiveScored({ payload, happenedAt, eventType }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans
+            i18nKey={`sessionTimeline.events.${eventType}`}
+            values={{ faction: t(`factions.${payload.faction}.name`) }}
+          />
+        </Typography>
+        <Box>
+          <Typography variant="subitle1">
+            <Trans
+              i18nKey="sessionTimeline.upTo"
+              values={{ points: payload.points }}
+            />
+          </Typography>
+        </Box>
+        <Box style={{ display: 'inline-block' }}>
+          <Objective slug={payload.slug} />
+        </Box>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function VictoryPointsUpdated({ payload, happenedAt, eventType }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans
+            i18nKey={`sessionTimeline.events.${eventType}`}
+            values={{ faction: t(`factions.${payload.faction}.name`) }}
+          />
+        </Typography>
+        <Typography variant="subtitle1">
+          <Trans
+            i18nKey="sessionTimeline.vpScored"
+            values={{
+              faction: t(`factions.${payload.faction}.name`),
+              points: payload.points,
+            }}
+          />
         </Typography>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
@@ -69,9 +179,45 @@ function VpCountChanged({ payload, happenedAt }) {
 function EventOnATimeline({ eventType, payload, happenedAt }) {
   switch (eventType) {
     case 'GameStarted':
-      return <GameStarted happenedAt={happenedAt} payload={payload} />
+      return (
+        <GameStarted
+          eventType={eventType}
+          happenedAt={happenedAt}
+          payload={payload}
+        />
+      )
     case 'VpCountChanged':
-      return <VpCountChanged happenedAt={happenedAt} payload={payload} />
+      return (
+        <VpCountChanged
+          eventType={eventType}
+          happenedAt={happenedAt}
+          payload={payload}
+        />
+      )
+    case 'ObjectiveAdded':
+      return (
+        <ObjectiveAdded
+          eventType={eventType}
+          happenedAt={happenedAt}
+          payload={payload}
+        />
+      )
+    case 'VictoryPointsUpdated':
+      return (
+        <VictoryPointsUpdated
+          eventType={eventType}
+          happenedAt={happenedAt}
+          payload={payload}
+        />
+      )
+    case 'ObjectiveScored':
+      return (
+        <ObjectiveScored
+          eventType={eventType}
+          happenedAt={happenedAt}
+          payload={payload}
+        />
+      )
     default:
       return (
         <Ti4TimelineItem>
@@ -102,14 +248,7 @@ export function Timeline({ session, sessionService }) {
   })
 
   return (
-    <MuiTimeline align="alternate">
-      <TimelineItem>
-        <TimelineSeparator>
-          <TimelineConnector />
-        </TimelineSeparator>
-        <TimelineContent />
-      </TimelineItem>
-      {/* always there unless game ended xD */}
+    <MuiTimeline>
       {timeline.map((event) => (
         <EventOnATimeline {...event} key={event.order} />
       ))}

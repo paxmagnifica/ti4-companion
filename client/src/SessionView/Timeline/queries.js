@@ -15,7 +15,7 @@ export const useTimelineEvents = ({ sessionId, sessionService }) => {
           ...timelineEvent,
           payload: JSON.parse(timelineEvent.serializedPayload),
         }))
-        .sort(({ order: orderA }, { order: orderB }) => orderB - orderA)
+        .sort(({ order: orderA }, { order: orderB }) => orderA - orderB)
     },
     {
       placeholderData: [],

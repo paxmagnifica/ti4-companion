@@ -86,11 +86,6 @@ const factory = (options = { debug: true }) =>
                 'Keep in mind that maps smaller than 800x800px are going to be small and unreadable',
               preview: 'preview',
             },
-            share: {
-              copied: 'Copied!',
-              tooltip: 'show qr code',
-              allowEdit: 'allow edit',
-            },
             sessionDetails: {
               name: 'Your session name',
               tts: 'TTS',
@@ -105,6 +100,23 @@ const factory = (options = { debug: true }) =>
                 content:
                   'You changed the Victory Point target.\nSome people already scored, so the game is probably in progress.\nAre you sure you want to change the Victory Point target of this game?',
               },
+            },
+            sessionTimeline: {
+              events: {
+                GameStarted: 'Game started',
+                VpCountChanged: 'VP count changed',
+                ObjectiveAdded: 'Objective added',
+                VictoryPointsUpdated: 'Victory Point scored by {{faction}}',
+                ObjectiveScored: 'Objective scored by {{faction}}',
+              },
+              vpCountChanged: '{{from}} -> {{to}}',
+              upTo: 'up to {{points}} VP',
+              vpScored: '{{faction}} scored, up to {{points}} VP',
+            },
+            share: {
+              copied: 'Copied!',
+              tooltip: 'show qr code',
+              allowEdit: 'allow edit',
             },
             fullscreen: {
               tooltip: 'show in fullscreen mode',
