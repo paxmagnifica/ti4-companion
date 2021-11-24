@@ -91,6 +91,33 @@ namespace server.Controllers
                     }
                 }
 
+                if (sessionEvent.EventType == nameof(VictoryPointsUpdated))
+                {
+                    var payload = VictoryPointsUpdated.GetPayload(sessionEvent);
+                    if (timelineEvents.Last().Value.EventType == nameof(ObjectiveScored))
+                    {
+                        var lastPayload = ObjectiveScored.GetPayload(timelineEvents.Last().Key);
+
+                        if (lastPayload.Faction == payload.Faction)
+                        {
+                            timelineEvents.RemoveAt(timelineEvents.Count - 1);
+                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                            {
+                                EventType = nameof(ObjectiveScored),
+                                SerializedPayload = JsonConvert.SerializeObject(new
+                                {
+                                    faction = payload.Faction,
+                                    points = payload.Points,
+                                    slug = lastPayload.Slug,
+                                }),
+                                HappenedAt = sessionEvent.HappenedAt
+                            }));
+
+                            continue;
+                        }
+                    }
+                }
+
                 timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
                 {
                     EventType = sessionEvent.EventType,

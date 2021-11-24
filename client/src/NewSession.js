@@ -17,7 +17,7 @@ import { SESSION_VIEW_ROUTES } from './shared/constants'
 import sessionFactory from './shared/sessionService'
 import { factionsList } from './gameInfo/factions'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     color: 'white',
   },
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'white',
     },
   },
-}))
+})
 
 function NewSession({ dispatch }) {
   const classes = useStyles()

@@ -103,15 +103,11 @@ const factory = (options = { debug: true }) =>
             },
             sessionTimeline: {
               events: {
-                GameStarted: 'Game started',
+                GameStarted: 'Game created',
                 VpCountChanged: 'VP count changed',
-                ObjectiveAdded: 'Objective added',
-                VictoryPointsUpdated: 'Victory Point scored by {{faction}}',
-                ObjectiveScored: 'Objective scored by {{faction}}',
               },
               vpCountChanged: '{{from}} -> {{to}}',
-              upTo: 'up to {{points}} VP',
-              vpScored: '{{faction}} scored, up to {{points}} VP',
+              vp: '{{points}} VP',
             },
             share: {
               copied: 'Copied!',

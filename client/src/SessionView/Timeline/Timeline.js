@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { Trans, useTranslation } from 'react-i18next'
 
 import Objective from '../../shared/Objective'
+import FactionFlag from '../../shared/FactionFlag'
 
 import { useTimelineEvents } from './queries'
 
@@ -47,7 +48,18 @@ function GameStarted({ payload, happenedAt, eventType }) {
         <Typography variant="h5">
           <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
         </Typography>
-        <pre>{JSON.stringify(payload, null, 2)}</pre>
+        {payload.map((faction) => (
+          <Box style={{ display: 'inline-block' }}>
+            <FactionFlag
+              key={faction}
+              disabled
+              factionKey={faction}
+              height="3em"
+              selected
+              width="4.5em"
+            />
+          </Box>
+        ))}
       </Ti4TimelineContent>
     </Ti4TimelineItem>
   )
@@ -80,7 +92,7 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
   )
 }
 
-function ObjectiveAdded({ payload, happenedAt, eventType }) {
+function ObjectiveAdded({ payload, happenedAt }) {
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -93,9 +105,6 @@ function ObjectiveAdded({ payload, happenedAt, eventType }) {
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
-        <Typography variant="h5">
-          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
-        </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} />
         </Box>
@@ -115,24 +124,24 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot />
+        <Box style={{ margin: '3px 0' }}>
+          <FactionFlag
+            disabled
+            factionKey={payload.faction}
+            height="2.5em"
+            selected
+            width="4.5em"
+          />
+        </Box>
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
         <Typography variant="h5">
           <Trans
-            i18nKey={`sessionTimeline.events.${eventType}`}
-            values={{ faction: t(`factions.${payload.faction}.name`) }}
+            i18nKey="sessionTimeline.vp"
+            values={{ points: payload.points }}
           />
         </Typography>
-        <Box>
-          <Typography variant="subitle1">
-            <Trans
-              i18nKey="sessionTimeline.upTo"
-              values={{ points: payload.points }}
-            />
-          </Typography>
-        </Box>
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} />
         </Box>
@@ -141,9 +150,7 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
   )
 }
 
-function VictoryPointsUpdated({ payload, happenedAt, eventType }) {
-  const { t } = useTranslation()
-
+function VictoryPointsUpdated({ payload, happenedAt }) {
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -152,23 +159,22 @@ function VictoryPointsUpdated({ payload, happenedAt, eventType }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot />
+        <Box style={{ margin: '3px 0' }}>
+          <FactionFlag
+            disabled
+            factionKey={payload.faction}
+            height="2.5em"
+            selected
+            width="4.5em"
+          />
+        </Box>
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
         <Typography variant="h5">
           <Trans
-            i18nKey={`sessionTimeline.events.${eventType}`}
-            values={{ faction: t(`factions.${payload.faction}.name`) }}
-          />
-        </Typography>
-        <Typography variant="subtitle1">
-          <Trans
-            i18nKey="sessionTimeline.vpScored"
-            values={{
-              faction: t(`factions.${payload.faction}.name`),
-              points: payload.points,
-            }}
+            i18nKey="sessionTimeline.vp"
+            values={{ points: payload.points }}
           />
         </Typography>
       </Ti4TimelineContent>
