@@ -181,6 +181,7 @@ namespace server.Persistence
                               IsTTS = false,
                               IsSplit = false,
                               SessionStart = "2021-09-25",
+                              VpCount= 10,
                               Duration = 9
                             })
                         }
@@ -211,6 +212,7 @@ namespace server.Persistence
                               IsTTS = false,
                               IsSplit = false,
                               SessionStart = "2021-09-26",
+                              VpCount= 10,
                               Duration = 9
                             })
                         }

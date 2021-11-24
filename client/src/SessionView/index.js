@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet'
-import { Grid, Button } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Route, Switch } from 'react-router-dom'
 
@@ -16,6 +16,7 @@ import Map from './Map'
 import SessionNavigation from './SessionNavigation'
 import DetailsForm from './DetailsForm'
 import LockForEdit from './LockForEdit'
+import { Timeline } from './Timeline'
 
 const useStyles = makeStyles({
   header: {
@@ -107,6 +108,9 @@ function SessionView({
         </Route>
         <Route exact path={SESSION_VIEW_ROUTES.details}>
           <DetailsForm disabled={!editable} session={session} />
+        </Route>
+        <Route exact path={SESSION_VIEW_ROUTES.timeline}>
+          <Timeline session={session} sessionService={sessionService} />
         </Route>
         <Route exact path={SESSION_VIEW_ROUTES.main}>
           <Overview

@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useReducer } from 'react'
+import { useEffect, useCallback, useMemo, useReducer } from 'react'
 import clsx from 'clsx'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { Helmet } from 'react-helmet'
 import {
   AppBar,
@@ -31,6 +33,8 @@ import { useFullscreen } from './Fullscreen'
 import i18nFactory from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
 import GitHubRibbon from './GitHubRibbon'
+import config from './config'
+import useInvalidateQueries from './useInvalidateQueries'
 
 i18nFactory()
 
@@ -75,6 +79,15 @@ function App() {
     load()
   }, [])
 
+  const invalidateQueries = useInvalidateQueries()
+  const dispatchWithInvalidate = useCallback(
+    (...args) => {
+      invalidateQueries(['session'])
+      dispatch(...args)
+    },
+    [invalidateQueries, dispatch],
+  )
+
   return (
     <ThemeProvider theme={theme}>
       <Helmet>
@@ -118,15 +131,18 @@ function App() {
         <Toolbar />
         <Container className={clsx({ [classes.fullWidth]: fullscreen })}>
           <StateContext.Provider value={state}>
-            <DispatchContext.Provider value={dispatch}>
+            <DispatchContext.Provider value={dispatchWithInvalidate}>
               <KnowledgeBase />
               <Box m={2}>
                 <Switch>
                   <Route path="/new">
-                    <NewSession dispatch={dispatch} />
+                    <NewSession dispatch={dispatchWithInvalidate} />
                   </Route>
                   <Route path="/:sessionId/:secret?">
-                    <SessionProvider dispatch={dispatch} state={state}>
+                    <SessionProvider
+                      dispatch={dispatchWithInvalidate}
+                      state={state}
+                    >
                       {({
                         sessionService,
                         session,
@@ -165,10 +181,22 @@ function App() {
   )
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      notifyOnChangeProps: 'tracked',
+      refetchOnWindowFocus: !config.isDevelopment,
+    },
+  },
+})
+
 function SignalRConnectedApp() {
   return (
     <SignalRConnectionProvider>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+        {config.isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
+      </QueryClientProvider>
     </SignalRConnectionProvider>
   )
 }

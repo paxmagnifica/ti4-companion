@@ -67,11 +67,12 @@ const factory = (options = { debug: true }) =>
                 overview: 'Overview',
                 map: 'Map',
                 details: 'Details',
+                timeline: 'Timeline',
               },
               overview: {
                 goToWiki: 'go to wiki',
                 openOriginal: 'open original image',
-                sessionStart: 'session from {{date}} {{time}}',
+                sessionStart: 'session from',
               },
             },
             sessionMap: {
@@ -84,11 +85,6 @@ const factory = (options = { debug: true }) =>
               sizeHint:
                 'Keep in mind that maps smaller than 800x800px are going to be small and unreadable',
               preview: 'preview',
-            },
-            share: {
-              copied: 'Copied!',
-              tooltip: 'show qr code',
-              allowEdit: 'allow edit',
             },
             sessionDetails: {
               name: 'Your session name',
@@ -104,6 +100,19 @@ const factory = (options = { debug: true }) =>
                 content:
                   'You changed the Victory Point target.\nSome people already scored, so the game is probably in progress.\nAre you sure you want to change the Victory Point target of this game?',
               },
+            },
+            sessionTimeline: {
+              events: {
+                GameStarted: 'Game created',
+                VpCountChanged: 'VP count changed',
+              },
+              vpCountChanged: '{{from}} -> {{to}}',
+              vp: '{{points}} VP',
+            },
+            share: {
+              copied: 'Copied!',
+              tooltip: 'show qr code',
+              allowEdit: 'allow edit',
             },
             fullscreen: {
               tooltip: 'show in fullscreen mode',
