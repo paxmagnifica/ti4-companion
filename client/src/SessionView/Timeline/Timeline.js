@@ -9,10 +9,11 @@ import {
   TimelineContent,
 } from '@material-ui/lab'
 import { withStyles } from '@material-ui/core/styles'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
+import useSmallViewport from '../../shared/useSmallViewport'
 
 import { useTimelineEvents } from './queries'
 
@@ -32,6 +33,14 @@ const Ti4TimelineItem = withStyles({
   },
 })(TimelineItem)
 
+const Ti4TimelineDot = withStyles({
+  root: {
+    padding: '.3em',
+    marginLeft: '2.1em',
+    marginRight: '2.1em',
+  },
+})(TimelineDot)
+
 function GameStarted({ payload, happenedAt, eventType }) {
   return (
     <Ti4TimelineItem>
@@ -41,7 +50,7 @@ function GameStarted({ payload, happenedAt, eventType }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot />
+        <Ti4TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
@@ -74,7 +83,7 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot />
+        <Ti4TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
@@ -93,6 +102,8 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
 }
 
 function ObjectiveAdded({ payload, happenedAt }) {
+  const small = useSmallViewport()
+
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -101,12 +112,12 @@ function ObjectiveAdded({ payload, happenedAt }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot />
+        <Ti4TimelineDot />
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
         <Box style={{ display: 'inline-block' }}>
-          <Objective slug={payload.slug} />
+          <Objective slug={payload.slug} small={small} />
         </Box>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
@@ -114,7 +125,7 @@ function ObjectiveAdded({ payload, happenedAt }) {
 }
 
 function ObjectiveScored({ payload, happenedAt, eventType }) {
-  const { t } = useTranslation()
+  const small = useSmallViewport()
 
   return (
     <Ti4TimelineItem>
@@ -143,7 +154,7 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
           />
         </Typography>
         <Box style={{ display: 'inline-block' }}>
-          <Objective slug={payload.slug} />
+          <Objective slug={payload.slug} small={small} />
         </Box>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
@@ -233,13 +244,12 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
             </Typography>
           </TimelineOppositeContent>
           <TimelineSeparator>
-            <TimelineDot />
+            <Ti4TimelineDot />
             <TimelineConnector />
           </TimelineSeparator>
           <Ti4TimelineContent>
-            <Typography variant="h5">{eventType}</Typography>
-            <Typography variant="subtitle1">
-              <pre>{JSON.stringify(payload, null, 2)}</pre>
+            <Typography title={eventType} variant="h5">
+              {eventType}
             </Typography>
           </Ti4TimelineContent>
         </Ti4TimelineItem>
