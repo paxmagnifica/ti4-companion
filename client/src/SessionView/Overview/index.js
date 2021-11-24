@@ -150,10 +150,8 @@ function Overview({ editable, session, updateFactionPoints }) {
           spacing={4}
         >
           <Grid item style={{ textAlign: 'right' }} xs={12}>
-            {t('sessionView.overview.sessionStart', {
-              date: new Date(session.createdAt).toLocaleDateString(),
-              time: new Date(session.createdAt).toLocaleTimeString(),
-            })}
+            {t('sessionView.overview.sessionStart')}{' '}
+            {new Date(session.createdAt).toLocaleString()}
           </Grid>
         </Grid>
       </HideInFullscreen>

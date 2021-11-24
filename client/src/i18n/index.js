@@ -72,7 +72,7 @@ const factory = (options = { debug: true }) =>
               overview: {
                 goToWiki: 'go to wiki',
                 openOriginal: 'open original image',
-                sessionStart: 'session from {{date}} {{time}}',
+                sessionStart: 'session from',
               },
             },
             sessionMap: {

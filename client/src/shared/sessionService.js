@@ -47,6 +47,11 @@ const factory = ({ fetch }) => {
         body: formData,
       })
     },
+
+    getTimeline: async (sessionId) =>
+      (
+        await fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/timeline`)
+      ).json(),
   }
 }
 
