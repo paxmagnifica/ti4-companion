@@ -36,6 +36,7 @@ const factory = (options = { debug: true }) =>
               home: 'Home',
               title: 'TI4 Companion',
               labels: {
+                toBottom: 'to bottom',
                 add: 'add',
                 cancel: 'cancel',
                 ok: 'ok',
