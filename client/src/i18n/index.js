@@ -39,6 +39,8 @@ const factory = (options = { debug: true }) =>
                 add: 'add',
                 cancel: 'cancel',
                 ok: 'ok',
+                upload: 'upload',
+                preview: 'preview',
                 objective: 'objective',
                 search: 'search',
                 stageI: 'stage I',
@@ -84,7 +86,6 @@ const factory = (options = { debug: true }) =>
                 "Drag 'n' drop your map file here, or click to select the map file",
               sizeHint:
                 'Keep in mind that maps smaller than 800x800px are going to be small and unreadable',
-              preview: 'preview',
             },
             sessionDetails: {
               name: 'Your session name',
@@ -108,6 +109,11 @@ const factory = (options = { debug: true }) =>
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vp: '{{points}} VP',
+              changeFile: 'Change the image',
+              dropHere: 'Drop your image here...',
+              dragHere: "Drag 'n' drop your image here, or click to select it",
+              submit: 'remember',
+              cta: 'remember a moment',
             },
             share: {
               copied: 'Copied!',

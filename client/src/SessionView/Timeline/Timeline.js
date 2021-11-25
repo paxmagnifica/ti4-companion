@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Typography, Box } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
@@ -8,13 +9,14 @@ import {
   TimelineDot,
   TimelineContent,
 } from '@material-ui/lab'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, makeStyles } from '@material-ui/core/styles'
 import { Trans } from 'react-i18next'
 
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
 
+import AddTimelineEvent from './AddTimelineEvent'
 import { useTimelineEvents } from './queries'
 
 const Ti4TimelineContent = withStyles({
@@ -257,17 +259,42 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
   }
 }
 
+const useStyles = makeStyles({
+  addNew: {
+    minHeight: '0 !important',
+  },
+  addNewSeparator: {
+    minWidth: 600,
+    maxWidth: '80%',
+    '& button': {
+      marginTop: 5,
+      marginBottom: 15,
+    },
+  },
+})
+
 export function Timeline({ session, sessionService }) {
   const { timeline } = useTimelineEvents({
     sessionId: session.id,
     sessionService,
   })
 
+  const uploadEvent = useCallback(console.log, [])
+
+  const classes = useStyles()
+
   return (
     <MuiTimeline>
       {timeline.map((event) => (
         <EventOnATimeline {...event} key={event.order} />
       ))}
+      <Ti4TimelineItem className={classes.addNew}>
+        <TimelineOppositeContent />
+        <TimelineSeparator className={classes.addNewSeparator}>
+          <AddTimelineEvent uploadEvent={uploadEvent} />
+        </TimelineSeparator>
+        <Ti4TimelineContent />
+      </Ti4TimelineItem>
     </MuiTimeline>
   )
 }
