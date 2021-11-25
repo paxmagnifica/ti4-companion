@@ -11,6 +11,10 @@ import {
 } from '@material-ui/lab'
 import { withStyles, makeStyles } from '@material-ui/core/styles'
 import { Trans } from 'react-i18next'
+import {
+  AccessibilityNew as UserEventIcon,
+  Map as MapIcon,
+} from '@material-ui/icons'
 
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
@@ -43,6 +47,24 @@ const Ti4TimelineDot = withStyles({
     marginRight: '2.1em',
   },
 })(TimelineDot)
+
+const useStyles = makeStyles({
+  dotWithIcon: {
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  addNew: {
+    minHeight: '0 !important',
+  },
+  addNewSeparator: {
+    width: 600,
+    maxWidth: '80%',
+    '& button': {
+      marginTop: 5,
+      marginBottom: 15,
+    },
+  },
+})
 
 function GameStarted({ payload, happenedAt, eventType }) {
   return (
@@ -195,6 +217,31 @@ function VictoryPointsUpdated({ payload, happenedAt }) {
   )
 }
 
+function ImageFromPayload({ Icon, payload, happenedAt }) {
+  const classes = useStyles()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot className={classes.dotWithIcon} color="primary">
+          {Icon}
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <a href={payload} target="about:blank">
+          <img alt="" src={payload} style={{ maxWidth: '100%' }} />
+        </a>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
 function EventOnATimeline({ eventType, payload, happenedAt }) {
   switch (eventType) {
     case 'GameStarted':
@@ -237,6 +284,22 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
           payload={payload}
         />
       )
+    case 'MapAdded':
+      return (
+        <ImageFromPayload
+          happenedAt={happenedAt}
+          Icon={<MapIcon />}
+          payload={payload}
+        />
+      )
+    case 'TimelineUserEvent':
+      return (
+        <ImageFromPayload
+          happenedAt={happenedAt}
+          Icon={<UserEventIcon />}
+          payload={payload}
+        />
+      )
     default:
       return (
         <Ti4TimelineItem>
@@ -259,21 +322,7 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
   }
 }
 
-const useStyles = makeStyles({
-  addNew: {
-    minHeight: '0 !important',
-  },
-  addNewSeparator: {
-    minWidth: 600,
-    maxWidth: '80%',
-    '& button': {
-      marginTop: 5,
-      marginBottom: 15,
-    },
-  },
-})
-
-export function Timeline({ session, sessionService }) {
+export function Timeline({ editable, session, sessionService }) {
   const { timeline } = useTimelineEvents({
     sessionId: session.id,
     sessionService,
@@ -297,13 +346,15 @@ export function Timeline({ session, sessionService }) {
       {timeline.map((event) => (
         <EventOnATimeline {...event} key={event.order} />
       ))}
-      <Ti4TimelineItem className={classes.addNew}>
-        <TimelineOppositeContent />
-        <TimelineSeparator className={classes.addNewSeparator}>
-          <AddTimelineEvent uploadEvent={uploadEvent} />
-        </TimelineSeparator>
-        <Ti4TimelineContent />
-      </Ti4TimelineItem>
+      {editable && (
+        <Ti4TimelineItem className={classes.addNew}>
+          <TimelineOppositeContent />
+          <TimelineSeparator className={classes.addNewSeparator}>
+            <AddTimelineEvent uploadEvent={uploadEvent} />
+          </TimelineSeparator>
+          <Ti4TimelineContent />
+        </Ti4TimelineItem>
+      )}
     </MuiTimeline>
   )
 }

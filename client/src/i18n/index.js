@@ -112,8 +112,8 @@ const factory = (options = { debug: true }) =>
               changeFile: 'Change the image',
               dropHere: 'Drop your image here...',
               dragHere: "Drag 'n' drop your image here, or click to select it",
-              submit: 'remember',
-              cta: 'remember a moment',
+              submit: 'save',
+              cta: 'save a moment',
             },
             share: {
               copied: 'Copied!',

@@ -164,6 +164,18 @@ namespace server.Controllers
                         }
                     }
                 }
+#if DEBUG
+                if (sessionEvent.EventType == GameEvent.TimelineUserEvent || sessionEvent.EventType == GameEvent.MapAdded)
+                {
+                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                    {
+                        EventType = sessionEvent.EventType,
+                        SerializedPayload = sessionEvent.SerializedPayload.Replace("storage-emulator", "localhost"),
+                        HappenedAt = sessionEvent.HappenedAt
+                    }));
+                    continue;
+                }
+#endif
 
                 timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
                 {
