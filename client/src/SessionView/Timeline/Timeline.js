@@ -15,9 +15,10 @@ import { Trans } from 'react-i18next'
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
+import useInvalidateQueries from '../../useInvalidateQueries'
 
 import AddTimelineEvent from './AddTimelineEvent'
-import { useTimelineEvents } from './queries'
+import { useTimelineEvents, timelineKeys } from './queries'
 
 const Ti4TimelineContent = withStyles({
   root: {
@@ -278,8 +279,17 @@ export function Timeline({ session, sessionService }) {
     sessionId: session.id,
     sessionService,
   })
+  const invalidateQueries = useInvalidateQueries()
 
-  const uploadEvent = useCallback(console.log, [])
+  const uploadEvent = useCallback(
+    async (file) => {
+      const result = await sessionService.addTimelineEvent(file, session.id)
+      if (result.ok) {
+        invalidateQueries(timelineKeys.sessionTimeline(session.id))
+      }
+    },
+    [session.id, sessionService, invalidateQueries],
+  )
 
   const classes = useStyles()
 

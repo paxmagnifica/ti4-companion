@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@material-ui/core'
 import { Image as ImageIcon, Close as CloseIcon } from '@material-ui/icons'
 import { Trans } from 'react-i18next'
@@ -7,13 +7,6 @@ import ImageUpload from '../../shared/ImageUpload'
 
 function AddTimelineEvent({ uploadEvent }) {
   const [open, setOpen] = useState(false)
-
-  const upload = useCallback(
-    (file) => {
-      uploadEvent('uploading', file)
-    },
-    [uploadEvent],
-  )
 
   return (
     <>
@@ -34,7 +27,7 @@ function AddTimelineEvent({ uploadEvent }) {
             dragHere: 'sessionTimeline.dragHere',
             button: 'sessionTimeline.submit',
           }}
-          upload={upload}
+          upload={uploadEvent}
         />
       )}
     </>

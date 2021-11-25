@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 
-const timelineKeys = {
+export const timelineKeys = {
   sessionTimeline: (sessionId) => ['session', sessionId, 'timeline'],
 }
 
