@@ -67,7 +67,7 @@ namespace server.Controllers
                 if (sessionEvent.EventType == nameof(ObjectiveScored))
                 {
                     var payload = ObjectiveScored.GetPayload(sessionEvent);
-                    if (timelineEvents.Last().Value.EventType == nameof(VictoryPointsUpdated))
+                    if (timelineEvents.Last().Key.EventType == nameof(VictoryPointsUpdated))
                     {
                         var lastPayload = VictoryPointsUpdated.GetPayload(timelineEvents.Last().Key);
 
@@ -94,7 +94,7 @@ namespace server.Controllers
                 if (sessionEvent.EventType == nameof(VictoryPointsUpdated))
                 {
                     var payload = VictoryPointsUpdated.GetPayload(sessionEvent);
-                    if (timelineEvents.Last().Value.EventType == nameof(ObjectiveScored))
+                    if (timelineEvents.Last().Key.EventType == nameof(ObjectiveScored))
                     {
                         var lastPayload = ObjectiveScored.GetPayload(timelineEvents.Last().Key);
 
