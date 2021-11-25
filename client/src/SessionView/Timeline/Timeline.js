@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { Typography, Box } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
@@ -19,6 +19,7 @@ import {
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
+import ScrollToBottom from '../../shared/ScrollToBottom'
 import useInvalidateQueries from '../../useInvalidateQueries'
 
 import AddTimelineEvent from './AddTimelineEvent'
@@ -367,19 +368,22 @@ export function Timeline({ editable, session, sessionService }) {
   const classes = useStyles()
 
   return (
-    <MuiTimeline>
-      {timeline.map((event) => (
-        <EventOnATimeline {...event} key={event.order} />
-      ))}
-      {editable && (
-        <Ti4TimelineItem className={classes.addNew}>
-          <TimelineOppositeContent />
-          <TimelineSeparator className={classes.addNewSeparator}>
-            <AddTimelineEvent uploadEvent={uploadEvent} />
-          </TimelineSeparator>
-          <Ti4TimelineContent />
-        </Ti4TimelineItem>
-      )}
-    </MuiTimeline>
+    <>
+      <MuiTimeline>
+        {timeline.map((event) => (
+          <EventOnATimeline {...event} key={event.order} />
+        ))}
+        {editable && (
+          <Ti4TimelineItem className={classes.addNew}>
+            <TimelineOppositeContent />
+            <TimelineSeparator className={classes.addNewSeparator}>
+              <AddTimelineEvent uploadEvent={uploadEvent} />
+            </TimelineSeparator>
+            <Ti4TimelineContent />
+          </Ti4TimelineItem>
+        )}
+      </MuiTimeline>
+      <ScrollToBottom />
+    </>
   )
 }
