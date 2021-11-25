@@ -106,6 +106,10 @@ const factory = (options = { debug: true }) =>
               events: {
                 GameStarted: 'Game created',
                 VpCountChanged: 'VP count changed',
+                MapAdded: 'Map added',
+                ObjectiveScored: 'Objective scored',
+                TimelineUserEvent: 'User added event',
+                VictoryPointsUpdated: 'VP scored',
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vp: '{{points}} VP',
