@@ -4,6 +4,18 @@ const timelineKeys = {
   sessionTimeline: (sessionId) => ['session', sessionId, 'timeline'],
 }
 
+const parsePayload = (serializedPayload) => {
+  try {
+    return JSON.parse(serializedPayload)
+  } catch (e) {
+    if (e.name === 'SyntaxError') {
+      return serializedPayload
+    }
+
+    throw e
+  }
+}
+
 export const useTimelineEvents = ({ sessionId, sessionService }) => {
   const { data, ...queryInfo } = useQuery(
     timelineKeys.sessionTimeline(sessionId),
@@ -13,7 +25,7 @@ export const useTimelineEvents = ({ sessionId, sessionService }) => {
       return timeline
         .map((timelineEvent) => ({
           ...timelineEvent,
-          payload: JSON.parse(timelineEvent.serializedPayload),
+          payload: parsePayload(timelineEvent.serializedPayload),
         }))
         .sort(({ order: orderA }, { order: orderB }) => orderA - orderB)
     },
