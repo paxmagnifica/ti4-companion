@@ -110,7 +110,11 @@ function SessionView({
           <DetailsForm disabled={!editable} session={session} />
         </Route>
         <Route exact path={SESSION_VIEW_ROUTES.timeline}>
-          <Timeline session={session} sessionService={sessionService} />
+          <Timeline
+            editable={editable}
+            session={session}
+            sessionService={sessionService}
+          />
         </Route>
         <Route exact path={SESSION_VIEW_ROUTES.main}>
           <Overview

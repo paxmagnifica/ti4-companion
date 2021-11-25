@@ -12,5 +12,6 @@ namespace server.Domain
 
         public const string GameStarted = "GameStarted";
         public const string MapAdded = "MapAdded";
+        public const string TimelineUserEvent = "TimelineUserEvent";
     }
 }

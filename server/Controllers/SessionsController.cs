@@ -92,7 +92,8 @@ namespace server.Controllers
         {
             var mapFile = HttpContext.Request.Form.Files["map"];
 
-            if (mapFile.Length > 3000000) {
+            if (mapFile.Length > 3000000)
+            {
                 return new BadRequestResult();
             }
 
@@ -104,7 +105,8 @@ namespace server.Controllers
             blobHttpHeader.ContentType = mapFile.ContentType;
             await mapBlobClient.UploadAsync(mapFile.OpenReadStream(), blobHttpHeader);
 
-            var gameEvent = new GameEvent{
+            var gameEvent = new GameEvent
+            {
                 Id = Guid.NewGuid(),
                 SessionId = sessionId,
                 HappenedAt = _timeProvider.Now,

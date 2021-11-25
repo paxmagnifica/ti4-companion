@@ -38,6 +38,15 @@ const factory = ({ fetch }) => {
     },
 
     pushEvent,
+    addTimelineEvent: (imageFile, sessionId) => {
+      const formData = new FormData()
+      formData.append('image', imageFile)
+
+      return fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/timeline`, {
+        method: 'POST',
+        body: formData,
+      })
+    },
     uploadMap: (mapFile, sessionId) => {
       const formData = new FormData()
       formData.append('map', mapFile)

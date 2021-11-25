@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Typography, Box } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
@@ -8,14 +9,20 @@ import {
   TimelineDot,
   TimelineContent,
 } from '@material-ui/lab'
-import { withStyles } from '@material-ui/core/styles'
-import { Trans } from 'react-i18next'
+import { withStyles, makeStyles } from '@material-ui/core/styles'
+import { Trans, useTranslation } from 'react-i18next'
+import {
+  AccessibilityNew as UserEventIcon,
+  Map as MapIcon,
+} from '@material-ui/icons'
 
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
+import useInvalidateQueries from '../../useInvalidateQueries'
 
-import { useTimelineEvents } from './queries'
+import AddTimelineEvent from './AddTimelineEvent'
+import { useTimelineEvents, timelineKeys } from './queries'
 
 const Ti4TimelineContent = withStyles({
   root: {
@@ -41,7 +48,27 @@ const Ti4TimelineDot = withStyles({
   },
 })(TimelineDot)
 
+const useStyles = makeStyles({
+  dotWithIcon: {
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  addNew: {
+    minHeight: '0 !important',
+  },
+  addNewSeparator: {
+    width: 600,
+    maxWidth: '80%',
+    '& button': {
+      marginTop: 5,
+      marginBottom: 15,
+    },
+  },
+})
+
 function GameStarted({ payload, happenedAt, eventType }) {
+  const { t } = useTranslation()
+
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -50,7 +77,7 @@ function GameStarted({ payload, happenedAt, eventType }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <Ti4TimelineDot />
+        <Ti4TimelineDot title={t(`sessionTimeline.events.${eventType}`)} />
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
@@ -58,9 +85,8 @@ function GameStarted({ payload, happenedAt, eventType }) {
           <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
         </Typography>
         {payload.map((faction) => (
-          <Box style={{ display: 'inline-block' }}>
+          <Box key={faction} style={{ display: 'inline-block' }}>
             <FactionFlag
-              key={faction}
               disabled
               factionKey={faction}
               height="3em"
@@ -75,6 +101,8 @@ function GameStarted({ payload, happenedAt, eventType }) {
 }
 
 function VpCountChanged({ payload, happenedAt, eventType }) {
+  const { t } = useTranslation()
+
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -83,7 +111,7 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <Ti4TimelineDot />
+        <Ti4TimelineDot title={t(`sessionTimeline.events.${eventType}`)} />
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
@@ -101,8 +129,9 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
   )
 }
 
-function ObjectiveAdded({ payload, happenedAt }) {
+function ObjectiveAdded({ eventType, payload, happenedAt }) {
   const small = useSmallViewport()
+  const { t } = useTranslation()
 
   return (
     <Ti4TimelineItem>
@@ -112,7 +141,7 @@ function ObjectiveAdded({ payload, happenedAt }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <Ti4TimelineDot />
+        <Ti4TimelineDot title={t(`sessionTimeline.events.${eventType}`)} />
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
@@ -126,6 +155,7 @@ function ObjectiveAdded({ payload, happenedAt }) {
 
 function ObjectiveScored({ payload, happenedAt, eventType }) {
   const small = useSmallViewport()
+  const { t } = useTranslation()
 
   return (
     <Ti4TimelineItem>
@@ -135,7 +165,10 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <Box style={{ margin: '3px 0' }}>
+        <Box
+          style={{ margin: '3px 0' }}
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
           <FactionFlag
             disabled
             factionKey={payload.faction}
@@ -161,7 +194,9 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
   )
 }
 
-function VictoryPointsUpdated({ payload, happenedAt }) {
+function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>
@@ -170,7 +205,10 @@ function VictoryPointsUpdated({ payload, happenedAt }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <Box style={{ margin: '3px 0' }}>
+        <Box
+          style={{ margin: '3px 0' }}
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
           <FactionFlag
             disabled
             factionKey={payload.faction}
@@ -188,6 +226,40 @@ function VictoryPointsUpdated({ payload, happenedAt }) {
             values={{ points: payload.points }}
           />
         </Typography>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
+  const classes = useStyles()
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          className={classes.dotWithIcon}
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          {Icon}
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <a href={payload} target="about:blank">
+          <img
+            alt={t(`sessionTimeline.events.${eventType}`)}
+            src={payload}
+            style={{ maxWidth: '100%' }}
+          />
+        </a>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
   )
@@ -235,6 +307,24 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
           payload={payload}
         />
       )
+    case 'MapAdded':
+      return (
+        <ImageFromPayload
+          eventType={eventType}
+          happenedAt={happenedAt}
+          Icon={<MapIcon />}
+          payload={payload}
+        />
+      )
+    case 'TimelineUserEvent':
+      return (
+        <ImageFromPayload
+          eventType={eventType}
+          happenedAt={happenedAt}
+          Icon={<UserEventIcon />}
+          payload={payload}
+        />
+      )
     default:
       return (
         <Ti4TimelineItem>
@@ -257,17 +347,39 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
   }
 }
 
-export function Timeline({ session, sessionService }) {
+export function Timeline({ editable, session, sessionService }) {
   const { timeline } = useTimelineEvents({
     sessionId: session.id,
     sessionService,
   })
+  const invalidateQueries = useInvalidateQueries()
+
+  const uploadEvent = useCallback(
+    async (file) => {
+      const result = await sessionService.addTimelineEvent(file, session.id)
+      if (result.ok) {
+        invalidateQueries(timelineKeys.sessionTimeline(session.id))
+      }
+    },
+    [session.id, sessionService, invalidateQueries],
+  )
+
+  const classes = useStyles()
 
   return (
     <MuiTimeline>
       {timeline.map((event) => (
         <EventOnATimeline {...event} key={event.order} />
       ))}
+      {editable && (
+        <Ti4TimelineItem className={classes.addNew}>
+          <TimelineOppositeContent />
+          <TimelineSeparator className={classes.addNewSeparator}>
+            <AddTimelineEvent uploadEvent={uploadEvent} />
+          </TimelineSeparator>
+          <Ti4TimelineContent />
+        </Ti4TimelineItem>
+      )}
     </MuiTimeline>
   )
 }
