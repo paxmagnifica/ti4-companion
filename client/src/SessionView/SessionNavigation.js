@@ -85,7 +85,7 @@ function SessionNavigation() {
   const sanitizedParams = useMemo(() => {
     const { secret, ...otherParams } = params
 
-    if (['map', 'details'].includes(secret)) {
+    if (Object.keys(SESSION_VIEW_ROUTES).includes(secret)) {
       return otherParams
     }
 
