@@ -156,16 +156,6 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  fullscreen: {
-    opacity: 0.3,
-    transition: theme.transitions.create(['opacity'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    '&:hover': {
-      opacity: 1,
-    },
-  },
   drawerBackdrop: {
     position: 'fixed',
     top: 0,
@@ -280,13 +270,16 @@ function KnowledgeBase() {
     [chosenTab, drawerOpen],
   )
 
+  if (fullscreen) {
+    return null
+  }
+
   return (
     <>
       <Grid
         alignItems="center"
         className={clsx(classes.root, {
           [classes.rootActive]: drawerOpen,
-          [classes.fullscreen]: !drawerOpen && fullscreen,
         })}
         container
         direction="column"

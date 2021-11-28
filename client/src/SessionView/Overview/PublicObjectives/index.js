@@ -21,7 +21,7 @@ const useStyles = makeStyles({
       }
 
       if (fullscreen) {
-        return '1vw'
+        return '1vw 1.4vw'
       }
 
       return 18
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 function PublicObjectives({ editable, session, updateFactionPoints }) {
   const { t } = useTranslation()
   const smallViewport = useSmallViewport()
-  const fullscreen = useFullscreen()
+  const { fullscreen } = useFullscreen()
   const classes = useStyles({ small: smallViewport, fullscreen })
   const comboDispatch = useContext(ComboDispatchContext)
   const {
