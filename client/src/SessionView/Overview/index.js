@@ -78,7 +78,7 @@ function Overview({ editable, session, updateFactionPoints }) {
       >
         <Grid className={clsx({ [classes.fullWidth]: fullscreen })} item>
           <VictoryPoints
-            editable={editable}
+            editable={editable && !fullscreen}
             factions={session.factions}
             onChange={updateFactionPointsInSession}
             points={session.points}
@@ -87,7 +87,7 @@ function Overview({ editable, session, updateFactionPoints }) {
         </Grid>
         <Grid item>
           <PublicObjectives
-            editable={editable}
+            editable={editable && !fullscreen}
             session={session}
             updateFactionPoints={updateFactionPoints}
           />

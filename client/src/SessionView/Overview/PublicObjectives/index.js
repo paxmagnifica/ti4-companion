@@ -125,7 +125,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
             />
           </div>
         ))}
-        {!fullscreen && editable && (
+        {editable && (
           <div className={classes.objectiveContainer}>
             <IconButton
               onClick={() => setAddObjectiveOpen(true)}

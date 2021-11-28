@@ -114,7 +114,7 @@ function VictoryPoints({ editable, target, onChange, points }) {
   const inputWidth = 100 / (target + 1)
   const classes = useStyles({ inputWidth })
   const vpImages = target === 10 ? vp10_images : vp14_images
-  const {fullscreen} = useFullscreen()
+  const { fullscreen } = useFullscreen()
 
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
