@@ -133,6 +133,7 @@ function DetailsForm({ disabled, session }) {
                 <Slider
                   color="secondary"
                   defaultValue={10}
+                  disabled={disabled}
                   marks={vpMarks}
                   max={14}
                   min={10}
