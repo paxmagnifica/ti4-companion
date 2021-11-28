@@ -1,26 +1,15 @@
 import { useState, useCallback, useMemo } from 'react'
 import clsx from 'clsx'
-import {
-  Avatar,
-  Card,
-  CardActions,
-  CardHeader,
-  CardMedia,
-  Dialog,
-  Grid,
-  IconButton,
-  Tooltip,
-} from '@material-ui/core'
-import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
+import { Dialog, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 
-import * as factions from '../../gameInfo/factions'
 import { getFactionCheatSheetPath } from '../../gameInfo/factions'
 import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
 
 import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
+import FactionNutshells from './FactionNutshells'
 
 const useStyles = makeStyles({
   root: {
@@ -46,73 +35,6 @@ const useStyles = makeStyles({
   },
 })
 
-function FactionNutshells({
-  factionsList,
-  classes,
-  setFaction,
-  setFactionDialogOpen,
-}) {
-  const { t } = useTranslation()
-
-  return factionsList.map((faction) => {
-    const factionData = factions.getData(faction)
-    const factionName = t(`factions.${faction}.name`)
-
-    return (
-      <Grid key={factionData.key} item sm={6} xs={12}>
-        <Card className={classes.factionCard}>
-          <CardHeader
-            avatar={<Avatar alt={factionName} src={factionData.image} />}
-            title={factionName}
-          />
-          <CardMedia
-            className={classes.media}
-            image={getFactionCheatSheetPath(factionData.key)}
-            onClick={() => {
-              setFaction(factionData.key)
-              setFactionDialogOpen((open) => !open)
-            }}
-            title={factionName}
-          />
-          <CardActions disableSpacing>
-            <Tooltip placement="top" title={t('sessionView.overview.goToWiki')}>
-              <IconButton
-                aria-label={t('sessionView.overview.goToWiki')}
-                className={classes.factionCardIcon}
-                href={`https://twilight-imperium.fandom.com/wiki/${encodeURIComponent(
-                  factionName,
-                )}`}
-                target="about:blank"
-              >
-                <LocalLibrary />
-              </IconButton>
-            </Tooltip>
-            <Tooltip
-              placement="top"
-              title={t('sessionView.overview.openOriginal')}
-            >
-              <IconButton
-                aria-label={t('sessionView.overview.openOriginal')}
-                className={classes.factionCardIcon}
-                href={getFactionCheatSheetPath(factionData.key)}
-                target="about:blank"
-              >
-                <PhotoLibrary />
-              </IconButton>
-            </Tooltip>
-          </CardActions>
-        </Card>
-      </Grid>
-    )
-  })
-}
-
-const justifyBasedOnPublicObjectives = ({ editable, objectives }) => {
-  const whenToStretch = editable ? 5 : 6
-
-  return objectives.length > whenToStretch ? 'stretch' : 'center'
-}
-
 function Overview({ editable, session, updateFactionPoints }) {
   const classes = useStyles()
   const [factionDialogOpen, setFactionDialogOpen] = useState(false)
@@ -128,15 +50,6 @@ function Overview({ editable, session, updateFactionPoints }) {
         points,
       }),
     [session.id, updateFactionPoints],
-  )
-
-  const justifyLayout = useMemo(
-    () =>
-      justifyBasedOnPublicObjectives({
-        editable,
-        objectives: session.objectives,
-      }),
-    [editable, session.objectives],
   )
 
   return (
@@ -160,7 +73,7 @@ function Overview({ editable, session, updateFactionPoints }) {
         className={clsx(classes.root, { [classes.fullscreen]: fullscreen })}
         container
         direction="column"
-        justifyContent={justifyLayout}
+        justifyContent="center"
         spacing={4}
       >
         <Grid className={clsx({ [classes.fullWidth]: fullscreen })} item>

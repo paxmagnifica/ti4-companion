@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
+import { useFullscreen } from '../../../Fullscreen'
 import useSmallViewport from '../../../shared/useSmallViewport'
 /* eslint-disable camelcase */
 import vp10_0 from '../../../assets/victory-points-10/0.jpg'
@@ -102,18 +103,26 @@ const useStyles = makeStyles({
     height: '73%',
     width: '100%',
   },
+  fullscreen: {
+    marginTop: '-51px',
+    paddingTop: 0,
+  },
 })
 
-function VictoryPoints({ editable, target, onChange, factions, points }) {
+function VictoryPoints({ editable, target, onChange, points }) {
   const smallViewport = useSmallViewport()
   const inputWidth = 100 / (target + 1)
   const classes = useStyles({ inputWidth })
   const vpImages = target === 10 ? vp10_images : vp14_images
+  const {fullscreen} = useFullscreen()
 
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
       <Grid
-        className={clsx(classes.root, { [classes.fullWidth]: smallViewport })}
+        className={clsx(classes.root, {
+          [classes.fullWidth]: smallViewport,
+          [classes.fullscreen]: fullscreen,
+        })}
         container
         justifyContent="center"
       >
