@@ -1,4 +1,5 @@
 import { useMemo, useCallback, useState } from 'react'
+import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 import Flags from 'country-flag-icons/react/3x2'
 import {
@@ -10,24 +11,38 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
+import { useFullscreen } from '../Fullscreen'
+
 const langNames = {
   pl: 'Polski',
   en: 'English',
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   flag: {
     height: '1em',
   },
   switcher: {
     marginRight: 50,
   },
-})
+  fullscreen: {
+    opacity: 0.5,
+    marginRight: 0,
+    transition: theme.transitions.create(['opacity'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    '&:hover': {
+      opacity: 1,
+    },
+  },
+}))
 
 function LanguageSwitcher() {
   const classes = useStyles()
   const { t, i18n } = useTranslation()
   const [anchorEl, setAnchorEl] = useState(null)
+  const { fullscreen } = useFullscreen()
 
   const flags = useMemo(
     () => ({
@@ -56,7 +71,7 @@ function LanguageSwitcher() {
   return (
     <>
       <Button
-        className={classes.switcher}
+        className={clsx(classes.switcher, { [classes.fullscreen]: fullscreen })}
         onClick={handleClick}
         title={t('general.switchLanguage')}
       >
