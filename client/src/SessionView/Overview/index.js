@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback } from 'react'
 import clsx from 'clsx'
 import { Dialog, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -18,8 +18,15 @@ const useStyles = makeStyles({
   fullscreen: {
     height: 'calc(100vh - 64px)', // TODO bad hack for header height, use theme, I think
   },
-  fullWidth: {
+  vpContainer__fullscreen: {
     width: '100%',
+    paddingTop: '0 !important',
+    paddingBottom: '0 !important',
+    marginTop: '-6vh',
+  },
+  poContainer__fullscreen: {
+    paddingTop: '0 !important',
+    paddingBottom: '0 !important',
   },
   factionCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -76,7 +83,12 @@ function Overview({ editable, session, updateFactionPoints }) {
         justifyContent="center"
         spacing={4}
       >
-        <Grid className={clsx({ [classes.fullWidth]: fullscreen })} item>
+        <Grid
+          className={clsx({
+            [classes.vpContainer__fullscreen]: fullscreen,
+          })}
+          item
+        >
           <VictoryPoints
             editable={editable && !fullscreen}
             factions={session.factions}
@@ -85,7 +97,12 @@ function Overview({ editable, session, updateFactionPoints }) {
             target={session.vpCount}
           />
         </Grid>
-        <Grid item>
+        <Grid
+          className={clsx({
+            [classes.poContainer__fullscreen]: fullscreen,
+          })}
+          item
+        >
           <PublicObjectives
             editable={editable && !fullscreen}
             session={session}
