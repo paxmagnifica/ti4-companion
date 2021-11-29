@@ -81,7 +81,7 @@ const NORMAL_SIZE = {
 
 const FULLSCREEN_SIZE = {
   width: 'auto',
-  height: '32.5vh',
+  height: '36vh',
   fontSize: '2.1vh',
 }
 
