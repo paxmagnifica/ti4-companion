@@ -21,7 +21,7 @@ services:
     environment:
       - ConnectionStrings__SessionContext
       - ConnectionStrings__BlobStorage
-      - AllowedOrigin
+      - AllowedOrigins
     ports:
       - "5000:5000"
       - "5001:5001"

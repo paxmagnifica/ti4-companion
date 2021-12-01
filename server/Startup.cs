@@ -11,6 +11,7 @@ using server.Domain;
 using System;
 using System.Reflection;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace server
 {
@@ -33,7 +34,7 @@ namespace server
                 options.AddPolicy(name: "_localhostCors", builder =>
                 {
                     builder
-                        .WithOrigins(Configuration.GetValue<string>("AllowedOrigin"))
+                        .WithOrigins(JsonConvert.DeserializeObject<string[]>(Configuration.GetValue<string>("AllowedOrigins")))
                         .AllowAnyHeader()
                         .AllowCredentials();
                 });
