@@ -1,6 +1,6 @@
 # ti4-companion
 
-for live version see [https://ti4companion.willcodeforskipass.com/](https://ti4companion.willcodeforskipass.com/)
+for live version see [https://ti4companion.paxmagnifica.com/](https://ti4companion.paxmagnifica.com/)
 
 This is supposed to be a companion app for a session of [Twilight Imperium 4th Edition](https://twilight-imperium.fandom.com/wiki/Twilight_Imperium_Wiki#Fourth_Edition) board game.
 
@@ -11,7 +11,18 @@ This should help with tracking the objectives, laws and directives in play and, 
 
 A way of sharing the game state in read-only state that would show the big picture on a big screen (or people who are interested in the game but are not sitting together).
 
+## Support us
+
+If you've used the application and found it useful or think this is a cause worth your support, _consider giving us a little tip for our efforts_.
+Every bit counts and keeps us even more motivated to keep going!
+
+[donate some trade goods](https://www.buymeacoffee.com/paxmagnifica)
+
 ## Features
+
+see [our page](https://paxmagnifica.com)
+
+## Plans
 
 see [issues](https://github.com/tarnas14/ti4-companion/issues)
 
