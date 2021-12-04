@@ -35,6 +35,7 @@ import LanguageSwitcher from './i18n/languageSwitcher'
 import GitHubRibbon from './GitHubRibbon'
 import config from './config'
 import useInvalidateQueries from './useInvalidateQueries'
+import { Footer } from './Footer'
 
 i18nFactory()
 
@@ -176,6 +177,7 @@ function App() {
             </DispatchContext.Provider>
           </StateContext.Provider>
         </Container>
+        <Footer />
       </Router>
     </ThemeProvider>
   )
