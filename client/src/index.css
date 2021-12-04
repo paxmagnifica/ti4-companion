@@ -30,6 +30,33 @@ body, *:fullscreen {
   z-index: 0;
 }
 
+#root {
+	position: relative;
+	padding-bottom: 2em;
+	min-height: 100vh;
+}
+
+#root > footer {
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	display: block;
+	width: 100%;
+	font-size: .95em;
+	opacity: .9;
+	padding-bottom: .1em;
+}
+
+#root > footer > a {
+	text-decoration: none;
+	font-style: italic;
+	color: white;
+}
+
+#root > footer > a:hover {
+	font-style: normal;
+}
+
 .MuiAppBar-root {
   background-color: transparent !important;
   box-shadow: none !important;
