@@ -36,6 +36,7 @@ import GitHubRibbon from './GitHubRibbon'
 import config from './config'
 import useInvalidateQueries from './useInvalidateQueries'
 import { Footer } from './Footer'
+import { Chat } from './Chat'
 
 i18nFactory()
 
@@ -178,6 +179,7 @@ function App() {
           </StateContext.Provider>
         </Container>
         <Footer />
+        {!config.isDevelopment && <Chat />}
       </Router>
     </ThemeProvider>
   )
