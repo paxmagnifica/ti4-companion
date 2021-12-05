@@ -14,7 +14,7 @@ function GitHubRibbon() {
     <a
       aria-label="View source on GitHub"
       className="github-corner"
-      href="https://github.com/tarnas14/ti4-companion"
+      href="https://github.com/paxmagnifica/ti4-companion"
     >
       <GitHubRibbonIcon />
     </a>

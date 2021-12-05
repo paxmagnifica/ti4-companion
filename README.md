@@ -29,9 +29,9 @@ see [issues](https://github.com/tarnas14/ti4-companion/issues)
 ## Sessions assisted by the app
 
 <p>
-<a href="https://ti4companion.willcodeforskipass.com/63747d3c-626d-4f35-a948-8fa66c4b8368"><img style="border: 1px solid yellow" src="docs/ti_session_7_big.jpg" alt="big session with 7 people" title="big session with 7 people" width="400"/></a>
-<a href="https://ti4companion.willcodeforskipass.com/3c085427-6e9a-4716-ac8d-b7e2c0bda11b"><img style="border: 1px solid yellow" src="docs/ti_session_4_big.jpg" alt="session for 4 players with a big screen" title="session for 4 players with a big screen" width="400"/></a>
-<a href="https://ti4companion.willcodeforskipass.com/a79187d5-52fe-4d85-9731-93457219f419"><img style="border: 1px solid yellow" src="docs/ti_session_4_small.jpg" alt="session for 4 players at friend's house with a laptop as dashboard" title="session for 4 players at friend's house with a laptop as dashboard" width="400"/></a>
+<a href="https://ti4companion.paxmagnifica.com/63747d3c-626d-4f35-a948-8fa66c4b8368"><img style="border: 1px solid yellow" src="docs/ti_session_7_big.jpg" alt="big session with 7 people" title="big session with 7 people" width="400"/></a>
+<a href="https://ti4companion.paxmagnifica.com/3c085427-6e9a-4716-ac8d-b7e2c0bda11b"><img style="border: 1px solid yellow" src="docs/ti_session_4_big.jpg" alt="session for 4 players with a big screen" title="session for 4 players with a big screen" width="400"/></a>
+<a href="https://ti4companion.paxmagnifica.com/a79187d5-52fe-4d85-9731-93457219f419"><img style="border: 1px solid yellow" src="docs/ti_session_4_small.jpg" alt="session for 4 players at friend's house with a laptop as dashboard" title="session for 4 players at friend's house with a laptop as dashboard" width="400"/></a>
 </p>
 
 # development
