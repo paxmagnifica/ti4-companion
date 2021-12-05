@@ -6,18 +6,21 @@ import { useTranslation } from 'react-i18next'
 
 import config from '../config'
 
-export const useFullscreen = () => {
+export const useFullscreen = ({ onFullscreenChange } = {}) => {
   const [fullscreen, setFullscreen] = useState(false)
 
   const handleFullscreenChange = useCallback(async () => {
     const isFullscreen = Boolean(document.fullscreenElement)
     setFullscreen(isFullscreen)
+    if (onFullscreenChange) {
+      onFullscreenChange(isFullscreen)
+    }
 
     if (!isFullscreen && document.ti4CompanionWakeLock) {
       await document.ti4CompanionWakeLock.release()
       document.ti4CompanionWakeLock = null
     }
-  }, [])
+  }, [onFullscreenChange])
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullscreenChange)
 

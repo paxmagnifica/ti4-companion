@@ -1,23 +1,55 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import config from './config'
 
 const BASE_URL = 'https://app.chatwoot.com'
 
-export function Chat() {
+const hideChatwoot = () => {
+  const bubbleContainer = document.querySelector('.woot--bubble-holder')
+  if (bubbleContainer) {
+    bubbleContainer.style.visibility = 'hidden'
+    bubbleContainer.style.pointerEvents = 'none'
+  }
+
+  const chatContainer = document.querySelector('.woot-widget-holder')
+  if (chatContainer) {
+    chatContainer.style.visibility = 'hidden'
+    chatContainer.style.pointerEvents = 'none'
+  }
+}
+const showChatwoot = () => {
+  const bubbleContainer = document.querySelector('.woot--bubble-holder')
+  if (bubbleContainer) {
+    bubbleContainer.style.visibility = 'visible'
+    bubbleContainer.style.pointerEvents = 'auto'
+  }
+
+  const chatContainer = document.querySelector('.woot-widget-holder')
+  if (chatContainer) {
+    chatContainer.style.visibility = 'visible'
+    chatContainer.style.pointerEvents = 'auto'
+  }
+}
+
+export function useChat() {
   const [isChatwootReady, setIsChatwootReady] = useState(false)
   const { i18n } = useTranslation()
 
   useEffect(() => {
+    if (config.isDevelopment) {
+      return
+    }
+
     const setIsReady = () => setIsChatwootReady(true)
     window.addEventListener('chatwoot:ready', setIsReady)
 
+    // eslint-disable-next-line consistent-return
     return () => window.removeEventListener('chatwoot:ready', setIsReady)
   }, [])
 
   useEffect(() => {
-    if (isChatwootReady) {
+    if (isChatwootReady || config.isDevelopment) {
       return
     }
 
@@ -48,11 +80,17 @@ export function Chat() {
   }, [isChatwootReady, i18n.language])
 
   useEffect(() => {
-    if (!isChatwootReady) {
+    if (config.isDevelopment || !isChatwootReady) {
       return
     }
+
     window.$chatwoot.setLocale(i18n.language)
   }, [isChatwootReady, i18n.language])
 
-  return <></>
+  const setChatVisible = useCallback(
+    (visible) => (visible ? showChatwoot() : hideChatwoot()),
+    [],
+  )
+
+  return { setChatVisible }
 }
