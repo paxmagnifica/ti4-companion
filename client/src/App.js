@@ -36,7 +36,7 @@ import GitHubRibbon from './GitHubRibbon'
 import config from './config'
 import useInvalidateQueries from './useInvalidateQueries'
 import { Footer } from './Footer'
-import { Chat } from './Chat'
+import { useChat } from './Chat'
 
 i18nFactory()
 
@@ -55,6 +55,7 @@ function App() {
   const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
   const { sessions } = state
+  const { setChatVisible } = useChat()
 
   const theme = useMemo(
     () =>
@@ -66,7 +67,9 @@ function App() {
     [],
   )
 
-  const { fullscreen, exitFullscreen } = useFullscreen()
+  const { fullscreen, exitFullscreen } = useFullscreen({
+    onFullscreenChange: (x) => setChatVisible(!x),
+  })
 
   useEffect(() => {
     const allSessions = getAllSessions()
@@ -179,7 +182,6 @@ function App() {
           </StateContext.Provider>
         </Container>
         <Footer />
-        {!config.isDevelopment && <Chat />}
       </Router>
     </ThemeProvider>
   )
