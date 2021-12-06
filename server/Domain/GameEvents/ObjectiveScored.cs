@@ -32,6 +32,11 @@ namespace server.Domain
         {
             return JsonConvert.DeserializeObject<ObjectiveScoredPayload>(gameEvent.SerializedPayload);
         }
+
+        internal static ObjectiveScoredPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<ObjectiveScoredPayload>(serializedPayload);
+        }
     }
 
     internal class ObjectiveScoredPayload

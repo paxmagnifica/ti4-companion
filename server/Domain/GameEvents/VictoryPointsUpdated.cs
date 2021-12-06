@@ -32,6 +32,11 @@ namespace server.Domain
         {
             return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(gameEvent.SerializedPayload);
         }
+
+        public static VictoryPointsUpdatedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(serializedPayload);
+        }
     }
 
     public class VictoryPointsUpdatedPayload

@@ -14,14 +14,6 @@ using server.Persistence;
 
 namespace server.Controllers
 {
-    public class TimelineEventDto
-    {
-        public int Order { get; set; }
-        public string EventType { get; set; }
-        public string SerializedPayload { get; set; }
-        public DateTimeOffset HappenedAt { get; set; }
-    }
-
     [ApiController]
     [Route("api/sessions/{sessionId:guid}/[controller]")]
     public class TimelineController : ControllerBase
@@ -31,20 +23,22 @@ namespace server.Controllers
         private readonly IConfiguration _configuration;
         private readonly ITimeProvider _timeProvider;
         private readonly SessionContext _sessionContext;
+        private readonly ITimelineDeduplication _timelineDeduplication;
 
         public TimelineController(
             ILogger<SessionsController> logger,
             IRepository repository,
             IConfiguration configuration,
             ITimeProvider timeProvider,
-            SessionContext sessionContext
-        )
+            SessionContext sessionContext,
+            ITimelineDeduplication timelineDeduplication)
         {
             this._logger = logger;
             this._repository = repository;
             this._configuration = configuration;
             this._timeProvider = timeProvider;
             this._sessionContext = sessionContext;
+            _timelineDeduplication = timelineDeduplication;
         }
 
         [HttpPost]
@@ -81,14 +75,14 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TimelineEventDto>> Get([FromRoute] Guid sessionId)
+        public async Task<IEnumerable<TimelineEvent>> Get([FromRoute] Guid sessionId)
         {
             var sessionFromDb = await _repository.GetByIdWithEvents(sessionId);
 
             var previousVpCount = 10;
             var orderedEvents = sessionFromDb.Events.OrderBy(e => e.HappenedAt);
 
-            var timelineEvents = new List<KeyValuePair<GameEvent, TimelineEventDto>>();
+            var timelineEvents = new List<KeyValuePair<GameEvent, TimelineEvent>>();
 
             foreach (var sessionEvent in orderedEvents)
             {
@@ -101,7 +95,7 @@ namespace server.Controllers
                     }
                     var newPayload = JsonConvert.SerializeObject(new { from = previousVpCount, to = payload.VpCount });
                     previousVpCount = payload.VpCount;
-                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
                     {
                         EventType = "VpCountChanged",
                         SerializedPayload = newPayload,
@@ -121,7 +115,7 @@ namespace server.Controllers
                         if (lastPayload.Faction == payload.Faction)
                         {
                             timelineEvents.RemoveAt(timelineEvents.Count - 1);
-                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
                             {
                                 EventType = sessionEvent.EventType,
                                 SerializedPayload = JsonConvert.SerializeObject(new
@@ -148,7 +142,7 @@ namespace server.Controllers
                         if (lastPayload.Faction == payload.Faction)
                         {
                             timelineEvents.RemoveAt(timelineEvents.Count - 1);
-                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
                             {
                                 EventType = nameof(ObjectiveScored),
                                 SerializedPayload = JsonConvert.SerializeObject(new
@@ -167,7 +161,7 @@ namespace server.Controllers
 #if DEBUG
                 if (sessionEvent.EventType == GameEvent.TimelineUserEvent || sessionEvent.EventType == GameEvent.MapAdded)
                 {
-                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
                     {
                         EventType = sessionEvent.EventType,
                         SerializedPayload = sessionEvent.SerializedPayload.Replace("storage-emulator", "localhost"),
@@ -177,7 +171,7 @@ namespace server.Controllers
                 }
 #endif
 
-                timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEventDto
+                timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
                 {
                     EventType = sessionEvent.EventType,
                     SerializedPayload = sessionEvent.SerializedPayload,
@@ -185,11 +179,13 @@ namespace server.Controllers
                 }));
             }
 
-            return timelineEvents.Select(kvp => kvp.Value).Select((e, index) =>
+            var dtos = timelineEvents.Select(kvp => kvp.Value).Select((e, index) =>
             {
                 e.Order = index;
                 return e;
             });
+
+            return _timelineDeduplication.Deduplicate(dtos);
         }
     }
 }
