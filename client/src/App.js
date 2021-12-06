@@ -181,7 +181,7 @@ function App() {
             </DispatchContext.Provider>
           </StateContext.Provider>
         </Container>
-        <Footer />
+        {!fullscreen && <Footer />}
       </Router>
     </ThemeProvider>
   )
