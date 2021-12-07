@@ -68,7 +68,7 @@ namespace server.Controllers
                 SessionId = sessionId,
                 HappenedAt = _timeProvider.Now,
                 EventType = GameEvent.TimelineUserEvent,
-                SerializedPayload = JsonConvert.SerializeObject(new {file =  mapBlobClient.Uri.ToString(), title = HttpContext.Request.Form["title"], description = HttpContext.Request.Form["description"]}),
+                SerializedPayload = JsonConvert.SerializeObject(new { file = mapBlobClient.Uri.ToString(), title = HttpContext.Request.Form["title"].ToString(), description = HttpContext.Request.Form["description"].ToString() }),
             };
             await _sessionContext.Events.AddAsync(gameEvent);
             await _sessionContext.SaveChangesAsync();
