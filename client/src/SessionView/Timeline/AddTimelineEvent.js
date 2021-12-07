@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { CircularProgress, Button, TextField } from '@material-ui/core'
 import { Image as ImageIcon, Close as CloseIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-import { Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import ImagePicker from '../../shared/ImagePicker'
 
@@ -21,6 +21,7 @@ function AddTimelineEvent({ uploadEvent }) {
   const [uploading, setUploading] = useState(false)
   const [open, openSetter] = useState(false)
   const [file, setFile] = useState(null)
+  const { t } = useTranslation()
 
   const [title, setTitle] = useState('')
   const handleTitle = useCallback((event) => {
@@ -85,8 +86,9 @@ function AddTimelineEvent({ uploadEvent }) {
               className={classes.inputWithMargin}
               color="secondary"
               fullWidth
-              label="What happened?!"
+              label={t('sessionTimeline.titleLabel')}
               onChange={handleTitle}
+              placeholder={t('general.labels.optional')}
               value={title}
               variant="filled"
             />
@@ -94,9 +96,10 @@ function AddTimelineEvent({ uploadEvent }) {
               className={classes.inputWithMargin}
               color="secondary"
               fullWidth
-              label="What's the story"
+              label={t('sessionTimeline.descriptionLabel')}
               multiline
               onChange={handleDescription}
+              placeholder={t('general.labels.optional')}
               rows={3}
               value={description}
               variant="filled"
