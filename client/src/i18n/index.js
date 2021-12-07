@@ -48,6 +48,7 @@ const factory = (options = { debug: true }) =>
                 stageII: 'stage II',
                 secretObj: 'secret',
                 save: 'save',
+                optional: '(optional)',
                 undo: 'undo',
                 copy: 'copy',
               },
@@ -119,6 +120,8 @@ const factory = (options = { debug: true }) =>
               dragHere: "Drag 'n' drop your image here, or click to select it",
               submit: 'save',
               cta: 'save a moment',
+              titleLabel: 'what happened?!',
+              descriptionLabel: "what's the story?",
             },
             share: {
               copied: 'Copied!',

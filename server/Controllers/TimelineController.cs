@@ -44,6 +44,8 @@ namespace server.Controllers
         [HttpPost]
         public async Task<ActionResult> AddEvent([FromRoute] Guid sessionId)
         {
+            Console.WriteLine(HttpContext.Request.Form["title"]);
+            Console.WriteLine(HttpContext.Request.Form["description"]);
             var imageFile = HttpContext.Request.Form.Files["image"];
 
             if (imageFile.Length > 3000000)
@@ -66,7 +68,7 @@ namespace server.Controllers
                 SessionId = sessionId,
                 HappenedAt = _timeProvider.Now,
                 EventType = GameEvent.TimelineUserEvent,
-                SerializedPayload = mapBlobClient.Uri.ToString(),
+                SerializedPayload = JsonConvert.SerializeObject(new { file = mapBlobClient.Uri.ToString(), title = HttpContext.Request.Form["title"].ToString(), description = HttpContext.Request.Form["description"].ToString() }),
             };
             await _sessionContext.Events.AddAsync(gameEvent);
             await _sessionContext.SaveChangesAsync();

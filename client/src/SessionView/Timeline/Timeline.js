@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import { Typography, Box } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
@@ -232,6 +232,47 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
   )
 }
 
+function TimelineUserEvent({ eventType, payload, happenedAt }) {
+  const classes = useStyles()
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          className={classes.dotWithIcon}
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <UserEventIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        {payload.title && <Typography variant="h5">{payload.title}</Typography>}
+        {payload.description && (
+          <>
+            <Typography>{payload.description}</Typography>
+            <br />
+          </>
+        )}
+        <a href={payload.file} target="about:blank">
+          <img
+            alt={t(`sessionTimeline.events.${eventType}`)}
+            src={payload.file}
+            style={{ maxWidth: '100%' }}
+          />
+        </a>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
 function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
   const classes = useStyles()
   const { t } = useTranslation()
@@ -319,10 +360,9 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
       )
     case 'TimelineUserEvent':
       return (
-        <ImageFromPayload
+        <TimelineUserEvent
           eventType={eventType}
           happenedAt={happenedAt}
-          Icon={<UserEventIcon />}
           payload={payload}
         />
       )
@@ -356,8 +396,8 @@ export function Timeline({ editable, session, sessionService }) {
   const invalidateQueries = useInvalidateQueries()
 
   const uploadEvent = useCallback(
-    async (file) => {
-      const result = await sessionService.addTimelineEvent(file, session.id)
+    async (payload) => {
+      const result = await sessionService.addTimelineEvent(payload, session.id)
       if (result.ok) {
         invalidateQueries(timelineKeys.sessionTimeline(session.id))
       }

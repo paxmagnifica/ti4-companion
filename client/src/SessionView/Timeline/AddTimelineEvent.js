@@ -1,42 +1,122 @@
 import { useCallback, useState } from 'react'
-import { Button } from '@material-ui/core'
+import { CircularProgress, Button, TextField } from '@material-ui/core'
 import { Image as ImageIcon, Close as CloseIcon } from '@material-ui/icons'
-import { Trans } from 'react-i18next'
+import { makeStyles } from '@material-ui/core/styles'
+import { Trans, useTranslation } from 'react-i18next'
 
-import ImageUpload from '../../shared/ImageUpload'
+import ImagePicker from '../../shared/ImagePicker'
+
+const useStyles = makeStyles({
+  inputWithMargin: {
+    marginBottom: '1em',
+  },
+  formContainer: {
+    width: '300%',
+    maxWidth: '100vw',
+  },
+})
 
 function AddTimelineEvent({ uploadEvent }) {
-  const [open, setOpen] = useState(false)
+  const classes = useStyles()
+  const [uploading, setUploading] = useState(false)
+  const [open, openSetter] = useState(false)
+  const [file, setFile] = useState(null)
+  const { t } = useTranslation()
 
-  const handleUpload = useCallback(
-    async (file) => {
-      await uploadEvent(file)
-      setOpen(false)
-    },
-    [uploadEvent],
-  )
+  const [title, setTitle] = useState('')
+  const handleTitle = useCallback((event) => {
+    const { value } = event.target
+
+    setTitle(value)
+  }, [])
+
+  const [description, setDescription] = useState('')
+  const handleDescription = useCallback((event) => {
+    const { value } = event.target
+
+    setDescription(value)
+  }, [])
+
+  const setOpen = useCallback((o) => {
+    if (!o) {
+      setTitle('')
+      setDescription('')
+    }
+
+    openSetter(o)
+  }, [])
+
+  const handleUpload = useCallback(async () => {
+    setUploading(true)
+    await uploadEvent({ file, title, description })
+    setOpen(false)
+    setUploading(false)
+  }, [file, description, title, uploadEvent, setOpen])
+
+  const saveActive = uploading || file || description || title
 
   return (
     <>
       <Button
-        color="secondary"
-        onClick={() => setOpen((a) => !a)}
-        style={{ width: '15em' }}
+        color={open ? 'primary' : 'secondary'}
+        disabled={uploading}
+        onClick={() => setOpen(!open)}
+        style={{ width: open ? '4em' : '15em' }}
         variant="contained"
       >
         {open ? <CloseIcon /> : <Trans i18nKey="sessionTimeline.cta" />}
       </Button>
       {open && (
-        <ImageUpload
-          Icon={<ImageIcon style={{ fontSize: 40 }} />}
-          translations={{
-            changeFile: 'sessionTimeline.changeFile',
-            dropHere: 'sessionTimeline.dropHere',
-            dragHere: 'sessionTimeline.dragHere',
-            button: 'sessionTimeline.submit',
-          }}
-          upload={handleUpload}
-        />
+        <>
+          <Button
+            color="secondary"
+            disabled={!saveActive}
+            onClick={handleUpload}
+            style={{ width: uploading ? '4em' : '15em' }}
+            variant="contained"
+          >
+            {uploading ? (
+              <CircularProgress size={20} />
+            ) : (
+              <Trans i18nKey="general.labels.save" />
+            )}
+          </Button>
+          <div className={classes.formContainer}>
+            <TextField
+              className={classes.inputWithMargin}
+              color="secondary"
+              fullWidth
+              label={t('sessionTimeline.titleLabel')}
+              onChange={handleTitle}
+              placeholder={t('general.labels.optional')}
+              value={title}
+              variant="filled"
+            />
+            <TextField
+              className={classes.inputWithMargin}
+              color="secondary"
+              fullWidth
+              label={t('sessionTimeline.descriptionLabel')}
+              multiline
+              onChange={handleDescription}
+              placeholder={t('general.labels.optional')}
+              rows={3}
+              value={description}
+              variant="filled"
+            />
+            <ImagePicker
+              Icon={<ImageIcon style={{ fontSize: 40 }} />}
+              onChange={setFile}
+              previewAboveDropzone
+              translations={{
+                changeFile: 'sessionTimeline.changeFile',
+                dropHere: 'sessionTimeline.dropHere',
+                dragHere: 'sessionTimeline.dragHere',
+                button: 'sessionTimeline.submit',
+              }}
+            />
+          </div>
+        </>
       )}
     </>
   )
