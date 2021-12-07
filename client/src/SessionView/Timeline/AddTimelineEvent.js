@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Button, TextField } from '@material-ui/core'
+import { CircularProgress, Button, TextField } from '@material-ui/core'
 import { Image as ImageIcon, Close as CloseIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { Trans } from 'react-i18next'
@@ -18,7 +18,8 @@ const useStyles = makeStyles({
 
 function AddTimelineEvent({ uploadEvent }) {
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [open, openSetter] = useState(false)
   const [file, setFile] = useState(null)
 
   const [title, setTitle] = useState('')
@@ -35,27 +36,30 @@ function AddTimelineEvent({ uploadEvent }) {
     setDescription(value)
   }, [])
 
-  const toggle = useCallback(() => {
-    if (open) {
+  const setOpen = useCallback((o) => {
+    if (!o) {
       setTitle('')
       setDescription('')
     }
 
-    setOpen(!open)
-  }, [open])
+    openSetter(o)
+  }, [])
 
   const handleUpload = useCallback(async () => {
+    setUploading(true)
     await uploadEvent({ file, title, description })
-    toggle()
-  }, [file, description, title, uploadEvent, toggle])
+    setOpen(false)
+    setUploading(false)
+  }, [file, description, title, uploadEvent, setOpen])
 
-  const saveActive = file || description || title
+  const saveActive = uploading || file || description || title
 
   return (
     <>
       <Button
         color={open ? 'primary' : 'secondary'}
-        onClick={toggle}
+        disabled={uploading}
+        onClick={() => setOpen(!open)}
         style={{ width: open ? '4em' : '15em' }}
         variant="contained"
       >
@@ -67,10 +71,14 @@ function AddTimelineEvent({ uploadEvent }) {
             color="secondary"
             disabled={!saveActive}
             onClick={handleUpload}
-            style={{ width: '15em' }}
+            style={{ width: uploading ? '4em' : '15em' }}
             variant="contained"
           >
-            Save
+            {uploading ? (
+              <CircularProgress size={20} />
+            ) : (
+              <Trans i18nKey="general.labels.save" />
+            )}
           </Button>
           <div className={classes.formContainer}>
             <TextField
