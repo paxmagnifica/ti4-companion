@@ -71,12 +71,6 @@ function ImagePicker({ onChange, translations, Icon, previewAboveDropzone }) {
     [onChange],
   )
 
-  const clearFile = useCallback(() => {
-    setFile(null)
-    setFileErrors(null)
-    onChange(null)
-  }, [onChange])
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDropAccepted,
     onDropRejected,
