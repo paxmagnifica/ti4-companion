@@ -1,8 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  Tab,
-  Tabs,
   Drawer,
   IconButton,
   Divider,
@@ -20,41 +18,12 @@ import {
   ChevronLeft,
   Timeline,
 } from '@material-ui/icons'
-import { useTheme, makeStyles, withStyles } from '@material-ui/core/styles'
+import { useTheme, makeStyles } from '@material-ui/core/styles'
 import { useHistory, useRouteMatch, generatePath } from 'react-router-dom'
 
+import { Tab, Tabs } from '../components/navigation'
 import useSmallViewport from '../shared/useSmallViewport'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
-
-const StyledTabs = withStyles({
-  indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    '& > span': {
-      maxWidth: 70,
-      width: '100%',
-      backgroundColor: '#fff',
-    },
-  },
-})((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />)
-
-const StyledTab = withStyles((theme) => ({
-  root: {
-    textTransform: 'none',
-    color: '#fff',
-    fontWeight: theme.typography.fontWeightRegular,
-    fontSize: theme.typography.pxToRem(15),
-    minHeight: 'unset',
-    marginRight: theme.spacing(1),
-    '&:focus': {
-      opacity: 1,
-    },
-  },
-  wrapper: {
-    flexDirection: 'row',
-  },
-}))((props) => <Tab disableRipple {...props} />)
 
 const VIEW = {
   overview: 0,
@@ -183,32 +152,32 @@ function SessionNavigation() {
   }
 
   return (
-    <StyledTabs onChange={handleChange} value={view}>
-      <StyledTab
+    <Tabs onChange={handleChange} value={view}>
+      <Tab
         icon={<Assistant />}
         label={t('sessionView.nav.overview')}
         title={t('sessionView.nav.overview')}
         value={VIEW.overview}
       />
-      <StyledTab
+      <Tab
         icon={<MapIcon />}
         label={t('sessionView.nav.map')}
         title={t('sessionView.nav.map')}
         value={VIEW.map}
       />
-      <StyledTab
+      <Tab
         icon={<Details />}
         label={t('sessionView.nav.details')}
         title={t('sessionView.nav.details')}
         value={VIEW.details}
       />
-      <StyledTab
+      <Tab
         icon={<Timeline />}
         label={t('sessionView.nav.timeline')}
         title={t('sessionView.nav.timeline')}
         value={VIEW.timeline}
       />
-    </StyledTabs>
+    </Tabs>
   )
 }
 

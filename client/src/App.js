@@ -22,7 +22,7 @@ import { useTranslation, Trans } from 'react-i18next'
 
 import { getAllSessions } from './shared/persistence'
 import homeIcon from './assets/icon.jpg'
-import NewSession from './NewSession'
+import { SessionSetup } from './SessionSetup'
 import SessionsList from './SessionsList'
 import SessionView, { SessionProvider } from './SessionView'
 import * as objectivesService from './objectivesService'
@@ -141,7 +141,7 @@ function App() {
               <Box m={2}>
                 <Switch>
                   <Route path="/new">
-                    <NewSession dispatch={dispatchWithInvalidate} />
+                    <SessionSetup />
                   </Route>
                   <Route path="/:sessionId/:secret?">
                     <SessionProvider

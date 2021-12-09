@@ -13,9 +13,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { generatePath, useHistory } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 
-import { SESSION_VIEW_ROUTES } from './shared/constants'
-import sessionFactory from './shared/sessionService'
-import { factionsList } from './gameInfo/factions'
+import { SESSION_VIEW_ROUTES } from '../shared/constants'
+import sessionFactory from '../shared/sessionService'
+import { factionsList } from '../gameInfo/factions'
 
 const useStyles = makeStyles({
   root: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
 })
 
-function NewSession({ dispatch }) {
+export function NewSession({ dispatch }) {
   const classes = useStyles()
 
   const [selectedFactions, setSelected] = useState([])
@@ -101,5 +101,3 @@ function NewSession({ dispatch }) {
     </>
   )
 }
-
-export default NewSession
