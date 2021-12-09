@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { saveAllSessions } from './shared/persistence'
 
 export const StateContext = React.createContext()
 export const ComboDispatchContext = React.createContext()
 export const DispatchContext = React.createContext()
+
+export const useDispatch = () => {
+  const dispatch = useContext(DispatchContext)
+
+  return dispatch
+}
 
 export const init = () => ({
   relics: {
