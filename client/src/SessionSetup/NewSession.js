@@ -69,7 +69,9 @@ export function NewSession({ dispatch }) {
     <>
       <Box className={classes.root} mb={2}>
         <Container>
-          <Typography variant="h4">What factions are in the game?</Typography>
+          <Typography variant="h4">
+            <Trans i18nKey="sessionSetup.simple.title" />
+          </Typography>
         </Container>
       </Box>
 
