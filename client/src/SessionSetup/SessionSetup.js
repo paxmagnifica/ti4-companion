@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Container } from '@material-ui/core'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { useDispatch } from '../state'
 import { Tab, Tabs } from '../components/navigation'
@@ -14,6 +15,7 @@ const VIEW = {
 export function SessionSetup() {
   const [view, setView] = useState(VIEW.simpleSetup)
   const dispatch = useDispatch()
+  const { t } = useTranslation()
 
   const handleViewChange = useCallback((_event, newView) => {
     setView(newView)
@@ -24,7 +26,11 @@ export function SessionSetup() {
       case VIEW.simpleSetup:
         return <NewSession dispatch={dispatch} />
       case VIEW.setupDraft:
-        return <p>coming soon</p>
+        return (
+          <p>
+            <Trans i18nKey="general.comingSoon" />
+          </p>
+        )
       default:
         return null
     }
@@ -34,13 +40,13 @@ export function SessionSetup() {
     <>
       <Tabs onChange={handleViewChange} value={view}>
         <Tab
-          label="The factions are already decided"
-          title="The factions are already decided"
+          label={t('sessionSetup.tabs.simple')}
+          title={t('sessionSetup.tabs.simple')}
           value={VIEW.simpleSetup}
         />
         <Tab
-          label="We want to draft"
-          title="We want to draft"
+          label={t('sessionSetup.tabs.draft')}
+          title={t('sessionSetup.tabs.draft')}
           value={VIEW.setupDraft}
         />
       </Tabs>

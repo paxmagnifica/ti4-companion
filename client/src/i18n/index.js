@@ -35,6 +35,7 @@ const factory = (options = { debug: true }) =>
               switchLanguage: 'Change language',
               home: 'Home',
               title: 'TI4 Companion',
+              comingSoon: 'coming soon',
               labels: {
                 toBottom: 'to bottom',
                 add: 'add',
@@ -62,6 +63,15 @@ const factory = (options = { debug: true }) =>
               },
               confirmation: {
                 title: 'Are you sure?',
+              },
+            },
+            sessionSetup: {
+              tabs: {
+                simple: 'Select Factions',
+                draft: 'Draft tool',
+              },
+              simple: {
+                title: 'What factions rae in the game?',
               },
             },
             sessionView: {
