@@ -44,23 +44,33 @@ namespace server.Controllers
         [HttpPost]
         public async Task<ActionResult> AddEvent([FromRoute] Guid sessionId)
         {
-            Console.WriteLine(HttpContext.Request.Form["title"]);
-            Console.WriteLine(HttpContext.Request.Form["description"]);
+            var title = HttpContext.Request.Form["title"];
+            var description = HttpContext.Request.Form["description"];
             var imageFile = HttpContext.Request.Form.Files["image"];
 
-            if (imageFile.Length > 3000000)
+            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(description) && imageFile == null)
             {
                 return new BadRequestResult();
             }
 
-            var sessionBlobContainer = new BlobContainerClient(_configuration.GetConnectionString("BlobStorage"), sessionId.ToString());
-            await sessionBlobContainer.CreateIfNotExistsAsync(PublicAccessType.Blob);
-
             var eventId = Guid.NewGuid();
-            var mapBlobClient = sessionBlobContainer.GetBlobClient($"timeline_event_{eventId}");
-            var blobHttpHeader = new BlobHttpHeaders();
-            blobHttpHeader.ContentType = imageFile.ContentType;
-            await mapBlobClient.UploadAsync(imageFile.OpenReadStream(), blobHttpHeader);
+            string fileUri = "";
+            if (imageFile != null)
+            {
+                if (imageFile.Length > 3000000)
+                {
+                    return new BadRequestResult();
+                }
+
+                var sessionBlobContainer = new BlobContainerClient(_configuration.GetConnectionString("BlobStorage"), sessionId.ToString());
+                await sessionBlobContainer.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
+                var blobClient = sessionBlobContainer.GetBlobClient($"timeline_event_{eventId}");
+                var blobHttpHeader = new BlobHttpHeaders();
+                blobHttpHeader.ContentType = imageFile.ContentType;
+                await blobClient.UploadAsync(imageFile.OpenReadStream(), blobHttpHeader);
+                fileUri = blobClient.Uri.ToString();
+            }
 
             var gameEvent = new GameEvent
             {
@@ -68,7 +78,12 @@ namespace server.Controllers
                 SessionId = sessionId,
                 HappenedAt = _timeProvider.Now,
                 EventType = GameEvent.TimelineUserEvent,
-                SerializedPayload = JsonConvert.SerializeObject(new { file = mapBlobClient.Uri.ToString(), title = HttpContext.Request.Form["title"].ToString(), description = HttpContext.Request.Form["description"].ToString() }),
+                SerializedPayload = JsonConvert.SerializeObject(new
+                {
+                    file = fileUri,
+                    title = HttpContext.Request.Form["title"].ToString(),
+                    description = HttpContext.Request.Form["description"].ToString()
+                }),
             };
             await _sessionContext.Events.AddAsync(gameEvent);
             await _sessionContext.SaveChangesAsync();
