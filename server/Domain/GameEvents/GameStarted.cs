@@ -40,11 +40,11 @@ namespace server.Domain
 
     public class DraftOptions
     {
-      public DraftOptions()
-      {
-          InitialPool = new string[0];
-          Players = new string[0];
-      }
+        public DraftOptions()
+        {
+            InitialPool = new string[0];
+            Players = new string[0];
+        }
 
         public string[] InitialPool { get; set; }
         public string[] Players { get; set; }
@@ -53,5 +53,6 @@ namespace server.Domain
         public int BanRounds { get; set; }
         public int BansPerRound { get; set; }
         public bool TablePick { get; set; }
+        public int AllBansCount { get => PlayerCount * BansPerRound * BanRounds; }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using server.Domain;
 
 namespace server.Infra
 {

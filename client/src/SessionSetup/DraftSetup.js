@@ -63,7 +63,7 @@ export function DraftSetup() {
       setupType: 'draft',
       options: {
         initialPool: factionsList.map(({ key }) => key),
-        players: ['P1', 'P2', 'P3', 'P4', 'P5', 'P6'],
+        players: [...Array(playerCount).keys()].map((k) => `P${k + 1}`),
         bans,
         banRounds,
         bansPerRound,
@@ -78,6 +78,7 @@ export function DraftSetup() {
       }),
     )
   }, [
+    playerCount,
     sessionService,
     bans,
     banRounds,
