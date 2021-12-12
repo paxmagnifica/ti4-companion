@@ -40,7 +40,15 @@ namespace server.Domain
 
     public class DraftOptions
     {
-        public int PlayerCount { get; set; }
+      public DraftOptions()
+      {
+          InitialPool = new string[0];
+          Players = new string[0];
+      }
+
+        public string[] InitialPool { get; set; }
+        public string[] Players { get; set; }
+        public int PlayerCount { get { return Players.Length; } }
         public bool Bans { get; set; }
         public int BanRounds { get; set; }
         public int BansPerRound { get; set; }

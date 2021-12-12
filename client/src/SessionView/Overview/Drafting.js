@@ -1,42 +1,87 @@
 import { useState, useCallback } from 'react'
 import { Button } from '@material-ui/core'
 
-import { factionsList } from '../../gameInfo/factions'
-import { useComboDispatch } from '../../state'
-
 import { FactionListGrid } from './FactionListGrid'
+import { useDraftQuery, useDraftMutation } from './queries'
 
 const PHASE = {
-  ban: 'ban',
+  bans: 'bans',
 }
 
-export function Drafting({ editable, session }) {
-  const comboDispatch = useComboDispatch()
-  const { draft } = {
-    draft: {
-      initialPool: factionsList,
-      bans: ['The_Arborec', 'The_Barony_of_Letnev'],
-      bansPerRound: 1,
-      phase: 'ban',
-      order: [2, 3, 1, 0, 0, 1, 3, 2],
-      activePlayerIndex: [2],
-      players: ['P1', 'P2', 'P3', 'P4'],
-    },
-  }
-
+function Pick({ draft, session, sessionService }) {
   const [selected, setSelected] = useState([])
-
-  const ban = useCallback(() => {
-    comboDispatch({
-      type: 'Banned',
-      payload: { sessionId: session.id, bans: selected },
+  const pickMutation = useCallback(async () => {
+    await sessionService.pushEvent(session.id, {
+      type: 'Picked',
+      payload: {
+        sessionId: session.id,
+        pick: selected[0],
+        type: 'faction',
+        playerIndex: draft.order[draft.activePlayerIndex],
+        playerName: draft.players[draft.order[draft.activePlayerIndex]],
+      },
     })
-  }, [selected, comboDispatch, session.id])
+    setSelected([])
+  }, [selected, sessionService, session.id, draft])
+
+  const { mutate: pickFaction } = useDraftMutation({
+    sessionId: session.id,
+    mutation: pickMutation,
+  })
+
+  return (
+    <>
+      <p>phase: {draft.phase}</p>
+      <p>order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}</p>
+      <p>picks: {JSON.stringify(draft.picks)}</p>
+      <p>
+        who is picking: {draft.players[draft.order[draft.activePlayerIndex]]}
+      </p>
+      <p>selected: {JSON.stringify(selected)}</p>
+      <Button onClick={pickFaction} variant="contained">
+        pick
+      </Button>
+      <FactionListGrid
+        factions={draft.initialPool}
+        inactive={[
+          ...draft.bans,
+          ...draft.picks
+            .filter(({ type }) => type === 'faction')
+            .map(({ pick }) => pick),
+        ]}
+        max={1}
+        onSelected={setSelected}
+        selected={selected}
+      />
+    </>
+  )
+}
+
+function Ban({ draft, sessionService, session }) {
+  const [selected, setSelected] = useState([])
+  const banMutation = useCallback(async () => {
+    await sessionService.pushEvent(session.id, {
+      type: 'Banned',
+      payload: {
+        sessionId: session.id,
+        bans: selected,
+        playerIndex: draft.order[draft.activePlayerIndex],
+        playerName: draft.players[draft.order[draft.activePlayerIndex]],
+      },
+    })
+    setSelected([])
+  }, [selected, sessionService, session.id, draft])
+
+  const { mutate: ban } = useDraftMutation({
+    sessionId: session.id,
+    mutation: banMutation,
+  })
 
   return (
     <>
       <p>phase: {draft.phase}</p>
       <p>already banned: {JSON.stringify(draft.bans)}</p>
+      <p>order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}</p>
       <p>
         who is banning: {draft.players[draft.order[draft.activePlayerIndex]]}
       </p>
@@ -51,7 +96,28 @@ export function Drafting({ editable, session }) {
         onSelected={setSelected}
         selected={selected}
       />
-      <pre>{JSON.stringify({ editable, session }, null, 2)}</pre>
+    </>
+  )
+}
+
+export function Drafting({ editable, session, sessionService }) {
+  const { draft } = useDraftQuery({
+    sessionId: session.id,
+    sessionService,
+  })
+
+  if (!draft) {
+    return null
+  }
+
+  return (
+    <>
+      {draft.phase === PHASE.bans ? (
+        <Ban draft={draft} session={session} sessionService={sessionService} />
+      ) : (
+        <Pick draft={draft} session={session} sessionService={sessionService} />
+      )}
+      <pre>{JSON.stringify({ session }, null, 2)}</pre>
     </>
   )
 }

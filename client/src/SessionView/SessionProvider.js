@@ -33,11 +33,12 @@ export function SessionProvider({ children, state, dispatch }) {
   const comboDispatch = useCallback(
     (action) => {
       const { payload } = action
-      sessionService.pushEvent(payload.sessionId, {
+      dispatch(action)
+
+      return sessionService.pushEvent(payload.sessionId, {
         type: action.type,
         payload,
       })
-      dispatch(action)
     },
     [dispatch, sessionService],
   )

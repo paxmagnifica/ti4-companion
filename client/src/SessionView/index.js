@@ -124,6 +124,7 @@ function SessionView({
             editable={editable}
             session={session}
             updateFactionPoints={updateFactionPoints}
+            sessionService={sessionService}
           />
         </Route>
       </Switch>

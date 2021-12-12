@@ -12,9 +12,31 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
+using System.Security.Cryptography;
 
 namespace server.Controllers
 {
+    static class Extensions
+    {
+        // https://stackoverflow.com/questions/273313/randomize-a-listt
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+            int n = list.Count;
+            while (n > 1)
+            {
+                byte[] box = new byte[1];
+                do provider.GetBytes(box);
+                while (!(box[0] < n * (Byte.MaxValue / n)));
+                int k = (box[0] % n);
+                n--;
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+        }
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class SessionsController : ControllerBase
@@ -51,6 +73,13 @@ namespace server.Controllers
                     SerializedPayload = JsonConvert.SerializeObject(payload)
                 }
             };
+
+            Console.WriteLine(newSession.Events.First().SerializedPayload);
+
+            if (payload.SetupType == "draft")
+            {
+                newSession.Events.Add(GenerateOrderEvent(sessionId, payload));
+            }
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 
@@ -58,6 +87,32 @@ namespace server.Controllers
             dto.Secret = newSession.Secret;
 
             return CreatedAtAction(nameof(GetSession), new { sessionId = newSession.Id }, dto);
+        }
+
+        private GameEvent GenerateOrderEvent(Guid sessionId, GameStartedPayload payload)
+        {
+            var randomizedPlayerOrder = Enumerable.Range(0, payload.Options.Players.Length).ToList();
+            randomizedPlayerOrder.Shuffle();
+            var reversedPlayerOrder = new List<int>();
+            reversedPlayerOrder.AddRange(randomizedPlayerOrder);
+            reversedPlayerOrder.Reverse();
+            var order = Enumerable.Range(0, payload.Options.BanRounds).SelectMany(round =>
+            {
+                if (round % 2 == 0)
+                {
+                    return randomizedPlayerOrder;
+                }
+
+                return reversedPlayerOrder;
+            });
+
+            return new GameEvent
+            {
+                SessionId = sessionId,
+                HappenedAt = _timeProvider.Now,
+                EventType = "PlayerOrder",
+                SerializedPayload = JsonConvert.SerializeObject(order),
+            };
         }
 
         [HttpGet]

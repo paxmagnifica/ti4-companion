@@ -1,10 +1,47 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using server.Domain;
 
 namespace server.Controllers
 {
+    public class DraftDto
+    {
+        public DraftDto(Session session)
+        {
+            var gameStartEvent = session.Events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
+            var payload = GameStarted.GetPayload(gameStartEvent).Options;
+
+            var banEvents = session.Events.Where(e => e.EventType == nameof(Banned));
+            var bans = banEvents.SelectMany(b =>
+            {
+                var payload = Banned.GetPayload(b);
+                return payload.Bans;
+            }).ToArray();
+            var pickEvents = session.Events.Where(e => e.EventType == nameof(Picked));
+            var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
+
+            Order = JsonConvert.DeserializeObject<int[]>(orderEvent.SerializedPayload);
+            Phase = bans.Count() < Order.Count() ? "bans" : "picks";
+            InitialPool = payload.InitialPool;
+            Players = payload.Players;
+            BansPerRound = payload.BansPerRound;
+            Bans = bans;
+            Picks = pickEvents.Select(Picked.GetPayload).ToArray();
+            ActivePlayerIndex = Phase == "bans" ? bans.Count() : pickEvents.Count();
+        }
+
+        public string[] InitialPool { get; set; }
+        public string[] Players { get; set; }
+        public string[] Bans { get; set; }
+        public PickedPayload[] Picks { get; set; }
+        public int BansPerRound { get; set; }
+        public string Phase { get; set; }
+        public int[] Order { get; set; }
+        public int ActivePlayerIndex { get; set; }
+    }
+
     public class SessionDto : Session
     {
         public SessionDto(Session session)
@@ -18,7 +55,10 @@ namespace server.Controllers
             CreatedAt = session.CreatedAt;
             Locked = session.Locked;
             SetSessionDetails(session.Events);
+            Draft = new DraftDto(session);
         }
+
+        public DraftDto Draft { get; set; }
 
         public SessionDto(Session session, Guid? secret) : this(session)
         {

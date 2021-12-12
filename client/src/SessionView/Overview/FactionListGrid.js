@@ -3,6 +3,8 @@ import { Avatar, Button, Grid } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 import { makeStyles } from '@material-ui/core/styles'
 
+import { getData } from '../../gameInfo/factions'
+
 const useStyles = makeStyles({
   containedButton: {
     '&:not(.MuiButton-containedSecondary)': {
@@ -38,20 +40,26 @@ export function FactionListGrid({
 
   return (
     <Grid container justifyContent="center" spacing={4}>
-      {factions.map((faction) => (
-        <Grid key={faction.key} item lg={3} md={4} sm={6} xs={12}>
+      {factions.map((factionKey) => (
+        <Grid key={factionKey} item lg={3} md={4} sm={6} xs={12}>
           <Button
             className={classes.containedButton}
-            color={isSelected(faction.key) ? 'secondary' : 'default'}
+            color={isSelected(factionKey) ? 'secondary' : 'default'}
             disabled={
-              selected.length === max && !selected.includes(faction.key)
+              inactive.includes(factionKey) ||
+              (selected.length === max && !selected.includes(factionKey))
             }
             fullWidth
-            onClick={() => toggleSelection(faction.key)}
-            startIcon={<Avatar alt={faction.name} src={faction.image} />}
+            onClick={() => toggleSelection(factionKey)}
+            startIcon={
+              <Avatar
+                alt={getData(factionKey).name}
+                src={getData(factionKey).image}
+              />
+            }
             variant="contained"
           >
-            <Trans i18nKey={`factions.${faction.key}.name`} />
+            <Trans i18nKey={`factions.${factionKey}.name`} />
           </Button>
         </Grid>
       ))}

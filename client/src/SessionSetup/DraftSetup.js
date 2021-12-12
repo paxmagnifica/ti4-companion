@@ -14,6 +14,7 @@ import {
   Button,
 } from '@material-ui/core'
 
+import { factionsList } from '../gameInfo/factions'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useDispatch } from '../state'
@@ -61,7 +62,8 @@ export function DraftSetup() {
     const session = await sessionService.createSession({
       setupType: 'draft',
       options: {
-        playerCount,
+        initialPool: factionsList.map(({ key }) => key),
+        players: ['P1', 'P2', 'P3', 'P4', 'P5', 'P6'],
         bans,
         banRounds,
         bansPerRound,
@@ -77,7 +79,6 @@ export function DraftSetup() {
     )
   }, [
     sessionService,
-    playerCount,
     bans,
     banRounds,
     bansPerRound,
