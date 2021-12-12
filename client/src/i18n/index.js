@@ -71,7 +71,7 @@ const factory = (options = { debug: true }) =>
                 draft: 'Draft tool',
               },
               simple: {
-                title: 'What factions rae in the game?',
+                title: 'What factions are in the game?',
               },
             },
             sessionView: {

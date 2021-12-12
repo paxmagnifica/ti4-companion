@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react'
 import { Container } from '@material-ui/core'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { useDispatch } from '../state'
 import { Tab, Tabs } from '../components/navigation'
 
-import { NewSession } from './NewSession'
+import { SetFactions } from './SetFactions'
+import { DraftSetup } from './DraftSetup'
 
 const VIEW = {
   simpleSetup: 'simpleSetup',
@@ -24,13 +25,9 @@ export function SessionSetup() {
   const renderView = useCallback(() => {
     switch (view) {
       case VIEW.simpleSetup:
-        return <NewSession dispatch={dispatch} />
+        return <SetFactions dispatch={dispatch} />
       case VIEW.setupDraft:
-        return (
-          <p>
-            <Trans i18nKey="general.comingSoon" />
-          </p>
-        )
+        return <DraftSetup />
       default:
         return null
     }

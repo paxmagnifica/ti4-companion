@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
 })
 
-export function NewSession({ dispatch }) {
+export function SetFactions({ dispatch }) {
   const classes = useStyles()
 
   const [selectedFactions, setSelected] = useState([])
