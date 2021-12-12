@@ -66,6 +66,15 @@ body, *:fullscreen {
   box-shadow: none !important;
 }
 
+/* same as useSmallViewport */
+@media (max-width:649px) {
+	#root > footer {
+		width: 44vw;
+		margin-left: 27vw;
+		font-size: .7em;
+	}
+}
+
 /* GitHub Ribbon*/
 .github-corner {
   opacity: 0.8;
