@@ -120,6 +120,7 @@ const factory = (options = { debug: true }) =>
                 VpCountChanged: 'VP count changed',
                 MapAdded: 'Map added',
                 ObjectiveScored: 'Objective scored',
+                ObjectiveAdded: 'Objective revealed',
                 TimelineUserEvent: 'User added event',
                 VictoryPointsUpdated: 'VP scored',
               },

@@ -14,6 +14,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import {
   AccessibilityNew as UserEventIcon,
   Map as MapIcon,
+  Add as AddIcon,
 } from '@material-ui/icons'
 
 import Objective from '../../shared/Objective'
@@ -131,6 +132,7 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
 }
 
 function ObjectiveAdded({ eventType, payload, happenedAt }) {
+  const classes = useStyles()
   const small = useSmallViewport()
   const { t } = useTranslation()
 
@@ -142,10 +144,19 @@ function ObjectiveAdded({ eventType, payload, happenedAt }) {
         </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <Ti4TimelineDot title={t(`sessionTimeline.events.${eventType}`)} />
+        <Ti4TimelineDot
+          className={classes.dotWithIcon}
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <AddIcon />
+        </Ti4TimelineDot>
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} small={small} />
         </Box>
