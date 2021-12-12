@@ -23,13 +23,20 @@ namespace server.Controllers
             var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
 
             Order = JsonConvert.DeserializeObject<int[]>(orderEvent.SerializedPayload);
-            Phase = bans.Count() < Order.Count() ? "bans" : "picks";
+            Phase = bans.Count() < Order.Count() ? "bans" :
+              (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
             InitialPool = payload.InitialPool;
             Players = payload.Players;
             BansPerRound = payload.BansPerRound;
             Bans = bans;
             Picks = pickEvents.Select(Picked.GetPayload).ToArray();
             ActivePlayerIndex = Phase == "bans" ? bans.Count() : pickEvents.Count();
+
+            var speakerEvent = session.Events.FirstOrDefault(e => e.EventType == nameof(SpeakerSelected));
+            if (speakerEvent != null)
+            {
+                Speaker = SpeakerSelected.GetPayload(speakerEvent).SpeakerName;
+            }
         }
 
         public string[] InitialPool { get; set; }
@@ -40,6 +47,7 @@ namespace server.Controllers
         public string Phase { get; set; }
         public int[] Order { get; set; }
         public int ActivePlayerIndex { get; set; }
+        public string Speaker { get; set; }
     }
 
     public class SessionDto : Session

@@ -1,11 +1,49 @@
 import { useState, useCallback } from 'react'
 import { Button } from '@material-ui/core'
+import shuffle from 'lodash.shuffle'
 
 import { FactionListGrid } from './FactionListGrid'
 import { useDraftQuery, useDraftMutation } from './queries'
 
 const PHASE = {
   bans: 'bans',
+  picks: 'picks',
+  speaker: 'speaker',
+}
+
+function Speaker({ draft, session, sessionService }) {
+  const pickMutation = useCallback(async () => {
+    const shuffled = shuffle([...Array(draft.players.length).keys()])
+
+    const speakerIndex = shuffled[0]
+    const speakerName = draft.players[speakerIndex]
+
+    await sessionService.pushEvent(session.id, {
+      type: 'SpeakerSelected',
+      payload: {
+        sessionId: session.id,
+        speakerIndex,
+        speakerName,
+      },
+    })
+  }, [sessionService, session.id, draft])
+
+  const { mutate: selectRandomSpeaker } = useDraftMutation({
+    sessionId: session.id,
+    mutation: pickMutation,
+  })
+
+  return (
+    <>
+      <p>phase: {draft.phase}</p>
+      <p>speaker: {draft.speaker || 'not selected'}</p>
+      {!draft.speaker && (
+        <Button onClick={selectRandomSpeaker} variant="contained">
+          random speaker
+        </Button>
+      )}
+    </>
+  )
 }
 
 function Pick({ draft, session, sessionService }) {
@@ -112,10 +150,18 @@ export function Drafting({ editable, session, sessionService }) {
 
   return (
     <>
-      {draft.phase === PHASE.bans ? (
+      {draft.phase === PHASE.bans && (
         <Ban draft={draft} session={session} sessionService={sessionService} />
-      ) : (
+      )}
+      {draft.phase === PHASE.picks && (
         <Pick draft={draft} session={session} sessionService={sessionService} />
+      )}
+      {draft.phase === PHASE.speaker && (
+        <Speaker
+          draft={draft}
+          session={session}
+          sessionService={sessionService}
+        />
       )}
       <pre>{JSON.stringify({ session }, null, 2)}</pre>
     </>
