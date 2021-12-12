@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { Button } from '@material-ui/core'
 import shuffle from 'lodash.shuffle'
 
-import { FactionListGrid } from './FactionListGrid'
+import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
 
 const PHASE = {
@@ -95,36 +95,23 @@ function Pick({ draft, session, sessionService }) {
       <Button onClick={pickFaction} variant="contained">
         pick
       </Button>
-      <FactionListGrid
-        factions={draft.initialPool}
-        inactive={[
-          ...draft.bans,
-          ...draft.picks
-            .filter(({ type }) => type === 'faction')
-            .map(({ pick }) => pick),
-        ]}
-        max={1}
-        onSelected={setSelected}
-        selected={selected}
-      />
     </>
   )
 }
 
-function Ban({ draft, sessionService, session }) {
-  const [selected, setSelected] = useState([])
+function Ban({ bans, clearSelection, draft, sessionService, session }) {
   const banMutation = useCallback(async () => {
     await sessionService.pushEvent(session.id, {
       type: 'Banned',
       payload: {
         sessionId: session.id,
-        bans: selected,
+        bans,
         playerIndex: draft.order[draft.activePlayerIndex],
         playerName: draft.players[draft.order[draft.activePlayerIndex]],
       },
     })
-    setSelected([])
-  }, [selected, sessionService, session.id, draft])
+    clearSelection()
+  }, [bans, sessionService, session.id, draft, clearSelection])
 
   const { mutate: ban } = useDraftMutation({
     sessionId: session.id,
@@ -133,28 +120,22 @@ function Ban({ draft, sessionService, session }) {
 
   return (
     <>
-      <p>phase: {draft.phase}</p>
-      <p>already banned: {JSON.stringify(draft.bans)}</p>
-      <p>order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}</p>
       <p>
         who is banning: {draft.players[draft.order[draft.activePlayerIndex]]}
       </p>
-      <p>selected: {JSON.stringify(selected)}</p>
-      <Button onClick={ban} variant="contained">
+      <Button
+        disabled={bans.length < draft.bansPerRound}
+        onClick={ban}
+        variant="contained"
+      >
         ban
       </Button>
-      <FactionListGrid
-        factions={draft.initialPool}
-        inactive={draft.bans}
-        max={draft.bansPerRound}
-        onSelected={setSelected}
-        selected={selected}
-      />
     </>
   )
 }
 
 export function Drafting({ editable, session, sessionService }) {
+  const [selected, setSelected] = useState([])
   const { draft } = useDraftQuery({
     sessionId: session.id,
     sessionService,
@@ -166,20 +147,39 @@ export function Drafting({ editable, session, sessionService }) {
 
   return (
     <>
+      <p>phase: {draft.phase}</p>
+      <p>order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}</p>
+      <p>
+        active player: {draft.players[draft.order[draft.activePlayerIndex]]}
+      </p>
       {draft.phase === PHASE.bans && (
-        <Ban draft={draft} session={session} sessionService={sessionService} />
-      )}
-      {draft.phase === PHASE.picks && (
-        <Pick draft={draft} session={session} sessionService={sessionService} />
-      )}
-      {draft.phase === PHASE.speaker && (
-        <Speaker
+        <Ban
+          bans={selected}
+          clearSelection={() => setSelected([])}
           draft={draft}
           session={session}
           sessionService={sessionService}
         />
       )}
+      <DraftPool
+        bans={draft.bans}
+        initialPool={draft.initialPool}
+        max={1}
+        onSelected={setSelected}
+        picks={draft.picks.filter(({ type }) => type === 'faction')}
+        selected={selected}
+      />
       <pre>{JSON.stringify({ session }, null, 2)}</pre>
     </>
   )
 }
+// {draft.phase === PHASE.picks && (
+// <Pick draft={draft} session={session} sessionService={sessionService} />
+// )}
+// {draft.phase === PHASE.speaker && (
+// <Speaker
+// draft={draft}
+// session={session}
+// sessionService={sessionService}
+// />
+// )}

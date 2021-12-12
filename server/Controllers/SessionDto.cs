@@ -6,6 +6,12 @@ using server.Domain;
 
 namespace server.Controllers
 {
+    public class BanDto
+    {
+        public string Faction { get; set; }
+        public string PlayerName { get; set; }
+    }
+
     public class DraftDto
     {
         public DraftDto(Session session)
@@ -17,7 +23,7 @@ namespace server.Controllers
             var bans = banEvents.SelectMany(b =>
             {
                 var payload = Banned.GetPayload(b);
-                return payload.Bans;
+                return payload.Bans.Select(f => new BanDto { Faction = f, PlayerName = payload.PlayerName });
             }).ToArray();
             var pickEvents = session.Events.Where(e => e.EventType == nameof(Picked));
             var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
@@ -41,7 +47,7 @@ namespace server.Controllers
 
         public string[] InitialPool { get; set; }
         public string[] Players { get; set; }
-        public string[] Bans { get; set; }
+        public BanDto[] Bans { get; set; }
         public PickedPayload[] Picks { get; set; }
         public int BansPerRound { get; set; }
         public string Phase { get; set; }

@@ -35,6 +35,7 @@ export function DraftSetup() {
   const dispatch = useDispatch()
   const classes = useStyles()
   const [playerCount, setPlayerCount] = useState(6)
+  const [players, setPlayers] = useState(['P1', 'P2', 'P3', 'P4', 'P5', 'P6'])
 
   const [bans, setBans] = useState(true)
   const toggleBans = useCallback(() => setBans((b) => !b), [])
@@ -63,7 +64,7 @@ export function DraftSetup() {
       setupType: 'draft',
       options: {
         initialPool: factionsList.map(({ key }) => key),
-        players: [...Array(playerCount).keys()].map((k) => `P${k + 1}`),
+        players,
         bans,
         banRounds,
         bansPerRound,
@@ -78,7 +79,7 @@ export function DraftSetup() {
       }),
     )
   }, [
-    playerCount,
+    players,
     sessionService,
     bans,
     banRounds,
@@ -87,6 +88,31 @@ export function DraftSetup() {
     dispatch,
     history,
   ])
+
+  const handlePlayerCountChange = useCallback(
+    (_, newValue) => {
+      const diff = newValue - playerCount
+      const newPlayers =
+        diff < 0
+          ? players.slice(0, diff)
+          : [...Array(newValue).keys()].map(
+              (playerIndex) => players[playerIndex] || `P${playerIndex + 1}`,
+            )
+
+      setPlayerCount(newValue)
+      setPlayers(newPlayers)
+    },
+    [playerCount, players],
+  )
+  const handlePlayerChange = useCallback((playerIndex, event) => {
+    const { value } = event.currentTarget
+
+    setPlayers((p) => [
+      ...p.slice(0, playerIndex),
+      value,
+      ...p.slice(playerIndex + 1),
+    ])
+  }, [])
 
   return (
     <>
@@ -105,7 +131,7 @@ export function DraftSetup() {
               marks={playerMarks}
               max={8}
               min={2}
-              onChange={(_, newValue) => setPlayerCount(newValue)}
+              onChange={handlePlayerCountChange}
               step={1}
               value={playerCount}
               valueLabelDisplay="on"
@@ -115,6 +141,19 @@ export function DraftSetup() {
           labelPlacement="bottom"
           style={{ width: '100%' }}
         />
+      </FormGroup>
+      <FormGroup className={classes.row} row>
+        {[...Array(playerCount).keys()].map((indice) => (
+          <TextField
+            key={`player${indice}`}
+            color="secondary"
+            disabled={!bans}
+            label={`Player ${indice + 1}`}
+            onChange={(e) => handlePlayerChange(indice, e)}
+            value={players[indice] || ''}
+            variant="filled"
+          />
+        ))}
       </FormGroup>
       <FormGroup className={classes.row} row>
         <FormControlLabel
