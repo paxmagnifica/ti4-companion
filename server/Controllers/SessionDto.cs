@@ -77,8 +77,8 @@ namespace server.Controllers
             }
         }
 
+        public bool IsDraft { get { return !Factions.Any(); } }
         public GameStartedPayload Setup { get; set; }
-        public bool IsDraft { get { return Setup?.IsDraft ?? false; } }
         private void SetupGameState(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
@@ -194,14 +194,14 @@ namespace server.Controllers
         private List<String> GetFactions(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
-            var lastShuffle = events.OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == nameof(FactionsShuffled));
 
-            if (gameStartEvent == null && lastShuffle == null)
+            var draftCommitedEvent = events.FirstOrDefault(e => e.EventType == nameof(CommitDraft));
+            if (draftCommitedEvent != null)
             {
-                // TODO domain exception
-                throw new Exception("game session without factions event");
+                return new List<string>(CommitDraft.GetPayload(draftCommitedEvent).Factions);
             }
 
+            var lastShuffle = events.OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == nameof(FactionsShuffled));
             if (lastShuffle == null)
             {
                 var payload = GameStarted.GetPayload(gameStartEvent);

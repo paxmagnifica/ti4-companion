@@ -12,7 +12,7 @@ const PHASE = {
 }
 
 function Speaker({ draft, session, sessionService }) {
-  const pickMutation = useCallback(async () => {
+  const speakerMutation = useCallback(async () => {
     const shuffled = shuffle([...Array(draft.players.length).keys()])
 
     const speakerIndex = shuffled[0]
@@ -30,7 +30,18 @@ function Speaker({ draft, session, sessionService }) {
 
   const { mutate: selectRandomSpeaker } = useDraftMutation({
     sessionId: session.id,
-    mutation: pickMutation,
+    mutation: speakerMutation,
+  })
+
+  const commitDraftMutation = useCallback(async () => {
+    await sessionService.pushEvent(session.id, {
+      type: 'CommitDraft',
+    })
+  }, [session.id, sessionService])
+
+  const { mutate: commitDraft } = useDraftMutation({
+    sessionId: session.id,
+    mutation: commitDraftMutation,
   })
 
   return (
@@ -40,6 +51,11 @@ function Speaker({ draft, session, sessionService }) {
       {!draft.speaker && (
         <Button onClick={selectRandomSpeaker} variant="contained">
           random speaker
+        </Button>
+      )}
+      {draft.speaker && (
+        <Button onClick={commitDraft} variant="contained">
+          start
         </Button>
       )}
     </>
