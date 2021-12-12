@@ -29,12 +29,13 @@ namespace server.Controllers
             }
         }
 
-        public GameStartedPayload SessionState { get; set; }
+        public GameStartedPayload Setup { get; set; }
+        public bool IsDraft { get { return Setup?.IsDraft ?? false; } }
         private void SetupGameState(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
 
-            SessionState = GameStarted.GetPayload(gameStartEvent);
+            Setup = GameStarted.GetPayload(gameStartEvent);
         }
 
         public bool Editable { get; internal set; }

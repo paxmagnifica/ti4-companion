@@ -12,6 +12,12 @@ export const useDispatch = () => {
   return dispatch
 }
 
+export const useComboDispatch = () => {
+  const dispatch = useContext(ComboDispatchContext)
+
+  return dispatch
+}
+
 export const init = () => ({
   relics: {
     loading: false,
