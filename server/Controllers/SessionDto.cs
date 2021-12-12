@@ -10,6 +10,7 @@ namespace server.Controllers
         public SessionDto(Session session)
         {
             Id = session.Id;
+            SetupGameState(session.Events);
             Factions = GetFactions(session.Events);
             Points = GetPoints(session.Events);
             Objectives = GetObjectives(session.Events);
@@ -26,6 +27,14 @@ namespace server.Controllers
             {
                 Secret = secret.Value;
             }
+        }
+
+        public GameStartedPayload SessionState { get; set; }
+        private void SetupGameState(List<GameEvent> events)
+        {
+            var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
+
+            SessionState = GameStarted.GetPayload(gameStartEvent);
         }
 
         public bool Editable { get; internal set; }

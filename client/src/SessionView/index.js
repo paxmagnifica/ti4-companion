@@ -9,7 +9,7 @@ import FullscreenButton, { HideInFullscreen } from '../Fullscreen'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
 import useRealTimeSession from './useRealTimeSession'
-import Overview from './Overview'
+import { Overview } from './Overview'
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
 import Map from './Map'
