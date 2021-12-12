@@ -40,7 +40,10 @@ import { useChat } from './Chat'
 
 i18nFactory()
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  main: {
+    paddingBottom: theme.spacing(3),
+  },
   fullWidth: {
     width: '100%',
     maxWidth: '100%',
@@ -48,7 +51,7 @@ const useStyles = makeStyles({
   title: {
     flexGrow: 1,
   },
-})
+}))
 
 function App() {
   const { t } = useTranslation()
@@ -134,7 +137,9 @@ function App() {
           </Toolbar>
         </AppBar>
         <Toolbar />
-        <Container className={clsx({ [classes.fullWidth]: fullscreen })}>
+        <Container
+          className={clsx(classes.main, { [classes.fullWidth]: fullscreen })}
+        >
           <StateContext.Provider value={state}>
             <DispatchContext.Provider value={dispatchWithInvalidate}>
               <KnowledgeBase />
