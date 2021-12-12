@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using server.Domain;
 
 namespace server.Controllers
 {
-    public class SessionDto: Session
+    public class SessionDto : Session
     {
         public SessionDto(Session session)
         {
@@ -23,22 +22,27 @@ namespace server.Controllers
         public SessionDto(Session session, Guid? secret) : this(session)
         {
             Editable = secret.HasValue && session.CanEditWith(secret.Value);
-            if (Editable) {
+            if (Editable)
+            {
                 Secret = secret.Value;
             }
         }
 
         public bool Editable { get; internal set; }
-        public bool Finished { get {
-            return Points.Any(point => point.Points == VpCount);
-        }}
+        public bool Finished
+        {
+            get
+            {
+                return Points.Any(point => point.Points == VpCount);
+            }
+        }
 
         public string DisplayName { get; internal set; }
         public bool TTS { get; internal set; }
         public bool Split { get; internal set; }
         public string Start { get; internal set; }
         public string End { get; internal set; }
-        public decimal Duration {get; internal set; }
+        public decimal Duration { get; internal set; }
         public int VpCount { get; internal set; }
         private void SetSessionDetails(List<GameEvent> events)
         {
@@ -49,7 +53,7 @@ namespace server.Controllers
 
             if (latestMetadataEvent == null)
             {
-              return;
+                return;
             }
 
             var payload = MetadataUpdated.GetPayload(latestMetadataEvent);
@@ -67,12 +71,13 @@ namespace server.Controllers
         {
             var mapEvent = (events ?? new List<GameEvent>()).OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == GameEvent.MapAdded);
 
-            if (mapEvent == null) {
+            if (mapEvent == null)
+            {
                 return string.Empty;
             }
 
 #if DEBUG
-    return mapEvent.SerializedPayload.Replace("storage-emulator", "localhost");
+            return mapEvent.SerializedPayload.Replace("storage-emulator", "localhost");
 #endif
 
             return mapEvent.SerializedPayload;
@@ -130,7 +135,7 @@ namespace server.Controllers
         public List<string> Factions { get; internal set; }
         private List<String> GetFactions(List<GameEvent> events)
         {
-            var gameStartEvent = events.FirstOrDefault(e => e.EventType == GameEvent.GameStarted);
+            var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
             var lastShuffle = events.OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == nameof(FactionsShuffled));
 
             if (gameStartEvent == null && lastShuffle == null)
@@ -141,7 +146,9 @@ namespace server.Controllers
 
             if (lastShuffle == null)
             {
-                return JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
+                var payload = GameStarted.GetPayload(gameStartEvent);
+
+                return payload.Factions;
             }
 
             return FactionsShuffled.GetPayload(lastShuffle).Factions;

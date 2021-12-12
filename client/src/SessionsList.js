@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// TODO handle drafts
 function SessionsList({ loading, sessions }) {
   const classes = useStyles()
   const history = useHistory()
