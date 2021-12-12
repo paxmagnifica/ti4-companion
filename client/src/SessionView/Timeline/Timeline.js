@@ -261,13 +261,15 @@ function TimelineUserEvent({ eventType, payload, happenedAt }) {
             <br />
           </>
         )}
-        <a href={payload.file} target="about:blank">
-          <img
-            alt={t(`sessionTimeline.events.${eventType}`)}
-            src={payload.file}
-            style={{ maxWidth: '100%' }}
-          />
-        </a>
+        {payload.file && (
+          <a href={payload.file} target="about:blank">
+            <img
+              alt={t(`sessionTimeline.events.${eventType}`)}
+              src={payload.file}
+              style={{ maxWidth: '100%' }}
+            />
+          </a>
+        )}
       </Ti4TimelineContent>
     </Ti4TimelineItem>
   )
