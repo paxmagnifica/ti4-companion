@@ -86,7 +86,7 @@ function GameStarted({ payload, happenedAt, eventType }) {
         <Typography variant="h5">
           <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
         </Typography>
-        {payload.map((faction) => (
+        {payload.Factions.map((faction) => (
           <Box key={faction} style={{ display: 'inline-block' }}>
             <FactionFlag
               disabled
