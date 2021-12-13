@@ -14,7 +14,7 @@ const PHASE = {
   speaker: 'speaker',
 }
 
-function Speaker({ draft, session, sessionService }) {
+function Speaker({ disabled, draft, session, sessionService }) {
   const speakerMutation = useCallback(async () => {
     const shuffled = shuffle([...Array(draft.players.length).keys()])
 
@@ -55,12 +55,22 @@ function Speaker({ draft, session, sessionService }) {
       </Typography>
       {draft.speaker && (
         <Box mb={2}>
-          <Button color="secondary" onClick={commitDraft} variant="contained">
+          <Button
+            color="secondary"
+            disabled={disabled}
+            onClick={commitDraft}
+            variant="contained"
+          >
             commit draft & start session
           </Button>
         </Box>
       )}
-      <Button color="primary" onClick={selectRandomSpeaker} variant="contained">
+      <Button
+        color="primary"
+        disabled={disabled}
+        onClick={selectRandomSpeaker}
+        variant="contained"
+      >
         assign speaker at random
       </Button>
     </>
@@ -151,6 +161,7 @@ function TablePositionPick({
 
 // TODO onPositionSelected ugly hack because of state being in the wrong place
 function Pick({
+  disabled,
   pick,
   clearSelection,
   draft,
@@ -204,7 +215,7 @@ function Pick({
       </Typography>
       <Button
         color="secondary"
-        disabled={!pick && selectedPosition === null}
+        disabled={disabled || (!pick && selectedPosition === null)}
         onClick={pickFaction}
         variant="contained"
       >
@@ -212,12 +223,15 @@ function Pick({
       </Button>
       {session.setup.options.tablePick && (
         <TablePositionPick
-          disabled={draft.picks.some(
-            ({ type, playerIndex }) =>
-              type === 'tablePosition' &&
-              Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
-          )}
+          disabled={
+            disabled ||
+            draft.picks.some(
+              ({ type, playerIndex }) =>
+                type === 'tablePosition' &&
+                Number(draft.order[draft.activePlayerIndex]) ===
+                  Number(playerIndex),
+            )
+          }
           draft={draft}
           handleSelectedPosition={handleSelectedPosition}
           pick={pick}
@@ -228,7 +242,14 @@ function Pick({
   )
 }
 
-function Ban({ bans, clearSelection, draft, sessionService, session }) {
+function Ban({
+  disabled,
+  bans,
+  clearSelection,
+  draft,
+  sessionService,
+  session,
+}) {
   const banMutation = useCallback(async () => {
     await sessionService.pushEvent(session.id, {
       type: 'Banned',
@@ -254,7 +275,7 @@ function Ban({ bans, clearSelection, draft, sessionService, session }) {
       </Typography>
       <Button
         color="secondary"
-        disabled={bans.length < draft.bansPerRound}
+        disabled={disabled || bans.length < draft.bansPerRound}
         onClick={ban}
         variant="contained"
       >
@@ -290,6 +311,7 @@ export function Drafting({ editable, session, sessionService }) {
         {draft.phase === PHASE.picks && (
           <Pick
             clearSelection={() => setSelected([])}
+            disabled={!editable}
             draft={draft}
             onPositionSelected={(selectedPosition) => {
               setDisableFactionSelection(selectedPosition !== null)
@@ -303,6 +325,7 @@ export function Drafting({ editable, session, sessionService }) {
           <Ban
             bans={selected}
             clearSelection={() => setSelected([])}
+            disabled={!editable}
             draft={draft}
             session={session}
             sessionService={sessionService}
@@ -310,6 +333,7 @@ export function Drafting({ editable, session, sessionService }) {
         )}
         {draft.phase === PHASE.speaker && (
           <Speaker
+            disabled={!editable}
             draft={draft}
             session={session}
             sessionService={sessionService}
@@ -323,6 +347,7 @@ export function Drafting({ editable, session, sessionService }) {
       <DraftPool
         bans={draft.bans}
         disabled={
+          !editable ||
           draft.phase === PHASE.speaker ||
           disableFactionSelection ||
           draft.picks.some(

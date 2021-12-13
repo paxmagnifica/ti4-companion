@@ -7,12 +7,21 @@ const useRealTimeSession = (sessionId) => {
   const signalRConnection = useContext(SignalRConnectionContext)
   const dispatch = useContext(DispatchContext)
 
+  // TODO cleanup subscription
   useEffect(() => {
     signalRConnection.on('SessionEvent', (sessionEvent) => {
       const payload = JSON.parse(sessionEvent.serializedPayload)
+      if (
+        // TODO also check if we are currently viewing the session?
+        sessionEvent.eventType === 'CommitDraft' &&
+        sessionId === sessionEvent.sessionId
+      ) {
+        window.location.reload()
+      }
+
       dispatch({ type: sessionEvent.eventType, payload })
     })
-  }, [signalRConnection, dispatch])
+  }, [signalRConnection, dispatch, sessionId])
 
   useEffect(() => {
     if (!sessionId) {
