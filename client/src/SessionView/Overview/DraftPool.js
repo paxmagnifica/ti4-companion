@@ -83,7 +83,9 @@ export function DraftPool({
                 [classes.picked]: picked,
               })}
               color={isSelected(factionKey) ? 'secondary' : 'default'}
-              disabled={Boolean(disabled || banned || disabledDueToSelection || picked)}
+              disabled={Boolean(
+                disabled || banned || disabledDueToSelection || picked,
+              )}
               endIcon={
                 banned ? (
                   <BlockIcon fontSize="large" />
