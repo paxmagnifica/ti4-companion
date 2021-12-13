@@ -15,8 +15,11 @@ import {
   AccessibilityNew as UserEventIcon,
   Map as MapIcon,
   Add as AddIcon,
+  Block as BannedIcon,
+  PanTool as PickedIcon,
 } from '@material-ui/icons'
 
+import config from '../../config'
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
@@ -45,16 +48,12 @@ const Ti4TimelineItem = withStyles({
 const Ti4TimelineDot = withStyles({
   root: {
     padding: '.3em',
-    marginLeft: '2.1em',
-    marginRight: '2.1em',
-  },
-})(TimelineDot)
-
-const useStyles = makeStyles({
-  dotWithIcon: {
     marginLeft: 0,
     marginRight: 0,
   },
+})(TimelineDot)
+
+const useStyles = makeStyles((theme) => ({
   addNew: {
     minHeight: '0 !important',
   },
@@ -66,7 +65,15 @@ const useStyles = makeStyles({
       marginBottom: 15,
     },
   },
-})
+  banned: {
+    backgroundColor: theme.palette.error.dark,
+    opacity: '0.8',
+  },
+  picked: {
+    backgroundColor: theme.palette.success.dark,
+    opacity: '0.8',
+  },
+}))
 
 function GameStarted({ payload, happenedAt, eventType }) {
   const { t } = useTranslation()
@@ -132,7 +139,6 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
 }
 
 function ObjectiveAdded({ eventType, payload, happenedAt }) {
-  const classes = useStyles()
   const small = useSmallViewport()
   const { t } = useTranslation()
 
@@ -145,7 +151,6 @@ function ObjectiveAdded({ eventType, payload, happenedAt }) {
       </TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
-          className={classes.dotWithIcon}
           color="primary"
           title={t(`sessionTimeline.events.${eventType}`)}
         >
@@ -244,7 +249,6 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
 }
 
 function TimelineUserEvent({ eventType, payload, happenedAt }) {
-  const classes = useStyles()
   const { t } = useTranslation()
 
   return (
@@ -256,7 +260,6 @@ function TimelineUserEvent({ eventType, payload, happenedAt }) {
       </TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
-          className={classes.dotWithIcon}
           color="primary"
           title={t(`sessionTimeline.events.${eventType}`)}
         >
@@ -287,7 +290,6 @@ function TimelineUserEvent({ eventType, payload, happenedAt }) {
 }
 
 function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
-  const classes = useStyles()
   const { t } = useTranslation()
 
   return (
@@ -299,7 +301,6 @@ function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
       </TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
-          className={classes.dotWithIcon}
           color="primary"
           title={t(`sessionTimeline.events.${eventType}`)}
         >
@@ -320,67 +321,172 @@ function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
   )
 }
 
+function DebugEvent({ eventType, payload, happenedAt }) {
+  if (!config.isDevelopment) {
+    return null
+  }
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot title={eventType} />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">{eventType}</Typography>
+        <pre>{JSON.stringify(payload, null, 2)}</pre>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function Banned({ eventType, payload, happenedAt }) {
+  const classes = useStyles()
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          className={classes.banned}
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <BannedIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans
+            i18nKey="sessionTimeline.banned"
+            values={{ player: payload.playerName }}
+          />
+        </Typography>
+        {payload.bans.map((factionKey) => (
+          <Box key={factionKey} style={{ display: 'inline-block' }}>
+            <FactionFlag
+              className={classes.banned}
+              disabled
+              factionKey={factionKey}
+              height="3em"
+              selected
+              width="4.5em"
+            />
+          </Box>
+        ))}
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function Picked({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          color="secondary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <PickedIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans
+            i18nKey="sessionTimeline.picked"
+            values={{ player: payload.playerName }}
+          />
+        </Typography>
+        {payload.type === 'faction' ? (
+          <Box key={payload.pick} style={{ display: 'inline-block' }}>
+            <FactionFlag
+              disabled
+              factionKey={payload.pick}
+              height="3em"
+              selected
+              width="4.5em"
+            />
+          </Box>
+        ) : (
+          <Typography>
+            <Trans i18nKey="sessionTimeline.tableSpotPicked" />:{' '}
+            <strong>P{payload.pick + 1}</strong>
+          </Typography>
+        )}
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function SpeakerSelected({ payload, happenedAt }) {
+  const classes = useStyles()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans
+            i18nKey="sessionTimeline.speakerAssigned"
+            values={{ speaker: payload.speakerName }}
+          />
+        </Typography>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
 function EventOnATimeline({ eventType, payload, happenedAt }) {
+  const props = { eventType, payload, happenedAt }
   switch (eventType) {
     case 'GameStarted':
-      return (
-        <GameStarted
-          eventType={eventType}
-          happenedAt={happenedAt}
-          payload={payload}
-        />
-      )
+      return <GameStarted {...props} />
     case 'VpCountChanged':
-      return (
-        <VpCountChanged
-          eventType={eventType}
-          happenedAt={happenedAt}
-          payload={payload}
-        />
-      )
+      return <VpCountChanged {...props} />
     case 'ObjectiveAdded':
-      return (
-        <ObjectiveAdded
-          eventType={eventType}
-          happenedAt={happenedAt}
-          payload={payload}
-        />
-      )
+      return <ObjectiveAdded {...props} />
     case 'VictoryPointsUpdated':
-      return (
-        <VictoryPointsUpdated
-          eventType={eventType}
-          happenedAt={happenedAt}
-          payload={payload}
-        />
-      )
+      return <VictoryPointsUpdated {...props} />
     case 'ObjectiveScored':
-      return (
-        <ObjectiveScored
-          eventType={eventType}
-          happenedAt={happenedAt}
-          payload={payload}
-        />
-      )
+      return <ObjectiveScored {...props} />
     case 'MapAdded':
-      return (
-        <ImageFromPayload
-          eventType={eventType}
-          happenedAt={happenedAt}
-          Icon={<MapIcon />}
-          payload={payload}
-        />
-      )
+      return <ImageFromPayload Icon={<MapIcon />} {...props} />
     case 'TimelineUserEvent':
-      return (
-        <TimelineUserEvent
-          eventType={eventType}
-          happenedAt={happenedAt}
-          payload={payload}
-        />
-      )
+      return <TimelineUserEvent {...props} />
+    case 'Banned':
+      return <Banned {...props} />
+    case 'Picked':
+      return <Picked {...props} />
+    case 'SpeakerSelected':
+      return <SpeakerSelected {...props} />
     default:
-      return null
+      return <DebugEvent {...props} />
   }
 }
 

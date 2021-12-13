@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
+import clsx from 'clsx'
 
 import * as factions from '../gameInfo/factions'
 
@@ -26,7 +27,7 @@ const useFlagStyles = makeStyles({
 })
 
 function FactionFlag(
-  { disabled, factionKey, selected, onClick, width, height },
+  { disabled, factionKey, selected, onClick, width, height, className },
   ref,
 ) {
   const { t } = useTranslation()
@@ -41,7 +42,7 @@ function FactionFlag(
   return (
     <div
       ref={ref}
-      className={classes.root}
+      className={clsx(classes.root, className)}
       onClick={disabled ? undefined : onClick}
     >
       <img
