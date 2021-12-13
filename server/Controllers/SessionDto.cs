@@ -29,7 +29,7 @@ namespace server.Controllers
             var banOrder = JsonConvert.DeserializeObject<int[]>(session.Events.FirstOrDefault(e => e.EventType == "PlayerOrder")?.SerializedPayload ?? "[]");
             var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
 
-            Order = JsonConvert.DeserializeObject<int[]>(orderEvent.SerializedPayload);
+            Order = JsonConvert.DeserializeObject<int[]>(orderEvent?.SerializedPayload ?? "[]");
             Phase = bans.Count() < banOrder.Count() ? "bans" :
               (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
             InitialPool = payload.InitialPool;
