@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using server.Domain;
 using server.Persistence;
-using server.Infra;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Azure.Storage.Blobs.Models;

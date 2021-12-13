@@ -55,7 +55,10 @@ export function SetFactions({ dispatch }) {
   const history = useHistory()
   const sessionService = useMemo(() => sessionFactory({ fetch }), [])
   const createGameSession = useCallback(async () => {
-    const session = await sessionService.createSession(selectedFactions)
+    const session = await sessionService.createSession({
+      setupType: 'simple',
+      factions: selectedFactions,
+    })
     dispatch({ type: 'CreateGameSession', session })
     history.push(
       generatePath(SESSION_VIEW_ROUTES.main, {

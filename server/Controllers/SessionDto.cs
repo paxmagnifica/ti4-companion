@@ -17,7 +17,7 @@ namespace server.Controllers
         public DraftDto(Session session)
         {
             var gameStartEvent = session.Events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
-            var payload = GameStarted.GetPayload(gameStartEvent).Options;
+            var gameStartOptions = GameStarted.GetPayload(gameStartEvent).Options;
 
             var banEvents = session.Events.Where(e => e.EventType == nameof(Banned));
             var bans = banEvents.SelectMany(b =>
@@ -32,9 +32,9 @@ namespace server.Controllers
             Order = JsonConvert.DeserializeObject<int[]>(orderEvent?.SerializedPayload ?? "[]");
             Phase = bans.Count() < banOrder.Count() ? "bans" :
               (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
-            InitialPool = payload.InitialPool;
-            Players = payload.Players;
-            BansPerRound = payload.BansPerRound;
+            InitialPool = gameStartOptions?.InitialPool;
+            Players = gameStartOptions?.Players;
+            BansPerRound = gameStartOptions?.BansPerRound ?? 1;
             Bans = bans;
             Picks = pickEvents.Select(Picked.GetPayload).ToArray();
             ActivePlayerIndex = Phase == "bans" ? bans.Count() : pickEvents.Count();
