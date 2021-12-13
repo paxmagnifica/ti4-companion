@@ -16,7 +16,8 @@ namespace server.Controllers
     {
         public DraftDto(Session session)
         {
-            var gameStartEvent = session.Events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
+            var orderedEvents = session.Events.OrderBy(e => e.HappenedAt);
+            var gameStartEvent = orderedEvents.FirstOrDefault(e => e.EventType == nameof(GameStarted));
             var gameStartOptions = GameStarted.GetPayload(gameStartEvent).Options;
 
             var banEvents = session.Events.Where(e => e.EventType == nameof(Banned));
@@ -25,9 +26,9 @@ namespace server.Controllers
                 var payload = Banned.GetPayload(b);
                 return payload.Bans.Select(f => new BanDto { Ban = f, PlayerName = payload.PlayerName });
             }).ToArray();
-            var pickEvents = session.Events.Where(e => e.EventType == nameof(Picked));
-            var banOrder = JsonConvert.DeserializeObject<int[]>(session.Events.FirstOrDefault(e => e.EventType == "PlayerOrder")?.SerializedPayload ?? "[]");
-            var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
+            var pickEvents = orderedEvents.Where(e => e.EventType == nameof(Picked));
+            var banOrder = JsonConvert.DeserializeObject<int[]>(orderedEvents.FirstOrDefault(e => e.EventType == "PlayerOrder")?.SerializedPayload ?? "[]");
+            var orderEvent = orderedEvents.LastOrDefault(e => e.EventType == "PlayerOrder");
 
             Order = JsonConvert.DeserializeObject<int[]>(orderEvent?.SerializedPayload ?? "[]");
             Phase = banEvents.Count() < banOrder.Count() ? "bans" :
@@ -39,7 +40,7 @@ namespace server.Controllers
             Picks = pickEvents.Select(Picked.GetPayload).ToArray();
             ActivePlayerIndex = Phase == "bans" ? banEvents.Count() : pickEvents.Count();
 
-            var speakerEvent = session.Events.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
+            var speakerEvent = orderedEvents.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
             if (speakerEvent != null)
             {
                 Speaker = SpeakerSelected.GetPayload(speakerEvent).SpeakerName;
