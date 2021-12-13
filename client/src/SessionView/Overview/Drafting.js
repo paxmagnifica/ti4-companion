@@ -48,13 +48,13 @@ function Speaker({ draft, session, sessionService }) {
   return (
     <>
       <p>speaker: {draft.speaker || 'not selected yet'}</p>
-      <Button onClick={selectRandomSpeaker} variant="contained">
+      <Button color="primary" onClick={selectRandomSpeaker} variant="contained">
         assign speaker at random
       </Button>
       <br />
       <br />
       {draft.speaker && (
-        <Button onClick={commitDraft} variant="contained">
+        <Button color="secondary" onClick={commitDraft} variant="contained">
           commit draft & start session
         </Button>
       )}
@@ -84,7 +84,15 @@ function Pick({ pick, clearSelection, draft, session, sessionService }) {
 
   return (
     <>
-      <Button disabled={!pick} onClick={pickFaction} variant="contained">
+      <Typography variant="h2">
+        picking: {draft.players[draft.order[draft.activePlayerIndex]]}
+      </Typography>
+      <Button
+        color="secondary"
+        disabled={!pick}
+        onClick={pickFaction}
+        variant="contained"
+      >
         pick
       </Button>
     </>
@@ -112,10 +120,11 @@ function Ban({ bans, clearSelection, draft, sessionService, session }) {
 
   return (
     <>
-      <p>
-        who is banning: {draft.players[draft.order[draft.activePlayerIndex]]}
-      </p>
+      <Typography variant="h3">
+        banning: {draft.players[draft.order[draft.activePlayerIndex]]}
+      </Typography>
       <Button
+        color="secondary"
         disabled={bans.length < draft.bansPerRound}
         onClick={ban}
         variant="contained"
@@ -142,16 +151,11 @@ export function Drafting({ editable, session, sessionService }) {
   return (
     <>
       <Box mb={2}>
-        <Typography>phase: {draft.phase}</Typography>
+        <Typography variant="h1">phase: {draft.phase}</Typography>
         {pickOrBan && (
-          <p>
+          <Typography>
             order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}
-          </p>
-        )}
-        {pickOrBan && (
-          <p>
-            active player: {draft.players[draft.order[draft.activePlayerIndex]]}
-          </p>
+          </Typography>
         )}
         {draft.phase === PHASE.picks && (
           <Pick
