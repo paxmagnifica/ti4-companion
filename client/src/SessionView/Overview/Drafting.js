@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { Grid, Box, Button, Typography } from '@material-ui/core'
 import { PanTool as PickedIcon } from '@material-ui/icons'
+import Alert from '@material-ui/lab/Alert'
 import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -301,6 +302,7 @@ export function Drafting({ editable, session, sessionService }) {
 
   return (
     <>
+      <Alert severity="warning">This is an early prototype of the drafting tool.<br/>Please be patient with us, we are working to improve the UI and provide you with more drafting options.<br/>If you run into an error, please be so kind as to write us a message in the chat (lower bottom corner) - it will help us immensely!</Alert>
       <Box mb={2}>
         <Typography variant="h1">phase: {draft.phase}</Typography>
         {pickOrBan && (
