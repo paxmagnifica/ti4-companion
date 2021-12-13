@@ -26,10 +26,11 @@ namespace server.Controllers
                 return payload.Bans.Select(f => new BanDto { Ban = f, PlayerName = payload.PlayerName });
             }).ToArray();
             var pickEvents = session.Events.Where(e => e.EventType == nameof(Picked));
+            var banOrder = JsonConvert.DeserializeObject<int[]>(session.Events.FirstOrDefault(e => e.EventType == "PlayerOrder")?.SerializedPayload ?? "[]");
             var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
 
             Order = JsonConvert.DeserializeObject<int[]>(orderEvent.SerializedPayload);
-            Phase = bans.Count() < Order.Count() ? "bans" :
+            Phase = bans.Count() < banOrder.Count() ? "bans" :
               (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
             InitialPool = payload.InitialPool;
             Players = payload.Players;

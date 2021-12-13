@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react'
-import { Box, Button, Typography } from '@material-ui/core'
+import { Grid, Box, Button, Typography } from '@material-ui/core'
+import { PanTool as PickedIcon } from '@material-ui/icons'
 import shuffle from 'lodash.shuffle'
+import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
@@ -47,35 +50,147 @@ function Speaker({ draft, session, sessionService }) {
 
   return (
     <>
-      <p>speaker: {draft.speaker || 'not selected yet'}</p>
+      <Typography variant="h2">
+        speaker: {draft.speaker || 'not selected yet'}
+      </Typography>
+      {draft.speaker && (
+        <Box mb={2}>
+          <Button color="secondary" onClick={commitDraft} variant="contained">
+            commit draft & start session
+          </Button>
+        </Box>
+      )}
       <Button color="primary" onClick={selectRandomSpeaker} variant="contained">
         assign speaker at random
       </Button>
-      <br />
-      <br />
-      {draft.speaker && (
-        <Button color="secondary" onClick={commitDraft} variant="contained">
-          commit draft & start session
-        </Button>
-      )}
     </>
   )
 }
 
-function Pick({ pick, clearSelection, draft, session, sessionService }) {
+const useStyles = makeStyles((theme) => ({
+  containedButton: {
+    transition: theme.transitions.create(
+      ['opacity', 'background-color', 'color'],
+      {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      },
+    ),
+    '&:not(.MuiButton-containedSecondary)': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'black',
+      opacity: 0.5,
+    },
+  },
+  banned: {
+    backgroundColor: `${theme.palette.error.light} !important`,
+    opacity: '0.8 !important',
+    '& .MuiButton-endIcon': {
+      color: theme.palette.error.contrastText,
+    },
+  },
+  picked: {
+    backgroundColor: `${theme.palette.success.light} !important`,
+    opacity: '0.8 !important',
+    '& .MuiButton-endIcon': {
+      color: theme.palette.success.contrastText,
+    },
+  },
+}))
+
+function TablePositionPick({
+  disabled,
+  pick,
+  draft,
+  selectedPosition,
+  handleSelectedPosition,
+}) {
+  const classes = useStyles()
+
+  return (
+    <Grid container justifyContent="center" spacing={4}>
+      {[...Array(draft.players.length).keys()].map((tablePositionIndex) => {
+        const picked = draft.picks
+          .filter(({ type }) => type === 'tablePosition')
+          .find(({ pick: p }) => Number(p) === tablePositionIndex)
+        const disabledDueToSelection =
+          selectedPosition !== null && selectedPosition !== tablePositionIndex
+        const isSelected =
+          selectedPosition !== null && selectedPosition === tablePositionIndex
+
+        return (
+          <Grid key={tablePositionIndex} item lg={3} md={4} sm={6} xs={12}>
+            <Button
+              className={clsx(classes.containedButton, {
+                [classes.picked]: picked,
+              })}
+              color={isSelected ? 'secondary' : 'default'}
+              disabled={Boolean(
+                disabled || disabledDueToSelection || picked || pick,
+              )}
+              endIcon={picked ? <PickedIcon fontSize="large" /> : null}
+              fullWidth
+              onClick={() => handleSelectedPosition(tablePositionIndex)}
+              variant="contained"
+            >
+              {`P${tablePositionIndex + 1}`} on map
+              {picked && (
+                <Typography variant="caption">
+                  picked by {picked.playerName}
+                </Typography>
+              )}
+            </Button>
+          </Grid>
+        )
+      })}
+    </Grid>
+  )
+}
+
+// TODO onPositionSelected ugly hack because of state being in the wrong place
+function Pick({
+  pick,
+  clearSelection,
+  draft,
+  session,
+  sessionService,
+  onPositionSelected,
+}) {
+  const [selectedPosition, setSelectedPosition] = useState(null)
+  const handleSelectedPosition = useCallback(
+    (playerIndex) => {
+      const value = selectedPosition === playerIndex ? null : playerIndex
+
+      setSelectedPosition(value)
+      onPositionSelected(value)
+    },
+    [selectedPosition, onPositionSelected],
+  )
   const pickMutation = useCallback(async () => {
     await sessionService.pushEvent(session.id, {
       type: 'Picked',
       payload: {
         sessionId: session.id,
-        pick,
-        type: 'faction',
+        pick: pick || selectedPosition,
+        type: pick ? 'faction' : 'tablePosition',
         playerIndex: draft.order[draft.activePlayerIndex],
         playerName: draft.players[draft.order[draft.activePlayerIndex]],
       },
     })
+    setSelectedPosition(null)
+    onPositionSelected(null)
     clearSelection()
-  }, [clearSelection, sessionService, pick, session.id, draft])
+  }, [
+    selectedPosition,
+    clearSelection,
+    sessionService,
+    pick,
+    session.id,
+    draft,
+    onPositionSelected,
+  ])
 
   const { mutate: pickFaction } = useDraftMutation({
     sessionId: session.id,
@@ -89,12 +204,26 @@ function Pick({ pick, clearSelection, draft, session, sessionService }) {
       </Typography>
       <Button
         color="secondary"
-        disabled={!pick}
+        disabled={!pick && selectedPosition === null}
         onClick={pickFaction}
         variant="contained"
       >
         pick
       </Button>
+      {session.setup.options.tablePick && (
+        <TablePositionPick
+          disabled={draft.picks.some(
+            ({ type, playerIndex }) =>
+              type === 'tablePosition' &&
+              Number(draft.order[draft.activePlayerIndex]) ===
+                Number(playerIndex),
+          )}
+          draft={draft}
+          handleSelectedPosition={handleSelectedPosition}
+          pick={pick}
+          selectedPosition={selectedPosition}
+        />
+      )}
     </>
   )
 }
@@ -136,6 +265,7 @@ function Ban({ bans, clearSelection, draft, sessionService, session }) {
 }
 
 export function Drafting({ editable, session, sessionService }) {
+  const [disableFactionSelection, setDisableFactionSelection] = useState(false)
   const [selected, setSelected] = useState([])
   const { draft } = useDraftQuery({
     sessionId: session.id,
@@ -161,6 +291,9 @@ export function Drafting({ editable, session, sessionService }) {
           <Pick
             clearSelection={() => setSelected([])}
             draft={draft}
+            onPositionSelected={(selectedPosition) => {
+              setDisableFactionSelection(selectedPosition !== null)
+            }}
             pick={selected[0]}
             session={session}
             sessionService={sessionService}
@@ -184,10 +317,27 @@ export function Drafting({ editable, session, sessionService }) {
         )}
       </Box>
       {draft.phase === PHASE.speaker && <Typography>picks:</Typography>}
+      {session.setup.options.tablePick && draft.phase === PHASE.speaker && (
+        <TablePositionPick disabled draft={draft} />
+      )}
       <DraftPool
         bans={draft.bans}
+        disabled={
+          draft.phase === PHASE.speaker ||
+          disableFactionSelection ||
+          draft.picks.some(
+            ({ type, playerIndex }) =>
+              type === 'faction' &&
+              Number(draft.order[draft.activePlayerIndex]) ===
+                Number(playerIndex),
+          )
+        }
         initialPool={
-          pickOrBan ? draft.initialPool : draft.picks.map(({ pick }) => pick)
+          pickOrBan
+            ? draft.initialPool
+            : draft.picks
+                .filter(({ type }) => type === 'faction')
+                .map(({ pick }) => pick)
         }
         max={1}
         onSelected={setSelected}
@@ -199,6 +349,7 @@ export function Drafting({ editable, session, sessionService }) {
           <Typography>bans:</Typography>
           <DraftPool
             bans={draft.bans}
+            disabled
             initialPool={draft.bans.map(({ ban }) => ban)}
             max={1}
             onSelected={setSelected}

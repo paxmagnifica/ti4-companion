@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { Typography, Avatar, Button, Grid } from '@material-ui/core'
 import { PanTool as PickedIcon, Block as BlockIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
@@ -47,6 +47,7 @@ export function DraftPool({
   max,
   onSelected,
   selected,
+  disabled,
 }) {
   const classes = useStyles()
   const isSelected = useCallback(
@@ -82,7 +83,7 @@ export function DraftPool({
                 [classes.picked]: picked,
               })}
               color={isSelected(factionKey) ? 'secondary' : 'default'}
-              disabled={Boolean(banned || disabledDueToSelection || picked)}
+              disabled={Boolean(disabled || banned || disabledDueToSelection || picked)}
               endIcon={
                 banned ? (
                   <BlockIcon fontSize="large" />
