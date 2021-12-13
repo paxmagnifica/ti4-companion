@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { Typography, Avatar, Button, Grid } from '@material-ui/core'
-import { Block as BlockIcon } from '@material-ui/icons'
+import { PanTool as PickedIcon, Block as BlockIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { Trans } from 'react-i18next'
 import clsx from 'clsx'
@@ -22,6 +22,20 @@ const useStyles = makeStyles((theme) => ({
     '&:disabled': {
       color: 'black',
       opacity: 0.5,
+    },
+  },
+  banned: {
+    backgroundColor: `${theme.palette.error.light} !important`,
+    opacity: '0.8 !important',
+    '& .MuiButton-endIcon': {
+      color: theme.palette.error.contrastText,
+    },
+  },
+  picked: {
+    backgroundColor: `${theme.palette.success.light} !important`,
+    opacity: '0.8 !important',
+    '& .MuiButton-endIcon': {
+      color: theme.palette.success.contrastText,
     },
   },
 }))
@@ -55,7 +69,8 @@ export function DraftPool({
   return (
     <Grid container justifyContent="center" spacing={4}>
       {initialPool.map((factionKey) => {
-        const banned = bans.find((ban) => ban.faction === factionKey)
+        const picked = picks.find(({ pick }) => pick === factionKey)
+        const banned = bans.find(({ ban }) => ban === factionKey)
         const disabledDueToSelection =
           selected.length === max && !selected.includes(factionKey)
 
@@ -64,11 +79,16 @@ export function DraftPool({
             <Button
               className={clsx(classes.containedButton, {
                 [classes.banned]: banned,
+                [classes.picked]: picked,
               })}
               color={isSelected(factionKey) ? 'secondary' : 'default'}
-              disabled={banned || disabledDueToSelection}
+              disabled={Boolean(banned || disabledDueToSelection || picked)}
               endIcon={
-                banned ? <BlockIcon color="error" fontSize="large" /> : null
+                banned ? (
+                  <BlockIcon fontSize="large" />
+                ) : picked ? (
+                  <PickedIcon fontSize="large" />
+                ) : null
               }
               fullWidth
               onClick={() => toggleSelection(factionKey)}
@@ -78,13 +98,17 @@ export function DraftPool({
                   src={getData(factionKey).image}
                 />
               }
-              title={banned ? 'Banned' : ''}
               variant="contained"
             >
               <Trans i18nKey={`factions.${factionKey}.name`} />
               {banned && (
                 <Typography variant="caption">
                   banned by {banned.playerName}
+                </Typography>
+              )}
+              {picked && (
+                <Typography variant="caption">
+                  picked by {picked.playerName}
                 </Typography>
               )}
             </Button>

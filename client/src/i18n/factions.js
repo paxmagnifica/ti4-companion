@@ -5,7 +5,7 @@ export const en = {
     name: 'The Arborec',
   },
   [FACTION.The_Barony_of_Letnev]: {
-    name: 'The Barnoy of Letnev',
+    name: 'The Barony of Letnev',
   },
   [FACTION.The_Clan_of_Saar]: {
     name: 'The Clan of Saar',

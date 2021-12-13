@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Button } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 import shuffle from 'lodash.shuffle'
 
 import { DraftPool } from './DraftPool'
@@ -46,37 +46,35 @@ function Speaker({ draft, session, sessionService }) {
 
   return (
     <>
-      <p>phase: {draft.phase}</p>
-      <p>speaker: {draft.speaker || 'not selected'}</p>
-      {!draft.speaker && (
-        <Button onClick={selectRandomSpeaker} variant="contained">
-          random speaker
-        </Button>
-      )}
+      <p>speaker: {draft.speaker || 'not selected yet'}</p>
+      <Button onClick={selectRandomSpeaker} variant="contained">
+        assign speaker at random
+      </Button>
+      <br />
+      <br />
       {draft.speaker && (
         <Button onClick={commitDraft} variant="contained">
-          start
+          commit draft
         </Button>
       )}
     </>
   )
 }
 
-function Pick({ draft, session, sessionService }) {
-  const [selected, setSelected] = useState([])
+function Pick({ pick, clearSelection, draft, session, sessionService }) {
   const pickMutation = useCallback(async () => {
     await sessionService.pushEvent(session.id, {
       type: 'Picked',
       payload: {
         sessionId: session.id,
-        pick: selected[0],
+        pick,
         type: 'faction',
         playerIndex: draft.order[draft.activePlayerIndex],
         playerName: draft.players[draft.order[draft.activePlayerIndex]],
       },
     })
-    setSelected([])
-  }, [selected, sessionService, session.id, draft])
+    clearSelection()
+  }, [clearSelection, sessionService, pick, session.id, draft])
 
   const { mutate: pickFaction } = useDraftMutation({
     sessionId: session.id,
@@ -85,14 +83,7 @@ function Pick({ draft, session, sessionService }) {
 
   return (
     <>
-      <p>phase: {draft.phase}</p>
-      <p>order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}</p>
-      <p>picks: {JSON.stringify(draft.picks)}</p>
-      <p>
-        who is picking: {draft.players[draft.order[draft.activePlayerIndex]]}
-      </p>
-      <p>selected: {JSON.stringify(selected)}</p>
-      <Button onClick={pickFaction} variant="contained">
+      <Button disabled={!pick} onClick={pickFaction} variant="contained">
         pick
       </Button>
     </>
@@ -145,41 +136,72 @@ export function Drafting({ editable, session, sessionService }) {
     return null
   }
 
+  const pickOrBan = [PHASE.picks, PHASE.bans].includes(draft.phase)
+
   return (
     <>
-      <p>phase: {draft.phase}</p>
-      <p>order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}</p>
-      <p>
-        active player: {draft.players[draft.order[draft.activePlayerIndex]]}
-      </p>
-      {draft.phase === PHASE.bans && (
-        <Ban
-          bans={selected}
-          clearSelection={() => setSelected([])}
-          draft={draft}
-          session={session}
-          sessionService={sessionService}
-        />
-      )}
+      <Box mb={2}>
+        <Typography>phase: {draft.phase}</Typography>
+        {pickOrBan && (
+          <p>
+            order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}
+          </p>
+        )}
+        {pickOrBan && (
+          <p>
+            active player: {draft.players[draft.order[draft.activePlayerIndex]]}
+          </p>
+        )}
+        {draft.phase === PHASE.picks && (
+          <Pick
+            clearSelection={() => setSelected([])}
+            draft={draft}
+            pick={selected[0]}
+            session={session}
+            sessionService={sessionService}
+          />
+        )}
+        {draft.phase === PHASE.bans && (
+          <Ban
+            bans={selected}
+            clearSelection={() => setSelected([])}
+            draft={draft}
+            session={session}
+            sessionService={sessionService}
+          />
+        )}
+        {draft.phase === PHASE.speaker && (
+          <Speaker
+            draft={draft}
+            session={session}
+            sessionService={sessionService}
+          />
+        )}
+      </Box>
+      {draft.phase === PHASE.speaker && <Typography>picks:</Typography>}
       <DraftPool
         bans={draft.bans}
-        initialPool={draft.initialPool}
+        initialPool={
+          pickOrBan ? draft.initialPool : draft.picks.map(({ pick }) => pick)
+        }
         max={1}
         onSelected={setSelected}
-        picks={draft.picks.filter(({ type }) => type === 'faction')}
+        picks={draft.picks}
         selected={selected}
       />
-      <pre>{JSON.stringify({ session }, null, 2)}</pre>
+      {draft.phase === PHASE.speaker && (
+        <>
+          <Typography>bans:</Typography>
+          <DraftPool
+            bans={draft.bans}
+            initialPool={draft.bans.map(({ ban }) => ban)}
+            max={1}
+            onSelected={setSelected}
+            picks={draft.picks}
+            selected={selected}
+          />
+        </>
+      )}
     </>
   )
 }
-// {draft.phase === PHASE.picks && (
-// <Pick draft={draft} session={session} sessionService={sessionService} />
-// )}
-// {draft.phase === PHASE.speaker && (
-// <Speaker
-// draft={draft}
-// session={session}
-// sessionService={sessionService}
-// />
-// )}

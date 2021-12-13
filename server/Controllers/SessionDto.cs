@@ -8,7 +8,7 @@ namespace server.Controllers
 {
     public class BanDto
     {
-        public string Faction { get; set; }
+        public string Ban { get; set; }
         public string PlayerName { get; set; }
     }
 
@@ -23,7 +23,7 @@ namespace server.Controllers
             var bans = banEvents.SelectMany(b =>
             {
                 var payload = Banned.GetPayload(b);
-                return payload.Bans.Select(f => new BanDto { Faction = f, PlayerName = payload.PlayerName });
+                return payload.Bans.Select(f => new BanDto { Ban = f, PlayerName = payload.PlayerName });
             }).ToArray();
             var pickEvents = session.Events.Where(e => e.EventType == nameof(Picked));
             var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
@@ -38,7 +38,7 @@ namespace server.Controllers
             Picks = pickEvents.Select(Picked.GetPayload).ToArray();
             ActivePlayerIndex = Phase == "bans" ? bans.Count() : pickEvents.Count();
 
-            var speakerEvent = session.Events.FirstOrDefault(e => e.EventType == nameof(SpeakerSelected));
+            var speakerEvent = session.Events.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
             if (speakerEvent != null)
             {
                 Speaker = SpeakerSelected.GetPayload(speakerEvent).SpeakerName;
