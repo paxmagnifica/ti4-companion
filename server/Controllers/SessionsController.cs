@@ -52,8 +52,6 @@ namespace server.Controllers
                 }
             };
 
-            Console.WriteLine(newSession.Events.First().SerializedPayload);
-
             if (payload.SetupType == "draft")
             {
                 newSession.Events.Add(GameEvent.GenerateOrderEvent(sessionId, payload, payload.Options.BanRounds, _timeProvider.Now));
