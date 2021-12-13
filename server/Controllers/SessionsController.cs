@@ -38,7 +38,7 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Session>> Post(List<string> factions)
+        public async Task<ActionResult<Session>> Post(GameStartedPayload payload)
         {
             var sessionId = Guid.NewGuid();
             var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now, Secret = Guid.NewGuid() };
@@ -48,9 +48,14 @@ namespace server.Controllers
                     SessionId = sessionId,
                     HappenedAt = _timeProvider.Now,
                     EventType = GameEvent.GameStarted,
-                    SerializedPayload = JsonConvert.SerializeObject(factions)
+                    SerializedPayload = JsonConvert.SerializeObject(payload)
                 }
             };
+
+            if (payload.SetupType == "draft")
+            {
+                newSession.Events.Add(GameEvent.GenerateOrderEvent(sessionId, payload, payload.Options.BanRounds, _timeProvider.Now));
+            }
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 

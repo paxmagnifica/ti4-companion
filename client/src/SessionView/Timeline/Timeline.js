@@ -86,7 +86,7 @@ function GameStarted({ payload, happenedAt, eventType }) {
         <Typography variant="h5">
           <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
         </Typography>
-        {payload.map((faction) => (
+        {payload.Factions.map((faction) => (
           <Box key={faction} style={{ display: 'inline-block' }}>
             <FactionFlag
               disabled
@@ -380,24 +380,7 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
         />
       )
     default:
-      return (
-        <Ti4TimelineItem>
-          <TimelineOppositeContent>
-            <Typography color="textSecondary">
-              {new Date(happenedAt).toLocaleString()}
-            </Typography>
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <Ti4TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <Ti4TimelineContent>
-            <Typography title={eventType} variant="h5">
-              {eventType}
-            </Typography>
-          </Ti4TimelineContent>
-        </Ti4TimelineItem>
-      )
+      return null
   }
 }
 
@@ -423,9 +406,9 @@ export function Timeline({ editable, session, sessionService }) {
   return (
     <>
       <MuiTimeline>
-        {timeline.map((event) => (
-          <EventOnATimeline {...event} key={event.order} />
-        ))}
+        {timeline
+          .map((event) => <EventOnATimeline {...event} key={event.order} />)
+          .filter(Boolean)}
         {editable && (
           <Ti4TimelineItem className={classes.addNew}>
             <TimelineOppositeContent />

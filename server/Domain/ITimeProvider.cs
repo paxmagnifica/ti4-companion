@@ -1,6 +1,6 @@
 using System;
 
-namespace server.Infra
+namespace server.Domain
 {
     public interface ITimeProvider
     {

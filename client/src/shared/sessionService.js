@@ -14,11 +14,11 @@ const factory = ({ fetch }) => {
     })
 
   return {
-    createSession: async (factions) => {
+    createSession: async (payload) => {
       const result = await fetch(`${CONFIG.apiUrl}/api/sessions`, {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(factions),
+        body: JSON.stringify(payload),
       })
       const session = await result.json()
 

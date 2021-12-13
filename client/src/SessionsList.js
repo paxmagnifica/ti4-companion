@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+// TODO handle drafts
 function SessionsList({ loading, sessions }) {
   const classes = useStyles()
   const history = useHistory()
@@ -72,9 +73,11 @@ function SessionsList({ loading, sessions }) {
         }
       >
         {sessions.map((session) => {
-          const factionList = session.factions
-            .map((factionKey) => t(`factions.${factionKey}.name`))
-            .join(', ')
+          const defaultName = session.factions.length
+            ? session.factions
+                .map((factionKey) => t(`factions.${factionKey}.name`))
+                .join(', ')
+            : `Drafting in progress...`
 
           return (
             <ListItem
@@ -107,10 +110,10 @@ function SessionsList({ loading, sessions }) {
                 )}
               </ListItemIcon>
               <ListItemText
-                primary={session.displayName || factionList}
+                primary={session.displayName || defaultName}
                 secondary={`${session.start || ''} ${
                   session.displayName
-                    ? t('sessionList.secondaryTitle', { factionList })
+                    ? t('sessionList.secondaryTitle', { defaultName })
                     : ''
                 }`}
               />

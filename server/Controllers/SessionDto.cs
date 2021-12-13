@@ -6,11 +6,63 @@ using server.Domain;
 
 namespace server.Controllers
 {
-    public class SessionDto: Session
+    public class BanDto
+    {
+        public string Ban { get; set; }
+        public string PlayerName { get; set; }
+    }
+
+    public class DraftDto
+    {
+        public DraftDto(Session session)
+        {
+            var gameStartEvent = session.Events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
+            var payload = GameStarted.GetPayload(gameStartEvent).Options;
+
+            var banEvents = session.Events.Where(e => e.EventType == nameof(Banned));
+            var bans = banEvents.SelectMany(b =>
+            {
+                var payload = Banned.GetPayload(b);
+                return payload.Bans.Select(f => new BanDto { Ban = f, PlayerName = payload.PlayerName });
+            }).ToArray();
+            var pickEvents = session.Events.Where(e => e.EventType == nameof(Picked));
+            var banOrder = JsonConvert.DeserializeObject<int[]>(session.Events.FirstOrDefault(e => e.EventType == "PlayerOrder")?.SerializedPayload ?? "[]");
+            var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
+
+            Order = JsonConvert.DeserializeObject<int[]>(orderEvent.SerializedPayload);
+            Phase = bans.Count() < banOrder.Count() ? "bans" :
+              (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
+            InitialPool = payload.InitialPool;
+            Players = payload.Players;
+            BansPerRound = payload.BansPerRound;
+            Bans = bans;
+            Picks = pickEvents.Select(Picked.GetPayload).ToArray();
+            ActivePlayerIndex = Phase == "bans" ? bans.Count() : pickEvents.Count();
+
+            var speakerEvent = session.Events.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
+            if (speakerEvent != null)
+            {
+                Speaker = SpeakerSelected.GetPayload(speakerEvent).SpeakerName;
+            }
+        }
+
+        public string[] InitialPool { get; set; }
+        public string[] Players { get; set; }
+        public BanDto[] Bans { get; set; }
+        public PickedPayload[] Picks { get; set; }
+        public int BansPerRound { get; set; }
+        public string Phase { get; set; }
+        public int[] Order { get; set; }
+        public int ActivePlayerIndex { get; set; }
+        public string Speaker { get; set; }
+    }
+
+    public class SessionDto : Session
     {
         public SessionDto(Session session)
         {
             Id = session.Id;
+            SetupGameState(session.Events);
             Factions = GetFactions(session.Events);
             Points = GetPoints(session.Events);
             Objectives = GetObjectives(session.Events);
@@ -18,27 +70,44 @@ namespace server.Controllers
             CreatedAt = session.CreatedAt;
             Locked = session.Locked;
             SetSessionDetails(session.Events);
+            Draft = new DraftDto(session);
         }
+
+        public DraftDto Draft { get; set; }
 
         public SessionDto(Session session, Guid? secret) : this(session)
         {
             Editable = secret.HasValue && session.CanEditWith(secret.Value);
-            if (Editable) {
+            if (Editable)
+            {
                 Secret = secret.Value;
             }
         }
 
+        public bool IsDraft { get { return !Factions.Any(); } }
+        public GameStartedPayload Setup { get; set; }
+        private void SetupGameState(List<GameEvent> events)
+        {
+            var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
+
+            Setup = GameStarted.GetPayload(gameStartEvent);
+        }
+
         public bool Editable { get; internal set; }
-        public bool Finished { get {
-            return Points.Any(point => point.Points == VpCount);
-        }}
+        public bool Finished
+        {
+            get
+            {
+                return Points.Any(point => point.Points == VpCount);
+            }
+        }
 
         public string DisplayName { get; internal set; }
         public bool TTS { get; internal set; }
         public bool Split { get; internal set; }
         public string Start { get; internal set; }
         public string End { get; internal set; }
-        public decimal Duration {get; internal set; }
+        public decimal Duration { get; internal set; }
         public int VpCount { get; internal set; }
         private void SetSessionDetails(List<GameEvent> events)
         {
@@ -49,7 +118,7 @@ namespace server.Controllers
 
             if (latestMetadataEvent == null)
             {
-              return;
+                return;
             }
 
             var payload = MetadataUpdated.GetPayload(latestMetadataEvent);
@@ -67,12 +136,13 @@ namespace server.Controllers
         {
             var mapEvent = (events ?? new List<GameEvent>()).OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == GameEvent.MapAdded);
 
-            if (mapEvent == null) {
+            if (mapEvent == null)
+            {
                 return string.Empty;
             }
 
 #if DEBUG
-    return mapEvent.SerializedPayload.Replace("storage-emulator", "localhost");
+            return mapEvent.SerializedPayload.Replace("storage-emulator", "localhost");
 #endif
 
             return mapEvent.SerializedPayload;
@@ -130,18 +200,20 @@ namespace server.Controllers
         public List<string> Factions { get; internal set; }
         private List<String> GetFactions(List<GameEvent> events)
         {
-            var gameStartEvent = events.FirstOrDefault(e => e.EventType == GameEvent.GameStarted);
-            var lastShuffle = events.OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == nameof(FactionsShuffled));
+            var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
 
-            if (gameStartEvent == null && lastShuffle == null)
+            var draftCommitedEvent = events.FirstOrDefault(e => e.EventType == nameof(CommitDraft));
+            if (draftCommitedEvent != null)
             {
-                // TODO domain exception
-                throw new Exception("game session without factions event");
+                return new List<string>(CommitDraft.GetPayload(draftCommitedEvent).Factions);
             }
 
+            var lastShuffle = events.OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == nameof(FactionsShuffled));
             if (lastShuffle == null)
             {
-                return JsonConvert.DeserializeObject<List<string>>(gameStartEvent.SerializedPayload);
+                var payload = GameStarted.GetPayload(gameStartEvent);
+
+                return payload.Factions;
             }
 
             return FactionsShuffled.GetPayload(lastShuffle).Factions;

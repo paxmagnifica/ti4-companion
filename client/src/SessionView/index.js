@@ -9,7 +9,7 @@ import FullscreenButton, { HideInFullscreen } from '../Fullscreen'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
 import useRealTimeSession from './useRealTimeSession'
-import Overview from './Overview'
+import { Overview } from './Overview'
 import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
 import Map from './Map'
@@ -37,8 +37,9 @@ function SessionView({
 
   const sortedPoints = [...session.points]
   sortedPoints.sort((a, b) => b.points - a.points)
-  const winningFaction = sortedPoints[0].faction
+  const winningFaction = sortedPoints[0]?.faction
 
+  // TODO draft title etc
   return (
     <>
       <Helmet>
@@ -66,12 +67,14 @@ function SessionView({
             .join(', ')}
           property="og:description"
         />
-        <meta
-          content={`${window.location.origin}${getFactionCheatSheetPath(
-            winningFaction,
-          )}`}
-          property="og:image"
-        />
+        {winningFaction && (
+          <meta
+            content={`${window.location.origin}${getFactionCheatSheetPath(
+              winningFaction,
+            )}`}
+            property="og:image"
+          />
+        )}
       </Helmet>
 
       <HideInFullscreen>
@@ -121,6 +124,7 @@ function SessionView({
             editable={editable}
             session={session}
             updateFactionPoints={updateFactionPoints}
+            sessionService={sessionService}
           />
         </Route>
       </Switch>
