@@ -269,6 +269,8 @@ function Ban({
     mutation: banMutation,
   })
 
+  const bansLeft = draft.bansPerRound - bans.length
+
   return (
     <>
       <Typography variant="h3">
@@ -280,8 +282,9 @@ function Ban({
         onClick={ban}
         variant="contained"
       >
-        ban
+        ban{bansLeft ? ` (${bansLeft})` : ''}
       </Button>
+      <Typography>(bans left this round: {bansLeft})</Typography>
     </>
   )
 }
@@ -374,7 +377,7 @@ export function Drafting({ editable, session, sessionService }) {
                 .filter(({ type }) => type === 'faction')
                 .map(({ pick }) => pick)
         }
-        max={1}
+        max={draft.phase === PHASE.bans ? draft.bansPerRound : 1}
         onSelected={setSelected}
         picks={draft.picks}
         selected={selected}
