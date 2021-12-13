@@ -73,7 +73,7 @@ function SessionsList({ loading, sessions }) {
         }
       >
         {sessions.map((session) => {
-          const defaultName = session.factions.length
+          const defaultName = session.factions?.length
             ? session.factions
                 .map((factionKey) => t(`factions.${factionKey}.name`))
                 .join(', ')
