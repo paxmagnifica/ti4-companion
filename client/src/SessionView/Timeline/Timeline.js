@@ -93,7 +93,12 @@ function GameStarted({ payload, happenedAt, eventType }) {
         <Typography variant="h5">
           <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
         </Typography>
-        {payload.Factions.map((faction) => (
+        {payload.SetupType === 'draft' && (
+          <Typography>
+            <Trans i18nKey="sessionTimeline.withDraft" />
+          </Typography>
+        )}
+        {(payload.Factions || []).map((faction) => (
           <Box key={faction} style={{ display: 'inline-block' }}>
             <FactionFlag
               disabled
@@ -437,8 +442,6 @@ function Picked({ eventType, payload, happenedAt }) {
 }
 
 function SpeakerSelected({ payload, happenedAt }) {
-  const classes = useStyles()
-
   return (
     <Ti4TimelineItem>
       <TimelineOppositeContent>

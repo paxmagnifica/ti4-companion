@@ -124,6 +124,7 @@ const factory = (options = { debug: true }) =>
                 TimelineUserEvent: 'User added event',
                 VictoryPointsUpdated: 'VP scored',
               },
+              withDraft: 'Players will draft their factions',
               banned: '{{player}} banned:',
               picked: '{{player}} picked:',
               tableSpotPicked: 'Picked position at the table',
