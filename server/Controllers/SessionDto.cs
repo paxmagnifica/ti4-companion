@@ -30,14 +30,14 @@ namespace server.Controllers
             var orderEvent = session.Events.LastOrDefault(e => e.EventType == "PlayerOrder");
 
             Order = JsonConvert.DeserializeObject<int[]>(orderEvent?.SerializedPayload ?? "[]");
-            Phase = bans.Count() < banOrder.Count() ? "bans" :
+            Phase = banEvents.Count() < banOrder.Count() ? "bans" :
               (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
             InitialPool = gameStartOptions?.InitialPool;
             Players = gameStartOptions?.Players;
             BansPerRound = gameStartOptions?.BansPerRound ?? 1;
             Bans = bans;
             Picks = pickEvents.Select(Picked.GetPayload).ToArray();
-            ActivePlayerIndex = Phase == "bans" ? bans.Count() : pickEvents.Count();
+            ActivePlayerIndex = Phase == "bans" ? banEvents.Count() : pickEvents.Count();
 
             var speakerEvent = session.Events.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
             if (speakerEvent != null)
