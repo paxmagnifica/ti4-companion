@@ -37,6 +37,7 @@ function Speaker({ draft, session, sessionService }) {
     await sessionService.pushEvent(session.id, {
       type: 'CommitDraft',
     })
+    window.location.reload()
   }, [session.id, sessionService])
 
   const { mutate: commitDraft } = useDraftMutation({
@@ -54,7 +55,7 @@ function Speaker({ draft, session, sessionService }) {
       <br />
       {draft.speaker && (
         <Button onClick={commitDraft} variant="contained">
-          commit draft
+          commit draft & start session
         </Button>
       )}
     </>
