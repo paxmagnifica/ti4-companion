@@ -7,9 +7,8 @@ const useRealTimeSession = (sessionId) => {
   const signalRConnection = useContext(SignalRConnectionContext)
   const dispatch = useContext(DispatchContext)
 
-  // TODO cleanup subscription
   useEffect(() => {
-    signalRConnection.on('SessionEvent', (sessionEvent) => {
+    const handler = (sessionEvent) => {
       const payload = JSON.parse(sessionEvent.serializedPayload)
       if (
         // TODO also check if we are currently viewing the session?
@@ -20,7 +19,10 @@ const useRealTimeSession = (sessionId) => {
       }
 
       dispatch({ type: sessionEvent.eventType, payload })
-    })
+    }
+    signalRConnection.on('SessionEvent', handler)
+
+    return () => signalRConnection.off('SessionEvent', handler)
   }, [signalRConnection, dispatch, sessionId])
 
   useEffect(() => {
