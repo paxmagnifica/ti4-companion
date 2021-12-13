@@ -35,7 +35,14 @@ export function DraftSetup() {
   const dispatch = useDispatch()
   const classes = useStyles()
   const [playerCount, setPlayerCount] = useState(6)
-  const [players, setPlayers] = useState(['P1', 'P2', 'P3', 'P4', 'P5', 'P6'])
+  const [players, setPlayers] = useState([
+    'Player 1',
+    'Player 2',
+    'Player 3',
+    'Player 4',
+    'Player 5',
+    'Player 6',
+  ])
 
   const [bans, setBans] = useState(true)
   const toggleBans = useCallback(() => setBans((b) => !b), [])
@@ -96,7 +103,8 @@ export function DraftSetup() {
         diff < 0
           ? players.slice(0, diff)
           : [...Array(newValue).keys()].map(
-              (playerIndex) => players[playerIndex] || `P${playerIndex + 1}`,
+              (playerIndex) =>
+                players[playerIndex] || `Player ${playerIndex + 1}`,
             )
 
       setPlayerCount(newValue)
