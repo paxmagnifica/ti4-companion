@@ -1,5 +1,14 @@
 import { useCallback } from 'react'
-import { Typography, Box } from '@material-ui/core'
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
   TimelineOppositeContent,
@@ -406,7 +415,7 @@ function Picked({ eventType, payload, happenedAt }) {
       </TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
-          color="secondary"
+          color="primary"
           title={t(`sessionTimeline.events.${eventType}`)}
         >
           <PickedIcon />
@@ -436,6 +445,59 @@ function Picked({ eventType, payload, happenedAt }) {
             <strong>P{payload.pick + 1}</strong>
           </Typography>
         )}
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function DraftSummary({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot />
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey="sessionTimeline.draftSummary.title" />
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table aria-label="simple table">
+            <TableBody>
+              {payload.picks.map((pick) => (
+                <TableRow key={pick.playerName}>
+                  <TableCell component="th" scope="row">
+                    {pick.playerName}{' '}
+                    <em>
+                      {pick.playerName === payload.speaker ? '(speaker)' : ''}
+                    </em>
+                  </TableCell>
+                  <TableCell align="right">
+                    <FactionFlag
+                      disabled
+                      factionKey={pick.faction}
+                      height="3em"
+                      selected
+                      width="4.5em"
+                    />
+                  </TableCell>
+                  {pick.tablePosition !== -1 && (
+                    <TableCell align="right">
+                      P{pick.tablePosition + 1}
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
   )
@@ -488,6 +550,8 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
       return <Picked {...props} />
     case 'SpeakerSelected':
       return <SpeakerSelected {...props} />
+    case 'DraftSummary':
+      return <DraftSummary {...props} />
     default:
       return <DebugEvent {...props} />
   }

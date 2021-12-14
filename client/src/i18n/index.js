@@ -129,6 +129,10 @@ const factory = (options = { debug: true }) =>
               picked: '{{player}} picked:',
               tableSpotPicked: 'Picked position at the table',
               speakerAssigned: 'Speaker: {{speaker}}',
+              draftSummary: {
+                title: 'Draft finished',
+                speaker: 'Speaker: {{speaker}}',
+              },
               vpCountChanged: '{{from}} -> {{to}}',
               vp: '{{points}} VP',
               changeFile: 'Change the image',
