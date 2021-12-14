@@ -30,7 +30,11 @@ namespace server.Domain
 
         internal static PickedPayload GetPayload(GameEvent gameEvent)
         {
-            return JsonConvert.DeserializeObject<PickedPayload>(gameEvent.SerializedPayload);
+            return GetPayload(gameEvent.SerializedPayload);
+        }
+        internal static PickedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<PickedPayload>(serializedPayload);
         }
     }
 
