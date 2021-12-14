@@ -23,7 +23,7 @@ namespace server.Controllers
         private readonly IConfiguration _configuration;
         private readonly ITimeProvider _timeProvider;
         private readonly SessionContext _sessionContext;
-        private readonly ITimelineDeduplication _timelineDeduplication;
+        private readonly ITimelineModifiers _timelineModifiers;
 
         public TimelineController(
             ILogger<SessionsController> logger,
@@ -31,14 +31,14 @@ namespace server.Controllers
             IConfiguration configuration,
             ITimeProvider timeProvider,
             SessionContext sessionContext,
-            ITimelineDeduplication timelineDeduplication)
+            ITimelineModifiers timelineModifiers)
         {
             this._logger = logger;
             this._repository = repository;
             this._configuration = configuration;
             this._timeProvider = timeProvider;
             this._sessionContext = sessionContext;
-            _timelineDeduplication = timelineDeduplication;
+            _timelineModifiers = timelineModifiers;
         }
 
         [HttpPost]
@@ -96,7 +96,8 @@ namespace server.Controllers
         {
             var sessionFromDb = await _repository.GetByIdWithEvents(sessionId);
 
-            var previousVpCount = 10;
+            var defaultVpCount = 10;
+            var previousVpCount = defaultVpCount;
             var orderedEvents = sessionFromDb.Events.OrderBy(e => e.HappenedAt);
 
             var timelineEvents = new List<KeyValuePair<GameEvent, TimelineEvent>>();
@@ -202,7 +203,7 @@ namespace server.Controllers
                 return e;
             });
 
-            return _timelineDeduplication.Deduplicate(dtos);
+            return _timelineModifiers.AddDraftSummary(_timelineModifiers.Deduplicate(dtos));
         }
     }
 }

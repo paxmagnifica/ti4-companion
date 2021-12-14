@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using FluentAssertions;
 using server.Domain;
@@ -15,10 +13,10 @@ namespace serverTests
         {
             // given
             var given = new List<TimelineEvent>();
-            ITimelineDeduplication timelineDeduplication = new TimelineDeduplication();
+            ITimelineModifiers timelineModifiers = new TimelineModifiers();
 
             // when
-            var actual = timelineDeduplication.Deduplicate(given);
+            var actual = timelineModifiers.Deduplicate(given);
 
             // then
             Assert.AreEqual(0, actual.Count());
@@ -43,10 +41,10 @@ namespace serverTests
                 },
             };
 
-            ITimelineDeduplication timelineDeduplication = new TimelineDeduplication();
+            ITimelineModifiers timelineModifiers = new TimelineModifiers();
 
             // when
-            var actual = timelineDeduplication.Deduplicate(given);
+            var actual = timelineModifiers.Deduplicate(given);
 
             // then
             actual.Should().BeEquivalentTo(expected);
@@ -81,10 +79,10 @@ namespace serverTests
                 }
             };
 
-            ITimelineDeduplication timelineDeduplication = new TimelineDeduplication();
+            ITimelineModifiers timelineModifiers = new TimelineModifiers();
 
             // when
-            var actual = timelineDeduplication.Deduplicate(given);
+            var actual = timelineModifiers.Deduplicate(given);
 
             // then
             actual.Should().BeEquivalentTo(expected);
@@ -129,10 +127,10 @@ namespace serverTests
                 },
             };
 
-            ITimelineDeduplication timelineDeduplication = new TimelineDeduplication();
+            ITimelineModifiers timelineModifiers = new TimelineModifiers();
 
             // when
-            var actual = timelineDeduplication.Deduplicate(given);
+            var actual = timelineModifiers.Deduplicate(given);
 
             // then
             actual.Should().BeEquivalentTo(expected);
@@ -178,10 +176,10 @@ namespace serverTests
                 },
             };
 
-            ITimelineDeduplication timelineDeduplication = new TimelineDeduplication();
+            ITimelineModifiers timelineModifiers = new TimelineModifiers();
 
             // when
-            var actual = timelineDeduplication.Deduplicate(given);
+            var actual = timelineModifiers.Deduplicate(given);
 
             // then
             actual.Should().BeEquivalentTo(expected);

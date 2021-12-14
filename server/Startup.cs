@@ -54,7 +54,7 @@ namespace server
             services.AddScoped<EventFactory>();
             services.AddScoped<SessionHub>();
             services.AddScoped<ITimeProvider, TimeProvider>();
-            services.AddScoped<ITimelineDeduplication, TimelineDeduplication>();
+            services.AddScoped<ITimelineModifiers, TimelineModifiers>();
             services.AddScoped<Dispatcher>();
             services.AddScoped<HeaderAuthorization>();
 

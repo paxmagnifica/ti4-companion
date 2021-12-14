@@ -1,21 +1,28 @@
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace server.Domain
 {
-    public interface ITimelineDeduplication
+    public interface ITimelineModifiers
     {
         IEnumerable<TimelineEvent> Deduplicate(IEnumerable<TimelineEvent> possiblyDuplicatedEvents);
+        IEnumerable<TimelineEvent> AddDraftSummary(IEnumerable<TimelineEvent> timelineEvents);
     }
 
-    public class TimelineDeduplication : ITimelineDeduplication
+    public class TimelineModifiers : ITimelineModifiers
     {
         public IEnumerable<TimelineEvent> Deduplicate(IEnumerable<TimelineEvent> possiblyDuplicatedEvents)
         {
             var deduplicatedVpScored = DeduplicateVp(possiblyDuplicatedEvents);
             var deduplicatedObjectives = DeduplicateObjectives(deduplicatedVpScored);
 
-            return deduplicatedObjectives.Select((ded, index) =>
+            return RegenerateOrder(deduplicatedObjectives);
+        }
+
+        private IEnumerable<TimelineEvent> RegenerateOrder(IEnumerable<TimelineEvent> events)
+        {
+            return events.Select((ded, index) =>
             {
                 ded.Order = index;
                 return ded;
@@ -106,6 +113,52 @@ namespace server.Domain
             }
 
             return deduplicated;
+        }
+
+        public IEnumerable<TimelineEvent> AddDraftSummary(IEnumerable<TimelineEvent> timelineEvents)
+        {
+            if (!timelineEvents.Any(e => e.EventType == nameof(CommitDraft)))
+            {
+                return timelineEvents;
+            }
+
+            var speakerEvent = timelineEvents.First(e => e.EventType == nameof(SpeakerSelected));
+            var picks = timelineEvents.Where(e => e.EventType == nameof(Picked)).OrderBy(e => Picked.GetPayload(e.SerializedPayload).PlayerIndex);
+            var playerPicks = new Dictionary<string, (string, int)>();
+
+            foreach (var pick in picks)
+            {
+                var pickPayload = Picked.GetPayload(pick.SerializedPayload);
+                if (!playerPicks.ContainsKey(pickPayload.PlayerName))
+                {
+                    playerPicks[pickPayload.PlayerName] = ("", -1);
+                }
+
+                if (pickPayload.Type == "faction")
+                {
+                    playerPicks[pickPayload.PlayerName] = (pickPayload.Pick, playerPicks[pickPayload.PlayerName].Item2);
+                }
+
+                if (pickPayload.Type == "tablePosition")
+                {
+                    playerPicks[pickPayload.PlayerName] = (playerPicks[pickPayload.PlayerName].Item1, int.Parse(pickPayload.Pick));
+                }
+            }
+
+            var draftSummary = new TimelineEvent
+            {
+                EventType = "DraftSummary",
+                SerializedPayload = JsonConvert.SerializeObject(new
+                {
+                    speaker = SpeakerSelected.GetPayload(speakerEvent.SerializedPayload).SpeakerName,
+                    picks = playerPicks.Select(kvp => new { playerName = kvp.Key, faction = kvp.Value.Item1, tablePosition = kvp.Value.Item2 })
+                })
+            };
+            var commitDraftIndex = timelineEvents.ToList().FindIndex(e => e.EventType == nameof(CommitDraft));
+            var timelineEventsWithDraftSummary = new List<TimelineEvent>(timelineEvents);
+            timelineEventsWithDraftSummary.Insert(commitDraftIndex + 1, draftSummary);
+
+            return RegenerateOrder(timelineEventsWithDraftSummary);
         }
     }
 }
