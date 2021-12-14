@@ -37,6 +37,10 @@ const factory = (options = { debug: true }) =>
               title: 'TI4 Companion',
               comingSoon: 'coming soon',
               labels: {
+                player: 'player',
+                speaker: 'speaker',
+                faction: 'faction',
+                tablePosition: 'table position',
                 toBottom: 'to bottom',
                 add: 'add',
                 cancel: 'cancel',

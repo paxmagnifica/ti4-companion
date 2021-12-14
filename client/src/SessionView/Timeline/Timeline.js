@@ -4,6 +4,7 @@ import {
   Paper,
   Table,
   TableBody,
+  TableHead,
   TableCell,
   TableContainer,
   TableRow,
@@ -450,7 +451,7 @@ function Picked({ eventType, payload, happenedAt }) {
   )
 }
 
-function DraftSummary({ eventType, payload, happenedAt }) {
+function DraftSummary({ payload, happenedAt }) {
   const { t } = useTranslation()
 
   return (
@@ -470,16 +471,31 @@ function DraftSummary({ eventType, payload, happenedAt }) {
         </Typography>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Trans i18nKey="general.labels.player" />
+                </TableCell>
+                <TableCell>
+                  <Trans i18nKey="general.labels.faction" />
+                </TableCell>
+                <TableCell>
+                  <Trans i18nKey="general.labels.tablePosition" />
+                </TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
               {payload.picks.map((pick) => (
                 <TableRow key={pick.playerName}>
                   <TableCell component="th" scope="row">
                     {pick.playerName}{' '}
                     <em>
-                      {pick.playerName === payload.speaker ? '(speaker)' : ''}
+                      {pick.playerName === payload.speaker
+                        ? `(${t('general.labels.speaker')})`
+                        : ''}
                     </em>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell>
                     <FactionFlag
                       disabled
                       factionKey={pick.faction}
@@ -489,9 +505,7 @@ function DraftSummary({ eventType, payload, happenedAt }) {
                     />
                   </TableCell>
                   {pick.tablePosition !== -1 && (
-                    <TableCell align="right">
-                      P{pick.tablePosition + 1}
-                    </TableCell>
+                    <TableCell>P{pick.tablePosition + 1}</TableCell>
                   )}
                 </TableRow>
               ))}
