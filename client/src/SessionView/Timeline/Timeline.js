@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useMemo, useCallback } from 'react'
 import {
   Box,
   Paper,
@@ -451,8 +451,20 @@ function Picked({ eventType, payload, happenedAt }) {
   )
 }
 
-function DraftSummary({ payload, happenedAt }) {
+function DraftSummary({ payload, happenedAt, session }) {
   const { t } = useTranslation()
+
+  const picks = useMemo(() => {
+    if (session.setup.options?.tablePick) {
+      const memoized = [...payload.picks]
+
+      memoized.sort((a, b) => a.tablePosition - b.tablePosition)
+
+      return memoized
+    }
+
+    return payload.picks
+  }, [payload.picks, session])
 
   return (
     <Ti4TimelineItem>
@@ -485,7 +497,7 @@ function DraftSummary({ payload, happenedAt }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {payload.picks.map((pick) => (
+              {picks.map((pick) => (
                 <TableRow key={pick.playerName}>
                   <TableCell component="th" scope="row">
                     {pick.playerName}{' '}
@@ -541,7 +553,7 @@ function SpeakerSelected({ payload, happenedAt }) {
   )
 }
 
-function EventOnATimeline({ eventType, payload, happenedAt }) {
+function EventOnATimeline({ eventType, payload, happenedAt, session }) {
   const props = { eventType, payload, happenedAt }
   switch (eventType) {
     case 'GameStarted':
@@ -565,7 +577,7 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
     case 'SpeakerSelected':
       return <SpeakerSelected {...props} />
     case 'DraftSummary':
-      return <DraftSummary {...props} />
+      return <DraftSummary {...props} session={session} />
     default:
       return <DebugEvent {...props} />
   }
@@ -594,7 +606,9 @@ export function Timeline({ editable, session, sessionService }) {
     <>
       <MuiTimeline>
         {timeline
-          .map((event) => <EventOnATimeline {...event} key={event.order} />)
+          .map((event) => (
+            <EventOnATimeline {...event} key={event.order} session={session} />
+          ))
           .filter(Boolean)}
         {editable && (
           <Ti4TimelineItem className={classes.addNew}>
