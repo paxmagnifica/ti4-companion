@@ -136,6 +136,8 @@ const factory = (options = { debug: true }) =>
               draftSummary: {
                 title: 'Draft finished',
                 speaker: 'Speaker: {{speaker}}',
+                toggleMap: 'show map',
+                map: 'map',
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vp: '{{points}} VP',
