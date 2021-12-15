@@ -20,7 +20,7 @@ import {
 } from '@material-ui/core/styles'
 import { useTranslation, Trans } from 'react-i18next'
 
-import { SupportTheCreator } from './SupportTheCreator'
+import { SupportTheCreator } from './Support'
 import { getAllSessions } from './shared/persistence'
 import homeIcon from './assets/icon.jpg'
 import { SessionSetup } from './SessionSetup'
