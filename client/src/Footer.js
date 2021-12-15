@@ -8,7 +8,7 @@ export function Footer() {
       © Tarnaspol Mateusz Tarnaski -{' '}
       <a href="https://paxmagnifica.com">Pax Magnifica Bellum Gloriosum.</a> |{' '}
       <Trans i18nKey="support.theCreator" /> -{' '}
-      <a href={t('support.bumeacoffee')} rel="nofollow">
+      <a href={t('support.buymeacoffee')} rel="nofollow">
         <Trans i18nKey="support.donate" />
       </a>
     </footer>

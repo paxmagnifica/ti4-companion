@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableRow,
   Typography,
+  Link,
 } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
@@ -33,6 +34,7 @@ import {
   PanTool as PickedIcon,
 } from '@material-ui/icons'
 
+import tradeGoods from '../../assets/tradegoods.png'
 import config from '../../config'
 import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
@@ -68,6 +70,23 @@ const Ti4TimelineDot = withStyles({
 })(TimelineDot)
 
 const useStyles = makeStyles((theme) => ({
+  supportContent: {
+    paddingTop: '1.6em',
+    '& a': {
+      textDecoration: 'none',
+      color: 'white',
+    },
+    '& a:hover': {
+      fontStyle: 'italic',
+      textDecoration: 'none',
+    },
+  },
+  supportDot: {
+    backgroundColor: 'transparent',
+    '& > img': {
+      height: '4em',
+    },
+  },
   mapContainer: {
     height: '96%',
     padding: theme.spacing(1),
@@ -560,6 +579,42 @@ function DraftSummary({ payload, happenedAt, session }) {
               </TableBody>
             </Table>
           </TableContainer>
+        </Ti4TimelineContent>
+      </Ti4TimelineItem>
+      <Ti4TimelineItem>
+        <TimelineOppositeContent className={classes.supportContent}>
+          <Typography variant="h6">
+            <Link
+              href={t('support.buymeacoffee')}
+              rel="nofollow"
+              target="about:blank"
+            >
+              <Trans i18nKey="support.doYouLike" />
+            </Link>
+          </Typography>
+        </TimelineOppositeContent>
+        <TimelineSeparator>
+          <Link
+            href={t('support.buymeacoffee')}
+            rel="nofollow"
+            target="about:blank"
+          >
+            <Ti4TimelineDot className={classes.supportDot}>
+              <img alt={t('general.labels.tg')} src={tradeGoods} />
+            </Ti4TimelineDot>
+          </Link>
+          <TimelineConnector />
+        </TimelineSeparator>
+        <Ti4TimelineContent className={classes.supportContent}>
+          <Typography variant="h6">
+            <Link
+              href={t('support.buymeacoffee')}
+              rel="nofollow"
+              target="about:blank"
+            >
+              <Trans i18nKey="support.consider" />
+            </Link>
+          </Typography>
         </Ti4TimelineContent>
       </Ti4TimelineItem>
       {showMap && (

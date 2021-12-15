@@ -48,7 +48,7 @@ body, *:fullscreen {
 	width: 100%;
 	font-size: .95em;
 	opacity: .9;
-	padding-bottom: .1em;
+	padding-bottom: .2em;
 }
 
 #root > footer > a {

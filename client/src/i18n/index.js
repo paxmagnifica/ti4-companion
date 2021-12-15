@@ -35,6 +35,8 @@ const factory = (options = { debug: true }) =>
               theCreator: 'Support the creator',
               buymeacoffee: 'https://buymeacoffee.com/paxmagnifica',
               donate: 'donate some trade goods',
+              doYouLike: 'Do you like the app?',
+              consider: 'Consider supporting the creator',
             },
             general: {
               switchLanguage: 'Change language',
