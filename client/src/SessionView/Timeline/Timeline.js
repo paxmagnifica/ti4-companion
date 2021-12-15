@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
-  TimelineOppositeContent,
+  TimelineOppositeContent as Ti4TimelineOppositeContent,
   TimelineItem,
   TimelineConnector,
   TimelineSeparator,
@@ -62,16 +62,6 @@ const Ti4TimelineDot = withStyles({
     marginRight: 0,
   },
 })(TimelineDot)
-
-const Ti4TimelineOppositeContent = (props) => {
-  const small = useSmallViewport()
-
-  if (small) {
-    return null
-  }
-
-  return <TimelineOppositeContent {...props} />
-}
 
 const useStyles = makeStyles((theme) => ({
   supportContent: {
@@ -124,6 +114,9 @@ const useStyles = makeStyles((theme) => ({
     '&:before': {
       display: 'none',
     },
+    '& .MuiTimelineItem-oppositeContent': {
+      display: 'none',
+    },
   },
 }))
 
@@ -135,18 +128,12 @@ const Ti4TimelineItem = withStyles({
   const small = useSmallViewport()
   const classes = useStyles()
 
-  if (small) {
-    return (
-      <TimelineItem
-        {...props}
-        classes={{
-          missingOppositeContent: classes.hideOpposite,
-        }}
-      />
-    )
-  }
-
-  return <TimelineItem {...props} />
+  return (
+    <TimelineItem
+      {...props}
+      className={clsx({ [classes.hideOpposite]: small })}
+    />
+  )
 })
 
 function GameStarted({ payload, happenedAt, eventType }) {
