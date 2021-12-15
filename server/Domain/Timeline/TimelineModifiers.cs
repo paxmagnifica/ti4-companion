@@ -117,7 +117,8 @@ namespace server.Domain
 
         public IEnumerable<TimelineEvent> AddDraftSummary(IEnumerable<TimelineEvent> timelineEvents)
         {
-            if (!timelineEvents.Any(e => e.EventType == nameof(CommitDraft)))
+            var commitDraftEvent = timelineEvents.FirstOrDefault(e => e.EventType == nameof(CommitDraft));
+            if (commitDraftEvent == null)
             {
                 return timelineEvents;
             }
@@ -145,16 +146,17 @@ namespace server.Domain
                 }
             }
 
+            var commitDraftIndex = timelineEvents.ToList().FindIndex(e => e.EventType == nameof(CommitDraft));
             var draftSummary = new TimelineEvent
             {
                 EventType = "DraftSummary",
+                HappenedAt = commitDraftEvent.HappenedAt,
                 SerializedPayload = JsonConvert.SerializeObject(new
                 {
                     speaker = SpeakerSelected.GetPayload(speakerEvent.SerializedPayload).SpeakerName,
                     picks = playerPicks.Select(kvp => new { playerName = kvp.Key, faction = kvp.Value.Item1, tablePosition = kvp.Value.Item2 })
                 })
             };
-            var commitDraftIndex = timelineEvents.ToList().FindIndex(e => e.EventType == nameof(CommitDraft));
             var timelineEventsWithDraftSummary = new List<TimelineEvent>(timelineEvents);
             timelineEventsWithDraftSummary.Insert(commitDraftIndex + 1, draftSummary);
 

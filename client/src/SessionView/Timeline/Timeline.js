@@ -1,5 +1,9 @@
-import { useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
+import clsx from 'clsx'
 import {
+  Drawer,
+  Grid,
+  Button,
   Box,
   Paper,
   Table,
@@ -64,6 +68,16 @@ const Ti4TimelineDot = withStyles({
 })(TimelineDot)
 
 const useStyles = makeStyles((theme) => ({
+  mapContainer: {
+    height: '100%',
+    padding: theme.spacing(1),
+  },
+  draftSummaryMap: {
+    maxWidth: '47vw',
+  },
+  bigDraftSummaryMap: {
+    maxWidth: '87vw',
+  },
   addNew: {
     minHeight: '0 !important',
   },
@@ -451,69 +465,125 @@ function Picked({ eventType, payload, happenedAt }) {
   )
 }
 
-function DraftSummary({ payload, happenedAt }) {
+function DraftSummary({ payload, happenedAt, session }) {
+  const small = useSmallViewport()
   const { t } = useTranslation()
+  const classes = useStyles()
+
+  const withTablePositions = Boolean(session.setup.options?.tablePick)
+  const showMap = withTablePositions && session.map
+  const picks = useMemo(() => {
+    if (withTablePositions) {
+      const memoized = [...payload.picks]
+
+      memoized.sort((a, b) => a.tablePosition - b.tablePosition)
+
+      return memoized
+    }
+
+    return payload.picks
+  }, [payload.picks, withTablePositions])
+
+  const [mapDrawerOpen, setMapDrawerOpen] = useState(false)
+  const toggleMapDrawer = useCallback(
+    () => setMapDrawerOpen((smdo) => !smdo),
+    [],
+  )
 
   return (
-    <Ti4TimelineItem>
-      <TimelineOppositeContent>
-        <Typography color="textSecondary">
-          {new Date(happenedAt).toLocaleString()}
-        </Typography>
-      </TimelineOppositeContent>
-      <TimelineSeparator>
-        <Ti4TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-      <Ti4TimelineContent>
-        <Typography variant="h5">
-          <Trans i18nKey="sessionTimeline.draftSummary.title" />
-        </Typography>
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Trans i18nKey="general.labels.player" />
-                </TableCell>
-                <TableCell>
-                  <Trans i18nKey="general.labels.faction" />
-                </TableCell>
-                <TableCell>
-                  <Trans i18nKey="general.labels.tablePosition" />
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {payload.picks.map((pick) => (
-                <TableRow key={pick.playerName}>
-                  <TableCell component="th" scope="row">
-                    {pick.playerName}{' '}
-                    <em>
-                      {pick.playerName === payload.speaker
-                        ? `(${t('general.labels.speaker')})`
-                        : ''}
-                    </em>
+    <>
+      <Ti4TimelineItem>
+        <TimelineOppositeContent>
+          <Typography color="textSecondary">
+            {new Date(happenedAt).toLocaleString()}
+          </Typography>
+        </TimelineOppositeContent>
+        <TimelineSeparator>
+          <Ti4TimelineDot />
+          <TimelineConnector />
+        </TimelineSeparator>
+        <Ti4TimelineContent>
+          <Typography variant="h5">
+            <Trans i18nKey="sessionTimeline.draftSummary.title" />
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Trans i18nKey="general.labels.player" />
                   </TableCell>
                   <TableCell>
-                    <FactionFlag
-                      disabled
-                      factionKey={pick.faction}
-                      height="3em"
-                      selected
-                      width="4.5em"
-                    />
+                    <Trans i18nKey="general.labels.faction" />
                   </TableCell>
-                  {pick.tablePosition !== -1 && (
-                    <TableCell>P{pick.tablePosition + 1}</TableCell>
+                  {withTablePositions && (
+                    <TableCell>
+                      <Trans i18nKey="general.labels.tablePosition" />
+                      {showMap && (
+                        <Button color="secondary" onClick={toggleMapDrawer}>
+                          <em>
+                            (
+                            <Trans i18nKey="sessionTimeline.draftSummary.toggleMap" />
+                            )
+                          </em>
+                        </Button>
+                      )}
+                    </TableCell>
                   )}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Ti4TimelineContent>
-    </Ti4TimelineItem>
+              </TableHead>
+              <TableBody>
+                {picks.map((pick) => (
+                  <TableRow key={pick.playerName}>
+                    <TableCell component="th" scope="row">
+                      {pick.playerName}{' '}
+                      <em>
+                        {pick.playerName === payload.speaker
+                          ? `(${t('general.labels.speaker')})`
+                          : ''}
+                      </em>
+                    </TableCell>
+                    <TableCell>
+                      <FactionFlag
+                        disabled
+                        factionKey={pick.faction}
+                        height="3em"
+                        selected
+                        width="4.5em"
+                      />
+                    </TableCell>
+                    {withTablePositions && (
+                      <TableCell>P{pick.tablePosition + 1}</TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Ti4TimelineContent>
+      </Ti4TimelineItem>
+      {showMap && (
+        <Drawer anchor="left" onClose={toggleMapDrawer} open={mapDrawerOpen}>
+          <Grid
+            alignItems="center"
+            className={classes.mapContainer}
+            container
+            direction="column"
+            justifyContent="center"
+          >
+            <Grid item>
+              <img
+                alt={t('sessionTimeline.draftSummary.map')}
+                className={clsx(classes.draftSummaryMap, {
+                  [classes.bigDraftSummaryMap]: small,
+                })}
+                src={session.map}
+              />
+            </Grid>
+          </Grid>
+        </Drawer>
+      )}
+    </>
   )
 }
 
@@ -541,7 +611,7 @@ function SpeakerSelected({ payload, happenedAt }) {
   )
 }
 
-function EventOnATimeline({ eventType, payload, happenedAt }) {
+function EventOnATimeline({ eventType, payload, happenedAt, session }) {
   const props = { eventType, payload, happenedAt }
   switch (eventType) {
     case 'GameStarted':
@@ -565,7 +635,7 @@ function EventOnATimeline({ eventType, payload, happenedAt }) {
     case 'SpeakerSelected':
       return <SpeakerSelected {...props} />
     case 'DraftSummary':
-      return <DraftSummary {...props} />
+      return <DraftSummary {...props} session={session} />
     default:
       return <DebugEvent {...props} />
   }
@@ -594,7 +664,9 @@ export function Timeline({ editable, session, sessionService }) {
     <>
       <MuiTimeline>
         {timeline
-          .map((event) => <EventOnATimeline {...event} key={event.order} />)
+          .map((event) => (
+            <EventOnATimeline {...event} key={event.order} session={session} />
+          ))
           .filter(Boolean)}
         {editable && (
           <Ti4TimelineItem className={classes.addNew}>
