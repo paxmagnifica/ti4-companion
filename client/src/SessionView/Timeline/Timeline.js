@@ -55,12 +55,6 @@ const Ti4TimelineContent = withStyles({
   },
 })(TimelineContent)
 
-const Ti4TimelineItem = withStyles({
-  root: {
-    minHeight: 100,
-  },
-})(TimelineItem)
-
 const Ti4TimelineDot = withStyles({
   root: {
     padding: '.3em',
@@ -68,6 +62,16 @@ const Ti4TimelineDot = withStyles({
     marginRight: 0,
   },
 })(TimelineDot)
+
+const Ti4TimelineOppositeContent = (props) => {
+  const small = useSmallViewport()
+
+  if (small) {
+    return null
+  }
+
+  return <TimelineOppositeContent {...props} />
+}
 
 const useStyles = makeStyles((theme) => ({
   supportContent: {
@@ -116,18 +120,45 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.success.dark,
     opacity: '0.8',
   },
+  hideOpposite: {
+    '&:before': {
+      display: 'none',
+    },
+  },
 }))
+
+const Ti4TimelineItem = withStyles({
+  root: {
+    minHeight: 100,
+  },
+})((props) => {
+  const small = useSmallViewport()
+  const classes = useStyles()
+
+  if (small) {
+    return (
+      <TimelineItem
+        {...props}
+        classes={{
+          missingOppositeContent: classes.hideOpposite,
+        }}
+      />
+    )
+  }
+
+  return <TimelineItem {...props} />
+})
 
 function GameStarted({ payload, happenedAt, eventType }) {
   const { t } = useTranslation()
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot title={t(`sessionTimeline.events.${eventType}`)} />
         <TimelineConnector />
@@ -162,11 +193,11 @@ function VpCountChanged({ payload, happenedAt, eventType }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot title={t(`sessionTimeline.events.${eventType}`)} />
         <TimelineConnector />
@@ -192,11 +223,11 @@ function ObjectiveAdded({ eventType, payload, happenedAt }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
           color="primary"
@@ -224,11 +255,11 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Box
           style={{ margin: '3px 0' }}
@@ -264,11 +295,11 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Box
           style={{ margin: '3px 0' }}
@@ -301,11 +332,11 @@ function TimelineUserEvent({ eventType, payload, happenedAt }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
           color="primary"
@@ -342,11 +373,11 @@ function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
           color="primary"
@@ -376,11 +407,11 @@ function DebugEvent({ eventType, payload, happenedAt }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot title={eventType} />
         <TimelineConnector />
@@ -399,11 +430,11 @@ function Banned({ eventType, payload, happenedAt }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
           className={classes.banned}
@@ -442,11 +473,11 @@ function Picked({ eventType, payload, happenedAt }) {
 
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot
           color="primary"
@@ -512,11 +543,11 @@ function DraftSummary({ payload, happenedAt, session }) {
   return (
     <>
       <Ti4TimelineItem>
-        <TimelineOppositeContent>
+        <Ti4TimelineOppositeContent>
           <Typography color="textSecondary">
             {new Date(happenedAt).toLocaleString()}
           </Typography>
-        </TimelineOppositeContent>
+        </Ti4TimelineOppositeContent>
         <TimelineSeparator>
           <Ti4TimelineDot />
           <TimelineConnector />
@@ -582,7 +613,7 @@ function DraftSummary({ payload, happenedAt, session }) {
         </Ti4TimelineContent>
       </Ti4TimelineItem>
       <Ti4TimelineItem>
-        <TimelineOppositeContent className={classes.supportContent}>
+        <Ti4TimelineOppositeContent className={classes.supportContent}>
           <Typography variant="h6">
             <Link
               href={t('support.buymeacoffee')}
@@ -592,7 +623,7 @@ function DraftSummary({ payload, happenedAt, session }) {
               <Trans i18nKey="support.doYouLike" />
             </Link>
           </Typography>
-        </TimelineOppositeContent>
+        </Ti4TimelineOppositeContent>
         <TimelineSeparator>
           <Link
             href={t('support.buymeacoffee')}
@@ -645,11 +676,11 @@ function DraftSummary({ payload, happenedAt, session }) {
 function SpeakerSelected({ payload, happenedAt }) {
   return (
     <Ti4TimelineItem>
-      <TimelineOppositeContent>
+      <Ti4TimelineOppositeContent>
         <Typography color="textSecondary">
           {new Date(happenedAt).toLocaleString()}
         </Typography>
-      </TimelineOppositeContent>
+      </Ti4TimelineOppositeContent>
       <TimelineSeparator>
         <Ti4TimelineDot />
         <TimelineConnector />
@@ -725,7 +756,7 @@ export function Timeline({ editable, session, sessionService }) {
           .filter(Boolean)}
         {editable && (
           <Ti4TimelineItem className={classes.addNew}>
-            <TimelineOppositeContent />
+            <Ti4TimelineOppositeContent />
             <TimelineSeparator className={classes.addNewSeparator}>
               <AddTimelineEvent uploadEvent={uploadEvent} />
             </TimelineSeparator>
