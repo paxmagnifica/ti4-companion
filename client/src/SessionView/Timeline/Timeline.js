@@ -69,7 +69,7 @@ const Ti4TimelineDot = withStyles({
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
-    height: '100%',
+    height: '96%',
     padding: theme.spacing(1),
   },
   draftSummaryMap: {
