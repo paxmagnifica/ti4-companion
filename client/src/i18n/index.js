@@ -31,12 +31,20 @@ const factory = (options = { debug: true }) =>
             explorationCards: explorationCardsEn,
             strategyCards: strategyCardsEn,
             relics: relicsEn,
+            support: {
+              theCreator: 'Support the creator',
+              buymeacoffee: 'https://buymeacoffee.com/paxmagnifica',
+              donate: 'donate some trade goods',
+              doYouLike: 'Do you like the app?',
+              consider: 'Consider supporting the creator',
+            },
             general: {
               switchLanguage: 'Change language',
               home: 'Home',
               title: 'TI4 Companion',
               comingSoon: 'coming soon',
               labels: {
+                tg: 'trade goods',
                 player: 'player',
                 speaker: 'speaker',
                 faction: 'faction',

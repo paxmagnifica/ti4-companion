@@ -11,10 +11,10 @@ This should help with tracking the objectives, laws and directives in play and, 
 
 A way of sharing the game state in read-only state that would show the big picture on a big screen (or people who are interested in the game but are not sitting together).
 
-## Support us
+## Support the creator
 
-If you've used the application and found it useful or think this is a cause worth your support, _consider giving us a little tip for our efforts_.
-Every bit counts and keeps us even more motivated to keep going!
+If you've used the application and found it useful or think this is a cause worth your support, _consider giving a little tip for our efforts_.
+Every bit counts and keeps the creator even more motivated to keep going!
 
 [donate some trade goods](https://www.buymeacoffee.com/paxmagnifica)
 
