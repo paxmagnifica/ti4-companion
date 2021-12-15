@@ -21,6 +21,7 @@ import {
 import { useTheme, makeStyles } from '@material-ui/core/styles'
 import { useHistory, useRouteMatch, generatePath } from 'react-router-dom'
 
+import { SupportMenuListItem } from '../Support'
 import { Tab, Tabs } from '../components/navigation'
 import useSmallViewport from '../shared/useSmallViewport'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
@@ -142,6 +143,7 @@ function SessionNavigation() {
               </ListItemIcon>
               <ListItemText primary={t('sessionView.nav.timeline')} />
             </ListItem>
+            <SupportMenuListItem />
           </List>
         </Drawer>
         <IconButton edge="start" onClick={() => setDrawerOpen(true)}>

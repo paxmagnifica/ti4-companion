@@ -2,7 +2,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Link } from '@material-ui/core'
 import { Trans, useTranslation } from 'react-i18next'
 
-import tradeGoods from './assets/tradegoods.png'
+import tradeGoods from '../assets/tradegoods.png'
+import useSmallViewport from '../shared/useSmallViewport'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
 export function SupportTheCreator() {
   const classes = useStyles()
   const { t } = useTranslation()
+  const small = useSmallViewport()
+
+  if (small) {
+    return null
+  }
 
   return (
     <Link href={t('support.buymeacoffee')} rel="nofollow" target="about:blank">

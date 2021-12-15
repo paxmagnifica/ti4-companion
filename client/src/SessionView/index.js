@@ -84,16 +84,6 @@ function SessionView({
           </Grid>
           <Grid container item justifyContent="flex-end" xs={4}>
             <FullscreenButton service={sessionService} />
-            {editable && (
-              <ShuffleFactionsButton
-                factions={session.factions}
-                session={session}
-                setFactions={(factionsToSet) =>
-                  setFactions(session.id, factionsToSet)
-                }
-                shuffleFactions={() => shuffleFactions(session.id)}
-              />
-            )}
             <ShareButton editable={editable} session={session} />
           </Grid>
         </Grid>
