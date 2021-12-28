@@ -8,6 +8,7 @@ namespace server.Domain
     {
         IEnumerable<TimelineEvent> Deduplicate(IEnumerable<TimelineEvent> possiblyDuplicatedEvents);
         IEnumerable<TimelineEvent> AddDraftSummary(IEnumerable<TimelineEvent> timelineEvents);
+        IEnumerable<TimelineEvent> AddSessionSummary(IEnumerable<TimelineEvent> timelineEvents);
     }
 
     public class TimelineModifiers : ITimelineModifiers
@@ -161,6 +162,34 @@ namespace server.Domain
             timelineEventsWithDraftSummary.Insert(commitDraftIndex + 1, draftSummary);
 
             return RegenerateOrder(timelineEventsWithDraftSummary);
+        }
+
+        public IEnumerable<TimelineEvent> AddSessionSummary(IEnumerable<TimelineEvent> timelineEvents)
+        {
+            var firstToScore10VP = timelineEvents.OrderBy(te => te.Order).FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains("\"points\":10"));
+
+            if (firstToScore10VP == null)
+            {
+                return timelineEvents;
+            }
+
+            var victoryPointsEvents = timelineEvents.Where(e => e.EventType == nameof(VictoryPointsUpdated)).OrderBy(e => e.Order);
+            var payloads = victoryPointsEvents.Select(e => VictoryPointsUpdated.GetPayload(e.SerializedPayload));
+            var payloadsByFaction = payloads.GroupBy(p => p.Faction);
+
+            var withSessionSummary = new List<TimelineEvent>(timelineEvents);
+            withSessionSummary.Add(new TimelineEvent
+            {
+                EventType = "SessionSummary",
+                HappenedAt = firstToScore10VP.HappenedAt,
+                SerializedPayload = JsonConvert.SerializeObject(new
+                {
+                    winner = VictoryPointsUpdated.GetPayload(firstToScore10VP.SerializedPayload).Faction,
+                    results = payloadsByFaction.Select(pbf => new { faction = pbf.Key, points = pbf.Last().Points })
+                })
+            });
+
+            return RegenerateOrder(withSessionSummary);
         }
     }
 }
