@@ -8,6 +8,7 @@ namespace server.Domain
     {
         IEnumerable<TimelineEvent> Deduplicate(IEnumerable<TimelineEvent> possiblyDuplicatedEvents);
         IEnumerable<TimelineEvent> AddDraftSummary(IEnumerable<TimelineEvent> timelineEvents);
+        IEnumerable<TimelineEvent> AddSessionSummary(IEnumerable<TimelineEvent> timelineEvents);
     }
 
     public class TimelineModifiers : ITimelineModifiers
@@ -161,6 +162,41 @@ namespace server.Domain
             timelineEventsWithDraftSummary.Insert(commitDraftIndex + 1, draftSummary);
 
             return RegenerateOrder(timelineEventsWithDraftSummary);
+        }
+
+        public IEnumerable<TimelineEvent> AddSessionSummary(IEnumerable<TimelineEvent> timelineEvents)
+        {
+            var orderedEvents = timelineEvents.OrderBy(e => e.Order);
+            var targetVP = orderedEvents.LastOrDefault(e => e.EventType == nameof(MetadataUpdated));
+
+            var targetVPCount = targetVP == null
+                ? 10
+                : MetadataUpdated.GetPayload(targetVP.SerializedPayload).VpCount;
+
+            var firstToScoreTargetVPCount = timelineEvents.OrderBy(te => te.Order).FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains($"\"points\":{targetVPCount}"));
+
+            if (firstToScoreTargetVPCount == null)
+            {
+                return timelineEvents;
+            }
+
+            var victoryPointsEvents = timelineEvents.Where(e => e.EventType == nameof(VictoryPointsUpdated)).OrderBy(e => e.Order);
+            var payloads = victoryPointsEvents.Select(e => VictoryPointsUpdated.GetPayload(e.SerializedPayload));
+            var payloadsByFaction = payloads.GroupBy(p => p.Faction);
+
+            var withSessionSummary = new List<TimelineEvent>(timelineEvents);
+            withSessionSummary.Add(new TimelineEvent
+            {
+                EventType = "SessionSummary",
+                HappenedAt = firstToScoreTargetVPCount.HappenedAt,
+                SerializedPayload = JsonConvert.SerializeObject(new
+                {
+                    winner = VictoryPointsUpdated.GetPayload(firstToScoreTargetVPCount.SerializedPayload).Faction,
+                    results = payloadsByFaction.Select(pbf => new { faction = pbf.Key, points = pbf.Last().Points })
+                })
+            });
+
+            return RegenerateOrder(withSessionSummary);
         }
     }
 }

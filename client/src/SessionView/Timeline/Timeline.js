@@ -14,6 +14,10 @@ import {
   TableRow,
   Typography,
   Link,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
@@ -32,6 +36,7 @@ import {
   Add as AddIcon,
   Block as BannedIcon,
   PanTool as PickedIcon,
+  WhereToVote as SessionSummaryIcon,
 } from '@material-ui/icons'
 
 import tradeGoods from '../../assets/tradegoods.png'
@@ -117,6 +122,14 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiTimelineItem-oppositeContent': {
       display: 'none',
     },
+  },
+  resultListIcon: {
+    marginRight: theme.spacing(2),
+  },
+  paxMagnifica: {
+    textAlign: 'center',
+    fontSize: '1.5em',
+    marginBottom: theme.spacing(2),
   },
 }))
 
@@ -502,6 +515,50 @@ function Picked({ eventType, payload, happenedAt }) {
   )
 }
 
+function SupportCreatorEvent() {
+  const classes = useStyles()
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent className={classes.supportContent}>
+        <Typography variant="h6">
+          <Link
+            href={t('support.buymeacoffee')}
+            rel="nofollow"
+            target="about:blank"
+          >
+            <Trans i18nKey="support.doYouLike" />
+          </Link>
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Link
+          href={t('support.buymeacoffee')}
+          rel="nofollow"
+          target="about:blank"
+        >
+          <Ti4TimelineDot className={classes.supportDot}>
+            <img alt={t('general.labels.tg')} src={tradeGoods} />
+          </Ti4TimelineDot>
+        </Link>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent className={classes.supportContent}>
+        <Typography variant="h6">
+          <Link
+            href={t('support.buymeacoffee')}
+            rel="nofollow"
+            target="about:blank"
+          >
+            <Trans i18nKey="support.consider" />
+          </Link>
+        </Typography>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
 function DraftSummary({ payload, happenedAt, session }) {
   const small = useSmallViewport()
   const { t } = useTranslation()
@@ -599,42 +656,7 @@ function DraftSummary({ payload, happenedAt, session }) {
           </TableContainer>
         </Ti4TimelineContent>
       </Ti4TimelineItem>
-      <Ti4TimelineItem>
-        <Ti4TimelineOppositeContent className={classes.supportContent}>
-          <Typography variant="h6">
-            <Link
-              href={t('support.buymeacoffee')}
-              rel="nofollow"
-              target="about:blank"
-            >
-              <Trans i18nKey="support.doYouLike" />
-            </Link>
-          </Typography>
-        </Ti4TimelineOppositeContent>
-        <TimelineSeparator>
-          <Link
-            href={t('support.buymeacoffee')}
-            rel="nofollow"
-            target="about:blank"
-          >
-            <Ti4TimelineDot className={classes.supportDot}>
-              <img alt={t('general.labels.tg')} src={tradeGoods} />
-            </Ti4TimelineDot>
-          </Link>
-          <TimelineConnector />
-        </TimelineSeparator>
-        <Ti4TimelineContent className={classes.supportContent}>
-          <Typography variant="h6">
-            <Link
-              href={t('support.buymeacoffee')}
-              rel="nofollow"
-              target="about:blank"
-            >
-              <Trans i18nKey="support.consider" />
-            </Link>
-          </Typography>
-        </Ti4TimelineContent>
-      </Ti4TimelineItem>
+      <SupportCreatorEvent />
       {showMap && (
         <Drawer anchor="left" onClose={toggleMapDrawer} open={mapDrawerOpen}>
           <Grid
@@ -656,6 +678,83 @@ function DraftSummary({ payload, happenedAt, session }) {
           </Grid>
         </Drawer>
       )}
+    </>
+  )
+}
+
+function SessionSummary({ eventType, payload, happenedAt, session }) {
+  const { t } = useTranslation()
+  const classes = useStyles()
+
+  const { results } = payload
+  results.sort((a, b) => b.points - a.points)
+
+  return (
+    <>
+      <SupportCreatorEvent />
+      <Ti4TimelineItem>
+        <Ti4TimelineOppositeContent>
+          <Typography color="textSecondary">
+            {new Date(happenedAt).toLocaleString()}
+          </Typography>
+        </Ti4TimelineOppositeContent>
+        <TimelineSeparator>
+          <Ti4TimelineDot
+            color="primary"
+            title={t(`sessionTimeline.events.${eventType}`)}
+          >
+            <SessionSummaryIcon />
+          </Ti4TimelineDot>
+          <TimelineConnector />
+        </TimelineSeparator>
+        <Ti4TimelineContent>
+          <Typography variant="h5">
+            <Trans i18nKey="sessionTimeline.sessionSummary.title" />
+          </Typography>
+          <List>
+            <ListItem>
+              <ListItemIcon className={classes.resultListIcon}>
+                <FactionFlag
+                  disabled
+                  factionKey={payload.winner}
+                  height="3em"
+                  selected
+                  width="4.5em"
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary={t('sessionTimeline.vp', { points: session.vpCount })}
+                secondary={t('sessionTimeline.sessionSummary.winner')}
+              />
+            </ListItem>
+          </List>
+          <List>
+            {results.slice(1).map((result) => (
+              <ListItem key={result.faction}>
+                <ListItemIcon className={classes.resultListIcon}>
+                  <FactionFlag
+                    disabled
+                    factionKey={result.faction}
+                    height="3em"
+                    selected
+                    width="4.5em"
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={t('sessionTimeline.vp', { points: result.points })}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Ti4TimelineContent>
+      </Ti4TimelineItem>
+      <Ti4TimelineItem>
+        <Ti4TimelineOppositeContent />
+        <TimelineSeparator className={classes.paxMagnifica}>
+          <Trans i18nKey="general.paxmagnifica" />
+        </TimelineSeparator>
+        <Ti4TimelineContent />
+      </Ti4TimelineItem>
     </>
   )
 }
@@ -709,6 +808,8 @@ function EventOnATimeline({ eventType, payload, happenedAt, session }) {
       return <SpeakerSelected {...props} />
     case 'DraftSummary':
       return <DraftSummary {...props} session={session} />
+    case 'SessionSummary':
+      return <SessionSummary {...props} session={session} />
     default:
       return <DebugEvent {...props} />
   }

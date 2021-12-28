@@ -39,6 +39,7 @@ const factory = (options = { debug: true }) =>
               consider: 'Consider supporting the creator',
             },
             general: {
+              paxmagnifica: 'Pax Magnifica Bellum Gloriosum',
               switchLanguage: 'Change language',
               home: 'Home',
               title: 'TI4 Companion',
@@ -135,6 +136,7 @@ const factory = (options = { debug: true }) =>
                 ObjectiveAdded: 'Objective revealed',
                 TimelineUserEvent: 'User added event',
                 VictoryPointsUpdated: 'VP scored',
+                SessionSummary: 'Game finished!',
               },
               withDraft: 'Players will draft their factions',
               banned: '{{player}} banned:',
@@ -146,6 +148,11 @@ const factory = (options = { debug: true }) =>
                 speaker: 'Speaker: {{speaker}}',
                 toggleMap: 'show map',
                 map: 'map',
+              },
+              sessionSummary: {
+                title: 'Game finished!',
+                winner: 'Winner',
+                results: 'Results',
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vp: '{{points}} VP',

@@ -62,7 +62,12 @@ namespace server.Domain
 
         internal static MetadataUpdatedPayload GetPayload(GameEvent gameEvent)
         {
-            return JsonConvert.DeserializeObject<MetadataUpdatedPayload>(gameEvent.SerializedPayload);
+            return GetPayload(gameEvent.SerializedPayload);
+        }
+
+        internal static MetadataUpdatedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<MetadataUpdatedPayload>(serializedPayload);
         }
     }
 
