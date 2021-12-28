@@ -2,7 +2,6 @@ import { useState, useMemo, useCallback } from 'react'
 import clsx from 'clsx'
 import {
   Drawer,
-  Divider,
   Grid,
   Button,
   Box,
@@ -126,6 +125,11 @@ const useStyles = makeStyles((theme) => ({
   },
   resultListIcon: {
     marginRight: theme.spacing(2),
+  },
+  paxMagnifica: {
+    textAlign: 'center',
+    fontSize: '1.5em',
+    marginBottom: theme.spacing(2),
   },
 }))
 
@@ -743,6 +747,13 @@ function SessionSummary({ eventType, payload, happenedAt, session }) {
             ))}
           </List>
         </Ti4TimelineContent>
+      </Ti4TimelineItem>
+      <Ti4TimelineItem>
+        <Ti4TimelineOppositeContent />
+        <TimelineSeparator className={classes.paxMagnifica}>
+          <Trans i18nKey="general.paxmagnifica" />
+        </TimelineSeparator>
+        <Ti4TimelineContent />
       </Ti4TimelineItem>
     </>
   )
