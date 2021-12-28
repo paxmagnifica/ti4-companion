@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using server.Domain;
-using server.Infra;
 using server.Persistence;
 
 namespace server.Controllers
@@ -203,7 +202,8 @@ namespace server.Controllers
                 return e;
             });
 
-            return _timelineModifiers.AddDraftSummary(_timelineModifiers.Deduplicate(dtos));
+            return _timelineModifiers
+                .AddDraftSummary(_timelineModifiers.Deduplicate(_timelineModifiers.AddSessionSummary(dtos)));
         }
     }
 }
