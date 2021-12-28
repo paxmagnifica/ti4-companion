@@ -166,9 +166,16 @@ namespace server.Domain
 
         public IEnumerable<TimelineEvent> AddSessionSummary(IEnumerable<TimelineEvent> timelineEvents)
         {
-            var firstToScore10VP = timelineEvents.OrderBy(te => te.Order).FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains("\"points\":10"));
+            var orderedEvents = timelineEvents.OrderBy(e => e.Order);
+            var targetVP = orderedEvents.LastOrDefault(e => e.EventType == nameof(MetadataUpdated));
 
-            if (firstToScore10VP == null)
+            var targetVPCount = targetVP == null
+                ? 10
+                : MetadataUpdated.GetPayload(targetVP.SerializedPayload).VpCount;
+
+            var firstToScoreTargetVPCount = timelineEvents.OrderBy(te => te.Order).FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains($"\"points\":{targetVPCount}"));
+
+            if (firstToScoreTargetVPCount == null)
             {
                 return timelineEvents;
             }
@@ -181,10 +188,10 @@ namespace server.Domain
             withSessionSummary.Add(new TimelineEvent
             {
                 EventType = "SessionSummary",
-                HappenedAt = firstToScore10VP.HappenedAt,
+                HappenedAt = firstToScoreTargetVPCount.HappenedAt,
                 SerializedPayload = JsonConvert.SerializeObject(new
                 {
-                    winner = VictoryPointsUpdated.GetPayload(firstToScore10VP.SerializedPayload).Faction,
+                    winner = VictoryPointsUpdated.GetPayload(firstToScoreTargetVPCount.SerializedPayload).Faction,
                     results = payloadsByFaction.Select(pbf => new { faction = pbf.Key, points = pbf.Last().Points })
                 })
             });
