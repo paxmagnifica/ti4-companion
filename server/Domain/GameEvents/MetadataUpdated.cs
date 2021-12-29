@@ -71,7 +71,7 @@ namespace server.Domain
         }
     }
 
-    internal class MetadataUpdatedPayload
+    public class MetadataUpdatedPayload
     {
       public string SessionDisplayName { get; set; }
       public bool IsTTS { get; set; }

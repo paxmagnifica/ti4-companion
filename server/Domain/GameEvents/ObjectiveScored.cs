@@ -39,7 +39,7 @@ namespace server.Domain
         }
     }
 
-    internal class ObjectiveScoredPayload
+    public class ObjectiveScoredPayload
     {
         public string Slug { get; set; }
         public string Faction { get; set; }
