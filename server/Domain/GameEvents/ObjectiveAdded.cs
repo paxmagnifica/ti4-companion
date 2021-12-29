@@ -34,7 +34,7 @@ namespace server.Domain
         }
     }
 
-    internal class ObjectiveAddedPayload
+    public class ObjectiveAddedPayload
     {
         public string Slug { get; set; }
     }

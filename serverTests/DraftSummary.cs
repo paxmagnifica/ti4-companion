@@ -3,20 +3,32 @@ using System.Linq;
 using NUnit.Framework;
 using FluentAssertions;
 using server.Domain;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace serverTests
 {
     public class DraftSummary
     {
+        JsonSerializerSettings SerializerSettings
+        {
+            get
+            {
+                var serializerSettings = new JsonSerializerSettings();
+                serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                return serializerSettings;
+            }
+        }
+
         [Test]
         public void ShouldReturnEmptyIfPassedEmpty()
         {
             // given
-            var given = new List<TimelineEvent>();
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            var given = new List<GameEvent>();
+            var timeline = new Timeline(new Session{ Events = given });
 
             // when
-            var actual = timelineModifiers.AddDraftSummary(given);
+            var actual = timeline.AddDraftSummary().GetEvents();
 
             // then
             Assert.AreEqual(0, actual.Count());
@@ -26,7 +38,40 @@ namespace serverTests
         public void ShouldAddDraftSummaryAfterDraftWithOnlyFactionPicksHasBeenCommitted()
         {
             // given
-            var given = new List<TimelineEvent>() {
+            var sessionEvents = new List<GameEvent>() {
+                new GameEvent {
+                    EventType = nameof(Picked),
+                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                        Pick = "The_Nomad",
+                        Type = "faction",
+                        PlayerIndex = 0,
+                        PlayerName = "Player 1"
+                    }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(Picked),
+                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                        Pick = "The_VuilRaith_Cabal",
+                        Type = "faction",
+                        PlayerIndex = 1,
+                        PlayerName = "Player 2"
+                    }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(SpeakerSelected),
+                    SerializedPayload = JsonConvert.SerializeObject(new SpeakerSelectedPayload {
+                        SpeakerIndex = 3,
+                        SpeakerName = "Player 2"
+                    }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(CommitDraft),
+                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
+                        Factions = new string[] {"The_VuilRaith_Cabal", "The_Nomad"}
+                    }, SerializerSettings)
+                },
+            };
+            var expected = new List<TimelineEvent>() {
                 new TimelineEvent {
                     Order = 0,
                     EventType = "Picked",
@@ -47,19 +92,20 @@ namespace serverTests
                     EventType = "CommitDraft",
                     SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}"
                 },
-            };
-            var expected = new List<TimelineEvent>(given);
-            expected.Add(
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "DraftSummary",
                     SerializedPayload = "{\"speaker\":\"Player 2\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":-1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":-1}]}"
                 }
-            );
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            };
+            var timeline = new Timeline(new Session
+            {
+                Events = sessionEvents,
+            });
 
             // when
-            var actual = timelineModifiers.AddDraftSummary(given);
+            var actual = timeline.AddDraftSummary().GetEvents();
 
             // then
             actual.Should().BeEquivalentTo(expected);
@@ -69,16 +115,67 @@ namespace serverTests
         public void ShouldAddDraftSummaryAfterDraftWithTablePositionHasBeenCommitted()
         {
             // given
-            var given = new List<TimelineEvent>() {
+            var given = new List<GameEvent>() {
+                 new GameEvent {
+                    EventType = nameof(Picked),
+                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                        Pick = "0",
+                        Type = "tablePosition",
+                        PlayerIndex = 1,
+                        PlayerName = "Player 2"
+                    }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(Picked),
+                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                        Pick = "1",
+                        Type = "tablePosition",
+                        PlayerIndex = 0,
+                        PlayerName = "Player 1"
+                    }, SerializerSettings)
+                },
+                 new GameEvent {
+                    EventType = nameof(Picked),
+                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                        Pick = "The_Nomad",
+                        Type = "faction",
+                        PlayerIndex = 0,
+                        PlayerName = "Player 1"
+                    }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(Picked),
+                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                        Pick = "The_VuilRaith_Cabal",
+                        Type = "faction",
+                        PlayerIndex = 1,
+                        PlayerName = "Player 2"
+                    }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(SpeakerSelected),
+                    SerializedPayload = JsonConvert.SerializeObject(new SpeakerSelectedPayload {
+                        SpeakerIndex = 1,
+                        SpeakerName = "Player 2"
+                    }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(CommitDraft),
+                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
+                        Factions = new string[] {"The_VuilRaith_Cabal", "The_Nomad"}
+                    }, SerializerSettings)
+                },
+           };
+            var expected = new List<TimelineEvent>() {
                 new TimelineEvent {
                     Order = 0,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":0,\"type\":\"tablePosition\",\"playerIndex\":1,\"playerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"pick\":\"0\",\"type\":\"tablePosition\",\"playerIndex\":1,\"playerName\":\"Player 2\"}"
                 },
                 new TimelineEvent {
                     Order = 1,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":1,\"type\":\"tablePosition\",\"playerIndex\":0,\"playerName\":\"Player 1\"}"
+                    SerializedPayload = "{\"pick\":\"1\",\"type\":\"tablePosition\",\"playerIndex\":0,\"playerName\":\"Player 1\"}"
                 },
                 new TimelineEvent {
                     Order = 2,
@@ -93,26 +190,24 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 4,
                     EventType = "SpeakerSelected",
-                    SerializedPayload = "{\"speakerIndex\":3,\"speakerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"speakerIndex\":1,\"speakerName\":\"Player 2\"}"
                 },
                 new TimelineEvent {
                     Order = 5,
                     EventType = "CommitDraft",
                     SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}"
                 },
-            };
-            var expected = new List<TimelineEvent>(given);
-            expected.Add(
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 6,
                     EventType = "DraftSummary",
                     SerializedPayload = "{\"speaker\":\"Player 2\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":0}]}"
                 }
-            );
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            };
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
-            var actual = timelineModifiers.AddDraftSummary(given);
+            var actual = timeline.AddDraftSummary().GetEvents();
 
             // then
             actual.Should().BeEquivalentTo(expected);

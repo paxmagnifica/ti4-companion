@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
@@ -22,22 +21,20 @@ namespace server.Controllers
         private readonly IConfiguration _configuration;
         private readonly ITimeProvider _timeProvider;
         private readonly SessionContext _sessionContext;
-        private readonly ITimelineModifiers _timelineModifiers;
 
         public TimelineController(
             ILogger<SessionsController> logger,
             IRepository repository,
             IConfiguration configuration,
             ITimeProvider timeProvider,
-            SessionContext sessionContext,
-            ITimelineModifiers timelineModifiers)
+            SessionContext sessionContext
+            )
         {
             this._logger = logger;
             this._repository = repository;
             this._configuration = configuration;
             this._timeProvider = timeProvider;
             this._sessionContext = sessionContext;
-            _timelineModifiers = timelineModifiers;
         }
 
         [HttpPost]
@@ -94,116 +91,13 @@ namespace server.Controllers
         public async Task<IEnumerable<TimelineEvent>> Get([FromRoute] Guid sessionId)
         {
             var sessionFromDb = await _repository.GetByIdWithEvents(sessionId);
+            var timeline = new Timeline(sessionFromDb);
 
-            var defaultVpCount = 10;
-            var previousVpCount = defaultVpCount;
-            var orderedEvents = sessionFromDb.Events.OrderBy(e => e.HappenedAt);
-
-            var timelineEvents = new List<KeyValuePair<GameEvent, TimelineEvent>>();
-
-            foreach (var sessionEvent in orderedEvents)
-            {
-                if (sessionEvent.EventType == nameof(MetadataUpdated))
-                {
-                    var payload = MetadataUpdated.GetPayload(sessionEvent);
-                    if (payload.VpCount == previousVpCount)
-                    {
-                        continue;
-                    }
-                    var newPayload = JsonConvert.SerializeObject(new { from = previousVpCount, to = payload.VpCount });
-                    previousVpCount = payload.VpCount;
-                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
-                    {
-                        EventType = "VpCountChanged",
-                        SerializedPayload = newPayload,
-                        HappenedAt = sessionEvent.HappenedAt
-                    }));
-
-                    continue;
-                }
-
-                if (sessionEvent.EventType == nameof(ObjectiveScored))
-                {
-                    var payload = ObjectiveScored.GetPayload(sessionEvent);
-                    if (timelineEvents.Last().Key.EventType == nameof(VictoryPointsUpdated))
-                    {
-                        var lastPayload = VictoryPointsUpdated.GetPayload(timelineEvents.Last().Key);
-
-                        if (lastPayload.Faction == payload.Faction)
-                        {
-                            timelineEvents.RemoveAt(timelineEvents.Count - 1);
-                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
-                            {
-                                EventType = sessionEvent.EventType,
-                                SerializedPayload = JsonConvert.SerializeObject(new
-                                {
-                                    faction = payload.Faction,
-                                    points = lastPayload.Points,
-                                    slug = payload.Slug,
-                                }),
-                                HappenedAt = sessionEvent.HappenedAt
-                            }));
-
-                            continue;
-                        }
-                    }
-                }
-
-                if (sessionEvent.EventType == nameof(VictoryPointsUpdated))
-                {
-                    var payload = VictoryPointsUpdated.GetPayload(sessionEvent);
-                    if (timelineEvents.Last().Key.EventType == nameof(ObjectiveScored))
-                    {
-                        var lastPayload = ObjectiveScored.GetPayload(timelineEvents.Last().Key);
-
-                        if (lastPayload.Faction == payload.Faction)
-                        {
-                            timelineEvents.RemoveAt(timelineEvents.Count - 1);
-                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
-                            {
-                                EventType = nameof(ObjectiveScored),
-                                SerializedPayload = JsonConvert.SerializeObject(new
-                                {
-                                    faction = payload.Faction,
-                                    points = payload.Points,
-                                    slug = lastPayload.Slug,
-                                }),
-                                HappenedAt = sessionEvent.HappenedAt
-                            }));
-
-                            continue;
-                        }
-                    }
-                }
-#if DEBUG
-                if (sessionEvent.EventType == GameEvent.TimelineUserEvent || sessionEvent.EventType == GameEvent.MapAdded)
-                {
-                    timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
-                    {
-                        EventType = sessionEvent.EventType,
-                        SerializedPayload = sessionEvent.SerializedPayload.Replace("storage-emulator", "localhost"),
-                        HappenedAt = sessionEvent.HappenedAt
-                    }));
-                    continue;
-                }
-#endif
-
-                timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
-                {
-                    EventType = sessionEvent.EventType,
-                    SerializedPayload = sessionEvent.SerializedPayload,
-                    HappenedAt = sessionEvent.HappenedAt
-                }));
-            }
-
-            var dtos = timelineEvents.Select(kvp => kvp.Value).Select((e, index) =>
-            {
-                e.Order = index;
-                return e;
-            });
-
-            return _timelineModifiers
-                .AddDraftSummary(_timelineModifiers.Deduplicate(_timelineModifiers.AddSessionSummary(dtos)));
+            return timeline
+                .AddSessionSummary()
+                .AddDraftSummary()
+                .Deduplicate()
+                .GetEvents();
         }
     }
 }

@@ -3,20 +3,32 @@ using System.Linq;
 using NUnit.Framework;
 using FluentAssertions;
 using server.Domain;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace serverTests
 {
     public class EventsDeduplication
     {
+        JsonSerializerSettings SerializerSettings
+        {
+            get
+            {
+                var serializerSettings = new JsonSerializerSettings();
+                serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                return serializerSettings;
+            }
+        }
+
         [Test]
         public void ShouldReturnEmptyEventsIfPassedEmpty()
         {
             // given
-            var given = new List<TimelineEvent>();
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            var given = new List<GameEvent>();
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
-            var actual = timelineModifiers.Deduplicate(given);
+            var actual = timeline.Deduplicate().GetEvents();
 
             // then
             Assert.AreEqual(0, actual.Count());
@@ -26,25 +38,27 @@ namespace serverTests
         public void ShouldNotCrashOnSingleEventList()
         {
             // given
-            var given = new List<TimelineEvent>() {
-                new TimelineEvent {
-                    Order = 0,
-                    EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+            var given = new List<GameEvent>() {
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload{
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 1
+                            }, SerializerSettings)
                 },
             };
             var expected = new List<TimelineEvent>() {
                 new TimelineEvent {
                     Order = 0,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
                 },
             };
 
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
-            var actual = timelineModifiers.Deduplicate(given);
+            var actual = timeline.Deduplicate().GetEvents();
 
             // then
             actual.Should().BeEquivalentTo(expected);
@@ -54,35 +68,41 @@ namespace serverTests
         public void ShouldSkipTwoConsecutiveVPEventsThatCancelEachOtherOut()
         {
             // given
-            var given = new List<TimelineEvent>() {
-                new TimelineEvent {
-                    Order = 0,
-                    EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+            var given = new List<GameEvent>() {
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 1
+                            }, SerializerSettings)
                 },
-                new TimelineEvent {
-                    Order = 1,
-                    EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0}"
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 0
+                            }, SerializerSettings)
                 },
-                new TimelineEvent {
-                    Order = 2,
-                    EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
-                }
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Xxcha_Kingdom",
+                            Points = 1
+                            }, SerializerSettings)
+                },
             };
             var expected = new List<TimelineEvent>() {
                 new TimelineEvent {
                     Order = 0,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
                 }
             };
 
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
-            var actual = timelineModifiers.Deduplicate(given);
+            var actual = timeline.Deduplicate().GetEvents();
 
             // then
             actual.Should().BeEquivalentTo(expected);
@@ -92,45 +112,51 @@ namespace serverTests
         public void ShouldNotDeduplicateVPChangesIfSomethingWasInBetween()
         {
             // given
-            var given = new List<TimelineEvent>() {
-                new TimelineEvent {
-                    Order = 0,
-                    EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+            var given = new List<GameEvent>() {
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 1
+                            }, SerializerSettings)
                 },
-                new TimelineEvent {
-                    Order = 1,
-                    EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Xxcha_Kingdom",
+                            Points = 1
+                            }, SerializerSettings)
                 },
-                new TimelineEvent {
-                    Order = 2,
-                    EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0}"
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 0
+                            }, SerializerSettings)
                 },
             };
             var expected = new List<TimelineEvent>() {
                 new TimelineEvent {
                     Order = 0,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
                 },
                 new TimelineEvent {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
                 },
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"sessionId\":\"63747d3c-626d-4f35-a948-8fa66c4b8368\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0}"
                 },
             };
 
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
-            var actual = timelineModifiers.Deduplicate(given);
+            var actual = timeline.Deduplicate().GetEvents();
 
             // then
             actual.Should().BeEquivalentTo(expected);
@@ -140,26 +166,40 @@ namespace serverTests
         public void ShouldDeduplicateScoredDescoredObjectivesForTheSameObjAndFaction()
         {
             // given
-            var given = new List<TimelineEvent> {
-                new TimelineEvent {
-                    Order = 0,
-                    EventType = "ObjectiveAdded",
-                    SerializedPayload = "{\"sessionId\":\"1811a152-b64c-41cd-bdfd-8885fdfb7620\",\"slug\":\"raise-a-fleet\"}",
+            var given = new List<GameEvent>() {
+                new GameEvent {
+                    EventType = nameof(ObjectiveAdded),
+                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveAddedPayload {
+                            Slug = "raise-a-fleet"
+                            }, SerializerSettings)
                 },
-                new TimelineEvent {
-                    Order = 1,
-                    EventType = "ObjectiveScored",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0,\"slug\":\"raise-a-fleet\"}",
+                new GameEvent {
+                    EventType = nameof(ObjectiveScored),
+                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Slug = "raise-a-fleet"
+                            }, SerializerSettings)
                 },
-                new TimelineEvent {
-                    Order = 2,
-                    EventType = "ObjectiveScored",
-                    SerializedPayload = "{\"faction\":\"The_Emirates_of_Hacan\",\"points\":0,\"slug\":\"raise-a-fleet\"}",
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 1
+                            }, SerializerSettings)
                 },
-                new TimelineEvent {
-                    Order = 3,
-                    EventType = "ObjectiveDescored",
-                    SerializedPayload = "{\"sessionId\":\"1811a152-b64c-41cd-bdfd-8885fdfb7620\",\"slug\":\"raise-a-fleet\",\"faction\":\"The_Emirates_of_Hacan\"}",
+                new GameEvent {
+                    EventType = nameof(ObjectiveScored),
+                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
+                            Faction = "The_Emirates_of_Hacan",
+                            Slug = "raise-a-fleet"
+                            }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(ObjectiveDescored),
+                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveDescoredPayload {
+                            Faction = "The_Emirates_of_Hacan",
+                            Slug = "raise-a-fleet"
+                            }, SerializerSettings)
                 },
             };
 
@@ -167,19 +207,19 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 0,
                     EventType = "ObjectiveAdded",
-                    SerializedPayload = "{\"sessionId\":\"1811a152-b64c-41cd-bdfd-8885fdfb7620\",\"slug\":\"raise-a-fleet\"}",
+                    SerializedPayload = "{\"slug\":\"raise-a-fleet\"}",
                 },
                 new TimelineEvent {
                     Order = 1,
                     EventType = "ObjectiveScored",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0,\"slug\":\"raise-a-fleet\"}",
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"slug\":\"raise-a-fleet\"}",
                 },
             };
 
-            ITimelineModifiers timelineModifiers = new TimelineModifiers();
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
-            var actual = timelineModifiers.Deduplicate(given);
+            var actual = timeline.Deduplicate().GetEvents();
 
             // then
             actual.Should().BeEquivalentTo(expected);
