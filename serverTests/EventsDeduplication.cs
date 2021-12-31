@@ -177,7 +177,8 @@ namespace serverTests
                     EventType = nameof(ObjectiveScored),
                     SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Slug = "raise-a-fleet"
+                            Slug = "raise-a-fleet",
+                            Points = 1
                             }, SerializerSettings)
                 },
                 new GameEvent {
@@ -191,14 +192,30 @@ namespace serverTests
                     EventType = nameof(ObjectiveScored),
                     SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
                             Faction = "The_Emirates_of_Hacan",
-                            Slug = "raise-a-fleet"
+                            Slug = "raise-a-fleet",
+                            Points = 1,
+                            }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Emirates_of_Hacan",
+                            Points = 1
                             }, SerializerSettings)
                 },
                 new GameEvent {
                     EventType = nameof(ObjectiveDescored),
                     SerializedPayload = JsonConvert.SerializeObject(new ObjectiveDescoredPayload {
                             Faction = "The_Emirates_of_Hacan",
-                            Slug = "raise-a-fleet"
+                            Slug = "raise-a-fleet",
+                            Points = 0,
+                            }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Emirates_of_Hacan",
+                            Points = 0
                             }, SerializerSettings)
                 },
             };
@@ -212,7 +229,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 1,
                     EventType = "ObjectiveScored",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"slug\":\"raise-a-fleet\"}",
+                    SerializedPayload = "{\"slug\":\"raise-a-fleet\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}",
                 },
             };
 

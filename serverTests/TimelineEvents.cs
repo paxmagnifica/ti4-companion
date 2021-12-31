@@ -34,7 +34,8 @@ namespace serverTests
                     EventType = nameof(ObjectiveScored),
                     SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Slug = "raise-a-fleet"
+                            Slug = "raise-a-fleet",
+                            Points = 1
                             }, SerializerSettings)
                 },
                 new GameEvent {
@@ -55,7 +56,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 1,
                     EventType = "ObjectiveScored",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"slug\":\"raise-a-fleet\"}",
+                    SerializedPayload = "{\"slug\":\"raise-a-fleet\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}",
                 },
             };
 
@@ -69,7 +70,6 @@ namespace serverTests
         }
 
         [Test]
-        [Ignore("TODO: Bug found")]
         public void ShouldIncludeLatestVictoryPointsUpdatedWithObjectiveScored()
         {
             // given
@@ -91,7 +91,8 @@ namespace serverTests
                     EventType = nameof(ObjectiveScored),
                     SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Slug = "raise-a-fleet"
+                            Slug = "raise-a-fleet",
+                            Points = 2
                             }, SerializerSettings)
                 },
                 new GameEvent {
@@ -117,7 +118,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 2,
                     EventType = "ObjectiveScored",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":2,\"slug\":\"raise-a-fleet\"}",
+                    SerializedPayload = "{\"slug\":\"raise-a-fleet\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":2}",
                 },
             };
 
