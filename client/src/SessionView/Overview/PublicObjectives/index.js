@@ -73,6 +73,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
             sessionId: session.id,
             slug: objective.slug,
             faction: change.factionKey,
+            points: factionPoints + objectivePoints,
           },
         })
       } else {
@@ -87,6 +88,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
             sessionId: session.id,
             slug: objective.slug,
             faction: change.factionKey,
+            points: factionPoints - objectivePoints,
           },
         })
       }

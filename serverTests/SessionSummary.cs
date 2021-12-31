@@ -156,7 +156,8 @@ namespace serverTests
                     EventType = nameof(ObjectiveScored),
                     SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
                             Faction = "The_Winnu",
-                            Slug = "raise-a-fleet"
+                            Slug = "raise-a-fleet",
+                            Points = 10
                             }, SerializerSettings)
                 },
                 new GameEvent {
@@ -206,7 +207,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 7,
                     EventType = "ObjectiveScored",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"slug\":\"raise-a-fleet\"}",
+                    SerializedPayload = "{\"slug\":\"raise-a-fleet\",\"faction\":\"The_Winnu\",\"points\":10}",
                 },
                 new TimelineEvent {
                     Order = 8,

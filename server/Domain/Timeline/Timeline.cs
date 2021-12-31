@@ -95,59 +95,6 @@ namespace server.Domain
                     continue;
                 }
 
-                if (sessionEvent.EventType == nameof(ObjectiveScored))
-                {
-                    var payload = ObjectiveScored.GetPayload(sessionEvent);
-                    if (timelineEvents.Any() && timelineEvents.Last().Key.EventType == nameof(VictoryPointsUpdated))
-                    {
-                        var lastPayload = VictoryPointsUpdated.GetPayload(timelineEvents.Last().Key);
-
-                        if (lastPayload.Faction == payload.Faction)
-                        {
-                            timelineEvents.RemoveAt(timelineEvents.Count - 1);
-                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
-                            {
-                                EventType = nameof(ObjectiveScored),
-                                SerializedPayload = JsonConvert.SerializeObject(new
-                                {
-                                    faction = payload.Faction,
-                                    points = lastPayload.Points,
-                                    slug = payload.Slug,
-                                }),
-                                HappenedAt = sessionEvent.HappenedAt
-                            }));
-
-                            continue;
-                        }
-                    }
-                }
-
-                if (sessionEvent.EventType == nameof(VictoryPointsUpdated))
-                {
-                    var payload = VictoryPointsUpdated.GetPayload(sessionEvent);
-                    if (timelineEvents.Any() && timelineEvents.Last().Key.EventType == nameof(ObjectiveScored))
-                    {
-                        var lastPayload = ObjectiveScored.GetPayload(timelineEvents.Last().Key);
-
-                        if (lastPayload.Faction == payload.Faction)
-                        {
-                            timelineEvents.RemoveAt(timelineEvents.Count - 1);
-                            timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
-                            {
-                                EventType = nameof(ObjectiveScored),
-                                SerializedPayload = JsonConvert.SerializeObject(new
-                                {
-                                    faction = payload.Faction,
-                                    points = payload.Points,
-                                    slug = lastPayload.Slug,
-                                }),
-                                HappenedAt = sessionEvent.HappenedAt
-                            }));
-
-                            continue;
-                        }
-                    }
-                }
 #if DEBUG
                 if (sessionEvent.EventType == GameEvent.TimelineUserEvent || sessionEvent.EventType == GameEvent.MapAdded)
                 {
@@ -169,7 +116,34 @@ namespace server.Domain
                 }));
             }
 
-            return timelineEvents.Select(kvp => kvp.Value);
+            var withoutVPFromObjectives = MergeVictoryPointsAndScoredObjectives(timelineEvents.Select(kvp => kvp.Value));
+
+            return withoutVPFromObjectives;
+        }
+
+
+        private IEnumerable<TimelineEvent> MergeVictoryPointsAndScoredObjectives(IEnumerable<TimelineEvent> timelineEvents)
+        {
+            var objectiveScoredEvents = timelineEvents.Where(e => e.EventType == nameof(ObjectiveScored));
+            var withoutScoredObjectives = timelineEvents.Where(e => e.EventType != nameof(VictoryPointsUpdated) || !IsVictoryPointFromObjective(e, objectiveScoredEvents));
+
+            var objectiveDescoredEvents = timelineEvents.Where(e => e.EventType == nameof(ObjectiveDescored));
+            var withoutDescoredObjectives = withoutScoredObjectives.Where(e => e.EventType != nameof(VictoryPointsUpdated) || !IsVictoryPointFromObjective(e, objectiveDescoredEvents));
+
+            return withoutDescoredObjectives;
+        }
+
+        private bool IsVictoryPointFromObjective(TimelineEvent e, IEnumerable<TimelineEvent> objectiveScoredEvents)
+        {
+            if (e.EventType != nameof(VictoryPointsUpdated))
+            {
+                return false;
+            }
+
+            var ePayload = VictoryPointsUpdated.GetPayload(e.SerializedPayload);
+            var inObjectiveScoredEvents = objectiveScoredEvents.Any(objectiveEvent => objectiveEvent.SerializedPayload.Contains($"\"points\":{ePayload.Points}") && objectiveEvent.SerializedPayload.Contains($"\"faction\":\"{ePayload.Faction}\""));
+
+            return e.EventType == nameof(VictoryPointsUpdated) && inObjectiveScoredEvents;
         }
 
         private IEnumerable<TimelineEvent> AddDraftSummary(IEnumerable<TimelineEvent> timelineEvents)
@@ -319,7 +293,8 @@ namespace server.Domain
             var targetVP = _orderedEvents.LastOrDefault(e => e.EventType == nameof(MetadataUpdated));
 
             var targetVPCount = 10;
-            if (targetVP != null) {
+            if (targetVP != null)
+            {
                 var targetVPPayload = MetadataUpdated.GetPayload(targetVP);
                 targetVPCount = targetVPPayload.VpCount;
             }
