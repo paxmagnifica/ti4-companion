@@ -316,22 +316,22 @@ namespace server.Domain
 
         private IEnumerable<TimelineEvent> AddSessionSummary(IEnumerable<TimelineEvent> timelineEvents)
         {
-            var targetVP = timelineEvents.LastOrDefault(e => e.EventType == "VpCountChanged");
+            var targetVP = _orderedEvents.LastOrDefault(e => e.EventType == nameof(MetadataUpdated));
 
             var targetVPCount = 10;
             if (targetVP != null) {
-                dynamic targetVPPayload = JsonConvert.DeserializeObject(targetVP.SerializedPayload);
-                targetVPCount = targetVPPayload.to;
+                var targetVPPayload = MetadataUpdated.GetPayload(targetVP);
+                targetVPCount = targetVPPayload.VpCount;
             }
 
-            var firstToScoreTargetVPCount = timelineEvents.FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains($"\"points\":{targetVPCount}"));
+            var firstToScoreTargetVPCount = _orderedEvents.FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains($"\"points\":{targetVPCount}"));
 
             if (firstToScoreTargetVPCount == null)
             {
                 return timelineEvents;
             }
 
-            var victoryPointsEvents = timelineEvents.Where(e => e.EventType == nameof(VictoryPointsUpdated));
+            var victoryPointsEvents = _orderedEvents.Where(e => e.EventType == nameof(VictoryPointsUpdated));
             var payloads = victoryPointsEvents.Select(e => VictoryPointsUpdated.GetPayload(e.SerializedPayload));
             var payloadsByFaction = payloads.GroupBy(p => p.Faction);
 
