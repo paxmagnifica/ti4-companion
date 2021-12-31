@@ -67,5 +67,67 @@ namespace serverTests
             // then
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [Test]
+        [Ignore("TODO: Bug found")]
+        public void ShouldIncludeLatestVictoryPointsUpdatedWithObjectiveScored()
+        {
+            // given
+            var given = new List<GameEvent>() {
+                new GameEvent {
+                    EventType = nameof(ObjectiveAdded),
+                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveAddedPayload {
+                            Slug = "raise-a-fleet"
+                            }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 1
+                            }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(ObjectiveScored),
+                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Slug = "raise-a-fleet"
+                            }, SerializerSettings)
+                },
+                new GameEvent {
+                    EventType = nameof(VictoryPointsUpdated),
+                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                            Faction = "The_Universities_of_Jol__Nar",
+                            Points = 2
+                            }, SerializerSettings)
+                },
+            };
+
+            var expected = new List<TimelineEvent> {
+                new TimelineEvent {
+                    Order = 0,
+                    EventType = "ObjectiveAdded",
+                    SerializedPayload = "{\"slug\":\"raise-a-fleet\"}",
+                },
+                new TimelineEvent {
+                    Order = 1,
+                    EventType = "VictoryPointsUpdated",
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+                },
+                new TimelineEvent {
+                    Order = 2,
+                    EventType = "ObjectiveScored",
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":2,\"slug\":\"raise-a-fleet\"}",
+                },
+            };
+
+            var timeline = new Timeline(new Session { Events = given });
+
+            // when
+            var actual = timeline.GetEvents();
+
+            // then
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }
