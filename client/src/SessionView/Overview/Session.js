@@ -1,10 +1,9 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import clsx from 'clsx'
-import { Dialog, Grid } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 
-import { getFactionCheatSheetPath } from '../../gameInfo/factions'
 import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
 
 import VictoryPoints from './VictoryPoints'
@@ -44,8 +43,6 @@ const useStyles = makeStyles({
 
 export function Session({ editable, session, updateFactionPoints }) {
   const classes = useStyles()
-  const [factionDialogOpen, setFactionDialogOpen] = useState(false)
-  const [faction, setFaction] = useState(null)
   const { fullscreen } = useFullscreen()
   const { t } = useTranslation()
 
@@ -118,22 +115,8 @@ export function Session({ editable, session, updateFactionPoints }) {
           justifyContent="center"
           spacing={4}
         >
-          <FactionNutshells
-            classes={classes}
-            factionsList={session.factions}
-            setFaction={setFaction}
-            setFactionDialogOpen={setFactionDialogOpen}
-          />
+          <FactionNutshells classes={classes} factionsList={session.factions} />
         </Grid>
-        <Dialog
-          maxWidth="lg"
-          onClose={() => setFactionDialogOpen(false)}
-          open={factionDialogOpen}
-        >
-          {faction && (
-            <img alt={faction} src={getFactionCheatSheetPath(faction)} />
-          )}
-        </Dialog>
       </HideInFullscreen>
     </>
   )
