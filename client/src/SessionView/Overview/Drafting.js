@@ -6,6 +6,8 @@ import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
+import { MapPreview } from '../MapPreview'
+
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
 
@@ -109,6 +111,9 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.success.contrastText,
     },
   },
+  marginTop: {
+    marginTop: theme.spacing(1),
+  },
 }))
 
 function TablePositionPick({
@@ -121,7 +126,12 @@ function TablePositionPick({
   const classes = useStyles()
 
   return (
-    <Grid container justifyContent="center" spacing={4}>
+    <Grid
+      className={classes.marginTop}
+      container
+      justifyContent="center"
+      spacing={4}
+    >
       {[...Array(draft.players.length).keys()].map((tablePositionIndex) => {
         const picked = draft.picks
           .filter(({ type }) => type === 'tablePosition')
@@ -237,6 +247,7 @@ function Pick({
           handleSelectedPosition={handleSelectedPosition}
           pick={pick}
           selectedPosition={selectedPosition}
+          session={session}
         />
       )}
     </>
@@ -334,6 +345,7 @@ export function Drafting({ editable, session, sessionService }) {
             order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}
           </Typography>
         )}
+        <MapPreview session={session} />
         {draft.phase === PHASE.picks && (
           <Pick
             clearSelection={() => setSelected([])}
