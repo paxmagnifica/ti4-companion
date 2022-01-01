@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useMemo, useCallback } from 'react'
 import clsx from 'clsx'
 import {
   Drawer,
@@ -46,6 +46,7 @@ import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
 import ScrollToBottom from '../../shared/ScrollToBottom'
 import useInvalidateQueries from '../../useInvalidateQueries'
+import { MapPreview } from '../MapPreview'
 
 import AddTimelineEvent from './AddTimelineEvent'
 import { useTimelineEvents, timelineKeys } from './queries'
@@ -560,9 +561,7 @@ function SupportCreatorEvent() {
 }
 
 function DraftSummary({ payload, happenedAt, session }) {
-  const small = useSmallViewport()
   const { t } = useTranslation()
-  const classes = useStyles()
 
   const withTablePositions = Boolean(session.setup.options?.tablePick)
   const showMap = withTablePositions && session.map
@@ -577,12 +576,6 @@ function DraftSummary({ payload, happenedAt, session }) {
 
     return payload.picks
   }, [payload.picks, withTablePositions])
-
-  const [mapDrawerOpen, setMapDrawerOpen] = useState(false)
-  const toggleMapDrawer = useCallback(
-    () => setMapDrawerOpen((smdo) => !smdo),
-    [],
-  )
 
   return (
     <>
@@ -613,15 +606,7 @@ function DraftSummary({ payload, happenedAt, session }) {
                   {withTablePositions && (
                     <TableCell>
                       <Trans i18nKey="general.labels.tablePosition" />
-                      {showMap && (
-                        <Button color="secondary" onClick={toggleMapDrawer}>
-                          <em>
-                            (
-                            <Trans i18nKey="sessionTimeline.draftSummary.toggleMap" />
-                            )
-                          </em>
-                        </Button>
-                      )}
+                      {showMap && <MapPreview session={session} />}
                     </TableCell>
                   )}
                 </TableRow>
@@ -657,27 +642,6 @@ function DraftSummary({ payload, happenedAt, session }) {
         </Ti4TimelineContent>
       </Ti4TimelineItem>
       <SupportCreatorEvent />
-      {showMap && (
-        <Drawer anchor="left" onClose={toggleMapDrawer} open={mapDrawerOpen}>
-          <Grid
-            alignItems="center"
-            className={classes.mapContainer}
-            container
-            direction="column"
-            justifyContent="center"
-          >
-            <Grid item>
-              <img
-                alt={t('sessionTimeline.draftSummary.map')}
-                className={clsx(classes.draftSummaryMap, {
-                  [classes.bigDraftSummaryMap]: small,
-                })}
-                src={session.map}
-              />
-            </Grid>
-          </Grid>
-        </Drawer>
-      )}
     </>
   )
 }

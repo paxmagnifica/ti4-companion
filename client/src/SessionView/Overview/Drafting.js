@@ -345,7 +345,7 @@ export function Drafting({ editable, session, sessionService }) {
             order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}
           </Typography>
         )}
-        <MapPreview session={session} />
+        <MapPreview session={session} variant="contained" />
         {draft.phase === PHASE.picks && (
           <Pick
             clearSelection={() => setSelected([])}

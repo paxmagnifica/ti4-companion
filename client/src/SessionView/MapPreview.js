@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export function MapPreview({ session }) {
+export function MapPreview({ session, variant }) {
   const { t } = useTranslation()
   const small = useSmallViewport()
   const classes = useStyles()
@@ -37,7 +37,7 @@ export function MapPreview({ session }) {
         disabled={!session.map}
         onClick={toggleMapDrawer}
         startIcon={<MapIcon />}
-        variant="contained"
+        variant={variant}
       >
         {session.map && (
           <Trans i18nKey="sessionTimeline.draftSummary.toggleMap" />
