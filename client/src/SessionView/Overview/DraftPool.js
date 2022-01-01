@@ -1,11 +1,20 @@
-import { useCallback } from 'react'
-import { Typography, Avatar, Button, Grid } from '@material-ui/core'
-import { PanTool as PickedIcon, Block as BlockIcon } from '@material-ui/icons'
+import { useCallback, useState } from 'react'
+import {
+  IconButton,
+  ButtonGroup,
+  Typography,
+  Avatar,
+  Button,
+  Grid,
+} from '@material-ui/core'
+import { Info as InfoIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { Trans } from 'react-i18next'
 import clsx from 'clsx'
 
 import { getData } from '../../gameInfo/factions'
+
+import { FactionNutshell } from './FactionNutshell'
 
 const useStyles = makeStyles((theme) => ({
   containedButton: {
@@ -23,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
       color: 'black',
       opacity: 0.5,
     },
+  },
+  infoButton: {
+    borderTopRightRadius: '4px !important',
+    borderBottomRightRadius: '4px !important',
+    backgroundColor: 'rgba(255, 255, 255, 0.1) !important',
   },
   banned: {
     backgroundColor: `${theme.palette.error.light} !important`,
@@ -66,58 +80,70 @@ export function DraftPool({
     },
     [selected, onSelected, isSelected],
   )
+  const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
 
   return (
-    <Grid container justifyContent="center" spacing={4}>
-      {initialPool.map((factionKey) => {
-        const picked = picks.find(({ pick }) => pick === factionKey)
-        const banned = bans.find(({ ban }) => ban === factionKey)
-        const disabledDueToSelection =
-          selected.length === max && !selected.includes(factionKey)
+    <>
+      <Grid container justifyContent="center" spacing={4}>
+        {initialPool.map((factionKey) => {
+          const picked = picks.find(({ pick }) => pick === factionKey)
+          const banned = bans.find(({ ban }) => ban === factionKey)
+          const disabledDueToSelection =
+            selected.length === max && !selected.includes(factionKey)
 
-        return (
-          <Grid key={factionKey} item lg={3} md={4} sm={6} xs={12}>
-            <Button
-              className={clsx(classes.containedButton, {
-                [classes.banned]: banned,
-                [classes.picked]: picked,
-              })}
-              color={isSelected(factionKey) ? 'secondary' : 'default'}
-              disabled={Boolean(
-                disabled || banned || disabledDueToSelection || picked,
-              )}
-              endIcon={
-                banned ? (
-                  <BlockIcon fontSize="large" />
-                ) : picked ? (
-                  <PickedIcon fontSize="large" />
-                ) : null
-              }
-              fullWidth
-              onClick={() => toggleSelection(factionKey)}
-              startIcon={
-                <Avatar
-                  alt={getData(factionKey).name}
-                  src={getData(factionKey).image}
-                />
-              }
-              variant="contained"
-            >
-              <Trans i18nKey={`factions.${factionKey}.name`} />
-              {banned && (
-                <Typography variant="caption">
-                  banned by {banned.playerName}
-                </Typography>
-              )}
-              {picked && (
-                <Typography variant="caption">
-                  picked by {picked.playerName}
-                </Typography>
-              )}
-            </Button>
-          </Grid>
-        )
-      })}
-    </Grid>
+          return (
+            <Grid key={factionKey} item lg={3} md={4} sm={6} xs={12}>
+              <ButtonGroup
+                color={isSelected(factionKey) ? 'secondary' : 'default'}
+                fullWidth
+                variant="contained"
+              >
+                <Button
+                  className={clsx(classes.containedButton, {
+                    [classes.banned]: banned,
+                    [classes.picked]: picked,
+                  })}
+                  color={isSelected(factionKey) ? 'secondary' : 'default'}
+                  disabled={Boolean(
+                    disabled || banned || disabledDueToSelection || picked,
+                  )}
+                  fullWidth
+                  onClick={() => toggleSelection(factionKey)}
+                  startIcon={
+                    <Avatar
+                      alt={getData(factionKey).name}
+                      src={getData(factionKey).image}
+                    />
+                  }
+                  variant="contained"
+                >
+                  <Trans i18nKey={`factions.${factionKey}.name`} />
+                  {banned && (
+                    <Typography variant="caption">
+                      banned by {banned.playerName}
+                    </Typography>
+                  )}
+                  {picked && (
+                    <Typography variant="caption">
+                      picked by {picked.playerName}
+                    </Typography>
+                  )}
+                </Button>
+                <IconButton
+                  className={clsx(classes.containedButton, classes.infoButton)}
+                  onClick={() => setFactionNutshellKey(factionKey)}
+                >
+                  <InfoIcon fontSize="large" />
+                </IconButton>
+              </ButtonGroup>
+            </Grid>
+          )
+        })}
+      </Grid>
+      <FactionNutshell
+        factionKey={nutshellFactionKey}
+        onClose={() => setFactionNutshellKey(null)}
+      />
+    </>
   )
 }
