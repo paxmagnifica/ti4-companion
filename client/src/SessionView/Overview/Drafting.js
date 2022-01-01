@@ -1,10 +1,12 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { Grid, Box, Button, Typography } from '@material-ui/core'
 import { PanTool as PickedIcon } from '@material-ui/icons'
 import Alert from '@material-ui/lab/Alert'
 import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
+
+import { MapPreview } from '../MapPreview'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
@@ -109,6 +111,9 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.success.contrastText,
     },
   },
+  marginTop: {
+    marginTop: theme.spacing(1),
+  },
 }))
 
 function TablePositionPick({
@@ -121,7 +126,12 @@ function TablePositionPick({
   const classes = useStyles()
 
   return (
-    <Grid container justifyContent="center" spacing={4}>
+    <Grid
+      className={classes.marginTop}
+      container
+      justifyContent="center"
+      spacing={4}
+    >
       {[...Array(draft.players.length).keys()].map((tablePositionIndex) => {
         const picked = draft.picks
           .filter(({ type }) => type === 'tablePosition')
@@ -237,6 +247,7 @@ function Pick({
           handleSelectedPosition={handleSelectedPosition}
           pick={pick}
           selectedPosition={selectedPosition}
+          session={session}
         />
       )}
     </>
@@ -297,6 +308,19 @@ export function Drafting({ editable, session, sessionService }) {
     sessionService,
   })
 
+  const bannedFactionKeys = useMemo(
+    () => draft?.bans.map(({ ban }) => ban) || [],
+    [draft?.bans],
+  )
+
+  const pickedFactionKeys = useMemo(
+    () =>
+      draft?.picks
+        .filter(({ type }) => type === 'faction')
+        .map(({ pick }) => pick) || [],
+    [draft?.picks],
+  )
+
   if (!draft) {
     return null
   }
@@ -321,6 +345,7 @@ export function Drafting({ editable, session, sessionService }) {
             order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}
           </Typography>
         )}
+        <MapPreview session={session} variant="contained" />
         {draft.phase === PHASE.picks && (
           <Pick
             clearSelection={() => setSelected([])}
@@ -357,40 +382,67 @@ export function Drafting({ editable, session, sessionService }) {
       {session.setup.options.tablePick && draft.phase === PHASE.speaker && (
         <TablePositionPick disabled draft={draft} />
       )}
-      <DraftPool
-        bans={draft.bans}
-        disabled={
-          !editable ||
-          draft.phase === PHASE.speaker ||
-          disableFactionSelection ||
-          draft.picks.some(
-            ({ type, playerIndex }) =>
-              type === 'faction' &&
-              Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
-          )
-        }
-        initialPool={
-          pickOrBan
-            ? draft.initialPool
-            : draft.picks
-                .filter(({ type }) => type === 'faction')
-                .map(({ pick }) => pick)
-        }
-        max={draft.phase === PHASE.bans ? draft.bansPerRound : 1}
-        onSelected={setSelected}
-        picks={draft.picks}
-        selected={selected}
-      />
+      {draft.phase === PHASE.bans && (
+        <DraftPool
+          bans={draft.bans}
+          disabled={
+            !editable ||
+            disableFactionSelection ||
+            draft.picks.some(
+              ({ type, playerIndex }) =>
+                type === 'faction' &&
+                Number(draft.order[draft.activePlayerIndex]) ===
+                  Number(playerIndex),
+            )
+          }
+          initialPool={draft.initialPool}
+          max={draft.phase === PHASE.bans ? draft.bansPerRound : 1}
+          onSelected={setSelected}
+          picks={[]}
+          selected={selected}
+        />
+      )}
+      {draft.phase === PHASE.picks && (
+        <DraftPool
+          bans={[]}
+          disabled={
+            !editable ||
+            disableFactionSelection ||
+            draft.picks.some(
+              ({ type, playerIndex }) =>
+                type === 'faction' &&
+                Number(draft.order[draft.activePlayerIndex]) ===
+                  Number(playerIndex),
+            )
+          }
+          initialPool={draft.initialPool.filter(
+            (factionKey) => !bannedFactionKeys.includes(factionKey),
+          )}
+          max={draft.phase === PHASE.bans ? draft.bansPerRound : 1}
+          onSelected={setSelected}
+          picks={draft.picks}
+          selected={selected}
+        />
+      )}
+
       {draft.phase === PHASE.speaker && (
+        <DraftPool
+          bans={[]}
+          disabled
+          initialPool={pickedFactionKeys}
+          picks={draft.picks}
+          selected={selected}
+        />
+      )}
+
+      {/* show banned factions */}
+      {draft.phase !== PHASE.bans && (
         <>
           <Typography>bans:</Typography>
           <DraftPool
             bans={draft.bans}
             disabled
-            initialPool={draft.bans.map(({ ban }) => ban)}
-            max={1}
-            onSelected={setSelected}
+            initialPool={bannedFactionKeys}
             picks={draft.picks}
             selected={selected}
           />

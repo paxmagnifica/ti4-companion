@@ -10,7 +10,6 @@ import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
 import useRealTimeSession from './useRealTimeSession'
 import { Overview } from './Overview'
-import ShuffleFactionsButton from './ShuffleFactionsButton'
 import ShareButton from './ShareButton'
 import Map from './Map'
 import SessionNavigation from './SessionNavigation'
@@ -28,8 +27,6 @@ function SessionView({
   sessionService,
   editable,
   session,
-  shuffleFactions,
-  setFactions,
   updateFactionPoints,
 }) {
   useRealTimeSession(session.id)
@@ -113,8 +110,8 @@ function SessionView({
           <Overview
             editable={editable}
             session={session}
-            updateFactionPoints={updateFactionPoints}
             sessionService={sessionService}
+            updateFactionPoints={updateFactionPoints}
           />
         </Route>
       </Switch>
