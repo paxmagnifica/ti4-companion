@@ -12,6 +12,7 @@ import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
 import { PhaseStepper } from './PhaseStepper'
 import { PlayerOrderStepper } from './PlayerOrderStepper'
+import { SpeakerIndicator } from './SpeakerIndicator'
 import { PHASE } from './shared'
 
 function Speaker({ disabled, draft, session, sessionService }) {
@@ -316,10 +317,15 @@ export function Drafting({ editable, session, sessionService }) {
         bans={Boolean(session.setup?.options?.bans)}
         phase={draft.phase}
       />
-      <PlayerOrderStepper
-        activePlayer={draft.activePlayerIndex}
-        order={draft.order.map((playerIndex) => draft.players[playerIndex])}
-      />
+      {draft.phase !== PHASE.speaker && (
+        <PlayerOrderStepper
+          activePlayer={draft.activePlayerIndex}
+          order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+        />
+      )}
+      {draft.phase === PHASE.speaker && (
+        <SpeakerIndicator indicated={draft.speaker} players={draft.players} />
+      )}
       <Box align="center" mb={2}>
         {draft.phase === PHASE.picks && (
           <Pick
