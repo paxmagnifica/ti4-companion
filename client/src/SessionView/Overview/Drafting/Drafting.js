@@ -6,16 +6,14 @@ import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
-import { MapPreview } from '../MapPreview'
+import { MapPreview } from '../../MapPreview'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
-
-const PHASE = {
-  bans: 'bans',
-  picks: 'picks',
-  speaker: 'speaker',
-}
+import { PhaseStepper } from './PhaseStepper'
+import { PlayerOrderStepper } from './PlayerOrderStepper'
+import { SpeakerIndicator } from './SpeakerIndicator'
+import { PHASE } from './shared'
 
 function Speaker({ disabled, draft, session, sessionService }) {
   const speakerMutation = useCallback(async () => {
@@ -53,9 +51,6 @@ function Speaker({ disabled, draft, session, sessionService }) {
 
   return (
     <>
-      <Typography variant="h2">
-        speaker: {draft.speaker || 'not selected yet'}
-      </Typography>
       {draft.speaker && (
         <Box mb={2}>
           <Button
@@ -221,16 +216,13 @@ function Pick({
 
   return (
     <>
-      <Typography variant="h2">
-        picking: {draft.players[draft.order[draft.activePlayerIndex]]}
-      </Typography>
       <Button
         color="secondary"
         disabled={disabled || (!pick && selectedPosition === null)}
         onClick={pickFaction}
         variant="contained"
       >
-        pick
+        pick {session.setup.options.tablePick ? ' (faction or table spot)' : ''}
       </Button>
       {session.setup.options.tablePick && (
         <TablePositionPick
@@ -283,20 +275,14 @@ function Ban({
   const bansLeft = draft.bansPerRound - bans.length
 
   return (
-    <>
-      <Typography variant="h3">
-        banning: {draft.players[draft.order[draft.activePlayerIndex]]}
-      </Typography>
-      <Button
-        color="secondary"
-        disabled={disabled || bans.length < draft.bansPerRound}
-        onClick={ban}
-        variant="contained"
-      >
-        ban{bansLeft ? ` (${bansLeft})` : ''}
-      </Button>
-      <Typography>(bans left this round: {bansLeft})</Typography>
-    </>
+    <Button
+      color="secondary"
+      disabled={disabled || bans.length < draft.bansPerRound}
+      onClick={ban}
+      variant="contained"
+    >
+      ban{bansLeft ? ` (left: ${bansLeft})` : ''}
+    </Button>
   )
 }
 
@@ -325,27 +311,22 @@ export function Drafting({ editable, session, sessionService }) {
     return null
   }
 
-  const pickOrBan = [PHASE.picks, PHASE.bans].includes(draft.phase)
-
   return (
     <>
-      <Alert severity="warning">
-        This is an early prototype of the drafting tool.
-        <br />
-        Please be patient with us, we are working to improve the UI and provide
-        you with more drafting options.
-        <br />
-        If you run into an error, please be so kind as to write us a message in
-        the chat (lower bottom corner) - it will help us immensely!
-      </Alert>
-      <Box mb={2}>
-        <Typography variant="h1">phase: {draft.phase}</Typography>
-        {pickOrBan && (
-          <Typography>
-            order: {JSON.stringify(draft.order.map((o) => draft.players[o]))}
-          </Typography>
-        )}
-        <MapPreview session={session} variant="contained" />
+      <PhaseStepper
+        bans={Boolean(session.setup?.options?.bans)}
+        phase={draft.phase}
+      />
+      {draft.phase !== PHASE.speaker && (
+        <PlayerOrderStepper
+          activePlayer={draft.activePlayerIndex}
+          order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+        />
+      )}
+      {draft.phase === PHASE.speaker && (
+        <SpeakerIndicator indicated={draft.speaker} players={draft.players} />
+      )}
+      <Box align="center" mb={2}>
         {draft.phase === PHASE.picks && (
           <Pick
             clearSelection={() => setSelected([])}
@@ -377,6 +358,9 @@ export function Drafting({ editable, session, sessionService }) {
             sessionService={sessionService}
           />
         )}
+      </Box>
+      <Box align="center" mb={2}>
+        <MapPreview session={session} />
       </Box>
       {draft.phase === PHASE.speaker && <Typography>picks:</Typography>}
       {session.setup.options.tablePick && draft.phase === PHASE.speaker && (
@@ -437,7 +421,7 @@ export function Drafting({ editable, session, sessionService }) {
 
       {/* show banned factions */}
       {draft.phase !== PHASE.bans && (
-        <>
+        <Box mt={2}>
           <Typography>bans:</Typography>
           <DraftPool
             bans={draft.bans}
@@ -446,8 +430,19 @@ export function Drafting({ editable, session, sessionService }) {
             picks={draft.picks}
             selected={selected}
           />
-        </>
+        </Box>
       )}
+      <Box mt={3}>
+        <Alert severity="warning">
+          This is an early prototype of the drafting tool.
+          <br />
+          Please be patient with us, we are working to improve the UI and
+          provide you with more drafting options.
+          <br />
+          If you run into an error, please be so kind as to write us a message
+          in the chat (lower bottom corner) - it will help us immensely!
+        </Alert>
+      </Box>
     </>
   )
 }

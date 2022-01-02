@@ -12,9 +12,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Trans } from 'react-i18next'
 import clsx from 'clsx'
 
-import { getData } from '../../gameInfo/factions'
-
-import { FactionNutshell } from './FactionNutshell'
+import { getData } from '../../../gameInfo/factions'
+import { FactionNutshell } from '../FactionNutshell'
 
 const useStyles = makeStyles((theme) => ({
   containedButton: {
