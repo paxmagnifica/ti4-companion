@@ -31,7 +31,7 @@ namespace server.Controllers
             var orderEvent = orderedEvents.LastOrDefault(e => e.EventType == "PlayerOrder");
 
             Order = JsonConvert.DeserializeObject<int[]>(orderEvent?.SerializedPayload ?? "[]");
-            Phase = banEvents.Count() < banOrder.Count() ? "bans" :
+            Phase = (gameStartOptions.Bans && banEvents.Count() < banOrder.Count()) ? "bans" :
               (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
             InitialPool = gameStartOptions?.InitialPool;
             Players = gameStartOptions?.Players;
