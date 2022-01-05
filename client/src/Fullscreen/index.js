@@ -1,10 +1,8 @@
-import { useEffect, useCallback, useState, useRef } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { IconButton, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Fullscreen } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
-
-import config from '../config'
 
 export const useFullscreen = ({ onFullscreenChange } = {}) => {
   const [fullscreen, setFullscreen] = useState(false)
@@ -21,6 +19,7 @@ export const useFullscreen = ({ onFullscreenChange } = {}) => {
       document.ti4CompanionWakeLock = null
     }
   }, [onFullscreenChange])
+
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullscreenChange)
 
@@ -55,24 +54,15 @@ export const HideInFullscreen = ({ children }) => {
   return children
 }
 
-const FullscreenButton = ({ service }) => {
+export const FullscreenButton = () => {
   const classes = useStyles()
   const { t } = useTranslation()
-  const pingInterval = useRef(null)
 
   const goFullscreen = useCallback(async () => {
     document.documentElement.requestFullscreen()
 
     document.ti4CompanionWakeLock = await navigator.wakeLock.request('screen')
-    service.ping()
-    pingInterval.current = setInterval(
-      service.ping,
-      config.wakeLockPingInterval,
-    )
-    document.ti4CompanionWakeLock.onrelease = () => {
-      clearInterval(pingInterval.current)
-    }
-  }, [service.ping])
+  }, [])
 
   return (
     <Tooltip placement="bottom" title={t('fullscreen.tooltip')}>
@@ -86,5 +76,3 @@ const FullscreenButton = ({ service }) => {
     </Tooltip>
   )
 }
-
-export default FullscreenButton

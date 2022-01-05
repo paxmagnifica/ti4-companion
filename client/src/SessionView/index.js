@@ -5,7 +5,7 @@ import { Route, Switch } from 'react-router-dom'
 
 import * as factions from '../gameInfo/factions'
 import { getFactionCheatSheetPath } from '../gameInfo/factions'
-import FullscreenButton, { HideInFullscreen } from '../Fullscreen'
+import { FullscreenButton, HideInFullscreen } from '../Fullscreen'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
 import useRealTimeSession from './useRealTimeSession'
@@ -80,7 +80,7 @@ function SessionView({
             <SessionNavigation />
           </Grid>
           <Grid container item justifyContent="flex-end" xs={4}>
-            <FullscreenButton service={sessionService} />
+            <FullscreenButton />
             <ShareButton editable={editable} session={session} />
           </Grid>
         </Grid>
