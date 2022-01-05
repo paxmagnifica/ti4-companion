@@ -12,7 +12,7 @@ import { getFactionCheatSheetPath } from '../../gameInfo/factions'
 
 export function FactionNutshell({ onClose, factionKey }) {
   const { t } = useTranslation()
-  const factionName = t(`factions.${factionKey}.name`)
+  const factionName = factionKey ? t(`factions.${factionKey}.name`) : ''
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} open={factionKey !== null}>
