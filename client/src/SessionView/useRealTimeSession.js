@@ -1,13 +1,17 @@
 import { useEffect, useContext } from 'react'
 
-import { SignalRConnectionContext } from '../signalR'
+import { useSignalRConnection } from '../signalR'
 import { DispatchContext } from '../state'
 
 const useRealTimeSession = (sessionId) => {
-  const signalRConnection = useContext(SignalRConnectionContext)
+  const signalRConnection = useSignalRConnection()
   const dispatch = useContext(DispatchContext)
 
   useEffect(() => {
+    if (!signalRConnection) {
+      return () => null
+    }
+
     const handler = (sessionEvent) => {
       const payload = JSON.parse(sessionEvent.serializedPayload)
       if (
@@ -26,7 +30,7 @@ const useRealTimeSession = (sessionId) => {
   }, [signalRConnection, dispatch, sessionId])
 
   useEffect(() => {
-    if (!sessionId) {
+    if (!sessionId || !signalRConnection) {
       return () => null
     }
 

@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import * as signalR from '@microsoft/signalr'
 
 import CONFIG from './config'
 
-export const SignalRConnectionContext = React.createContext()
+const SignalRConnectionContext = React.createContext()
+
+export const useSignalRConnection = () => {
+  const signalRConnection = useContext(SignalRConnectionContext)
+
+  return signalRConnection
+}
 
 export function SignalRConnectionProvider({ children }) {
   const [signalRConnection, setSignalRConnection] = useState(null)
@@ -33,10 +39,6 @@ export function SignalRConnectionProvider({ children }) {
 
     return () => connection.current.stop()
   }, [])
-
-  if (!signalRConnection) {
-    return children
-  }
 
   return (
     <SignalRConnectionContext.Provider value={signalRConnection}>
