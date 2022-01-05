@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import * as signalR from '@microsoft/signalr'
 
 import CONFIG from './config'
 
-export const SignalRConnectionContext = React.createContext()
+const SignalRConnectionContext = React.createContext()
+
+export const useSignalRConnection = () => {
+  const signalRConnection = useContext(SignalRConnectionContext)
+
+  return signalRConnection
+}
 
 export function SignalRConnectionProvider({ children }) {
   const [signalRConnection, setSignalRConnection] = useState(null)
 
   useEffect(() => {
-    if (!window.signalR) {
-      console.log('signalR not available :(')
-
-      return () => null
-    }
-
-    const connection = new window.signalR.HubConnectionBuilder()
+    const connection = new signalR.HubConnectionBuilder()
       .withUrl(`${CONFIG.apiUrl}/sessionHub`)
-      .configureLogging(window.signalR.LogLevel.Information)
+      .configureLogging(signalR.LogLevel.Information)
       .build()
 
     async function start() {
@@ -38,10 +39,6 @@ export function SignalRConnectionProvider({ children }) {
 
     return () => connection.current.stop()
   }, [])
-
-  if (!signalRConnection) {
-    return null
-  }
 
   return (
     <SignalRConnectionContext.Provider value={signalRConnection}>
