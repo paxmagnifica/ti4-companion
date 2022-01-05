@@ -567,7 +567,7 @@ const scrapedData = [
 const slugify = t => t.toLowerCase().replace(/'/g, '').replace(/\s+/g, '-')
 
 const generateDbInitialization = () => {
-  scrapedData.forEach(datum => console.log(`new Agenda("${slugify(datum.name)}",${datum.version},${datum.type},"${datum.election}","${datum.effect}"${datum.excludedFrom ? `,${datum.excludedFrom}` : ''}),`))
+  scrapedData.forEach(datum => console.log(`new Agenda("${slugify(datum.name)}",${datum.version},${datum.type},${datum.election === "-" ? 'ElectionType.None' : `ElectionType.${datum.election?.replace(/\s/g, '').replace(/-/g, '')}`}${datum.excludedFrom ? `,${datum.excludedFrom}` : ''}),`))
 }
 
 const generateTranslations = () => {
