@@ -7,6 +7,7 @@ import { en as factionsEn } from './factions'
 import { en as strategyCardsEn } from './strategyCards'
 import { en as explorationCardsEn } from './explorationCards'
 import { en as relicsEn } from './relics'
+import { en as agendasEn } from './agendas'
 
 const factory = (options = { debug: true }) =>
   i18n
@@ -31,6 +32,7 @@ const factory = (options = { debug: true }) =>
             explorationCards: explorationCardsEn,
             strategyCards: strategyCardsEn,
             relics: relicsEn,
+            agendas: agendasEn,
             support: {
               theCreator: 'Support the creator',
               buymeacoffee: 'https://buymeacoffee.com/paxmagnifica',
