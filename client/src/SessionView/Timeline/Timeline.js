@@ -395,7 +395,7 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
           />
         </Typography>
         {payload.source !== undefined && payload.source !== null && (
-          <VictoryPoint src={payload.source} />
+          <VictoryPoint context={payload.context} src={payload.source} />
         )}
       </Ti4TimelineContent>
     </Ti4TimelineItem>
