@@ -177,6 +177,9 @@ const factory = (options = { debug: true }) =>
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vp: '{{points}} VP',
+              vpSource: {
+                mecatol: 'First to control Mecatol Rex',
+              },
               changeFile: 'Change the image',
               dropHere: 'Drop your image here...',
               dragHere: "Drag 'n' drop your image here, or click to select it",

@@ -4,7 +4,16 @@ using Newtonsoft.Json;
 
 namespace server.Domain
 {
-    public class VictoryPointsUpdated: IHandler
+    public enum VictoryPointSource
+    {
+        Other,
+        Objective,
+        Mecatol,
+        SupportForTheThrone,
+        Emphidia
+    }
+
+    public class VictoryPointsUpdated : IHandler
     {
         private readonly IRepository _repository;
 
@@ -43,5 +52,6 @@ namespace server.Domain
     {
         public string Faction { get; set; }
         public int Points { get; set; }
+        public VictoryPointSource Source { get; set; }
     }
 }
