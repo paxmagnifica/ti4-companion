@@ -150,6 +150,7 @@ const factory = (options = { debug: true }) =>
                 VictoryPointsUpdated: 'VP scored',
                 SessionSummary: 'Game finished!',
                 LawPassed: 'Law Passed',
+                LawRemoved: 'Law Removed',
               },
               withDraft: 'Players will draft their factions',
               banned: '{{player}} banned:',

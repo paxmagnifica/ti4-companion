@@ -31,6 +31,7 @@ import {
   AccessibilityNew as UserEventIcon,
   Map as MapIcon,
   Add as AddIcon,
+  Remove as RemoveIcon,
   Block as BannedIcon,
   PanTool as PickedIcon,
   WhereToVote as SessionSummaryIcon,
@@ -276,6 +277,37 @@ function LawPassed({ eventType, payload, happenedAt }) {
         </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Typography variant="h6">{resultTitle}</Typography>
+          <Agenda slug={payload.Slug} />
+        </Box>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function LawRemoved({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <RemoveIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
+        <Box style={{ display: 'inline-block' }}>
           <Agenda slug={payload.Slug} />
         </Box>
       </Ti4TimelineContent>
@@ -809,6 +841,8 @@ function EventOnATimeline({ eventType, payload, happenedAt, session }) {
       return <SessionSummary {...props} session={session} />
     case 'LawPassed':
       return <LawPassed {...props} />
+    case 'LawRemoved':
+      return <LawRemoved {...props} />
     default:
       return <DebugEvent {...props} />
   }
