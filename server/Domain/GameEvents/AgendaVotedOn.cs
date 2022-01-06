@@ -11,11 +11,11 @@ namespace server.Domain
         Elected
     }
 
-    public class LawPassed : IHandler
+    public class AgendaVotedOn : IHandler
     {
         private readonly IRepository _repository;
 
-        public LawPassed(IRepository repository)
+        public AgendaVotedOn(IRepository repository)
         {
             _repository = repository;
         }
@@ -35,21 +35,22 @@ namespace server.Domain
             await _repository.SaveChangesAsync();
         }
 
-        public static LawPassedPayload GetPayload(GameEvent gameEvent)
+        public static AgendaVotedOnPayload GetPayload(GameEvent gameEvent)
         {
             return GetPayload(gameEvent.SerializedPayload);
         }
 
-        public static LawPassedPayload GetPayload(string serializedPayload)
+        public static AgendaVotedOnPayload GetPayload(string serializedPayload)
         {
-            return JsonConvert.DeserializeObject<LawPassedPayload>(serializedPayload);
+            return JsonConvert.DeserializeObject<AgendaVotedOnPayload>(serializedPayload);
         }
     }
 
-    public class LawPassedPayload
+    public class AgendaVotedOnPayload
     {
         public string Slug { get; set; }
         public VoteResult Result { get; set; }
         public string Election { get; set; }
+        public AgendaType Type { get; set; }
     }
 }

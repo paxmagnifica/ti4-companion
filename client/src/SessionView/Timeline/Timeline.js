@@ -249,11 +249,14 @@ function ObjectiveAdded({ eventType, payload, happenedAt }) {
   )
 }
 
-function LawPassed({ eventType, payload, happenedAt }) {
+function AgendaVotedOn({ eventType, payload, happenedAt }) {
   const { t } = useTranslation()
 
   const voteResult = t(`components.agenda.voteResult.${payload.Result}`)
-  const resultTitle = t(`components.agenda.resultTitle`, { voteResult })
+  const resultTitle = t(`components.agenda.resultTitle.${payload.Result}`, {
+    voteResult,
+    election: payload.Election,
+  })
 
   return (
     <Ti4TimelineItem>
@@ -265,7 +268,7 @@ function LawPassed({ eventType, payload, happenedAt }) {
       <TimelineSeparator>
         <Ti4TimelineDot
           color="primary"
-          title={t(`sessionTimeline.events.${eventType}`)}
+          title={t(`sessionTimeline.events.${eventType}.${payload.Type}`)}
         >
           <AddIcon />
         </Ti4TimelineDot>
@@ -273,11 +276,13 @@ function LawPassed({ eventType, payload, happenedAt }) {
       </TimelineSeparator>
       <Ti4TimelineContent>
         <Typography variant="h5">
-          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+          <Trans
+            i18nKey={`sessionTimeline.events.${eventType}.${payload.Type}`}
+          />
         </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Typography variant="h6">{resultTitle}</Typography>
-          <Agenda slug={payload.Slug} />
+          <Agenda slug={payload.Slug} type={payload.Type} />
         </Box>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
@@ -839,8 +844,8 @@ function EventOnATimeline({ eventType, payload, happenedAt, session }) {
       return <DraftSummary {...props} session={session} />
     case 'SessionSummary':
       return <SessionSummary {...props} session={session} />
-    case 'LawPassed':
-      return <LawPassed {...props} />
+    case 'AgendaVotedOn':
+      return <AgendaVotedOn {...props} />
     case 'LawRemoved':
       return <LawRemoved {...props} />
     default:

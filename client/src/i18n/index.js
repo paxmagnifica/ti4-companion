@@ -35,7 +35,11 @@ const factory = (options = { debug: true }) =>
             agendas: agendasEn,
             components: {
               agenda: {
-                resultTitle: 'Voted: {{voteResult}}',
+                resultTitle: {
+                  0: 'Voted {{voteResult}}',
+                  1: 'Voted {{voteResult}}',
+                  2: 'Elected {{election}}',
+                },
                 voteResult: {
                   0: 'For',
                   1: 'Against',
@@ -149,7 +153,10 @@ const factory = (options = { debug: true }) =>
                 TimelineUserEvent: 'User added event',
                 VictoryPointsUpdated: 'VP scored',
                 SessionSummary: 'Game finished!',
-                LawPassed: 'Law Passed',
+                AgendaVotedOn: {
+                  0: 'Directive voted on',
+                  1: 'Law voted on',
+                },
                 LawRemoved: 'Law Removed',
               },
               withDraft: 'Players will draft their factions',

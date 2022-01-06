@@ -9,6 +9,7 @@ const useStyles = makeStyles({
   root: {
     backgroundImage: ({ background }) => `url(${background})`,
     backgroundSize: 'auto 100%',
+    backgroundPositionX: ({ backgroundOffsetX }) => backgroundOffsetX || '0',
     width: ({ width }) => width,
     height: ({ height }) => height,
     fontSize: ({ fontSize }) => fontSize,
@@ -78,6 +79,7 @@ const GINORMOUS_SIZE = {
 
 function CardComponent({
   background,
+  backgroundOffsetX,
   slug,
   small,
   big,
@@ -103,6 +105,7 @@ function CardComponent({
     titleMaskColor: titleMaskBackground,
     effectColor,
     effectMaskColor,
+    backgroundOffsetX,
     ...stylesInit,
   })
 
