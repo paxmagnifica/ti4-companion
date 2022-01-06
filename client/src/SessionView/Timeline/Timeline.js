@@ -1,9 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import clsx from 'clsx'
 import {
-  Drawer,
-  Grid,
-  Button,
   Box,
   Paper,
   Table,
@@ -48,6 +45,7 @@ import ScrollToBottom from '../../shared/ScrollToBottom'
 import useInvalidateQueries from '../../useInvalidateQueries'
 import { MapPreview } from '../MapPreview'
 
+import { Agenda } from './Agenda'
 import AddTimelineEvent from './AddTimelineEvent'
 import { useTimelineEvents, timelineKeys } from './queries'
 
@@ -244,6 +242,41 @@ function ObjectiveAdded({ eventType, payload, happenedAt }) {
         </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} small={small} />
+        </Box>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function LawPassed({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  const voteResult = t(`components.agenda.voteResult.${payload.Result}`)
+  const resultTitle = t(`components.agenda.resultTitle`, { voteResult })
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <AddIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
+        <Box style={{ display: 'inline-block' }}>
+          <Typography variant="h6">{resultTitle}</Typography>
+          <Agenda slug={payload.Slug} />
         </Box>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
@@ -774,6 +807,8 @@ function EventOnATimeline({ eventType, payload, happenedAt, session }) {
       return <DraftSummary {...props} session={session} />
     case 'SessionSummary':
       return <SessionSummary {...props} session={session} />
+    case 'LawPassed':
+      return <LawPassed {...props} />
     default:
       return <DebugEvent {...props} />
   }

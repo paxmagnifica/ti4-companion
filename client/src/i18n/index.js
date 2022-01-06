@@ -33,6 +33,16 @@ const factory = (options = { debug: true }) =>
             strategyCards: strategyCardsEn,
             relics: relicsEn,
             agendas: agendasEn,
+            components: {
+              agenda: {
+                resultTitle: 'Voted: {{voteResult}}',
+                voteResult: {
+                  0: 'For',
+                  1: 'Against',
+                  2: 'Elected',
+                },
+              },
+            },
             support: {
               theCreator: 'Support the creator',
               buymeacoffee: 'https://buymeacoffee.com/paxmagnifica',
@@ -139,6 +149,7 @@ const factory = (options = { debug: true }) =>
                 TimelineUserEvent: 'User added event',
                 VictoryPointsUpdated: 'VP scored',
                 SessionSummary: 'Game finished!',
+                LawPassed: 'Law Passed',
               },
               withDraft: 'Players will draft their factions',
               banned: '{{player}} banned:',
