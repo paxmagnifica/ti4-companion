@@ -60,6 +60,7 @@ const factory = (options = { debug: true }) =>
               home: 'Home',
               title: 'TI4 Companion',
               comingSoon: 'coming soon',
+              from: 'from',
               labels: {
                 tg: 'trade goods',
                 player: 'player',
@@ -177,6 +178,10 @@ const factory = (options = { debug: true }) =>
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vp: '{{points}} VP',
+              vpSource: {
+                mecatol: 'First to control Mecatol Rex',
+                support: 'Support For The Throne promissory note received',
+              },
               changeFile: 'Change the image',
               dropHere: 'Drop your image here...',
               dragHere: "Drag 'n' drop your image here, or click to select it",

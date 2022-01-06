@@ -48,6 +48,7 @@ import { MapPreview } from '../MapPreview'
 
 import { Agenda } from './Agenda'
 import AddTimelineEvent from './AddTimelineEvent'
+import { VictoryPoint } from './VictoryPoint'
 import { useTimelineEvents, timelineKeys } from './queries'
 
 const Ti4TimelineContent = withStyles({
@@ -393,6 +394,9 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
             values={{ points: payload.points }}
           />
         </Typography>
+        {payload.source !== undefined && payload.source !== null && (
+          <VictoryPoint context={payload.context} src={payload.source} />
+        )}
       </Ti4TimelineContent>
     </Ti4TimelineItem>
   )
