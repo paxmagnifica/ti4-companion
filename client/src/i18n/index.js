@@ -7,6 +7,7 @@ import { en as factionsEn } from './factions'
 import { en as strategyCardsEn } from './strategyCards'
 import { en as explorationCardsEn } from './explorationCards'
 import { en as relicsEn } from './relics'
+import { en as agendasEn } from './agendas'
 
 const factory = (options = { debug: true }) =>
   i18n
@@ -31,6 +32,21 @@ const factory = (options = { debug: true }) =>
             explorationCards: explorationCardsEn,
             strategyCards: strategyCardsEn,
             relics: relicsEn,
+            agendas: agendasEn,
+            components: {
+              agenda: {
+                resultTitle: {
+                  0: 'Voted {{voteResult}}',
+                  1: 'Voted {{voteResult}}',
+                  2: 'Elected {{election}}',
+                },
+                voteResult: {
+                  0: 'For',
+                  1: 'Against',
+                  2: 'Elected',
+                },
+              },
+            },
             support: {
               theCreator: 'Support the creator',
               buymeacoffee: 'https://buymeacoffee.com/paxmagnifica',
@@ -137,6 +153,11 @@ const factory = (options = { debug: true }) =>
                 TimelineUserEvent: 'User added event',
                 VictoryPointsUpdated: 'VP scored',
                 SessionSummary: 'Game finished!',
+                AgendaVotedOn: {
+                  0: 'Directive voted on',
+                  1: 'Law voted on',
+                },
+                LawRemoved: 'Law Removed',
               },
               withDraft: 'Players will draft their factions',
               banned: '{{player}} banned:',

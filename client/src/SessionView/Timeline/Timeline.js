@@ -1,9 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import clsx from 'clsx'
 import {
-  Drawer,
-  Grid,
-  Button,
   Box,
   Paper,
   Table,
@@ -34,6 +31,7 @@ import {
   AccessibilityNew as UserEventIcon,
   Map as MapIcon,
   Add as AddIcon,
+  Remove as RemoveIcon,
   Block as BannedIcon,
   PanTool as PickedIcon,
   WhereToVote as SessionSummaryIcon,
@@ -48,6 +46,7 @@ import ScrollToBottom from '../../shared/ScrollToBottom'
 import useInvalidateQueries from '../../useInvalidateQueries'
 import { MapPreview } from '../MapPreview'
 
+import { Agenda } from './Agenda'
 import AddTimelineEvent from './AddTimelineEvent'
 import { useTimelineEvents, timelineKeys } from './queries'
 
@@ -244,6 +243,77 @@ function ObjectiveAdded({ eventType, payload, happenedAt }) {
         </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} small={small} />
+        </Box>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function AgendaVotedOn({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  const voteResult = t(`components.agenda.voteResult.${payload.Result}`)
+  const resultTitle = t(`components.agenda.resultTitle.${payload.Result}`, {
+    voteResult,
+    election: payload.Election,
+  })
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}.${payload.Type}`)}
+        >
+          <AddIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans
+            i18nKey={`sessionTimeline.events.${eventType}.${payload.Type}`}
+          />
+        </Typography>
+        <Box style={{ display: 'inline-block' }}>
+          <Typography variant="h6">{resultTitle}</Typography>
+          <Agenda slug={payload.Slug} type={payload.Type} />
+        </Box>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function LawRemoved({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <RemoveIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
+        <Box style={{ display: 'inline-block' }}>
+          <Agenda slug={payload.Slug} />
         </Box>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
@@ -774,6 +844,10 @@ function EventOnATimeline({ eventType, payload, happenedAt, session }) {
       return <DraftSummary {...props} session={session} />
     case 'SessionSummary':
       return <SessionSummary {...props} session={session} />
+    case 'AgendaVotedOn':
+      return <AgendaVotedOn {...props} />
+    case 'LawRemoved':
+      return <LawRemoved {...props} />
     default:
       return <DebugEvent {...props} />
   }

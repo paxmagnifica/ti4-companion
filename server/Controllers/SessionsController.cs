@@ -76,14 +76,14 @@ namespace server.Controllers
         public async Task<ActionResult<SessionDto>> GetSession(Guid sessionId)
         {
             var sessionFromDb = await _sessionContext.Sessions.FindAsync(sessionId);
-            _sessionContext.Entry(sessionFromDb)
-                .Collection(session => session.Events)
-                .Load();
-
             if (sessionFromDb == null)
             {
                 return new NotFoundResult();
             }
+
+            _sessionContext.Entry(sessionFromDb)
+                .Collection(session => session.Events)
+                .Load();
 
             var sessionDto = new SessionDto(sessionFromDb, (Guid?)HttpContext.Items["SessionSecret"] ?? (Guid?)null);
 
