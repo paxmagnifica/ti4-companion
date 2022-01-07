@@ -25,7 +25,7 @@ export const usePlasticColors = () => {
   const colorsWithHexValues = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(colorKeys).map(([key, value]) => [
+        Object.entries(colorKeys || {}).map(([key, value]) => [
           key,
           { color: value, hex: colors[value] },
         ]),
