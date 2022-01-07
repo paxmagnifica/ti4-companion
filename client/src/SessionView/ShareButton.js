@@ -9,8 +9,8 @@ import {
   Switch,
   Tooltip,
 } from '@material-ui/core'
-import QRCode from 'react-qr-code'
 import { Share } from '@material-ui/icons'
+import QRCode from 'react-qr-code'
 import { makeStyles } from '@material-ui/core/styles'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import { generatePath } from 'react-router-dom'

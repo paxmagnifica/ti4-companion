@@ -1,4 +1,7 @@
 import React, { useContext, useMemo } from 'react'
+import { IconButton, Tooltip } from '@material-ui/core'
+import { ColorLens } from '@material-ui/icons'
+import { useTranslation } from 'react-i18next'
 
 const PlasticColorsContext = React.createContext()
 
@@ -13,25 +16,53 @@ export const colors = {
   pink: '#ff33cc',
 }
 
-export const PlasticColorsProvider = ({ value, children }) => (
-  <PlasticColorsContext.Provider value={value || {}}>
+export const PlasticColorsProvider = ({
+  plasticColors,
+  hide,
+  toggle,
+  children,
+}) => (
+  <PlasticColorsContext.Provider
+    value={{ hide, colors: hide ? {} : plasticColors || {}, toggle }}
+  >
     {children}
   </PlasticColorsContext.Provider>
 )
 
 export const usePlasticColors = () => {
-  const colorKeys = useContext(PlasticColorsContext)
+  const plasticColorsContext = useContext(PlasticColorsContext)
 
   const colorsWithHexValues = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(colorKeys || {}).map(([key, value]) => [
-          key,
-          { color: value, hex: colors[value] },
-        ]),
+        Object.entries(plasticColorsContext?.colors || {}).map(
+          ([key, value]) => [key, { color: value, hex: colors[value] }],
+        ),
       ),
-    [colorKeys],
+    [plasticColorsContext?.colors],
   )
 
   return colorsWithHexValues
+}
+
+export const TogglePlasticColorsButton = () => {
+  const { t } = useTranslation()
+  const plasticColorsContext = useContext(PlasticColorsContext)
+
+  const onOff = plasticColorsContext?.hide
+    ? t('togglePlastic.nowOff')
+    : t('togglePlastic.nowOn')
+  const title = `${t('togglePlastic.title')} (${onOff})`
+
+  return (
+    <Tooltip placement="bottom" title={title}>
+      <IconButton
+        aria-label={title}
+        onClick={plasticColorsContext?.toggle}
+        style={{ color: 'white' }}
+      >
+        <ColorLens color={plasticColorsContext?.hide ? '' : 'secondary'} />
+      </IconButton>
+    </Tooltip>
+  )
 }

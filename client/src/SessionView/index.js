@@ -7,6 +7,7 @@ import * as factions from '../gameInfo/factions'
 import { getFactionCheatSheetPath } from '../gameInfo/factions'
 import { FullscreenButton, HideInFullscreen } from '../Fullscreen'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
+import { TogglePlasticColorsButton } from '../shared/plasticColors'
 
 import useRealTimeSession from './useRealTimeSession'
 import { Overview } from './Overview'
@@ -80,6 +81,7 @@ function SessionView({
             <SessionNavigation />
           </Grid>
           <Grid container item justifyContent="flex-end" xs={4}>
+            <TogglePlasticColorsButton />
             <FullscreenButton />
             <ShareButton editable={editable} session={session} />
           </Grid>
