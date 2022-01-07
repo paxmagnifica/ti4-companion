@@ -159,6 +159,8 @@ const factory = (options = { debug: true }) =>
                   1: 'Law voted on',
                 },
                 LawRemoved: 'Law Removed',
+                RelicDrawn: 'Relic drawn',
+                RelicUsed: 'Relic used',
               },
               withDraft: 'Players will draft their factions',
               banned: '{{player}} banned:',
