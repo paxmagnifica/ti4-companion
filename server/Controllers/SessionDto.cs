@@ -131,7 +131,7 @@ namespace server.Controllers
             End = payload.SessionEnd;
             Duration = payload.Duration;
             VpCount = payload.VpCount == 0 ? 10 : payload.VpCount;
-            Colors = new Dictionary<string, string>() { {"The_Arborec", "green"}, {"The_Emirates_of_Hacan", "orange"}, {"The_Mentak_Coalition", "yellow"}, {"The_Nekro_Virus", "red"} };
+            Colors = payload.Colors;
         }
 
         public string Map { get; internal set; }

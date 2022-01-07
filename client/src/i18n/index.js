@@ -148,6 +148,9 @@ const factory = (options = { debug: true }) =>
               duration: 'How long did you play? (roughly)',
               durationUnit: 'hours',
               detailsSavedCorrectly: 'Details saved correctly',
+              colorsPicker: {
+                sectionTitle: 'Assign plastic colors to factions',
+              },
               vpChangeConfirmation: {
                 title: 'You changed the VP target',
                 content:

@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react'
 
 const PlasticColorsContext = React.createContext()
 
-const colors = {
+export const colors = {
   purple: '#6f329f',
   green: '#00b050',
   yellow: '#ffff00',
