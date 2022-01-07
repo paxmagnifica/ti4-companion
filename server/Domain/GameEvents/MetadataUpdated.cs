@@ -80,5 +80,6 @@ namespace server.Domain
       public string SessionEnd { get; set; }
       public decimal Duration { get; set; }
       public int VpCount { get; set; }
+      public Dictionary<string, string> Colors { get; set; }
     }
 }

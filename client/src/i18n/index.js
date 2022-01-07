@@ -82,6 +82,16 @@ const factory = (options = { debug: true }) =>
                 optional: '(optional)',
                 undo: 'undo',
                 copy: 'copy',
+                colors: {
+                  purple: 'purple',
+                  green: 'green',
+                  yellow: 'yellow',
+                  red: 'red',
+                  black: 'black',
+                  blue: 'blue',
+                  orange: 'orange',
+                  pink: 'pink',
+                },
               },
               phase: {
                 0: 'status phase',

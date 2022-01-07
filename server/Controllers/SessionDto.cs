@@ -110,6 +110,7 @@ namespace server.Controllers
         public string End { get; internal set; }
         public decimal Duration { get; internal set; }
         public int VpCount { get; internal set; }
+        public Dictionary<string, string> Colors { get; internal set; }
         private void SetSessionDetails(List<GameEvent> events)
         {
             VpCount = 10;
@@ -130,6 +131,7 @@ namespace server.Controllers
             End = payload.SessionEnd;
             Duration = payload.Duration;
             VpCount = payload.VpCount == 0 ? 10 : payload.VpCount;
+            Colors = new Dictionary<string, string>() { {"The_Arborec", "green"}, {"The_Emirates_of_Hacan", "orange"}, {"The_Mentak_Coalition", "yellow"}, {"The_Nekro_Virus", "red"} };
         }
 
         public string Map { get; internal set; }
@@ -199,7 +201,7 @@ namespace server.Controllers
         }
 
         public List<string> Factions { get; internal set; }
-        private List<String> GetFactions(List<GameEvent> events)
+        private List<string> GetFactions(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
 
