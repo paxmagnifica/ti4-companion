@@ -43,6 +43,7 @@ import Objective from '../../shared/Objective'
 import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
 import ScrollToBottom from '../../shared/ScrollToBottom'
+import Relic from '../../shared/Relic'
 import useInvalidateQueries from '../../useInvalidateQueries'
 import { MapPreview } from '../MapPreview'
 
@@ -356,6 +357,44 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
         </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} small={small} />
+        </Box>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
+function RelicEvent({ payload, happenedAt, eventType }) {
+  const small = useSmallViewport()
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Box
+          style={{ margin: '3px 0' }}
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <FactionFlag
+            disabled
+            factionKey={payload.faction}
+            height="2.5em"
+            selected
+            width="4.5em"
+          />
+        </Box>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
+        <Box style={{ display: 'inline-block' }}>
+          <Relic slug={payload.slug} small={small} />
         </Box>
       </Ti4TimelineContent>
     </Ti4TimelineItem>
@@ -852,6 +891,10 @@ function EventOnATimeline({ eventType, payload, happenedAt, session }) {
       return <AgendaVotedOn {...props} />
     case 'LawRemoved':
       return <LawRemoved {...props} />
+    case 'RelicDrawn':
+      return <RelicEvent {...props} />
+    case 'RelicUsed':
+      return <RelicEvent {...props} />
     default:
       return <DebugEvent {...props} />
   }

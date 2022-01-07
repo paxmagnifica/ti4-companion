@@ -1,7 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { Typography } from '@material-ui/core'
 
+import useSmallViewport from '../../shared/useSmallViewport'
 import FactionFlag from '../../shared/FactionFlag'
+import Relic from '../../shared/Relic'
 import mecatol from '../../assets/guac-mecatol.png'
 
 const VP_SOURCE = {
@@ -10,6 +12,7 @@ const VP_SOURCE = {
   mecatol: 'mecatol',
   support: 'support',
   emphidia: 'emphidia',
+  shard: 'shard',
 }
 
 const mapVpSource = (src) => Object.values(VP_SOURCE)[src]
@@ -44,6 +47,7 @@ function Context({ source, context }) {
 export function VictoryPoint({ src, context }) {
   const { t } = useTranslation()
   const source = mapVpSource(src)
+  const small = useSmallViewport()
 
   if (!source || source === VP_SOURCE.other) {
     return null
@@ -63,6 +67,16 @@ export function VictoryPoint({ src, context }) {
             title={readable}
           />
           <br />
+        </>
+      )}
+      {source === VP_SOURCE.shard && (
+        <>
+          <Typography variant="h6">
+            <Trans
+              i18nKey={`sessionTimeline.vpSource.shardCaption.${context}`}
+            />
+          </Typography>
+          <Relic slug="shard-of-the-throne" small={small} />
         </>
       )}
       <Typography variant="caption">{readable}</Typography>

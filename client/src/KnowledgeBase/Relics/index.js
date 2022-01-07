@@ -7,9 +7,9 @@ import { useTranslation } from 'react-i18next'
 import { DispatchContext, StateContext } from '../../state'
 import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
+import Relic from '../../shared/Relic'
 
 import * as relicService from './service'
-import Relic from './Relic'
 
 function RelicsProvider(props) {
   const {
