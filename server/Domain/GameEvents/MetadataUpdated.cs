@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace server.Domain
 {
-    public class MetadataUpdated: IHandler
+    public class MetadataUpdated : IHandler
     {
         private readonly IRepository _repository;
 
@@ -25,7 +25,8 @@ namespace server.Domain
             {
                 session.Events = new List<GameEvent>();
             }
-            session.Events.Add(new GameEvent {
+            session.Events.Add(new GameEvent
+            {
                 Id = gameEvent.Id,
                 SessionId = gameEvent.SessionId,
                 HappenedAt = gameEvent.HappenedAt,
@@ -41,7 +42,8 @@ namespace server.Domain
         // TODO add tests
         private MetadataUpdatedPayload Sanitize(MetadataUpdatedPayload payload)
         {
-            return new MetadataUpdatedPayload {
+            return new MetadataUpdatedPayload
+            {
                 SessionDisplayName = payload.SessionDisplayName,
                 IsTTS = payload.IsTTS,
                 IsSplit = payload.IsSplit,
@@ -49,6 +51,7 @@ namespace server.Domain
                 SessionEnd = payload.IsSplit ? payload.SessionEnd : string.Empty,
                 Duration = payload.Duration,
                 VpCount = payload.VpCount > 0 ? payload.VpCount : 10,
+                Colors = payload.Colors,
             };
         }
 
@@ -73,12 +76,18 @@ namespace server.Domain
 
     public class MetadataUpdatedPayload
     {
-      public string SessionDisplayName { get; set; }
-      public bool IsTTS { get; set; }
-      public bool IsSplit { get; set; }
-      public string SessionStart { get; set; }
-      public string SessionEnd { get; set; }
-      public decimal Duration { get; set; }
-      public int VpCount { get; set; }
+        public MetadataUpdatedPayload()
+        {
+            Colors = new Dictionary<string, string>();
+        }
+
+        public string SessionDisplayName { get; set; }
+        public bool IsTTS { get; set; }
+        public bool IsSplit { get; set; }
+        public string SessionStart { get; set; }
+        public string SessionEnd { get; set; }
+        public decimal Duration { get; set; }
+        public int VpCount { get; set; }
+        public Dictionary<string, string> Colors { get; set; }
     }
 }

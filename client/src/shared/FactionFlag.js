@@ -5,6 +5,8 @@ import clsx from 'clsx'
 
 import * as factions from '../gameInfo/factions'
 
+import { usePlasticColors } from './plasticColors'
+
 const useFlagStyles = makeStyles({
   root: {
     width: ({ width }) => `calc(${width} - 2px)`,
@@ -15,6 +17,8 @@ const useFlagStyles = makeStyles({
     cursor: ({ disabled }) => (disabled ? 'default' : 'pointer'),
     display: 'flex',
     justifyContent: 'center',
+    border: ({ plasticColor }) =>
+      plasticColor ? `2px solid ${plasticColor}` : '',
     margin: '1px 1px',
   },
   factionImage: {
@@ -31,11 +35,14 @@ function FactionFlag(
   ref,
 ) {
   const { t } = useTranslation()
+  const plasticColors = usePlasticColors()
+  const plasticColor = plasticColors[factionKey]
   const classes = useFlagStyles({
     selected,
     width,
     height,
     disabled,
+    plasticColor: plasticColor?.hex,
   })
   const factionData = factions.getData(factionKey)
 
@@ -49,7 +56,11 @@ function FactionFlag(
         alt={factionKey}
         className={classes.factionImage}
         src={factionData.image}
-        title={t(`factions.${factionKey}.name`)}
+        title={`${t(`factions.${factionKey}.name`)} ${
+          plasticColor
+            ? `(${t(`general.labels.colors.${plasticColor.color}`)})`
+            : ''
+        }`}
       />
     </div>
   )

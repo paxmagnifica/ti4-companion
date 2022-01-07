@@ -82,6 +82,16 @@ const factory = (options = { debug: true }) =>
                 optional: '(optional)',
                 undo: 'undo',
                 copy: 'copy',
+                colors: {
+                  purple: 'purple',
+                  green: 'green',
+                  yellow: 'yellow',
+                  red: 'red',
+                  black: 'black',
+                  blue: 'blue',
+                  orange: 'orange',
+                  pink: 'pink',
+                },
               },
               phase: {
                 0: 'status phase',
@@ -138,6 +148,9 @@ const factory = (options = { debug: true }) =>
               duration: 'How long did you play? (roughly)',
               durationUnit: 'hours',
               detailsSavedCorrectly: 'Details saved correctly',
+              colorsPicker: {
+                sectionTitle: 'Assign plastic colors to factions',
+              },
               vpChangeConfirmation: {
                 title: 'You changed the VP target',
                 content:

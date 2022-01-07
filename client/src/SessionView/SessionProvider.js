@@ -2,6 +2,7 @@ import { useMemo, useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 
 import sessionServiceFactory from '../shared/sessionService'
+import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 
 export function SessionProvider({ children, state, dispatch }) {
@@ -99,13 +100,15 @@ export function SessionProvider({ children, state, dispatch }) {
 
   return (
     <ComboDispatchContext.Provider value={comboDispatch}>
-      {children({
-        session,
-        loading: loading || state.objectives.loading,
-        editable,
-        updateFactionPoints,
-        sessionService,
-      })}
+      <PlasticColorsProvider value={session?.colors}>
+        {children({
+          session,
+          loading: loading || state.objectives.loading,
+          editable,
+          updateFactionPoints,
+          sessionService,
+        })}
+      </PlasticColorsProvider>
     </ComboDispatchContext.Provider>
   )
 }

@@ -18,8 +18,10 @@ import {
 import MuiAlert from '@material-ui/lab/Alert'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { ComboDispatchContext } from '../state'
-import Confirmation from '../shared/Confirmation'
+import { ComboDispatchContext } from '../../state'
+import Confirmation from '../../shared/Confirmation'
+
+import { ColorsPicker } from './ColorsPicker'
 
 const getNow = () => {
   const now = new Date()
@@ -61,6 +63,7 @@ function DetailsForm({ disabled, session }) {
   const [duration, setDuration] = useState(session.duration || 0)
   const [vpCount, setVpCount] = useState(session.vpCount || 10)
   const [vpConfirmationOpen, setVpConfirmationOpen] = useState(false)
+  const [colors, setColors] = useState(session.colors || {})
   const getChangeHandler = useCallback(
     (setter, propertyName = 'value') =>
       (changeEvent) => {
@@ -81,12 +84,14 @@ function DetailsForm({ disabled, session }) {
       sessionEnd: sessionEnd || getNow(),
       duration: Number(duration),
       vpCount,
+      colors,
     }
 
     comboDispatch({ type: 'MetadataUpdated', payload })
     setVpConfirmationOpen(false)
     setShowSuccess(true)
   }, [
+    colors,
     vpCount,
     session,
     sessionDisplayName,
@@ -222,6 +227,14 @@ function DetailsForm({ disabled, session }) {
                   />
                 </FormControl>
               </Grid>
+              <Grid item sm={6} xs={12} />
+              {!session.isDraft && (
+                <ColorsPicker
+                  colors={colors}
+                  factions={session.factions}
+                  onChange={setColors}
+                />
+              )}
               <Grid container item justifyContent="flex-end" xs={12}>
                 {!disabled && (
                   <Button
