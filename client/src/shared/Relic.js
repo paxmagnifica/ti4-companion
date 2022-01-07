@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
 import { useTranslation } from 'react-i18next'
 
-import sprite from '../../assets/relic-sprite.jpg'
+import sprite from '../assets/relic-sprite.jpg'
 
 const useStyles = makeStyles({
   root: {

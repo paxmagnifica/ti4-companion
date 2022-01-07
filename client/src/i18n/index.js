@@ -180,7 +180,12 @@ const factory = (options = { debug: true }) =>
               vp: '{{points}} VP',
               vpSource: {
                 mecatol: 'First to control Mecatol Rex',
-                support: 'Support For The Throne promissory note received',
+                support: 'Support for the Throne promissory note received',
+                shard: 'Shard of the Throne',
+                shardCaption: {
+                  gained: 'Gained point',
+                  lost: 'Lost point',
+                },
               },
               changeFile: 'Change the image',
               dropHere: 'Drop your image here...',

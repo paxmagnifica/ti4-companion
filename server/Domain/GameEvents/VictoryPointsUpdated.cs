@@ -10,7 +10,8 @@ namespace server.Domain
         Objective,
         Mecatol,
         SupportForTheThrone,
-        Emphidia
+        Emphidia,
+        ShardOfTheThrone,
     }
 
     public class VictoryPointsUpdated : IHandler
