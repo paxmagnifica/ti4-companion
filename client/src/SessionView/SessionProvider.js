@@ -94,13 +94,23 @@ export function SessionProvider({ children, state, dispatch }) {
     [state, sessionId],
   )
 
+  const [showPlasticColors, setShowPlasticColors] = useState(true)
+  const togglePlasticColors = useCallback(
+    () => setShowPlasticColors((a) => !a),
+    [],
+  )
+
   if (!sessionId) {
     return null
   }
 
   return (
     <ComboDispatchContext.Provider value={comboDispatch}>
-      <PlasticColorsProvider value={session?.colors}>
+      <PlasticColorsProvider
+        hide={!showPlasticColors}
+        plasticColors={session?.colors}
+        toggle={togglePlasticColors}
+      >
         {children({
           session,
           loading: loading || state.objectives.loading,

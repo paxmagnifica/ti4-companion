@@ -210,6 +210,11 @@ const factory = (options = { debug: true }) =>
               titleLabel: 'what happened?!',
               descriptionLabel: "what's the story?",
             },
+            togglePlastic: {
+              tooltip: 'toggle plastic colors',
+              nowOn: 'now on',
+              nowOff: 'now off',
+            },
             share: {
               copied: 'Copied!',
               tooltip: 'show qr code',
