@@ -63,8 +63,8 @@ export function SetFactions({ dispatch }) {
     history.push(
       generatePath(SESSION_VIEW_ROUTES.main, {
         sessionId: session.id,
-        secret: session.secret,
       }),
+      { secret: session.secret },
     )
   }, [history, dispatch, selectedFactions, sessionService])
 

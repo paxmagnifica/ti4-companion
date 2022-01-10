@@ -25,7 +25,8 @@ import { getAllSessions } from './shared/persistence'
 import homeIcon from './assets/icon.jpg'
 import { SessionSetup } from './SessionSetup'
 import SessionsList from './SessionsList'
-import SessionView, { SessionProvider } from './SessionView'
+import SessionView from './SessionView'
+import { SessionProvider } from './SessionView/SessionProvider'
 import * as objectivesService from './objectivesService'
 import { DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
@@ -155,26 +156,7 @@ function App() {
                       dispatch={dispatchWithInvalidate}
                       state={state}
                     >
-                      {({
-                        sessionService,
-                        session,
-                        loading,
-                        editable,
-                        shuffleFactions,
-                        setFactions,
-                        updateFactionPoints,
-                      }) =>
-                        loading || !session ? null : (
-                          <SessionView
-                            editable={editable && !session.locked}
-                            session={session}
-                            sessionService={sessionService}
-                            setFactions={setFactions}
-                            shuffleFactions={shuffleFactions}
-                            updateFactionPoints={updateFactionPoints}
-                          />
-                        )
-                      }
+                      <SessionView />
                     </SessionProvider>
                   </Route>
                   <Route path="/">

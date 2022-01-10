@@ -82,7 +82,7 @@ export function DraftSetup() {
     history.push(
       generatePath(SESSION_VIEW_ROUTES.main, {
         sessionId: session.id,
-        secret: session.secret,
+        // secret: session.secret,
       }),
     )
   }, [
