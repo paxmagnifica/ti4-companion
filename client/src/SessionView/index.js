@@ -14,7 +14,7 @@ function Thing({ children }) {
 
   const { state } = history.location
   if (state?.secret) {
-    setSecret(session.id, state.secret)
+    setSecret(state.secret)
   }
 
   return (

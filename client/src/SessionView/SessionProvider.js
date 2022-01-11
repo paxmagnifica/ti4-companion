@@ -28,7 +28,7 @@ export function SessionProvider({ children, state, dispatch }) {
   const [secret, setSecret] = useState(
     JSON.parse(
       localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
-    )[sessionId],
+    )[sessionId]?.secret,
   )
 
   const authorizedFetch = useMemo(() => {
@@ -114,6 +114,20 @@ export function SessionProvider({ children, state, dispatch }) {
     [],
   )
 
+  const disableEdit = useCallback(() => {
+    const sessions = JSON.parse(
+      localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
+    )
+    if (sessions[sessionId]) {
+      sessions[sessionId].secret = null
+      localStorage.setItem(
+        'paxmagnifica-ti4companion-sessions',
+        JSON.stringify(sessions),
+      )
+    }
+    setSecret(null)
+  }, [sessionId])
+
   const contextValue = useMemo(
     () => ({
       session,
@@ -121,29 +135,32 @@ export function SessionProvider({ children, state, dispatch }) {
       editable: Boolean(secret),
       updateFactionPoints,
       sessionService,
-      setSecret: (sid, s) => {
+      setSecret: (s) => {
         const sessions = JSON.parse(
           localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
         )
-        if (!sessions[sid]) {
-          sessions[sid] = { id: sid }
+        if (!sessions[sessionId]) {
+          sessions[sessionId] = { id: sessionId }
         }
-        sessions[sid].secret = s
+        sessions[sessionId].secret = s
         localStorage.setItem(
           'paxmagnifica-ti4companion-sessions',
           JSON.stringify(sessions),
         )
         setSecret(s)
       },
+      disableEdit,
     }),
     [
       session,
+      sessionId,
       secret,
       loading,
       state.objectives.loading,
       updateFactionPoints,
       sessionService,
       setSecret,
+      disableEdit,
     ],
   )
 
