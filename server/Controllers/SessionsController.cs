@@ -90,6 +90,18 @@ namespace server.Controllers
             return sessionDto;
         }
 
+        public class PasswordPayload
+        {
+            public string Password { get; set; }
+        }
+
+        [HttpPost("{sessionId}/edit")]
+        public async Task<ActionResult> ExchangePasswordForSecret([FromRoute] Guid sessionId, [FromBody] PasswordPayload pp)
+        {
+            Console.WriteLine(JsonConvert.SerializeObject(pp));
+            return new OkObjectResult(new { secret = "some secret" });
+        }
+
         // TODO not cool, direct Events and stuff
         [HttpPost("{sessionId}/map")]
         public async Task<ActionResult> UploadMap(Guid sessionId)

@@ -12,7 +12,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Edit } from '@material-ui/icons'
 
-import { useSessionContext } from './SessionProvider'
+import { useSessionContext } from '../SessionProvider'
+
+import { EditPasswordDialog } from './EditPasswordDialog'
 
 const useStyles = makeStyles({
   button: {
@@ -58,18 +60,27 @@ export function EditButton() {
   const { editable, disableEdit } = useSessionContext()
 
   const [confirmationOpen, setConfirmationOpen] = useState()
-
-  const handleClick = useCallback(() => {
-    if (editable) {
-      setConfirmationOpen(true)
-    }
-  }, [editable])
-  const onCancel = useCallback(() => setConfirmationOpen(false), [])
   const onConfirm = useCallback(() => {
     // clear secret
     disableEdit()
     setConfirmationOpen(false)
   }, [disableEdit])
+
+  const [editPasswordOpen, setEditPasswordOpen] = useState()
+
+  const onClose = useCallback(() => {
+    setConfirmationOpen(false)
+    setEditPasswordOpen(false)
+  }, [])
+  const handleClick = useCallback(() => {
+    if (editable) {
+      setConfirmationOpen(true)
+
+      return
+    }
+
+    setEditPasswordOpen(true)
+  }, [editable])
 
   return (
     <>
@@ -85,11 +96,12 @@ export function EditButton() {
       <ConfirmationDialog
         keepMounted
         message="Are you sure to cancel edit?"
-        onCancel={onCancel}
+        onCancel={onClose}
         onConfirm={onConfirm}
         open={confirmationOpen}
         title="Disable editing"
       />
+      <EditPasswordDialog onClose={onClose} open={editPasswordOpen} />
     </>
   )
 }
