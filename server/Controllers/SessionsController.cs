@@ -58,6 +58,11 @@ namespace server.Controllers
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 
+            if (!string.IsNullOrWhiteSpace(payload.Password))
+            {
+              await _sessionContext.Database.ExecuteSqlRawAsync("UPDATE \"Sessions\" SET \"HashedPassword\"=crypt('{0}', gen_salt('bf')) WHERE \"Id\"={1}", payload.Password, sessionId);
+            }
+
             var dto = new SessionDto(newSession);
             dto.Secret = newSession.Secret;
 
