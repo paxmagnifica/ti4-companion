@@ -61,7 +61,6 @@ export function EditButton() {
 
   const [confirmationOpen, setConfirmationOpen] = useState()
   const onConfirm = useCallback(() => {
-    // clear secret
     disableEdit()
     setConfirmationOpen(false)
   }, [disableEdit])

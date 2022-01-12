@@ -5,7 +5,7 @@ import React, {
   useState,
   useCallback,
 } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 
 import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
@@ -25,6 +25,7 @@ export const useSessionSecret = () => {
 }
 export function SessionProvider({ children, state, dispatch }) {
   const { sessionId } = useParams()
+  const history = useHistory()
   const [secret, setSecret] = useState(
     JSON.parse(
       localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
@@ -120,13 +121,12 @@ export function SessionProvider({ children, state, dispatch }) {
     )
     if (sessions[sessionId]) {
       sessions[sessionId].secret = null
-      localStorage.setItem(
-        'paxmagnifica-ti4companion-sessions',
-        JSON.stringify(sessions),
-      )
+      const stringified = JSON.stringify(sessions)
+      localStorage.setItem('paxmagnifica-ti4companion-sessions', stringified)
     }
     setSecret(null)
-  }, [sessionId])
+    history.replace(history.location.pathname, {})
+  }, [sessionId, setSecret, history])
 
   const contextValue = useMemo(
     () => ({
