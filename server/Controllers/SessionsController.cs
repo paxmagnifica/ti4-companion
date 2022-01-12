@@ -60,7 +60,8 @@ namespace server.Controllers
 
             if (!string.IsNullOrWhiteSpace(payload.Password))
             {
-              await _sessionContext.Database.ExecuteSqlRawAsync("UPDATE \"Sessions\" SET \"HashedPassword\"=crypt('{0}', gen_salt('bf')) WHERE \"Id\"={1}", payload.Password, sessionId);
+                FormattableString commandText = $"UPDATE \"Sessions\" SET \"HashedPassword\"=crypt({payload.Password}, gen_salt('bf')) WHERE \"Id\"={sessionId}";
+                _sessionContext.Database.ExecuteSqlInterpolated(commandText);
             }
 
             var dto = new SessionDto(newSession);
