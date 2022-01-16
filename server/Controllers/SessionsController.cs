@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
+using server.Infra;
 
 namespace server.Controllers
 {
@@ -22,18 +23,24 @@ namespace server.Controllers
         private readonly SessionContext _sessionContext;
         private readonly ITimeProvider _timeProvider;
         private readonly IConfiguration _configuration;
+        private readonly IRepository _repository;
+        private readonly Authorization _authorization;
 
         public SessionsController(
             ILogger<SessionsController> logger,
             SessionContext sessionContext,
             ITimeProvider timeProvider,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IRepository repository,
+            Authorization authorization
         )
         {
             _logger = logger;
             _sessionContext = sessionContext;
             _timeProvider = timeProvider;
             _configuration = configuration;
+            _repository = repository;
+            _authorization = authorization;
         }
 
         [HttpPost]
@@ -104,8 +111,14 @@ namespace server.Controllers
         [HttpPost("{sessionId}/edit")]
         public async Task<ActionResult> ExchangePasswordForSecret([FromRoute] Guid sessionId, [FromBody] PasswordPayload pp)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(pp));
-            return new OkObjectResult(new { secret = "some secret" });
+            var passwordCorrect = await _authorization.CheckPassword(sessionId, pp.Password);
+            if (!passwordCorrect)
+            {
+                return new UnauthorizedResult();
+            }
+
+            var token = await _authorization.GetTokenFor(sessionId);
+            return new OkObjectResult(new { secret = token.Value });
         }
 
         // TODO not cool, direct Events and stuff

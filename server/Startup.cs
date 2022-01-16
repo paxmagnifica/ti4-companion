@@ -56,6 +56,7 @@ namespace server
             services.AddScoped<ITimeProvider, TimeProvider>();
             services.AddScoped<Dispatcher>();
             services.AddScoped<HeaderAuthorization>();
+            services.AddScoped<Authorization>();
 
             AddAllHandlers(services);
         }
