@@ -20,6 +20,7 @@ namespace server.Persistence
         public DbSet<Exploration> Explorations { get; set; }
         public DbSet<Relic> Relics { get; set; }
         public DbSet<Agenda> Agendas { get; set; }
+        public DbSet<Token> Tokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
                 => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("SessionContext"));
