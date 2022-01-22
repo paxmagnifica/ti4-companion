@@ -47,7 +47,7 @@ namespace server.Controllers
         public async Task<ActionResult<Session>> Post(GameStartedPayload payload)
         {
             var sessionId = Guid.NewGuid();
-            var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now, Secret = Guid.NewGuid() };
+            var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now };
             newSession.Events = new List<GameEvent> {
                 new GameEvent {
                     Id = Guid.NewGuid(),
@@ -65,14 +65,13 @@ namespace server.Controllers
             await _sessionContext.Sessions.AddAsync(newSession);
             await _sessionContext.SaveChangesAsync();
 
+            var dto = new SessionDto(newSession);
             if (!string.IsNullOrWhiteSpace(payload.Password))
             {
+                dto.Secret = (await _authorization.GenerateTokenFor(sessionId)).Value;
                 FormattableString commandText = $"UPDATE \"Sessions\" SET \"HashedPassword\"=crypt({payload.Password}, gen_salt('bf')) WHERE \"Id\"={sessionId}";
                 _sessionContext.Database.ExecuteSqlInterpolated(commandText);
             }
-
-            var dto = new SessionDto(newSession);
-            dto.Secret = newSession.Secret;
 
             return CreatedAtAction(nameof(GetSession), new { sessionId = newSession.Id }, dto);
         }
@@ -117,7 +116,7 @@ namespace server.Controllers
                 return new UnauthorizedResult();
             }
 
-            var token = await _authorization.GetTokenFor(sessionId);
+            var token = await _authorization.GenerateTokenFor(sessionId);
             return new OkObjectResult(new { secret = token.Value });
         }
 

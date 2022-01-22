@@ -16,6 +16,7 @@ namespace server.Infra
             _sessionContext = sesionContext;
             _timeProvider = timeProvider;
         }
+
         internal async Task<bool> CheckPassword(Guid sessionId, string password)
         {
             FormattableString commandText = $"SELECT \"Id\" FROM \"Sessions\" WHERE \"Id\"={sessionId} AND \"HashedPassword\" = crypt({password}, \"HashedPassword\");";
@@ -24,7 +25,7 @@ namespace server.Infra
             return rowsAffected != 0;
         }
 
-        internal async Task<Token> GetTokenFor(Guid sessionId)
+        internal async Task<Token> GenerateTokenFor(Guid sessionId)
         {
             var newToken = new Token
             {
@@ -37,6 +38,13 @@ namespace server.Infra
             await _sessionContext.SaveChangesAsync();
 
             return newToken;
+        }
+
+        internal async Task<bool> ValidateToken(Guid sessionId, Guid secretValue)
+        {
+            var token = await _sessionContext.Tokens.FindAsync(secretValue);
+
+            return token != null && token.SessionId == sessionId && _timeProvider.Now.CompareTo(token.Expires) < 0;
         }
     }
 }

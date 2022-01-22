@@ -163,6 +163,7 @@ namespace server.Persistence
                 {
                     Id = sessionId,
                     Secret = sessionId,
+                    HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
                     Events = new List<GameEvent>() {
                         new GameEvent {
                             Id = Guid.NewGuid(),
@@ -194,6 +195,7 @@ namespace server.Persistence
                 {
                     Id = sessionId2,
                     Secret = sessionId2,
+                    HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
                     Events = new List<GameEvent>() {
                         new GameEvent {
                             Id = Guid.NewGuid(),

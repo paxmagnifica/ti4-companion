@@ -12,6 +12,8 @@ using System;
 using System.Reflection;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace server
 {
@@ -55,7 +57,6 @@ namespace server
             services.AddScoped<SessionHub>();
             services.AddScoped<ITimeProvider, TimeProvider>();
             services.AddScoped<Dispatcher>();
-            services.AddScoped<HeaderAuthorization>();
             services.AddScoped<Authorization>();
 
             AddAllHandlers(services);
@@ -77,7 +78,7 @@ namespace server
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            HeaderAuthorization headerAuthorization
+            ILogger<Startup> logger
         )
         {
             if (env.IsDevelopment())
@@ -92,12 +93,41 @@ namespace server
                 app.UseHttpsRedirection();
             }
 
+            app.Use(async (context, next) =>
+            {
+                var protect = context.Request.Method == "POST" && context.Request.Path.ToString().StartsWith("/api/sessions/") && !context.Request.Path.ToString().EndsWith("/edit");
+                context.Items.Add("Protect", protect);
+                logger.LogDebug($"protecting {context.Request.Path.ToString()}");
+
+                await next.Invoke();
+            });
+            app.Use(async (context, next) =>
+            {
+                if (MiddlewareHelpers.IsProtected(context))
+                {
+                    var secretIsGuid = Guid.TryParse(context.Request.Headers["x-ti4companion-session-secret"], out var sessionSecretGuid);
+                    if (secretIsGuid)
+                    {
+                        context.Items.Add("SessionSecret", sessionSecretGuid);
+                        logger.LogDebug($"adding SessionSecret item {sessionSecretGuid}");
+                    }
+
+                    var pattern = @"^\/api\/sessions\/(.*?)(\/.*)?$";
+                    var sessionId = Regex.Matches(context.Request.Path.ToString(), pattern)[0].Groups[1].Value;
+                    if (sessionId != null)
+                    {
+                        context.Items.Add("SessionId", Guid.Parse(sessionId));
+                        logger.LogDebug($"adding SessionId item {sessionId}");
+                    }
+                }
+                await next.Invoke();
+            });
+            app.UseMiddleware<HeaderAuthorizationMiddleware>();
+            // TODO fix and reenable
+            // app.UseMiddleware<PreventLockedSessionEditMiddleware>();
             app.UseRouting();
 
             app.UseCors("_localhostCors");
-
-            headerAuthorization.Setup(app);
-            app.UseMiddleware<PreventLockedSessionEditMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

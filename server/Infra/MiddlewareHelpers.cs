@@ -14,5 +14,10 @@ namespace server.Infra
         {
             return context.Request.RouteValues.ContainsKey("sessionId");
         }
+
+        public static bool IsProtected(HttpContext context)
+        {
+            return (context.Items.ContainsKey("Protect") && (bool)context.Items["Protect"]);
+        }
     }
 }
