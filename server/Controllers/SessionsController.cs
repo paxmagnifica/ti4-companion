@@ -97,7 +97,7 @@ namespace server.Controllers
                 .Collection(session => session.Events)
                 .Load();
 
-            var sessionDto = new SessionDto(sessionFromDb, (Guid?)HttpContext.Items["SessionSecret"] ?? (Guid?)null);
+            var sessionDto = new SessionDto(sessionFromDb);
 
             return sessionDto;
         }
