@@ -102,80 +102,80 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-        <DomainErrorProvider error={domainError} setError={setDomainError}>
-      <Helmet>
-        <title>TI4 Companion</title>
-        <meta
-          content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
-          name="description"
-        />
-        <meta content="TI4 Companion" property="og:title" />
-        <meta
-          content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
-          property="og:description"
-        />
-      </Helmet>
+      <DomainErrorProvider error={domainError} setError={setDomainError}>
+        <Helmet>
+          <title>TI4 Companion</title>
+          <meta
+            content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
+            name="description"
+          />
+          <meta content="TI4 Companion" property="og:title" />
+          <meta
+            content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
+            property="og:description"
+          />
+        </Helmet>
 
-      <Router>
-        <CssBaseline />
-        <AppBar>
-          <Toolbar>
-            <Link onClick={exitFullscreen} to="/">
-              <IconButton>
-                <img
-                  alt={t('general.home')}
-                  src={homeIcon}
-                  style={{
-                    height: '1.2em',
-                    width: '1.2em',
-                    borderRadius: '50%',
-                  }}
-                  title={t('general.home')}
-                />
-              </IconButton>
-            </Link>
-            <Typography className={classes.title} variant="h5">
-              <Trans i18nKey="general.title" />
-            </Typography>
-            <SupportTheCreator />
-            <LanguageSwitcher />
-            <GitHubRibbon />
-          </Toolbar>
-        </AppBar>
-        <Toolbar />
-        <Container
-          className={clsx(classes.main, { [classes.fullWidth]: fullscreen })}
-        >
-          <StateContext.Provider value={state}>
-            <DispatchContext.Provider value={dispatchWithInvalidate}>
-              <KnowledgeBase />
-              <Box m={2}>
-                <Switch>
-                  <Route path="/new">
-                    <SessionSetup />
-                  </Route>
-                  <Route path="/:sessionId/:secret?">
-                    <SessionProvider
-                      dispatch={dispatchWithInvalidate}
-                      state={state}
-                    >
-                      <SessionView />
-                    </SessionProvider>
-                  </Route>
-                  <Route path="/">
-                    <SessionsList
-                      loading={sessions.loading || !sessions.loaded}
-                      sessions={sessions.data}
-                    />
-                  </Route>
-                </Switch>
-              </Box>
-            </DispatchContext.Provider>
-          </StateContext.Provider>
-        </Container>
-        {!fullscreen && <Footer />}
-      </Router>
-        </DomainErrorProvider>
+        <Router>
+          <CssBaseline />
+          <AppBar>
+            <Toolbar>
+              <Link onClick={exitFullscreen} to="/">
+                <IconButton>
+                  <img
+                    alt={t('general.home')}
+                    src={homeIcon}
+                    style={{
+                      height: '1.2em',
+                      width: '1.2em',
+                      borderRadius: '50%',
+                    }}
+                    title={t('general.home')}
+                  />
+                </IconButton>
+              </Link>
+              <Typography className={classes.title} variant="h5">
+                <Trans i18nKey="general.title" />
+              </Typography>
+              <SupportTheCreator />
+              <LanguageSwitcher />
+              <GitHubRibbon />
+            </Toolbar>
+          </AppBar>
+          <Toolbar />
+          <Container
+            className={clsx(classes.main, { [classes.fullWidth]: fullscreen })}
+          >
+            <StateContext.Provider value={state}>
+              <DispatchContext.Provider value={dispatchWithInvalidate}>
+                <KnowledgeBase />
+                <Box m={2}>
+                  <Switch>
+                    <Route path="/new">
+                      <SessionSetup />
+                    </Route>
+                    <Route path="/:sessionId/:secret?">
+                      <SessionProvider
+                        dispatch={dispatchWithInvalidate}
+                        state={state}
+                      >
+                        <SessionView />
+                      </SessionProvider>
+                    </Route>
+                    <Route path="/">
+                      <SessionsList
+                        loading={sessions.loading || !sessions.loaded}
+                        sessions={sessions.data}
+                      />
+                    </Route>
+                  </Switch>
+                </Box>
+              </DispatchContext.Provider>
+            </StateContext.Provider>
+          </Container>
+          {!fullscreen && <Footer />}
+        </Router>
+      </DomainErrorProvider>
     </ThemeProvider>
   )
 }
