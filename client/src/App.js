@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useReducer } from 'react'
+import { useEffect, useCallback, useMemo, useReducer, useState } from 'react'
 import clsx from 'clsx'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -22,6 +22,7 @@ import { useTranslation, Trans } from 'react-i18next'
 
 import { SupportTheCreator } from './Support'
 import { getAllSessions } from './shared/persistence'
+import { DomainErrorProvider } from './shared/errorHandling'
 import homeIcon from './assets/icon.jpg'
 import { SessionSetup } from './SessionSetup'
 import SessionsList from './SessionsList'
@@ -61,6 +62,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, null, init)
   const { sessions } = state
   const { setChatVisible } = useChat()
+  const [domainError, setDomainError] = useState(null)
 
   const theme = useMemo(
     () =>
@@ -100,6 +102,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+        <DomainErrorProvider error={domainError} setError={setDomainError}>
       <Helmet>
         <title>TI4 Companion</title>
         <meta
@@ -172,6 +175,7 @@ function App() {
         </Container>
         {!fullscreen && <Footer />}
       </Router>
+        </DomainErrorProvider>
     </ThemeProvider>
   )
 }

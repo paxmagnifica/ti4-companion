@@ -1,6 +1,7 @@
 import CONFIG from '../config'
 
 import { saveSession } from './persistence'
+import { handleErrors } from './errorHandling'
 
 const factory = ({ fetch }) => {
   const pushEvent = (sessionId, gameEvent) =>
@@ -11,7 +12,7 @@ const factory = ({ fetch }) => {
         eventType: gameEvent.type,
         serializedPayload: JSON.stringify(gameEvent.payload),
       }),
-    })
+    }).then(handleErrors)
 
   return {
     createSession: async (payload) => {

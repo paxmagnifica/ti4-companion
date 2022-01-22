@@ -122,12 +122,12 @@ namespace server
                 }
                 await next.Invoke();
             });
+            app.UseCors("_localhostCors");
+
             app.UseMiddleware<HeaderAuthorizationMiddleware>();
             // TODO fix and reenable
             // app.UseMiddleware<PreventLockedSessionEditMiddleware>();
             app.UseRouting();
-
-            app.UseCors("_localhostCors");
 
             app.UseEndpoints(endpoints =>
             {

@@ -7,12 +7,12 @@ import React, {
 } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
+import { useDomainErrors } from '../shared/errorHandling'
 import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 
 const SessionContext = React.createContext()
-
 export const useSessionContext = () => useContext(SessionContext)
 export const useSessionSecret = () => {
   const context = useContext(SessionContext)
@@ -26,6 +26,7 @@ export const useSessionSecret = () => {
 export function SessionProvider({ children, state, dispatch }) {
   const { sessionId } = useParams()
   const history = useHistory()
+  const { setError } = useDomainErrors()
   const [secret, setSecret] = useState(
     JSON.parse(
       localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
@@ -56,16 +57,23 @@ export function SessionProvider({ children, state, dispatch }) {
   )
 
   const comboDispatch = useCallback(
-    (action) => {
+    async (action) => {
       const { payload } = action
-      dispatch(action)
 
-      return sessionService.pushEvent(payload.sessionId, {
-        type: action.type,
-        payload,
-      })
+      try {
+        await sessionService.pushEvent(payload.sessionId, {
+          type: action.type,
+          payload,
+        })
+
+        dispatch(action)
+      } catch (e) {
+        if (e.domain) {
+          setError(e)
+        }
+      }
     },
-    [dispatch, sessionService],
+    [setError, dispatch, sessionService],
   )
 
   const updateFactionPoints = useCallback(

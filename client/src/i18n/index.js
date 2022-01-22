@@ -33,6 +33,11 @@ const factory = (options = { debug: true }) =>
             strategyCards: strategyCardsEn,
             relics: relicsEn,
             agendas: agendasEn,
+            errors: {
+              401: 'Unauthorized',
+              404: 'The item you are looking for was not found',
+              500: 'Something went wrong on our side, try again in a moment',
+            },
             components: {
               agenda: {
                 resultTitle: {
