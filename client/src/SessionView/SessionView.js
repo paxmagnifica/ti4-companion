@@ -85,7 +85,7 @@ export function SessionView({
             <EditButton />
             <TogglePlasticColorsButton />
             <FullscreenButton />
-            <ShareButton editable={editable} session={session} />
+            <ShareButton session={session} />
           </Grid>
         </Grid>
       </HideInFullscreen>

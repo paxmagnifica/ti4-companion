@@ -3,10 +3,7 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogTitle,
-  FormControlLabel,
   IconButton,
-  Switch,
   Tooltip,
 } from '@material-ui/core'
 import { Share } from '@material-ui/icons'
@@ -24,20 +21,17 @@ const useStyles = makeStyles({
   },
 })
 
-function ShareButton({ editable, session }) {
+function ShareButton({ session }) {
   const { t } = useTranslation()
   const classes = useStyles()
   const [showQr, setShowQr] = useState(false)
-  const [allowEdit, setAllowEdit] = useState(false)
-  const toggleAllowEdit = useCallback(() => setAllowEdit((x) => !x), [])
 
   const path = useMemo(
     () =>
       generatePath(SESSION_VIEW_ROUTES.main, {
         sessionId: session.id,
-        secret: allowEdit ? session.secret : undefined,
       }),
-    [session, allowEdit],
+    [session],
   )
   const fullUrl = useMemo(() => `${window.location.origin}${path}`, [path])
 
@@ -62,20 +56,6 @@ function ShareButton({ editable, session }) {
         </IconButton>
       </Tooltip>
       <Dialog onClose={() => setShowQr(false)} open={showQr}>
-        {editable && (
-          <DialogTitle>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={allowEdit}
-                  color="secondary"
-                  onChange={toggleAllowEdit}
-                />
-              }
-              label={t('share.allowEdit')}
-            />
-          </DialogTitle>
-        )}
         <DialogContent>
           <QRCode value={fullUrl} />
         </DialogContent>
