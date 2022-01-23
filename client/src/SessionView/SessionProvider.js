@@ -71,6 +71,8 @@ export function SessionProvider({ children, state, dispatch }) {
         if (e.domain) {
           setError(e)
         }
+
+        throw e
       }
     },
     [setError, dispatch, sessionService],

@@ -74,7 +74,7 @@ function DetailsForm({ disabled, session }) {
     [],
   )
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     const payload = {
       sessionId: session.id,
       sessionDisplayName,
@@ -87,9 +87,13 @@ function DetailsForm({ disabled, session }) {
       colors,
     }
 
-    comboDispatch({ type: 'MetadataUpdated', payload })
-    setVpConfirmationOpen(false)
-    setShowSuccess(true)
+    try {
+      await comboDispatch({ type: 'MetadataUpdated', payload })
+      setVpConfirmationOpen(false)
+      setShowSuccess(true)
+    } catch (e) {
+      // empty catch
+    }
   }, [
     colors,
     vpCount,

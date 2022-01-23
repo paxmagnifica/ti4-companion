@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Trans, useTranslation } from 'react-i18next'
 
 import ImagePicker from '../../shared/ImagePicker'
+import { useDomainErrors } from '../../shared/errorHandling'
 
 const useStyles = makeStyles({
   inputWithMargin: {
@@ -22,6 +23,7 @@ function AddTimelineEvent({ uploadEvent }) {
   const [open, openSetter] = useState(false)
   const [file, setFile] = useState(null)
   const { t } = useTranslation()
+  const { setError } = useDomainErrors()
 
   const [title, setTitle] = useState('')
   const handleTitle = useCallback((event) => {
@@ -48,10 +50,15 @@ function AddTimelineEvent({ uploadEvent }) {
 
   const handleUpload = useCallback(async () => {
     setUploading(true)
-    await uploadEvent({ file, title, description })
-    setOpen(false)
-    setUploading(false)
-  }, [file, description, title, uploadEvent, setOpen])
+    try {
+      await uploadEvent({ file, title, description })
+      setOpen(false)
+    } catch (e) {
+      setError(e)
+    } finally {
+      setUploading(false)
+    }
+  }, [file, description, title, uploadEvent, setOpen, setError])
 
   const saveActive = uploading || file || description || title
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { Snackbar } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { Trans } from 'react-i18next'
@@ -23,7 +23,18 @@ const DomainErrorContext = React.createContext()
 export const useDomainErrors = () => {
   const { setError } = useContext(DomainErrorContext)
 
-  return { setError }
+  const setOnlyDomainError = useCallback(
+    (error) => {
+      if (!error.domain) {
+        throw error
+      }
+
+      setError(error)
+    },
+    [setError],
+  )
+
+  return { setError: setOnlyDomainError }
 }
 export const DomainErrorRenderer = () => {
   const { hasError, clearError, error } = useContext(DomainErrorContext)
