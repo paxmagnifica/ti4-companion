@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { Container } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+import { useHistory, useRouteMatch, generatePath } from 'react-router-dom'
 
 import { useDispatch } from '../state'
 import { Tab, Tabs } from '../components/navigation'
@@ -14,13 +15,27 @@ const VIEW = {
 }
 
 export function SessionSetup() {
-  const [view, setView] = useState(VIEW.simpleSetup)
+  // const [view, setView] = useState(VIEW.simpleSetup)
   const dispatch = useDispatch()
   const { t } = useTranslation()
 
-  const handleViewChange = useCallback((_event, newView) => {
-    setView(newView)
-  }, [])
+  const draftSetupRoute = useRouteMatch('/new/draft')
+  const view = useMemo(() => {
+    if (draftSetupRoute?.isExact) {
+      return VIEW.setupDraft
+    }
+
+    return VIEW.simpleSetup
+  }, [draftSetupRoute])
+  const history = useHistory()
+  const go = useMemo(
+    () => ({
+      [VIEW.simpleSetup]: () => history.push('/new/factions'),
+      [VIEW.setupDraft]: () => history.push('/new/draft'),
+    }),
+    [history],
+  )
+  const handleViewChange = useCallback((_event, newView) => go[newView](), [go])
 
   const renderView = useCallback(() => {
     switch (view) {

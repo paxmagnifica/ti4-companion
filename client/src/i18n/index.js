@@ -139,8 +139,8 @@ const factory = (options = { debug: true }) =>
             },
             sessionSetup: {
               tabs: {
-                simple: 'Select Factions',
-                draft: 'Draft tool',
+                simple: 'Select factions',
+                draft: 'Draft factions',
               },
               simple: {
                 title: 'What factions are in the game?',
@@ -271,8 +271,11 @@ const factory = (options = { debug: true }) =>
               inProgress: 'In progress',
               locked: 'Locked for edit',
               edit: 'Edit',
-              new: 'New session',
               secondaryTitle: '(factions: {{factionList}})',
+              cta: {
+                draft: 'Draft factions',
+                set: 'Record a session',
+              },
             },
             kb: {
               title: 'Knowledge base',
@@ -405,7 +408,6 @@ const factory = (options = { debug: true }) =>
             },
             sessionList: {
               title: 'Twoje zapamiętane sesje',
-              new: 'Nowa Sesja',
               secondaryTitle: '(rasy: {{factionList}})',
             },
             kb: {

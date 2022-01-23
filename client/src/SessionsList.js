@@ -1,5 +1,7 @@
 import {
+  Button,
   Chip,
+  Grid,
   CircularProgress,
   Fab,
   List,
@@ -24,6 +26,7 @@ import { SESSION_VIEW_ROUTES } from './shared/constants'
 
 const useStyles = makeStyles((theme) => ({
   list: {
+    marginTop: theme.spacing(5),
     color: 'white',
     backgroundColor: 'rgba(255,255,255,0.1)',
     borderRadius: '2%',
@@ -38,19 +41,14 @@ const useStyles = makeStyles((theme) => ({
       color: 'white',
     },
   },
-  fab: {
-    position: 'sticky',
-    float: 'right',
-    right: 0,
-    bottom: 10,
-    marginTop: 10,
-    zIndex: 1199,
-  },
   listItem: {
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'start',
     },
+  },
+  cta: {
+    textDecoration: 'none',
   },
 }))
 
@@ -64,6 +62,22 @@ function SessionsList({ loading, sessions }) {
     <CircularProgress />
   ) : (
     <>
+      <Grid container justifyContent="space-around" spacing={4}>
+        <Grid item sm={4} xs={12}>
+          <Link className={classes.cta} to="/new/factions">
+            <Button color="primary" fullWidth variant="contained">
+              <Trans i18nKey="sessionList.cta.set" />
+            </Button>
+          </Link>
+        </Grid>
+        <Grid item sm={4} xs={12}>
+          <Link className={classes.cta} to="/new/draft">
+            <Button color="secondary" fullWidth variant="contained">
+              <Trans i18nKey="sessionList.cta.draft" />
+            </Button>
+          </Link>
+        </Grid>
+      </Grid>
       <List
         className={classes.list}
         subheader={
@@ -130,16 +144,6 @@ function SessionsList({ loading, sessions }) {
           )
         })}
       </List>
-      <Link to="/new">
-        <Fab
-          aria-label={t('sessionList.new')}
-          className={classes.fab}
-          color="primary"
-          title={t('sessionList.new')}
-        >
-          <Add />
-        </Fab>
-      </Link>
     </>
   )
 }
