@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogContent,
 } from '@material-ui/core'
+import { Trans } from 'react-i18next'
 
 import { useSessionContext } from '../SessionProvider'
 
@@ -57,11 +58,17 @@ export function EditPasswordDialog(props) {
       open={open}
     >
       <DialogTitle id="enable-edit-mode-dialog-title">
-        {session.secured ? 'Password protected' : 'Enable edit'}
+        {session.secured ? (
+          <Trans i18nKey="editProtection.enableEdit.secured.title" />
+        ) : (
+          <Trans i18nKey="editProtection.enableEdit.title" />
+        )}
       </DialogTitle>
       {session.secured && (
         <DialogContent>
-          <Typography>provide password given by game owner to edit:</Typography>
+          <Typography>
+            <Trans i18nKey="editProtection.enableEdit.secured.prompt" />
+          </Typography>
           <TextField
             onChange={handlePasswordChange}
             type="password"
@@ -72,17 +79,16 @@ export function EditPasswordDialog(props) {
       {!session.secured && (
         <DialogContent>
           <Typography>
-            This session is open for editing to anybody. Are you sure you want
-            to proceed and edit?
+            <Trans i18nKey="editProtection.enableEdit.prompt" />
           </Typography>
         </DialogContent>
       )}
       <DialogActions>
         <Button autoFocus color="secondary" onClick={close}>
-          Cancel
+          <Trans i18nKey="general.labels.cancel" />
         </Button>
         <Button color="white" onClick={exchangePasswordForSecret}>
-          Enable edit
+          <Trans i18nKey="editProtection.enableEdit.action" />
         </Button>
       </DialogActions>
     </Dialog>

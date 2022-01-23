@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { Trans } from 'react-i18next'
 import {
   Typography,
   TextField,
@@ -24,24 +25,27 @@ export function PasswordProtectionDialog({ open, callback }) {
       open={open}
     >
       <DialogTitle id="enable-edit-mode-dialog-title">
-        Protect editing with password
+        <Trans i18nKey="editProtection.passwordDialog.title" />
       </DialogTitle>
       <DialogContent>
         <Typography>
-          Your players will need this password to edit the session
+          <Trans i18nKey="editProtection.passwordDialog.purpose" />
         </Typography>
         <TextField
           onChange={handlePasswordChange}
           type="password"
           value={password}
         />
+        <Typography>
+          <Trans i18nKey="editProtection.passwordDialog.reminder" />
+        </Typography>
       </DialogContent>
       <DialogActions>
         <Button autoFocus color="secondary" onClick={() => callback({})}>
-          do not set password
+          <Trans i18nKey="editProtection.passwordDialog.noPassword" />
         </Button>
         <Button color="white" onClick={() => callback({ password })}>
-          set password
+          <Trans i18nKey="editProtection.passwordDialog.setPassword" />
         </Button>
       </DialogActions>
     </Dialog>

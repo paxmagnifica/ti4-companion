@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import {
   DialogActions,
   Button,
@@ -44,10 +44,10 @@ function ConfirmationDialog(props) {
       <DialogContent>{message}</DialogContent>
       <DialogActions>
         <Button autoFocus color="secondary" onClick={handleCancel}>
-          Cancel
+          <Trans i18nKey="general.labels.cancel" />
         </Button>
         <Button color="white" onClick={handleOk}>
-          Ok
+          <Trans i18nKey="general.labels.ok" />
         </Button>
       </DialogActions>
     </Dialog>
@@ -83,9 +83,16 @@ export function EditButton() {
 
   return (
     <>
-      <Tooltip placement="bottom" title={t('edit.tooltip')}>
+      <Tooltip
+        placement="bottom"
+        title={
+          editable
+            ? t('editProtection.enableEdit.cancelEdit.tooltip')
+            : t('editProtection.enableEdit.tooltip')
+        }
+      >
         <IconButton
-          aria-label={t('edit.tooltip')}
+          aria-label={t('editProtection.enableEdit.tooltip')}
           className={classes.button}
           onClick={handleClick}
         >
@@ -94,11 +101,11 @@ export function EditButton() {
       </Tooltip>
       <ConfirmationDialog
         keepMounted
-        message="Are you sure to cancel edit?"
+        message={t('editProtection.enableEdit.cancelEdit.prompt')}
         onCancel={onClose}
         onConfirm={onDisableEditConfirmation}
         open={confirmationOpen}
-        title="Disable editing"
+        title={t('editProtection.enableEdit.cancelEdit.title')}
       />
       <EditPasswordDialog onClose={onClose} open={editPasswordOpen} />
     </>
