@@ -29,6 +29,10 @@ body, *:fullscreen {
   z-index: 0;
 }
 
+*:fullscreen {
+    overflow-y: hidden;
+}
+
 #root {
   position: relative;
   padding-bottom: 2em;
