@@ -1,126 +1,32 @@
-import { Helmet } from 'react-helmet'
-import { Grid } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-import { Route, Switch } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
-import * as factions from '../gameInfo/factions'
-import { getFactionCheatSheetPath } from '../gameInfo/factions'
-import { FullscreenButton, HideInFullscreen } from '../Fullscreen'
-import { SESSION_VIEW_ROUTES } from '../shared/constants'
-import { TogglePlasticColorsButton } from '../shared/plasticColors'
+import { useSessionContext } from './SessionProvider'
+import { SessionView } from './SessionView'
 
-import useRealTimeSession from './useRealTimeSession'
-import { Overview } from './Overview'
-import ShareButton from './ShareButton'
-import Map from './Map'
-import SessionNavigation from './SessionNavigation'
-import DetailsForm from './DetailsForm'
-import LockForEdit from './LockForEdit'
-import { Timeline } from './Timeline'
+function Thing({ children }) {
+  const history = useHistory()
+  const { setSecret, sessionService, editable, session, updateFactionPoints } =
+    useSessionContext()
 
-const useStyles = makeStyles({
-  header: {
-    marginBottom: '2em',
-  },
-})
+  if (!session) {
+    return null
+  }
 
-function SessionView({
-  sessionService,
-  editable,
-  session,
-  updateFactionPoints,
-}) {
-  useRealTimeSession(session.id)
-  const classes = useStyles()
+  const { state } = history.location
+  if (state?.secret) {
+    setSecret(state.secret)
+  }
 
-  const sortedPoints = [...session.points]
-  sortedPoints.sort((a, b) => b.points - a.points)
-  const winningFaction = sortedPoints[0]?.faction
-
-  // TODO draft title etc
   return (
-    <>
-      <Helmet>
-        <title>{`TI4 Companion session- ${session.factions.length} players - 10VP`}</title>
-        <meta
-          content={sortedPoints
-            .map(
-              ({ faction, points }) =>
-                `${factions.getData(faction).name}(${points}vp)`,
-            )
-            .join(', ')}
-          name="description"
-        />
-
-        <meta
-          content={`TI4 Companion session - ${session.factions.length} players - 10VP`}
-          property="og:title"
-        />
-        <meta
-          content={sortedPoints
-            .map(
-              ({ faction, points }) =>
-                `${factions.getData(faction).name}(${points}vp)`,
-            )
-            .join(', ')}
-          property="og:description"
-        />
-        {winningFaction && (
-          <meta
-            content={`${window.location.origin}${getFactionCheatSheetPath(
-              winningFaction,
-            )}`}
-            property="og:image"
-          />
-        )}
-      </Helmet>
-
-      <HideInFullscreen>
-        <Grid className={classes.header} container>
-          <Grid item xs={4} sm={8}>
-            <SessionNavigation />
-          </Grid>
-          <Grid container item justifyContent="flex-end" xs={8} sm={4}>
-            <TogglePlasticColorsButton />
-            <FullscreenButton />
-            <ShareButton editable={editable} session={session} />
-          </Grid>
-        </Grid>
-      </HideInFullscreen>
-
-      <LockForEdit session={session} />
-
-      <Switch>
-        <Route exact path={SESSION_VIEW_ROUTES.map}>
-          <Map
-            editable={editable}
-            session={session}
-            sessionService={sessionService}
-          />
-        </Route>
-        <Route exact path={SESSION_VIEW_ROUTES.details}>
-          <DetailsForm disabled={!editable} session={session} />
-        </Route>
-        <Route exact path={SESSION_VIEW_ROUTES.timeline}>
-          <Timeline
-            editable={editable}
-            session={session}
-            sessionService={sessionService}
-          />
-        </Route>
-        <Route exact path={SESSION_VIEW_ROUTES.main}>
-          <Overview
-            editable={editable}
-            session={session}
-            sessionService={sessionService}
-            updateFactionPoints={updateFactionPoints}
-          />
-        </Route>
-      </Switch>
-    </>
+    <SessionView
+      editable={editable}
+      session={session}
+      sessionService={sessionService}
+      updateFactionPoints={updateFactionPoints}
+    >
+      {children}
+    </SessionView>
   )
 }
 
-export default SessionView
-
-export * from './SessionProvider'
+export default Thing

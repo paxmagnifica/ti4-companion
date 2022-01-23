@@ -17,6 +17,8 @@ import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { factionsList } from '../gameInfo/factions'
 
+import { PasswordProtectionDialog } from './PasswordProtectionDialog'
+
 const useStyles = makeStyles({
   root: {
     color: 'white',
@@ -52,21 +54,32 @@ export function SetFactions({ dispatch }) {
     [setSelected, isSelected],
   )
 
+  const [passwordProtectionDialogOpen, setPasswordProtectionDialogOpen] =
+    useState(false)
+  const openPasswordProtectionDialog = useCallback(() => {
+    setPasswordProtectionDialogOpen(true)
+  }, [])
+
   const history = useHistory()
   const sessionService = useMemo(() => sessionFactory({ fetch }), [])
-  const createGameSession = useCallback(async () => {
-    const session = await sessionService.createSession({
-      setupType: 'simple',
-      factions: selectedFactions,
-    })
-    dispatch({ type: 'CreateGameSession', session })
-    history.push(
-      generatePath(SESSION_VIEW_ROUTES.main, {
-        sessionId: session.id,
-        secret: session.secret,
-      }),
-    )
-  }, [history, dispatch, selectedFactions, sessionService])
+  const createGameSession = useCallback(
+    async ({ password }) => {
+      setPasswordProtectionDialogOpen(false)
+      const session = await sessionService.createSession({
+        setupType: 'simple',
+        factions: selectedFactions,
+        password,
+      })
+      dispatch({ type: 'CreateGameSession', session })
+      history.push(
+        generatePath(SESSION_VIEW_ROUTES.main, {
+          sessionId: session.id,
+        }),
+        { secret: session.secret },
+      )
+    },
+    [history, dispatch, selectedFactions, sessionService],
+  )
 
   return (
     <>
@@ -98,11 +111,15 @@ export function SetFactions({ dispatch }) {
           className={classes.fab}
           color="secondary"
           disabled={!selectedFactions.length}
-          onClick={createGameSession}
+          onClick={openPasswordProtectionDialog}
         >
           <Check />
         </Fab>
       </Grid>
+      <PasswordProtectionDialog
+        callback={createGameSession}
+        open={passwordProtectionDialogOpen}
+      />
     </>
   )
 }

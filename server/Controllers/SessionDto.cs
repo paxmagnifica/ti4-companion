@@ -72,19 +72,12 @@ namespace server.Controllers
             Locked = session.Locked;
             SetSessionDetails(session.Events);
             Draft = new DraftDto(session);
+            Secured = !string.IsNullOrEmpty(session.HashedPassword);
         }
 
         public DraftDto Draft { get; set; }
 
-        public SessionDto(Session session, Guid? secret) : this(session)
-        {
-            Editable = secret.HasValue && session.CanEditWith(secret.Value);
-            if (Editable)
-            {
-                Secret = secret.Value;
-            }
-        }
-
+        public bool Secured { get; set; }
         public bool IsDraft { get { return !Factions.Any(); } }
         public GameStartedPayload Setup { get; set; }
         private void SetupGameState(List<GameEvent> events)
@@ -94,6 +87,7 @@ namespace server.Controllers
             Setup = GameStarted.GetPayload(gameStartEvent);
         }
 
+        public Guid Secret { get; set; }
         public bool Editable { get; internal set; }
         public bool Finished
         {

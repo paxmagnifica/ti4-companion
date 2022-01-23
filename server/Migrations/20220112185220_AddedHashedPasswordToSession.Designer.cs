@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using server.Persistence;
@@ -9,9 +10,10 @@ using server.Persistence;
 namespace server.Migrations
 {
     [DbContext(typeof(SessionContext))]
-    partial class SessionContextModelSnapshot : ModelSnapshot
+    [Migration("20220112185220_AddedHashedPasswordToSession")]
+    partial class AddedHashedPasswordToSession
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,26 +149,12 @@ namespace server.Migrations
                     b.Property<bool>("Locked")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid>("Secret")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.ToTable("Sessions");
-                });
-
-            modelBuilder.Entity("server.Domain.Token", b =>
-                {
-                    b.Property<Guid>("Value")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("Expires")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("SessionId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Value");
-
-                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("server.Domain.GameEvent", b =>

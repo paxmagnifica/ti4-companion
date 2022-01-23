@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useReducer } from 'react'
+import { useEffect, useCallback, useMemo, useReducer, useState } from 'react'
 import clsx from 'clsx'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -22,10 +22,12 @@ import { useTranslation, Trans } from 'react-i18next'
 
 import { SupportTheCreator } from './Support'
 import { getAllSessions } from './shared/persistence'
+import { DomainErrorProvider } from './shared/errorHandling'
 import homeIcon from './assets/icon.jpg'
 import { SessionSetup } from './SessionSetup'
 import SessionsList from './SessionsList'
-import SessionView, { SessionProvider } from './SessionView'
+import SessionView from './SessionView'
+import { SessionProvider } from './SessionView/SessionProvider'
 import * as objectivesService from './objectivesService'
 import { DispatchContext, StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
@@ -60,6 +62,7 @@ function App() {
   const [state, dispatch] = useReducer(reducer, null, init)
   const { sessions } = state
   const { setChatVisible } = useChat()
+  const [domainError, setDomainError] = useState(null)
 
   const theme = useMemo(
     () =>
@@ -99,97 +102,80 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Helmet>
-        <title>TI4 Companion</title>
-        <meta
-          content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
-          name="description"
-        />
-        <meta content="TI4 Companion" property="og:title" />
-        <meta
-          content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
-          property="og:description"
-        />
-      </Helmet>
+      <DomainErrorProvider error={domainError} setError={setDomainError}>
+        <Helmet>
+          <title>TI4 Companion</title>
+          <meta
+            content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
+            name="description"
+          />
+          <meta content="TI4 Companion" property="og:title" />
+          <meta
+            content="Twilight Imperium Fourth Edition Companion App. Here you can manage your TI4 sessions and share them with your friends for a live game state view! If you want a quick reference of races present in the game, Public Objectives and current Victory Points - look no further."
+            property="og:description"
+          />
+        </Helmet>
 
-      <Router>
-        <CssBaseline />
-        <AppBar>
-          <Toolbar>
-            <Link onClick={exitFullscreen} to="/">
-              <IconButton>
-                <img
-                  alt={t('general.home')}
-                  src={homeIcon}
-                  style={{
-                    height: '1.2em',
-                    width: '1.2em',
-                    borderRadius: '50%',
-                  }}
-                  title={t('general.home')}
-                />
-              </IconButton>
-            </Link>
-            <Typography className={classes.title} variant="h5">
-              <Trans i18nKey="general.title" />
-            </Typography>
-            <SupportTheCreator />
-            <LanguageSwitcher />
-            <GitHubRibbon />
-          </Toolbar>
-        </AppBar>
-        <Toolbar />
-        <Container
-          className={clsx(classes.main, { [classes.fullWidth]: fullscreen })}
-        >
-          <StateContext.Provider value={state}>
-            <DispatchContext.Provider value={dispatchWithInvalidate}>
-              <KnowledgeBase />
-              <Box m={2}>
-                <Switch>
-                  <Route path="/new">
-                    <SessionSetup />
-                  </Route>
-                  <Route path="/:sessionId/:secret?">
-                    <SessionProvider
-                      dispatch={dispatchWithInvalidate}
-                      state={state}
-                    >
-                      {({
-                        sessionService,
-                        session,
-                        loading,
-                        editable,
-                        shuffleFactions,
-                        setFactions,
-                        updateFactionPoints,
-                      }) =>
-                        loading || !session ? null : (
-                          <SessionView
-                            editable={editable && !session.locked}
-                            session={session}
-                            sessionService={sessionService}
-                            setFactions={setFactions}
-                            shuffleFactions={shuffleFactions}
-                            updateFactionPoints={updateFactionPoints}
-                          />
-                        )
-                      }
-                    </SessionProvider>
-                  </Route>
-                  <Route path="/">
-                    <SessionsList
-                      loading={sessions.loading || !sessions.loaded}
-                      sessions={sessions.data}
-                    />
-                  </Route>
-                </Switch>
-              </Box>
-            </DispatchContext.Provider>
-          </StateContext.Provider>
-        </Container>
-        {!fullscreen && <Footer />}
-      </Router>
+        <Router>
+          <CssBaseline />
+          <AppBar>
+            <Toolbar>
+              <Link onClick={exitFullscreen} to="/">
+                <IconButton>
+                  <img
+                    alt={t('general.home')}
+                    src={homeIcon}
+                    style={{
+                      height: '1.2em',
+                      width: '1.2em',
+                      borderRadius: '50%',
+                    }}
+                    title={t('general.home')}
+                  />
+                </IconButton>
+              </Link>
+              <Typography className={classes.title} variant="h5">
+                <Trans i18nKey="general.title" />
+              </Typography>
+              <SupportTheCreator />
+              <LanguageSwitcher />
+              <GitHubRibbon />
+            </Toolbar>
+          </AppBar>
+          <Toolbar />
+          <Container
+            className={clsx(classes.main, { [classes.fullWidth]: fullscreen })}
+          >
+            <StateContext.Provider value={state}>
+              <DispatchContext.Provider value={dispatchWithInvalidate}>
+                <KnowledgeBase />
+                <Box m={2}>
+                  <Switch>
+                    <Route path="/new">
+                      <SessionSetup />
+                    </Route>
+                    <Route path="/:sessionId/:secret?">
+                      <SessionProvider
+                        dispatch={dispatchWithInvalidate}
+                        state={state}
+                      >
+                        <SessionView />
+                      </SessionProvider>
+                    </Route>
+                    <Route path="/">
+                      <SessionsList
+                        loading={sessions.loading || !sessions.loaded}
+                        sessions={sessions.data}
+                      />
+                    </Route>
+                  </Switch>
+                </Box>
+              </DispatchContext.Provider>
+            </StateContext.Provider>
+          </Container>
+          {!fullscreen && <Footer />}
+        </Router>
+      </DomainErrorProvider>
     </ThemeProvider>
   )
 }

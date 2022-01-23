@@ -33,6 +33,38 @@ const factory = (options = { debug: true }) =>
             strategyCards: strategyCardsEn,
             relics: relicsEn,
             agendas: agendasEn,
+            editProtection: {
+              passwordDialog: {
+                title: 'Protect editing with password',
+                purpose:
+                  'Your players will need this password to edit the session',
+                reminder:
+                  'Remember this password and share it with people who need edit privileges',
+                noPassword: 'do not set password',
+                setPassword: 'set password',
+              },
+              enableEdit: {
+                tooltip: 'Enable edit',
+                cancelEdit: {
+                  title: 'Disable editing',
+                  prompt: 'Are you sure you want to cancel edit?',
+                  tooltip: 'Disable editing',
+                },
+                secured: {
+                  title: 'Password protected',
+                  prompt: 'Password given by game owner:',
+                },
+                title: 'Enable edit',
+                prompt:
+                  'This session is open for editing to anybody. Are you sure you want to proceed and edit?',
+                action: 'Enable edit',
+              },
+            },
+            errors: {
+              401: 'Unauthorized',
+              404: 'The item you are looking for was not found',
+              500: 'Something went wrong on our side, try again in a moment',
+            },
             components: {
               agenda: {
                 resultTitle: {

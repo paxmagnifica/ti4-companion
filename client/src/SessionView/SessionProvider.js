@@ -1,12 +1,37 @@
-import { useMemo, useEffect, useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import React, {
+  useContext,
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react'
+import { useParams, useHistory } from 'react-router-dom'
 
+import { useDomainErrors } from '../shared/errorHandling'
 import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 
+const SessionContext = React.createContext()
+export const useSessionContext = () => useContext(SessionContext)
+export const useSessionSecret = () => {
+  const context = useContext(SessionContext)
+
+  if (!context) {
+    return { setSecret: () => null }
+  }
+
+  return { setSecret: context.setSecret }
+}
 export function SessionProvider({ children, state, dispatch }) {
-  const { sessionId, secret } = useParams()
+  const { sessionId } = useParams()
+  const history = useHistory()
+  const { setError } = useDomainErrors()
+  const [secret, setSecret] = useState(
+    JSON.parse(
+      localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
+    )[sessionId]?.secret,
+  )
 
   const authorizedFetch = useMemo(() => {
     if (!secret) {
@@ -32,16 +57,25 @@ export function SessionProvider({ children, state, dispatch }) {
   )
 
   const comboDispatch = useCallback(
-    (action) => {
+    async (action) => {
       const { payload } = action
-      dispatch(action)
 
-      return sessionService.pushEvent(payload.sessionId, {
-        type: action.type,
-        payload,
-      })
+      try {
+        await sessionService.pushEvent(payload.sessionId, {
+          type: action.type,
+          payload,
+        })
+
+        dispatch(action)
+      } catch (e) {
+        if (e.domain) {
+          setError(e)
+        }
+
+        throw e
+      }
     },
-    [dispatch, sessionService],
+    [setError, dispatch, sessionService],
   )
 
   const updateFactionPoints = useCallback(
@@ -53,7 +87,6 @@ export function SessionProvider({ children, state, dispatch }) {
   )
 
   const [loading, setLoading] = useState(null)
-  const [editable, setEditable] = useState(false)
 
   useEffect(() => {
     if (!sessionId) {
@@ -69,7 +102,6 @@ export function SessionProvider({ children, state, dispatch }) {
 
       try {
         const session = await sessionService.get(sessionId)
-        setEditable(secret && Boolean(session.editable))
         session.remote = true
         dispatch({ type: 'AddSession', session })
       } catch (e) {
@@ -80,14 +112,7 @@ export function SessionProvider({ children, state, dispatch }) {
     }
 
     loadSession()
-  }, [
-    loading,
-    dispatch,
-    state.sessions.data,
-    sessionId,
-    sessionService,
-    secret,
-  ])
+  }, [loading, dispatch, state.sessions.data, sessionId, sessionService])
 
   const session = useMemo(
     () => state.sessions.data.find((s) => s.id === sessionId),
@@ -100,9 +125,54 @@ export function SessionProvider({ children, state, dispatch }) {
     [],
   )
 
-  if (!sessionId) {
-    return null
-  }
+  const disableEdit = useCallback(() => {
+    const sessions = JSON.parse(
+      localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
+    )
+    if (sessions[sessionId]) {
+      sessions[sessionId].secret = null
+      const stringified = JSON.stringify(sessions)
+      localStorage.setItem('paxmagnifica-ti4companion-sessions', stringified)
+    }
+    setSecret(null)
+    history.replace(history.location.pathname, {})
+  }, [sessionId, setSecret, history])
+
+  const contextValue = useMemo(
+    () => ({
+      session,
+      loading: loading || state.objectives.loading,
+      editable: Boolean(secret),
+      updateFactionPoints,
+      sessionService,
+      setSecret: (s) => {
+        const sessions = JSON.parse(
+          localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
+        )
+        if (!sessions[sessionId]) {
+          sessions[sessionId] = { id: sessionId }
+        }
+        sessions[sessionId].secret = s
+        localStorage.setItem(
+          'paxmagnifica-ti4companion-sessions',
+          JSON.stringify(sessions),
+        )
+        setSecret(s)
+      },
+      disableEdit,
+    }),
+    [
+      session,
+      sessionId,
+      secret,
+      loading,
+      state.objectives.loading,
+      updateFactionPoints,
+      sessionService,
+      setSecret,
+      disableEdit,
+    ],
+  )
 
   return (
     <ComboDispatchContext.Provider value={comboDispatch}>
@@ -111,13 +181,9 @@ export function SessionProvider({ children, state, dispatch }) {
         plasticColors={session?.colors}
         toggle={togglePlasticColors}
       >
-        {children({
-          session,
-          loading: loading || state.objectives.loading,
-          editable,
-          updateFactionPoints,
-          sessionService,
-        })}
+        <SessionContext.Provider value={contextValue}>
+          {children}
+        </SessionContext.Provider>
       </PlasticColorsProvider>
     </ComboDispatchContext.Provider>
   )

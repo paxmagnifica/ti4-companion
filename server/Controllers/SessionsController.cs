@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
+using server.Infra;
 
 namespace server.Controllers
 {
@@ -22,25 +23,31 @@ namespace server.Controllers
         private readonly SessionContext _sessionContext;
         private readonly ITimeProvider _timeProvider;
         private readonly IConfiguration _configuration;
+        private readonly IRepository _repository;
+        private readonly Authorization _authorization;
 
         public SessionsController(
             ILogger<SessionsController> logger,
             SessionContext sessionContext,
             ITimeProvider timeProvider,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IRepository repository,
+            Authorization authorization
         )
         {
             _logger = logger;
             _sessionContext = sessionContext;
             _timeProvider = timeProvider;
             _configuration = configuration;
+            _repository = repository;
+            _authorization = authorization;
         }
 
         [HttpPost]
         public async Task<ActionResult<Session>> Post(GameStartedPayload payload)
         {
             var sessionId = Guid.NewGuid();
-            var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now, Secret = Guid.NewGuid() };
+            var newSession = new Session { Id = sessionId, CreatedAt = _timeProvider.Now };
             newSession.Events = new List<GameEvent> {
                 new GameEvent {
                     Id = Guid.NewGuid(),
@@ -59,7 +66,13 @@ namespace server.Controllers
             await _sessionContext.SaveChangesAsync();
 
             var dto = new SessionDto(newSession);
-            dto.Secret = newSession.Secret;
+            dto.Secret = (await _authorization.GenerateTokenFor(sessionId)).Value;
+            if (!string.IsNullOrWhiteSpace(payload.Password))
+            {
+                dto.Secured = true;
+                FormattableString commandText = $"UPDATE \"Sessions\" SET \"HashedPassword\"=crypt({payload.Password}, gen_salt('bf')) WHERE \"Id\"={sessionId}";
+                _sessionContext.Database.ExecuteSqlInterpolated(commandText);
+            }
 
             return CreatedAtAction(nameof(GetSession), new { sessionId = newSession.Id }, dto);
         }
@@ -85,9 +98,27 @@ namespace server.Controllers
                 .Collection(session => session.Events)
                 .Load();
 
-            var sessionDto = new SessionDto(sessionFromDb, (Guid?)HttpContext.Items["SessionSecret"] ?? (Guid?)null);
+            var sessionDto = new SessionDto(sessionFromDb);
 
             return sessionDto;
+        }
+
+        public class PasswordPayload
+        {
+            public string Password { get; set; }
+        }
+
+        [HttpPost("{sessionId}/edit")]
+        public async Task<ActionResult> ExchangePasswordForSecret([FromRoute] Guid sessionId, [FromBody] PasswordPayload pp)
+        {
+            var passwordCorrect = await _authorization.CheckPassword(sessionId, pp.Password);
+            if (!passwordCorrect)
+            {
+                return new UnauthorizedResult();
+            }
+
+            var token = await _authorization.GenerateTokenFor(sessionId);
+            return new OkObjectResult(new { secret = token.Value });
         }
 
         // TODO not cool, direct Events and stuff

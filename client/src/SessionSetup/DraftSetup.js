@@ -19,6 +19,8 @@ import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useDispatch } from '../state'
 
+import { PasswordProtectionDialog } from './PasswordProtectionDialog'
+
 const playerMarks = [
   { value: 4, label: '4' },
   { value: 6, label: '6' },
@@ -66,35 +68,44 @@ export function DraftSetup() {
 
   const history = useHistory()
   const sessionService = useMemo(() => sessionFactory({ fetch }), [])
-  const startDraft = useCallback(async () => {
-    const session = await sessionService.createSession({
-      setupType: 'draft',
-      options: {
-        initialPool: factionsList.map(({ key }) => key),
-        players,
-        bans,
-        banRounds,
-        bansPerRound,
-        tablePick,
-      },
-    })
-    dispatch({ type: 'CreateGameSession', session })
-    history.push(
-      generatePath(SESSION_VIEW_ROUTES.main, {
-        sessionId: session.id,
-        secret: session.secret,
-      }),
-    )
-  }, [
-    players,
-    sessionService,
-    bans,
-    banRounds,
-    bansPerRound,
-    tablePick,
-    dispatch,
-    history,
-  ])
+  const startDraft = useCallback(
+    async ({ password }) => {
+      const session = await sessionService.createSession({
+        password,
+        setupType: 'draft',
+        options: {
+          initialPool: factionsList.map(({ key }) => key),
+          players,
+          bans,
+          banRounds,
+          bansPerRound,
+          tablePick,
+        },
+      })
+      dispatch({ type: 'CreateGameSession', session })
+      history.push(
+        generatePath(SESSION_VIEW_ROUTES.main, {
+          sessionId: session.id,
+        }),
+        { secret: session.secret },
+      )
+    },
+    [
+      players,
+      sessionService,
+      bans,
+      banRounds,
+      bansPerRound,
+      tablePick,
+      dispatch,
+      history,
+    ],
+  )
+  const [passwordProtectionOpen, setPasswordProtectionOpen] = useState(false)
+  const openPasswordProtection = useCallback(
+    () => setPasswordProtectionOpen(true),
+    [],
+  )
 
   const handlePlayerCountChange = useCallback(
     (_, newValue) => {
@@ -195,9 +206,17 @@ export function DraftSetup() {
           label="pick place at the table as well as the faction"
         />
       </FormGroup>
-      <Button color="secondary" onClick={startDraft} variant="contained">
+      <Button
+        color="secondary"
+        onClick={openPasswordProtection}
+        variant="contained"
+      >
         <Trans i18nKey="general.labels.save" />
       </Button>
+      <PasswordProtectionDialog
+        callback={startDraft}
+        open={passwordProtectionOpen}
+      />
     </>
   )
 }
