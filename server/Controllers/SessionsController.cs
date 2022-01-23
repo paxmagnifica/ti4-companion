@@ -66,9 +66,10 @@ namespace server.Controllers
             await _sessionContext.SaveChangesAsync();
 
             var dto = new SessionDto(newSession);
+            dto.Secret = (await _authorization.GenerateTokenFor(sessionId)).Value;
             if (!string.IsNullOrWhiteSpace(payload.Password))
             {
-                dto.Secret = (await _authorization.GenerateTokenFor(sessionId)).Value;
+                dto.Secured = true;
                 FormattableString commandText = $"UPDATE \"Sessions\" SET \"HashedPassword\"=crypt({payload.Password}, gen_salt('bf')) WHERE \"Id\"={sessionId}";
                 _sessionContext.Database.ExecuteSqlInterpolated(commandText);
             }

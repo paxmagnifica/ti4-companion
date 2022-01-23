@@ -72,10 +72,12 @@ namespace server.Controllers
             Locked = session.Locked;
             SetSessionDetails(session.Events);
             Draft = new DraftDto(session);
+            Secured = !string.IsNullOrEmpty(session.HashedPassword);
         }
 
         public DraftDto Draft { get; set; }
 
+        public bool Secured { get; set; }
         public bool IsDraft { get { return !Factions.Any(); } }
         public GameStartedPayload Setup { get; set; }
         private void SetupGameState(List<GameEvent> events)

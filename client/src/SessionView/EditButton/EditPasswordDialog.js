@@ -57,22 +57,32 @@ export function EditPasswordDialog(props) {
       open={open}
     >
       <DialogTitle id="enable-edit-mode-dialog-title">
-        Password protected
+        {session.secured ? 'Password protected' : 'Enable edit'}
       </DialogTitle>
-      <DialogContent>
-        <Typography>provide password given by game owner to edit:</Typography>
-        <TextField
-          onChange={handlePasswordChange}
-          type="password"
-          value={password}
-        />
-      </DialogContent>
+      {session.secured && (
+        <DialogContent>
+          <Typography>provide password given by game owner to edit:</Typography>
+          <TextField
+            onChange={handlePasswordChange}
+            type="password"
+            value={password}
+          />
+        </DialogContent>
+      )}
+      {!session.secured && (
+        <DialogContent>
+          <Typography>
+            This session is open for editing to anybody. Are you sure you want
+            to proceed and edit?
+          </Typography>
+        </DialogContent>
+      )}
       <DialogActions>
         <Button autoFocus color="secondary" onClick={close}>
           Cancel
         </Button>
         <Button color="white" onClick={exchangePasswordForSecret}>
-          Submit
+          Enable edit
         </Button>
       </DialogActions>
     </Dialog>

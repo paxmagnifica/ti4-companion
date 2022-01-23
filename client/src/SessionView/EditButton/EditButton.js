@@ -59,21 +59,21 @@ export function EditButton() {
   const classes = useStyles()
   const { editable, disableEdit } = useSessionContext()
 
-  const [confirmationOpen, setConfirmationOpen] = useState()
-  const onConfirm = useCallback(() => {
+  const [confirmationOpen, setEditCancelConfirmationOpen] = useState()
+  const onDisableEditConfirmation = useCallback(() => {
     disableEdit()
-    setConfirmationOpen(false)
+    setEditCancelConfirmationOpen(false)
   }, [disableEdit])
 
   const [editPasswordOpen, setEditPasswordOpen] = useState()
 
   const onClose = useCallback(() => {
-    setConfirmationOpen(false)
+    setEditCancelConfirmationOpen(false)
     setEditPasswordOpen(false)
   }, [])
   const handleClick = useCallback(() => {
     if (editable) {
-      setConfirmationOpen(true)
+      setEditCancelConfirmationOpen(true)
 
       return
     }
@@ -96,7 +96,7 @@ export function EditButton() {
         keepMounted
         message="Are you sure to cancel edit?"
         onCancel={onClose}
-        onConfirm={onConfirm}
+        onConfirm={onDisableEditConfirmation}
         open={confirmationOpen}
         title="Disable editing"
       />

@@ -19,6 +19,12 @@ namespace server.Infra
 
         internal async Task<bool> CheckPassword(Guid sessionId, string password)
         {
+            if (string.IsNullOrEmpty(password))
+            {
+                var session = await _sessionContext.Sessions.FindAsync(sessionId);
+                return string.IsNullOrEmpty(session.HashedPassword);
+            }
+
             FormattableString commandText = $"SELECT \"Id\" FROM \"Sessions\" WHERE \"Id\"={sessionId} AND \"HashedPassword\" = crypt({password}, \"HashedPassword\");";
             var rowsAffected = await _sessionContext.Database.ExecuteSqlInterpolatedAsync(commandText);
 
