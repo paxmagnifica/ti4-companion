@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../../shared/useSmallViewport'
+import { useFullscreen } from '../../../Fullscreen'
 /* eslint-disable camelcase */
 import vp10_0 from '../../../assets/victory-points-10/0.jpg'
 import vp10_1 from '../../../assets/victory-points-10/1.jpg'
@@ -71,7 +72,8 @@ const useStyles = makeStyles({
   root: {
     width: '75%',
     margin: '0 auto',
-    maxHeight: '19vh',
+    maxHeight: ({ fullscreen }) => (fullscreen ? '19vh' : 'auto'),
+    marginBottom: ({ fullscreen }) => (fullscreen ? '1vh' : 0),
   },
   fullWidth: {
     width: '100%',
@@ -106,8 +108,9 @@ const useStyles = makeStyles({
 
 function VictoryPoints({ editable, target, onChange, points }) {
   const smallViewport = useSmallViewport()
+  const { fullscreen } = useFullscreen()
   const inputWidth = 100 / (target + 1)
-  const classes = useStyles({ inputWidth })
+  const classes = useStyles({ inputWidth, fullscreen })
   const vpImages = target === 10 ? vp10_images : vp14_images
 
   return (
