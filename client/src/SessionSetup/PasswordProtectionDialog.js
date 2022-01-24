@@ -10,7 +10,7 @@ import {
   DialogContent,
 } from '@material-ui/core'
 
-export function PasswordProtectionDialog({ open, callback }) {
+export function PasswordProtectionDialog({ open, callback, onClose }) {
   const [password, setPassword] = useState('')
   const handlePasswordChange = useCallback((e) => {
     const { value } = e.target
@@ -18,10 +18,15 @@ export function PasswordProtectionDialog({ open, callback }) {
     setPassword(value)
   }, [])
 
+  const closeCallback = useCallback(() => {
+    setPassword('')
+    onClose()
+  }, [onClose])
+
   return (
     <Dialog
       aria-labelledby="enable-edit-mode-dialog-title"
-      disableEscapeKeyDown
+      onClose={closeCallback}
       open={open}
     >
       <DialogTitle id="enable-edit-mode-dialog-title">

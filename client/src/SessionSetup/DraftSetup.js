@@ -215,6 +215,7 @@ export function DraftSetup() {
       </Button>
       <PasswordProtectionDialog
         callback={startDraft}
+        onClose={() => setPasswordProtectionOpen(false)}
         open={passwordProtectionOpen}
       />
     </>
