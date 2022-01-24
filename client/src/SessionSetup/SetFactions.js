@@ -118,6 +118,7 @@ export function SetFactions({ dispatch }) {
       </Grid>
       <PasswordProtectionDialog
         callback={createGameSession}
+        onClose={() => setPasswordProtectionDialogOpen(false)}
         open={passwordProtectionDialogOpen}
       />
     </>
