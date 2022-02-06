@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardActions,
+  CardMedia,
 } from '@material-ui/core'
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
@@ -15,16 +16,16 @@ export function FactionNutshell({ onClose, factionKey }) {
   const factionName = factionKey ? t(`factions.${factionKey}.name`) : ''
 
   return (
-    <Dialog maxWidth="lg" onClose={onClose} open={factionKey !== null}>
+    <Dialog maxWidth="xs" onClose={onClose} open={factionKey !== null}>
       {factionKey && (
         <Card>
-          <CardContent>
-            <img
+           <CardMedia
+              component="img"
+              height="300"
               alt={factionKey}
-              src={getFactionCheatSheetPath(factionKey)}
+              image={getFactionCheatSheetPath(factionKey)}
               title={factionName}
             />
-          </CardContent>
           <CardActions disableSpacing>
             <Button
               aria-label={t('sessionView.overview.goToWiki')}
