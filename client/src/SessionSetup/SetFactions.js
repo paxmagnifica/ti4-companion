@@ -40,6 +40,11 @@ export function SetFactions({ dispatch }) {
   const classes = useStyles()
 
   const [selectedFactions, setSelected] = useState([])
+
+  const validateSelectedFactionsLength = useCallback(
+    () => selectedFactions.length >= 2 && selectedFactions.length <= 8
+  )
+
   const isSelected = useCallback(
     (factionKey) => selectedFactions.includes(factionKey),
     [selectedFactions],
@@ -110,7 +115,7 @@ export function SetFactions({ dispatch }) {
           aria-label="add"
           className={classes.fab}
           color="secondary"
-          disabled={!selectedFactions.length}
+          disabled={!validateSelectedFactionsLength()}
           onClick={openPasswordProtectionDialog}
         >
           <Check />
