@@ -126,5 +126,28 @@ namespace serverTests
             // then
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [Test]
+        public void NobodyShouldBeSpeakerIfThereWasNoDraft()
+        {
+            // given
+            var session = new SessionDto()
+            {
+                Factions = new List<string>() { "F1", "F2", "F3", "F4" },
+            };
+            var expected = new[]
+            {
+                new PlayerDto { Faction = "F1" },
+                new PlayerDto { Faction = "F2" },
+                new PlayerDto { Faction = "F3" },
+                new PlayerDto { Faction = "F4" }
+            };
+
+            // when
+            var actual = PlayerDto.GetPlayers(session);
+
+            // then
+            actual.Should().BeEquivalentTo(expected);
+        }
     }
 }

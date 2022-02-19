@@ -19,12 +19,13 @@ namespace server.Controllers
             return session.Factions.Select(faction =>
             {
                 var playerName = factionPicks.FirstOrDefault(fp => fp.Pick == faction)?.PlayerName;
+
                 return new PlayerDto
                 {
                     Faction = faction,
                     PlayerName = playerName,
                     Color = session.Colors?.GetValueOrDefault(faction),
-                    Speaker = session.Draft?.Speaker == playerName
+                    Speaker = playerName != null && session.Draft?.Speaker == playerName
                 };
             });
         }

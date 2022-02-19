@@ -43,15 +43,19 @@ function FactionNutshells({ players, classes }) {
           <Card className={classes.factionCard}>
             <CardHeader
               avatar={
-                <Avatar
-                  alt={player}
-                  style={{
-                    backgroundColor: color || 'rgba(255, 255, 255, .5)',
-                  }}
-                  variant="rounded"
-                >
-                  {forcedEmptyAvatarValue}
-                </Avatar>
+                playerName || color ? (
+                  <Avatar
+                    alt={player}
+                    style={{
+                      backgroundColor: color || 'rgba(255, 255, 255, .5)',
+                    }}
+                    variant="rounded"
+                  >
+                    {forcedEmptyAvatarValue}
+                  </Avatar>
+                ) : (
+                  <Avatar alt={player} src={factionData.image} />
+                )
               }
               title={player}
             />
