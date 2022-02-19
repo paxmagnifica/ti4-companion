@@ -147,6 +147,7 @@ const factory = (options = { debug: true }) =>
               },
             },
             sessionView: {
+              r1Speaker: 'R1 speaker',
               lock: 'Prevent further editing',
               locked: 'Locked for editing',
               nav: {
