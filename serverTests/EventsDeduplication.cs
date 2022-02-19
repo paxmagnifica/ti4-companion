@@ -51,7 +51,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 0,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"source\":0,\"context\":null}"
                 },
             };
 
@@ -95,7 +95,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 0,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 }
             };
 
@@ -139,17 +139,17 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 0,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":0,\"source\":0,\"context\":null}"
                 },
             };
 
