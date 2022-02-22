@@ -68,22 +68,22 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 5,
@@ -182,27 +182,27 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":9}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":9,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 6,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":3}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":3,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 7,
@@ -285,22 +285,22 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":12}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":12,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 6,
@@ -378,22 +378,22 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
                 },
             };
             var timeline = new Timeline(new Session { Events = given });
@@ -468,32 +468,32 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 6,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 7,
@@ -573,32 +573,32 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 6,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 7,
@@ -643,7 +643,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
                 },
             };
             var timeline = new Timeline(new Session { Events = given });

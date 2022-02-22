@@ -166,7 +166,6 @@ export function DraftSetup() {
           <TextField
             key={`player${indice}`}
             color="secondary"
-            disabled={!bans}
             label={`Player ${indice + 1}`}
             onChange={(e) => handlePlayerChange(indice, e)}
             value={players[indice] || ''}

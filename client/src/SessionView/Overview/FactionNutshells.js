@@ -10,27 +10,54 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 import * as factions from '../../gameInfo/factions'
 
 import { FactionNutshell } from './FactionNutshell'
 
-function FactionNutshells({ factionsList, classes }) {
+function FactionNutshells({ players, classes }) {
   const { t } = useTranslation()
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
 
-  return factionsList.map((faction) => {
+  return players.map(({ faction, playerName, color, speaker }) => {
     const factionData = factions.getData(faction)
     const factionName = t(`factions.${faction}.name`)
+
+    const player = (
+      <span>
+        {playerName || factionName}
+        {speaker && (
+          <em>
+            {' '}
+            (<Trans i18nKey="sessionView.r1Speaker" />)
+          </em>
+        )}
+      </span>
+    )
+    const forcedEmptyAvatarValue = ' '
 
     return (
       <>
         <Grid key={factionData.key} item sm={6} xs={12}>
           <Card className={classes.factionCard}>
             <CardHeader
-              avatar={<Avatar alt={factionName} src={factionData.image} />}
-              title={factionName}
+              avatar={
+                playerName || color ? (
+                  <Avatar
+                    alt={player}
+                    style={{
+                      backgroundColor: color || 'rgba(255, 255, 255, .5)',
+                    }}
+                    variant="rounded"
+                  >
+                    {forcedEmptyAvatarValue}
+                  </Avatar>
+                ) : (
+                  <Avatar alt={player} src={factionData.image} />
+                )
+              }
+              title={player}
             />
             <CardMedia
               className={classes.media}

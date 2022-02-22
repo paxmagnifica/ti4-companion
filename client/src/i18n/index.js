@@ -33,6 +33,8 @@ const factory = (options = { debug: true }) =>
             strategyCards: strategyCardsEn,
             relics: relicsEn,
             agendas: agendasEn,
+            vpCount: '{{points}} VP',
+            playersCount: '{{players}} players',
             editProtection: {
               passwordDialog: {
                 title: 'Protect editing with password',
@@ -147,6 +149,7 @@ const factory = (options = { debug: true }) =>
               },
             },
             sessionView: {
+              r1Speaker: 'R1 speaker',
               lock: 'Prevent further editing',
               locked: 'Locked for editing',
               nav: {
@@ -158,7 +161,7 @@ const factory = (options = { debug: true }) =>
               overview: {
                 goToWiki: 'go to wiki',
                 openOriginal: 'open original image',
-                sessionStart: 'session from',
+                sessionStart: 'session date: {{when}}',
               },
             },
             sessionMap: {
@@ -224,7 +227,6 @@ const factory = (options = { debug: true }) =>
                 results: 'Results',
               },
               vpCountChanged: '{{from}} -> {{to}}',
-              vp: '{{points}} VP',
               vpSource: {
                 mecatol: 'First to control Mecatol Rex',
                 support: 'Support for the Throne promissory note received',
@@ -360,7 +362,7 @@ const factory = (options = { debug: true }) =>
               overview: {
                 goToWiki: 'przejdź do wiki',
                 openOriginal: 'otwórz oryginalny obraz',
-                sessionStart: 'sesja od {{date}} {{time}}',
+                sessionStart: 'kiedy sesja: {{when}}',
               },
             },
             sessionMap: {

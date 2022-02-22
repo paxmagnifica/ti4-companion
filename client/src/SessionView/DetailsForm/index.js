@@ -235,6 +235,7 @@ function DetailsForm({ disabled, session }) {
               {!session.isDraft && (
                 <ColorsPicker
                   colors={colors}
+                  disabled={disabled}
                   factions={session.factions}
                   onChange={setColors}
                 />

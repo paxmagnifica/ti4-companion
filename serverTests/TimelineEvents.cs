@@ -113,7 +113,7 @@ namespace serverTests
                 new TimelineEvent {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"source\":0,\"context\":null}"
                 },
                 new TimelineEvent {
                     Order = 2,

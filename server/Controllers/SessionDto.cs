@@ -6,6 +6,51 @@ using server.Domain;
 
 namespace server.Controllers
 {
+    public class PlayerDto
+    {
+        public string PlayerName { get; set; }
+        public string Faction { get; set; }
+        public string Color { get; set; }
+        public bool Speaker { get; set; }
+
+        public static IEnumerable<PlayerDto> GetPlayers(SessionDto session)
+        {
+            var factionPicks = session.Draft?.Picks?.Where(p => p.Type == "faction") ?? new PickedPayload[0];
+
+            var picks = session.Factions.Select(faction =>
+            {
+                var playerName = factionPicks.FirstOrDefault(fp => fp.Pick == faction)?.PlayerName;
+
+                return new PlayerDto
+                {
+                    Faction = faction,
+                    PlayerName = playerName,
+                    Color = session.Colors?.GetValueOrDefault(faction),
+                    Speaker = playerName != null && session.Draft?.Speaker == playerName
+                };
+            });
+
+            var speaker = session.Draft?.Speaker;
+            var tablePicks = session.Draft?.Picks?.Where(p => p.Type == "tablePosition") ?? new PickedPayload[0];
+
+            if (!string.IsNullOrEmpty(speaker) && tablePicks.Any())
+            {
+                var ordered = tablePicks.OrderBy(tp => int.Parse(tp.Pick));
+                var duplicated = ordered.Concat(ordered).ToList();
+                var speakerIndex = duplicated.FindIndex(a => a.PlayerName == speaker);
+
+                var inOrderAfterSpeaker = duplicated.Skip(speakerIndex).Take(picks.Count());
+
+                Console.WriteLine(JsonConvert.SerializeObject(inOrderAfterSpeaker));
+                Console.WriteLine(JsonConvert.SerializeObject(picks));
+
+                return inOrderAfterSpeaker.Select(orderedPick => picks.First(pick => pick.PlayerName == orderedPick.PlayerName));
+            }
+
+            return picks;
+        }
+    }
+
     public class BanDto
     {
         public string Ban { get; set; }
@@ -14,6 +59,10 @@ namespace server.Controllers
 
     public class DraftDto
     {
+        public DraftDto()
+        {
+        }
+
         public DraftDto(Session session)
         {
             var orderedEvents = session.Events.OrderBy(e => e.HappenedAt);
@@ -34,7 +83,7 @@ namespace server.Controllers
             Phase = ((gameStartOptions?.Bans ?? false) && banEvents.Count() < banOrder.Count()) ? "bans" :
               (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
             InitialPool = gameStartOptions?.InitialPool;
-            Players = gameStartOptions?.Players;
+            Players = gameStartOptions?.Players ?? new string[0];
             BansPerRound = gameStartOptions?.BansPerRound ?? 1;
             Bans = bans;
             Picks = pickEvents.Select(Picked.GetPayload).ToArray();
@@ -60,6 +109,10 @@ namespace server.Controllers
 
     public class SessionDto : Session
     {
+        public SessionDto()
+        {
+        }
+
         public SessionDto(Session session)
         {
             Id = session.Id;
@@ -72,7 +125,10 @@ namespace server.Controllers
             Locked = session.Locked;
             SetSessionDetails(session.Events);
             Draft = new DraftDto(session);
+            Players = PlayerDto.GetPlayers(this);
             Secured = !string.IsNullOrEmpty(session.HashedPassword);
+
+            Setup.Password = null;
         }
 
         public DraftDto Draft { get; set; }
@@ -104,7 +160,8 @@ namespace server.Controllers
         public string End { get; internal set; }
         public decimal Duration { get; internal set; }
         public int VpCount { get; internal set; }
-        public Dictionary<string, string> Colors { get; internal set; }
+        public Dictionary<string, string> Colors { get; set; }
+        public IEnumerable<PlayerDto> Players { get; internal set; }
         private void SetSessionDetails(List<GameEvent> events)
         {
             VpCount = 10;
@@ -194,7 +251,7 @@ namespace server.Controllers
             }).ToList();
         }
 
-        public List<string> Factions { get; internal set; }
+        public List<string> Factions { get; set; }
         private List<string> GetFactions(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
