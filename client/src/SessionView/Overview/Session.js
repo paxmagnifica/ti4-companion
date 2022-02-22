@@ -2,10 +2,10 @@ import { useCallback } from 'react'
 import clsx from 'clsx'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useTranslation } from 'react-i18next'
 
 import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
 
+import { SessionNutshell } from './SessionNutshell'
 import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 import FactionNutshells from './FactionNutshells'
@@ -44,7 +44,6 @@ const useStyles = makeStyles({
 export function Session({ editable, session, updateFactionPoints }) {
   const classes = useStyles()
   const { fullscreen } = useFullscreen()
-  const { t } = useTranslation()
 
   const updateFactionPointsInSession = useCallback(
     (factionToUpdate, points) =>
@@ -59,18 +58,7 @@ export function Session({ editable, session, updateFactionPoints }) {
   return (
     <>
       <HideInFullscreen>
-        <Grid
-          alignItems="center"
-          className={classes.root}
-          container
-          justifyContent="center"
-          spacing={4}
-        >
-          <Grid item style={{ textAlign: 'right' }} xs={12}>
-            {t('sessionView.overview.sessionStart')}{' '}
-            {new Date(session.createdAt).toLocaleString()}
-          </Grid>
-        </Grid>
+        <SessionNutshell />
       </HideInFullscreen>
       <Grid
         alignItems="center"

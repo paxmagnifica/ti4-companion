@@ -350,10 +350,7 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
       </TimelineSeparator>
       <Ti4TimelineContent>
         <Typography variant="h5">
-          <Trans
-            i18nKey="sessionTimeline.vp"
-            values={{ points: payload.points }}
-          />
+          <Trans i18nKey="vpCount" values={{ points: payload.points }} />
         </Typography>
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} small={small} />
@@ -428,10 +425,7 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
       </TimelineSeparator>
       <Ti4TimelineContent>
         <Typography variant="h5">
-          <Trans
-            i18nKey="sessionTimeline.vp"
-            values={{ points: payload.points }}
-          />
+          <Trans i18nKey="vpCount" values={{ points: payload.points }} />
         </Typography>
         {payload.source !== undefined && payload.source !== null && (
           <VictoryPoint context={payload.context} src={payload.source} />
@@ -800,7 +794,7 @@ function SessionSummary({ eventType, payload, happenedAt, session }) {
                 />
               </ListItemIcon>
               <ListItemText
-                primary={t('sessionTimeline.vp', { points: session.vpCount })}
+                primary={t('vpCount', { points: session.vpCount })}
                 secondary={t('sessionTimeline.sessionSummary.winner')}
               />
             </ListItem>
@@ -818,7 +812,7 @@ function SessionSummary({ eventType, payload, happenedAt, session }) {
                   />
                 </ListItemIcon>
                 <ListItemText
-                  primary={t('sessionTimeline.vp', { points: result.points })}
+                  primary={t('vpCount', { points: result.points })}
                 />
               </ListItem>
             ))}
