@@ -16,7 +16,8 @@ namespace server.Controllers
         public static IEnumerable<PlayerDto> GetPlayers(SessionDto session)
         {
             var factionPicks = session.Draft?.Picks?.Where(p => p.Type == "faction") ?? new PickedPayload[0];
-            return session.Factions.Select(faction =>
+
+            var picks = session.Factions.Select(faction =>
             {
                 var playerName = factionPicks.FirstOrDefault(fp => fp.Pick == faction)?.PlayerName;
 
@@ -28,6 +29,25 @@ namespace server.Controllers
                     Speaker = playerName != null && session.Draft?.Speaker == playerName
                 };
             });
+
+            var speaker = session.Draft?.Speaker;
+            var tablePicks = session.Draft?.Picks?.Where(p => p.Type == "tablePosition") ?? new PickedPayload[0];
+
+            if (!string.IsNullOrEmpty(speaker) && tablePicks.Any())
+            {
+                var ordered = tablePicks.OrderBy(tp => int.Parse(tp.Pick));
+                var duplicated = ordered.Concat(ordered).ToList();
+                var speakerIndex = duplicated.FindIndex(a => a.PlayerName == speaker);
+
+                var inOrderAfterSpeaker = duplicated.Skip(speakerIndex).Take(picks.Count());
+
+                Console.WriteLine(JsonConvert.SerializeObject(inOrderAfterSpeaker));
+                Console.WriteLine(JsonConvert.SerializeObject(picks));
+
+                return inOrderAfterSpeaker.Select(orderedPick => picks.First(pick => pick.PlayerName == orderedPick.PlayerName));
+            }
+
+            return picks;
         }
     }
 

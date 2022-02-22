@@ -128,6 +128,44 @@ namespace serverTests
         }
 
         [Test]
+        public void ShouldPutPlayersInTableOrderStartingFromSpeakerIfPresentInDraft()
+        {
+            // given
+            var session = new SessionDto()
+            {
+                Factions = new List<string>() { "F1", "F2", "F3", "F4" },
+                Draft = new DraftDto()
+                {
+                    Picks = new PickedPayload[] {
+                        new PickedPayload { Pick = "F1", PlayerName = "P1", Type = "faction" },
+                        new PickedPayload { Pick = "F2", PlayerName = "P2", Type = "faction" },
+                        new PickedPayload { Pick = "F3", PlayerName = "P3", Type = "faction" },
+                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" },
+                        new PickedPayload { Pick = "1", PlayerName = "P2", Type = "tablePosition" },
+                        new PickedPayload { Pick = "2", PlayerName = "P1", Type = "tablePosition" },
+                        new PickedPayload { Pick = "3", PlayerName = "P4", Type = "tablePosition" },
+                        new PickedPayload { Pick = "4", PlayerName = "P3", Type = "tablePosition" }
+                    },
+                    Speaker = "P3",
+                }
+            };
+            var expected = new[]
+            {
+                new PlayerDto { Faction = "F3", PlayerName = "P3", Speaker = true },
+                new PlayerDto { Faction = "F2", PlayerName = "P2" },
+                new PlayerDto { Faction = "F1", PlayerName = "P1" },
+                new PlayerDto { Faction = "F4", PlayerName = "P4" }
+            };
+
+            // when
+            var actual = PlayerDto.GetPlayers(session);
+
+            // then
+            actual.Should().BeEquivalentTo(expected);
+            actual.Select(a => a.PlayerName).Should().ContainInOrder(expected.Select(e => e.PlayerName));
+        }
+
+        [Test]
         public void NobodyShouldBeSpeakerIfThereWasNoDraft()
         {
             // given
