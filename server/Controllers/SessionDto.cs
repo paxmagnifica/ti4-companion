@@ -127,6 +127,8 @@ namespace server.Controllers
             Draft = new DraftDto(session);
             Players = PlayerDto.GetPlayers(this);
             Secured = !string.IsNullOrEmpty(session.HashedPassword);
+
+            Setup.Password = null;
         }
 
         public DraftDto Draft { get; set; }
