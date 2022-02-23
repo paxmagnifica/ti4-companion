@@ -87,37 +87,35 @@ export function SessionProvider({ children, state, dispatch }) {
   )
 
   const [loading, setLoading] = useState(null)
+  const [loadedSession, setLoadedSession] = useState(null)
 
   useEffect(() => {
     if (!sessionId) {
       return
     }
 
-    if (loading !== null) {
-      return
-    }
-
     const loadSession = async () => {
+      setLoadedSession(null)
       setLoading(true)
 
       try {
         const session = await sessionService.get(sessionId)
+        if (session.status === 404) {
+          throw new Error('what')
+        }
+
         session.remote = true
         dispatch({ type: 'AddSession', session })
+        setLoadedSession(session)
       } catch (e) {
-        console.error(e)
+        setLoadedSession({ error: 'Not found' })
       } finally {
         setLoading(false)
       }
     }
 
     loadSession()
-  }, [loading, dispatch, state.sessions.data, sessionId, sessionService])
-
-  const session = useMemo(
-    () => state.sessions.data.find((s) => s.id === sessionId),
-    [state, sessionId],
-  )
+  }, [dispatch, sessionId, sessionService])
 
   const [showPlasticColors, setShowPlasticColors] = useState(true)
   const togglePlasticColors = useCallback(
@@ -140,7 +138,7 @@ export function SessionProvider({ children, state, dispatch }) {
 
   const contextValue = useMemo(
     () => ({
-      session,
+      session: loadedSession,
       loading: loading || state.objectives.loading,
       editable: Boolean(secret),
       updateFactionPoints,
@@ -162,7 +160,7 @@ export function SessionProvider({ children, state, dispatch }) {
       disableEdit,
     }),
     [
-      session,
+      loadedSession,
       sessionId,
       secret,
       loading,
@@ -178,7 +176,7 @@ export function SessionProvider({ children, state, dispatch }) {
     <ComboDispatchContext.Provider value={comboDispatch}>
       <PlasticColorsProvider
         hide={!showPlasticColors}
-        plasticColors={session?.colors}
+        plasticColors={loadedSession?.colors}
         toggle={togglePlasticColors}
       >
         <SessionContext.Provider value={contextValue}>

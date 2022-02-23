@@ -17,6 +17,10 @@ function Thing({ children }) {
     setSecret(state.secret)
   }
 
+  if (session.error) {
+    return <p>{session.error}</p>
+  }
+
   return (
     <SessionView
       editable={editable}
