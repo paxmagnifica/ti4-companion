@@ -63,7 +63,12 @@ function DetailsForm({ disabled, session }) {
   const [duration, setDuration] = useState(session.duration || 0)
   const [vpCount, setVpCount] = useState(session.vpCount || 10)
   const [vpConfirmationOpen, setVpConfirmationOpen] = useState(false)
-  const [colors, setColors] = useState(session.colors || {})
+  const [colors, setColors] = useState(
+    session.players.reduce(
+      (acc, next) => ({ ...acc, [next.faction]: next.color }),
+      {},
+    ) || {},
+  )
   const getChangeHandler = useCallback(
     (setter, propertyName = 'value') =>
       (changeEvent) => {
@@ -236,8 +241,8 @@ function DetailsForm({ disabled, session }) {
                 <ColorsPicker
                   colors={colors}
                   disabled={disabled}
-                  factions={session.factions}
                   onChange={setColors}
+                  players={session.players}
                 />
               )}
               <Grid container item justifyContent="flex-end" xs={12}>
