@@ -79,9 +79,13 @@ export function SessionProvider({ children, state, dispatch }) {
   )
 
   const updateFactionPoints = useCallback(
-    ({ sessionId: targetSessionId, faction, points }) => {
+    async ({ sessionId: targetSessionId, faction, points }) => {
       const payload = { sessionId: targetSessionId, faction, points }
-      comboDispatch({ type: 'VictoryPointsUpdated', payload })
+      try {
+        await comboDispatch({ type: 'VictoryPointsUpdated', payload })
+      } catch (e) {
+        // empty
+      }
     },
     [comboDispatch],
   )
