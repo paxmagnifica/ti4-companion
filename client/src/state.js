@@ -321,6 +321,10 @@ const updatedMetadata = (state, payload) => {
   session.duration = duration
   session.vpCount = vpCount
   session.colors = colors
+  session.players = session.players.map((player) => ({
+    ...player,
+    color: colors[player.faction],
+  }))
 
   const sessions = [...state.sessions.data]
   sessions.splice(sessionIndex, 1, { ...session })
