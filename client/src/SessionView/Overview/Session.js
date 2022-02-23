@@ -103,7 +103,11 @@ export function Session({ editable, session, updateFactionPoints }) {
           justifyContent="center"
           spacing={4}
         >
-          <FactionNutshells classes={classes} players={session.players} />
+          <FactionNutshells
+            classes={classes}
+            players={session.players}
+            sessionId={session.id}
+          />
         </Grid>
       </HideInFullscreen>
     </>
