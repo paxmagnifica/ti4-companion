@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 import { colors as plasticColors } from '../../shared/plasticColors'
 
-export function ColorsPicker({ colors, factions, onChange, disabled }) {
+export function ColorsPicker({ colors, players, onChange, disabled }) {
   return (
     <>
       <Grid item xs={12}>
@@ -17,7 +17,7 @@ export function ColorsPicker({ colors, factions, onChange, disabled }) {
           <Trans i18nKey="sessionDetails.colorsPicker.sectionTitle" />
         </Typography>
       </Grid>
-      {factions.map((factionKey) => (
+      {players.map(({ faction: factionKey, playerName }) => (
         <Grid key={`color-selector-${factionKey}`} item sm={3} xs={6}>
           <FormControl disabled={disabled} fullWidth>
             <InputLabel
@@ -25,6 +25,7 @@ export function ColorsPicker({ colors, factions, onChange, disabled }) {
               style={{ color: plasticColors[colors[factionKey]] }}
             >
               <Trans i18nKey={`factions.${factionKey}.name`} />
+              {playerName && ` (${playerName})`}
             </InputLabel>
             <Select
               id={`color-${factionKey}`}

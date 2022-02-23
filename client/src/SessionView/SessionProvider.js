@@ -79,15 +79,19 @@ export function SessionProvider({ children, state, dispatch }) {
   )
 
   const updateFactionPoints = useCallback(
-    ({ sessionId: targetSessionId, faction, points }) => {
+    async ({ sessionId: targetSessionId, faction, points }) => {
       const payload = { sessionId: targetSessionId, faction, points }
-      comboDispatch({ type: 'VictoryPointsUpdated', payload })
+      try {
+        await comboDispatch({ type: 'VictoryPointsUpdated', payload })
+      } catch (e) {
+        // empty
+      }
     },
     [comboDispatch],
   )
 
   const [loading, setLoading] = useState(null)
-  const [loadedSession, setLoadedSession] = useState(null)
+  const [sessionLoaded, setSessionLoaded] = useState(false)
 
   useEffect(() => {
     if (!sessionId) {
@@ -95,22 +99,22 @@ export function SessionProvider({ children, state, dispatch }) {
     }
 
     const loadSession = async () => {
-      setLoadedSession(null)
+      setSessionLoaded(false)
       setLoading(true)
 
       try {
         const session = await sessionService.get(sessionId)
         if (session.status === 404) {
-          throw new Error('what')
+          session.error = 'Not Found'
         }
 
         session.remote = true
         dispatch({ type: 'AddSession', session })
-        setLoadedSession(session)
       } catch (e) {
-        setLoadedSession({ error: 'Not found' })
+        console.error(e)
       } finally {
         setLoading(false)
+        setSessionLoaded(true)
       }
     }
 
@@ -121,6 +125,14 @@ export function SessionProvider({ children, state, dispatch }) {
   const togglePlasticColors = useCallback(
     () => setShowPlasticColors((a) => !a),
     [],
+  )
+
+  const session = useMemo(
+    () =>
+      !sessionLoaded
+        ? null
+        : state.sessions.data.find((s) => s.id === sessionId),
+    [state, sessionId, sessionLoaded],
   )
 
   const disableEdit = useCallback(() => {
@@ -138,7 +150,7 @@ export function SessionProvider({ children, state, dispatch }) {
 
   const contextValue = useMemo(
     () => ({
-      session: loadedSession,
+      session,
       loading: loading || state.objectives.loading,
       editable: Boolean(secret),
       updateFactionPoints,
@@ -160,7 +172,7 @@ export function SessionProvider({ children, state, dispatch }) {
       disableEdit,
     }),
     [
-      loadedSession,
+      session,
       sessionId,
       secret,
       loading,
@@ -176,7 +188,7 @@ export function SessionProvider({ children, state, dispatch }) {
     <ComboDispatchContext.Provider value={comboDispatch}>
       <PlasticColorsProvider
         hide={!showPlasticColors}
-        plasticColors={loadedSession?.colors}
+        plasticColors={session?.colors}
         toggle={togglePlasticColors}
       >
         <SessionContext.Provider value={contextValue}>

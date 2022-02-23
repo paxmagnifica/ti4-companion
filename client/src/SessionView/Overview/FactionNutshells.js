@@ -9,14 +9,16 @@ import {
   IconButton,
   Tooltip,
 } from '@material-ui/core'
+import { Link, generatePath } from 'react-router-dom'
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 import { useTranslation, Trans } from 'react-i18next'
 
+import { SESSION_VIEW_ROUTES } from '../../shared/constants'
 import * as factions from '../../gameInfo/factions'
 
 import { FactionNutshell } from './FactionNutshell'
 
-function FactionNutshells({ players, classes }) {
+function FactionNutshells({ players, classes, sessionId }) {
   const { t } = useTranslation()
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
 
@@ -44,15 +46,22 @@ function FactionNutshells({ players, classes }) {
             <CardHeader
               avatar={
                 playerName || color ? (
-                  <Avatar
-                    alt={player}
-                    style={{
-                      backgroundColor: color || 'rgba(255, 255, 255, .5)',
-                    }}
-                    variant="rounded"
+                  <Link
+                    title="go to details to change colors"
+                    to={generatePath(SESSION_VIEW_ROUTES.details, {
+                      sessionId,
+                    })}
                   >
-                    {forcedEmptyAvatarValue}
-                  </Avatar>
+                    <Avatar
+                      alt={player}
+                      style={{
+                        backgroundColor: color || 'rgba(255, 255, 255, .5)',
+                      }}
+                      variant="rounded"
+                    >
+                      {forcedEmptyAvatarValue}
+                    </Avatar>
+                  </Link>
                 ) : (
                   <Avatar alt={player} src={factionData.image} />
                 )
