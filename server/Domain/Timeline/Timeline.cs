@@ -154,7 +154,7 @@ namespace server.Domain
                 return timelineEvents;
             }
 
-            var speakerEvent = timelineEvents.First(e => e.EventType == nameof(SpeakerSelected));
+            var speakerEvent = timelineEvents.Last(e => e.EventType == nameof(SpeakerSelected));
             var picks = timelineEvents.Where(e => e.EventType == nameof(Picked)).OrderBy(e => Picked.GetPayload(e.SerializedPayload).PlayerIndex);
             var playerPicks = new Dictionary<string, (string, int)>();
 
