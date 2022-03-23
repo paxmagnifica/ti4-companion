@@ -12,7 +12,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Edit } from '@material-ui/icons'
 
-import { useSessionContext } from '../SessionProvider'
+import { useSessionContext } from '../useSessionContext'
 
 import { EditPasswordDialog } from './EditPasswordDialog'
 

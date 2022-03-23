@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import { MapPreview } from '../../MapPreview'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { SessionNutshell } from '../SessionNutshell'
-import { EditPromptProvider, EditPrompt } from '../../EditButton'
+import { EditPrompt } from '../../Edit'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
@@ -347,7 +347,6 @@ export function Drafting({ editable, session, sessionService }) {
 
   return (
     <>
-      <EditPromptProvider />
       <SessionNutshell />
       <PhaseStepper
         bans={Boolean(session.setup?.options?.bans)}

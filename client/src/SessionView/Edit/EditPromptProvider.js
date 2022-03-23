@@ -1,35 +1,9 @@
 import React, { useCallback } from 'react'
 import { Snackbar, Button, IconButton } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons'
+import { Trans, useTranslation } from 'react-i18next'
 
-import { useSessionContext } from '../SessionProvider'
-
-export function EditPrompt({ children, fullWidth }) {
-  const {
-    editable,
-    editFeature: { setEnableEditPromptOpen },
-  } = useSessionContext()
-
-  const nonEditableCallback = useCallback(() => {
-    if (editable) {
-      return
-    }
-
-    setEnableEditPromptOpen(true)
-  }, [editable, setEnableEditPromptOpen])
-
-  return (
-    <span
-      onClick={nonEditableCallback}
-      style={{
-        width: fullWidth ? '100%' : 'auto',
-        display: 'inline-flex',
-      }}
-    >
-      {children}
-    </span>
-  )
-}
+import { useSessionContext } from '../useSessionContext'
 
 export function EditPromptProvider() {
   const {
@@ -55,12 +29,19 @@ export function EditPromptProvider() {
     setEnableEditDialogOpen(true)
   }, [setEnableEditDialogOpen, setEnableEditPromptOpen])
 
+  const { t } = useTranslation()
+
   return (
     <Snackbar
       action={
         <>
-          <Button color="secondary" onClick={enableEdit} size="small">
-            ENABLE EDIT
+          <Button
+            color="secondary"
+            endIcon={<EditIcon />}
+            onClick={enableEdit}
+            size="small"
+          >
+            <Trans i18nKey="editProtection.enableEdit.title" />
           </Button>
           <IconButton
             aria-label="close"
@@ -73,11 +54,11 @@ export function EditPromptProvider() {
         </>
       }
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'center',
       }}
-      autoHideDuration={3000}
-      message="To make changes you have to "
+      autoHideDuration={5000}
+      message={t('editProtection.enableEdit.toMakeChanges')}
       onClose={handleClose}
       open={enableEditPromptOpen}
     />

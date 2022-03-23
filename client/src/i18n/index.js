@@ -57,6 +57,7 @@ const factory = (options = { debug: true }) =>
                   prompt: 'Password given by game owner:',
                 },
                 title: 'Enable edit',
+                toMakeChanges: 'To make changes you have to',
                 prompt:
                   'This session is open for editing to anybody. Are you sure you want to proceed and edit?',
                 action: 'Enable edit',

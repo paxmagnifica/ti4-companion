@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 import { Trans } from 'react-i18next'
 
-import { useSessionContext } from '../SessionProvider'
+import { useSessionContext } from '../useSessionContext'
 
 export function SessionNutshell() {
   const { session } = useSessionContext()

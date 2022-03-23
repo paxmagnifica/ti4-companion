@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom'
 
-import { useSessionContext } from './SessionProvider'
+import { useSessionContext } from './useSessionContext'
 import { SessionView } from './SessionView'
 
 function Thing({ children }) {

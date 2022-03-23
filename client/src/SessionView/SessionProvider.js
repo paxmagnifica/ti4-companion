@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useMemo,
-  useEffect,
-  useState,
-  useCallback,
-} from 'react'
+import React, { useMemo, useEffect, useState, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
 import { useDomainErrors } from '../shared/errorHandling'
@@ -12,12 +6,11 @@ import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 
-import { useEdit } from './Edit'
+import { useEdit, EditPromptProvider } from './Edit'
+import { useSessionContext, SessionContext } from './useSessionContext'
 
-const SessionContext = React.createContext()
-export const useSessionContext = () => useContext(SessionContext)
 export const useSessionSecret = () => {
-  const context = useContext(SessionContext)
+  const context = useSessionContext()
 
   if (!context) {
     return { setSecret: () => null }
@@ -199,6 +192,7 @@ export function SessionProvider({ children, state, dispatch }) {
       >
         <SessionContext.Provider value={contextValue}>
           {children}
+          <EditPromptProvider />
         </SessionContext.Provider>
       </PlasticColorsProvider>
     </ComboDispatchContext.Provider>

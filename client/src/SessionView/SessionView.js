@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -9,10 +10,11 @@ import { FullscreenButton, HideInFullscreen } from '../Fullscreen'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import { TogglePlasticColorsButton } from '../shared/plasticColors'
 
+import { useSessionContext } from './useSessionContext'
 import useRealTimeSession from './useRealTimeSession'
 import { Overview } from './Overview'
 import ShareButton from './ShareButton'
-import { EditButton } from './EditButton'
+import { EditButton } from './Edit'
 import Map from './Map'
 import SessionNavigation from './SessionNavigation'
 import DetailsForm from './DetailsForm'
@@ -37,6 +39,13 @@ export function SessionView({
   const sortedPoints = [...session.points]
   sortedPoints.sort((a, b) => b.points - a.points)
   const winningFaction = sortedPoints[0]?.faction
+
+  const {
+    editFeature: { setEnableEditPromptOpen },
+  } = useSessionContext()
+  useEffect(() => {
+    setEnableEditPromptOpen(!editable)
+  }, [editable, setEnableEditPromptOpen])
 
   // TODO draft title etc
   return (
