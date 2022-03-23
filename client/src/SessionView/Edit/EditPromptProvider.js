@@ -2,34 +2,7 @@ import React, { useCallback } from 'react'
 import { Snackbar, Button, IconButton } from '@material-ui/core'
 import { Close as CloseIcon } from '@material-ui/icons'
 
-import { useSessionContext } from '../SessionProvider'
-
-export function EditPrompt({ children, fullWidth }) {
-  const {
-    editable,
-    editFeature: { setEnableEditPromptOpen },
-  } = useSessionContext()
-
-  const nonEditableCallback = useCallback(() => {
-    if (editable) {
-      return
-    }
-
-    setEnableEditPromptOpen(true)
-  }, [editable, setEnableEditPromptOpen])
-
-  return (
-    <span
-      onClick={nonEditableCallback}
-      style={{
-        width: fullWidth ? '100%' : 'auto',
-        display: 'inline-flex',
-      }}
-    >
-      {children}
-    </span>
-  )
-}
+import { useSessionContext } from '../useSessionContext'
 
 export function EditPromptProvider() {
   const {
@@ -73,10 +46,10 @@ export function EditPromptProvider() {
         </>
       }
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'center',
       }}
-      autoHideDuration={3000}
+      autoHideDuration={5000}
       message="To make changes you have to "
       onClose={handleClose}
       open={enableEditPromptOpen}
