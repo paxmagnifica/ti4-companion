@@ -1,10 +1,9 @@
-import { useEffect, useCallback } from 'react'
+import { useCallback } from 'react'
 import clsx from 'clsx'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
-import { useSessionContext } from '../SessionProvider'
 
 import { SessionNutshell } from './SessionNutshell'
 import VictoryPoints from './VictoryPoints'
