@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Snackbar, Button, IconButton } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { useSessionContext } from '../useSessionContext'
@@ -35,7 +35,12 @@ export function EditPromptProvider() {
     <Snackbar
       action={
         <>
-          <Button color="secondary" onClick={enableEdit} size="small">
+          <Button
+            color="secondary"
+            endIcon={<EditIcon />}
+            onClick={enableEdit}
+            size="small"
+          >
             <Trans i18nKey="editProtection.enableEdit.title" />
           </Button>
           <IconButton
