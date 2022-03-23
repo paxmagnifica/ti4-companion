@@ -12,6 +12,8 @@ import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 
+import { useEdit } from './Edit'
+
 const SessionContext = React.createContext()
 export const useSessionContext = () => useContext(SessionContext)
 export const useSessionSecret = () => {
@@ -148,6 +150,8 @@ export function SessionProvider({ children, state, dispatch }) {
     history.replace(history.location.pathname, {})
   }, [sessionId, setSecret, history])
 
+  const editFeature = useEdit()
+
   const contextValue = useMemo(
     () => ({
       session,
@@ -170,8 +174,10 @@ export function SessionProvider({ children, state, dispatch }) {
         setSecret(s)
       },
       disableEdit,
+      editFeature,
     }),
     [
+      editFeature,
       session,
       sessionId,
       secret,

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import {
   DialogActions,
@@ -57,29 +57,35 @@ function ConfirmationDialog(props) {
 export function EditButton() {
   const { t } = useTranslation()
   const classes = useStyles()
-  const { editable, disableEdit } = useSessionContext()
+  const {
+    editable,
+    disableEdit,
+    editFeature: {
+      enableEditDialogOpen,
+      setEnableEditDialogOpen,
+      confirmEditDisableOpen,
+      setEditDisableConfirmationOpen,
+    },
+  } = useSessionContext()
 
-  const [confirmationOpen, setEditCancelConfirmationOpen] = useState()
   const onDisableEditConfirmation = useCallback(() => {
     disableEdit()
-    setEditCancelConfirmationOpen(false)
-  }, [disableEdit])
-
-  const [editPasswordOpen, setEditPasswordOpen] = useState()
+    setEditDisableConfirmationOpen(false)
+  }, [disableEdit, setEditDisableConfirmationOpen])
 
   const onClose = useCallback(() => {
-    setEditCancelConfirmationOpen(false)
-    setEditPasswordOpen(false)
-  }, [])
+    setEditDisableConfirmationOpen(false)
+    setEnableEditDialogOpen(false)
+  }, [setEditDisableConfirmationOpen, setEnableEditDialogOpen])
   const handleClick = useCallback(() => {
     if (editable) {
-      setEditCancelConfirmationOpen(true)
+      setEditDisableConfirmationOpen(true)
 
       return
     }
 
-    setEditPasswordOpen(true)
-  }, [editable])
+    setEnableEditDialogOpen(true)
+  }, [editable, setEditDisableConfirmationOpen, setEnableEditDialogOpen])
 
   return (
     <>
@@ -104,10 +110,10 @@ export function EditButton() {
         message={t('editProtection.enableEdit.cancelEdit.prompt')}
         onCancel={onClose}
         onConfirm={onDisableEditConfirmation}
-        open={confirmationOpen}
+        open={confirmEditDisableOpen}
         title={t('editProtection.enableEdit.cancelEdit.title')}
       />
-      <EditPasswordDialog onClose={onClose} open={editPasswordOpen} />
+      <EditPasswordDialog onClose={onClose} open={enableEditDialogOpen} />
     </>
   )
 }
