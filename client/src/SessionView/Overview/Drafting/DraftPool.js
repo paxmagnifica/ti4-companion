@@ -14,7 +14,7 @@ import clsx from 'clsx'
 
 import { getData } from '../../../gameInfo/factions'
 import { FactionNutshell } from '../FactionNutshell'
-import { EditPrompt, EditPromptButton } from '../../EditButton'
+import { EditPrompt } from '../../EditButton'
 
 const useStyles = makeStyles((theme) => ({
   containedButton: {
