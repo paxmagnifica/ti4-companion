@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { Snackbar, Button, IconButton } from '@material-ui/core'
 import { Close as CloseIcon } from '@material-ui/icons'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { useSessionContext } from '../useSessionContext'
 
@@ -28,12 +29,14 @@ export function EditPromptProvider() {
     setEnableEditDialogOpen(true)
   }, [setEnableEditDialogOpen, setEnableEditPromptOpen])
 
+  const { t } = useTranslation()
+
   return (
     <Snackbar
       action={
         <>
           <Button color="secondary" onClick={enableEdit} size="small">
-            ENABLE EDIT
+            <Trans i18nKey="editProtection.enableEdit.title" />
           </Button>
           <IconButton
             aria-label="close"
@@ -50,7 +53,7 @@ export function EditPromptProvider() {
         horizontal: 'center',
       }}
       autoHideDuration={5000}
-      message="To make changes you have to "
+      message={t('editProtection.enableEdit.toMakeChanges')}
       onClose={handleClose}
       open={enableEditPromptOpen}
     />

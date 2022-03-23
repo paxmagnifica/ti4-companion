@@ -37,7 +37,7 @@ export function EditPasswordDialog(props) {
     mutate(
       { sessionId, password },
       {
-        onSuccess: (data, variables, context) => {
+        onSuccess: (data) => {
           const { secret } = data
           setSecret(secret)
           setLoading(false)
