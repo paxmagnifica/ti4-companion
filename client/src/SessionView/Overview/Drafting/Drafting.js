@@ -65,24 +65,28 @@ function Speaker({ disabled, draft, session, sessionService }) {
     <>
       {draft.speaker && (
         <Box mb={2}>
-          <Button
-            color="secondary"
-            disabled={disabled}
-            onClick={commitDraft}
-            variant="contained"
-          >
-            commit draft & start session
-          </Button>
+          <EditPrompt>
+            <Button
+              color="secondary"
+              disabled={disabled}
+              onClick={commitDraft}
+              variant="contained"
+            >
+              commit draft & start session
+            </Button>
+          </EditPrompt>
         </Box>
       )}
-      <Button
-        color="primary"
-        disabled={disabled}
-        onClick={selectRandomSpeaker}
-        variant="contained"
-      >
-        assign speaker at random
-      </Button>
+      <EditPrompt>
+        <Button
+          color="primary"
+          disabled={disabled}
+          onClick={selectRandomSpeaker}
+          variant="contained"
+        >
+          assign speaker at random
+        </Button>
+      </EditPrompt>
     </>
   )
 }
