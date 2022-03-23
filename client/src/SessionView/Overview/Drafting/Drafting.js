@@ -150,26 +150,28 @@ function TablePositionPick({
 
         return (
           <Grid key={tablePositionIndex} item lg={3} md={4} sm={6} xs={12}>
-            <Button
-              className={clsx(classes.containedButton, {
-                [classes.picked]: picked,
-              })}
-              color={isSelected ? 'secondary' : 'default'}
-              disabled={Boolean(
-                disabled || disabledDueToSelection || picked || pick,
-              )}
-              endIcon={picked ? <PickedIcon fontSize="large" /> : null}
-              fullWidth
-              onClick={() => handleSelectedPosition(tablePositionIndex)}
-              variant="contained"
-            >
-              {`P${tablePositionIndex + 1}`} on map
-              {picked && (
-                <Typography variant="caption">
-                  picked by {picked.playerName}
-                </Typography>
-              )}
-            </Button>
+            <EditPrompt fullWidth>
+              <Button
+                className={clsx(classes.containedButton, {
+                  [classes.picked]: picked,
+                })}
+                color={isSelected ? 'secondary' : 'default'}
+                disabled={Boolean(
+                  disabled || disabledDueToSelection || picked || pick,
+                )}
+                endIcon={picked ? <PickedIcon fontSize="large" /> : null}
+                fullWidth
+                onClick={() => handleSelectedPosition(tablePositionIndex)}
+                variant="contained"
+              >
+                {`P${tablePositionIndex + 1}`} on map
+                {picked && (
+                  <Typography variant="caption">
+                    picked by {picked.playerName}
+                  </Typography>
+                )}
+              </Button>
+            </EditPrompt>
           </Grid>
         )
       })}
@@ -234,14 +236,17 @@ function Pick({
 
   return (
     <>
-      <Button
-        color="secondary"
-        disabled={disabled || (!pick && selectedPosition === null)}
-        onClick={pickFaction}
-        variant="contained"
-      >
-        pick {session.setup.options.tablePick ? ' (faction or table spot)' : ''}
-      </Button>
+      <EditPrompt>
+        <Button
+          color="secondary"
+          disabled={disabled || (!pick && selectedPosition === null)}
+          onClick={pickFaction}
+          variant="contained"
+        >
+          pick{' '}
+          {session.setup.options.tablePick ? ' (faction or table spot)' : ''}
+        </Button>
+      </EditPrompt>
       {session.setup.options.tablePick && (
         <TablePositionPick
           disabled={
