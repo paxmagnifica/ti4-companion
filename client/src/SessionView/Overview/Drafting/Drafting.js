@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { Grid, Box, Button, Typography } from '@material-ui/core'
 import { PanTool as PickedIcon } from '@material-ui/icons'
 import Alert from '@material-ui/lab/Alert'
@@ -9,6 +9,7 @@ import clsx from 'clsx'
 import { MapPreview } from '../../MapPreview'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { SessionNutshell } from '../SessionNutshell'
+import { EditPromptProvider, EditPrompt } from '../../EditButton'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
@@ -297,14 +298,16 @@ function Ban({
   const bansLeft = draft.bansPerRound - bans.length
 
   return (
-    <Button
-      color="secondary"
-      disabled={disabled || bans.length < draft.bansPerRound}
-      onClick={ban}
-      variant="contained"
-    >
-      ban{bansLeft ? ` (left: ${bansLeft})` : ''}
-    </Button>
+    <EditPrompt>
+      <Button
+        color="secondary"
+        disabled={disabled || bans.length < draft.bansPerRound}
+        onClick={ban}
+        variant="contained"
+      >
+        ban{bansLeft ? ` (left: ${bansLeft})` : ''}
+      </Button>
+    </EditPrompt>
   )
 }
 
@@ -335,6 +338,7 @@ export function Drafting({ editable, session, sessionService }) {
 
   return (
     <>
+      <EditPromptProvider />
       <SessionNutshell />
       <PhaseStepper
         bans={Boolean(session.setup?.options?.bans)}

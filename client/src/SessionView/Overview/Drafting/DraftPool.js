@@ -14,6 +14,7 @@ import clsx from 'clsx'
 
 import { getData } from '../../../gameInfo/factions'
 import { FactionNutshell } from '../FactionNutshell'
+import { EditPrompt, EditPromptButton } from '../../EditButton'
 
 const useStyles = makeStyles((theme) => ({
   containedButton: {
@@ -97,37 +98,39 @@ export function DraftPool({
                 fullWidth
                 variant="contained"
               >
-                <Button
-                  className={clsx(classes.containedButton, {
-                    [classes.banned]: banned,
-                    [classes.picked]: picked,
-                  })}
-                  color={isSelected(factionKey) ? 'secondary' : 'default'}
-                  disabled={Boolean(
-                    disabled || banned || disabledDueToSelection || picked,
-                  )}
-                  fullWidth
-                  onClick={() => toggleSelection(factionKey)}
-                  startIcon={
-                    <Avatar
-                      alt={getData(factionKey).name}
-                      src={getData(factionKey).image}
-                    />
-                  }
-                  variant="contained"
-                >
-                  <Trans i18nKey={`factions.${factionKey}.name`} />
-                  {banned && (
-                    <Typography variant="caption">
-                      banned by {banned.playerName}
-                    </Typography>
-                  )}
-                  {picked && (
-                    <Typography variant="caption">
-                      picked by {picked.playerName}
-                    </Typography>
-                  )}
-                </Button>
+                <EditPrompt fullWidth>
+                  <Button
+                    className={clsx(classes.containedButton, {
+                      [classes.banned]: banned,
+                      [classes.picked]: picked,
+                    })}
+                    color={isSelected(factionKey) ? 'secondary' : 'default'}
+                    disabled={Boolean(
+                      disabled || banned || disabledDueToSelection || picked,
+                    )}
+                    fullWidth
+                    onClick={() => toggleSelection(factionKey)}
+                    startIcon={
+                      <Avatar
+                        alt={getData(factionKey).name}
+                        src={getData(factionKey).image}
+                      />
+                    }
+                    variant="contained"
+                  >
+                    <Trans i18nKey={`factions.${factionKey}.name`} />
+                    {banned && (
+                      <Typography variant="caption">
+                        banned by {banned.playerName}
+                      </Typography>
+                    )}
+                    {picked && (
+                      <Typography variant="caption">
+                        picked by {picked.playerName}
+                      </Typography>
+                    )}
+                  </Button>
+                </EditPrompt>
                 <IconButton
                   className={clsx(classes.containedButton, classes.infoButton)}
                   onClick={() => setFactionNutshellKey(factionKey)}
