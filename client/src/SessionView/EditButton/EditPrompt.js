@@ -73,8 +73,8 @@ export function EditPromptProvider() {
         </>
       }
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
+        vertical: 'top',
+        horizontal: 'center',
       }}
       autoHideDuration={3000}
       message="To make changes you have to "
