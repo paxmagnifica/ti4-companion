@@ -151,6 +151,10 @@ const factory = (options = { debug: true }) =>
             },
             sessionView: {
               r1Speaker: 'R1 speaker',
+              factionNutshell: {
+                tablePosition: 'at table: P{{position}}',
+                draftDetails: 'draft details',
+              },
               lock: 'Prevent further editing',
               locked: 'Locked for editing',
               nav: {

@@ -56,7 +56,7 @@ export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
                 {pick.playerName}{' '}
                 <em>
                   {pick.playerName === speaker
-                    ? `(${t('general.labels.speaker')})`
+                    ? `(${t('sessionView.r1Speaker')})`
                     : ''}
                 </em>
               </TableCell>

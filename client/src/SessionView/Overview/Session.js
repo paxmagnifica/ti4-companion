@@ -107,6 +107,8 @@ export function Session({ editable, session, updateFactionPoints }) {
             classes={classes}
             players={session.players}
             sessionId={session.id}
+            showTablePosition={Boolean(session.setup.options?.tablePick)}
+            wasDrafted={session.setup.setupType === 'draft'}
           />
         </Grid>
       </HideInFullscreen>
