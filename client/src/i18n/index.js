@@ -149,6 +149,16 @@ const factory = (options = { debug: true }) =>
                 title: 'What factions are in the game?',
               },
             },
+            drafting: {
+              speakerOrder: {
+                bans: {
+                  title: 'Ban order',
+                },
+                picks: {
+                  title: 'Pick order',
+                },
+              },
+            },
             sessionView: {
               r1Speaker: 'R1 speaker',
               factionNutshell: {

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Grid, Box, Button, Typography } from '@material-ui/core'
-import { PanTool as PickedIcon } from '@material-ui/icons'
+import { PanTool as PickedIcon, Map as MapIcon } from '@material-ui/icons'
+import { useTranslation } from 'react-i18next'
 import Alert from '@material-ui/lab/Alert'
 import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
@@ -10,6 +11,7 @@ import { MapPreview } from '../../components'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { SessionNutshell } from '../SessionNutshell'
 import { EditPrompt } from '../../Edit'
+import { FactionImage } from '../../../shared/FactionImage'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
@@ -321,6 +323,7 @@ function Ban({
 }
 
 export function Drafting({ editable, session, sessionService }) {
+  const { t } = useTranslation()
   const [disableFactionSelection, setDisableFactionSelection] = useState(false)
   const [selected, setSelected] = useState([])
   const { draft } = useDraftQuery({
@@ -352,10 +355,36 @@ export function Drafting({ editable, session, sessionService }) {
         bans={Boolean(session.setup?.options?.bans)}
         phase={draft.phase}
       />
-      {draft.phase !== PHASE.speaker && (
+      {draft.phase === PHASE.bans && (
         <PlayerOrderStepper
           activePlayer={draft.activePlayerIndex}
+          history={draft.bans.map(({ ban }) => (
+            <FactionImage
+              factionKey={ban}
+              style={{ width: 'auto', height: '100%' }}
+            />
+          ))}
           order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+          title={t(`drafting.speakerOrder.${draft.phase}.title`)}
+        />
+      )}
+      {draft.phase === PHASE.picks && (
+        <PlayerOrderStepper
+          activePlayer={draft.activePlayerIndex}
+          history={draft.picks.map(({ type, pick }) =>
+            type === 'faction' ? (
+              <FactionImage
+                factionKey={pick}
+                style={{ width: 'auto', height: '100%' }}
+              />
+            ) : (
+              <>
+                <MapIcon /> {`P${Number(pick) + 1}`}
+              </>
+            ),
+          )}
+          order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+          title={t(`drafting.speakerOrder.${draft.phase}.title`)}
         />
       )}
       {draft.phase === PHASE.speaker && (

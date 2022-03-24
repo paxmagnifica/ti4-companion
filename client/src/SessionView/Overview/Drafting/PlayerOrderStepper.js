@@ -7,7 +7,7 @@ import {
   Done as DoneIcon,
 } from '@material-ui/icons'
 
-const useStepperStyles = makeStyles((theme) => ({
+const useStepperStyles = makeStyles(() => ({
   root: {
     backgroundColor: 'transparent',
   },
@@ -16,13 +16,13 @@ const useStepperStyles = makeStyles((theme) => ({
   },
 }))
 
-export function PlayerOrderStepper({ order, activePlayer }) {
+export function PlayerOrderStepper({ history, order, activePlayer, title }) {
   const classes = useStepperStyles()
 
   return (
     <>
       <Typography align="center" variant="h4">
-        Player order:
+        {title}
       </Typography>
       <Stepper
         activeStep={activePlayer}
@@ -33,15 +33,21 @@ export function PlayerOrderStepper({ order, activePlayer }) {
           <Step key={label} color="secondary">
             <StepLabel
               optional={
-                index === activePlayer ? (
-                  <Typography align="center">
+                <Typography
+                  align="center"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '3em',
+                  }}
+                >
+                  {index === activePlayer ? (
                     <ActiveIcon color="secondary" />
-                  </Typography>
-                ) : index < activePlayer ? (
-                  <Typography align="center">
-                    <DoneIcon color="secondary" />
-                  </Typography>
-                ) : null
+                  ) : index < activePlayer ? (
+                    history[index] || <DoneIcon color="secondary" />
+                  ) : null}
+                </Typography>
               }
               StepIconComponent={PlayerIcon}
               StepIconProps={{

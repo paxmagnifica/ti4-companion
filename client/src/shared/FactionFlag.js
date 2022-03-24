@@ -3,9 +3,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 import clsx from 'clsx'
 
-import * as factions from '../gameInfo/factions'
-
 import { usePlasticColors } from './plasticColors'
+import { FactionImage } from './FactionImage'
 
 const useFlagStyles = makeStyles({
   root: {
@@ -44,7 +43,6 @@ function FactionFlag(
     disabled,
     plasticColor: plasticColor?.hex,
   })
-  const factionData = factions.getData(factionKey)
 
   return (
     <div
@@ -52,10 +50,9 @@ function FactionFlag(
       className={clsx(classes.root, className)}
       onClick={disabled ? undefined : onClick}
     >
-      <img
-        alt={factionKey}
+      <FactionImage
         className={classes.factionImage}
-        src={factionData.image}
+        factionKey={factionKey}
         title={`${t(`factions.${factionKey}.name`)} ${
           plasticColor
             ? `(${t(`general.labels.colors.${plasticColor.color}`)})`
