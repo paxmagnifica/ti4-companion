@@ -10,6 +10,7 @@ import { MapPreview } from '../../components'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { SessionNutshell } from '../SessionNutshell'
 import { EditPrompt } from '../../Edit'
+import { FactionImage } from '../../../shared/FactionImage'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
@@ -355,7 +356,20 @@ export function Drafting({ editable, session, sessionService }) {
       {draft.phase !== PHASE.speaker && (
         <PlayerOrderStepper
           activePlayer={draft.activePlayerIndex}
+          history={draft.bans.map(({ ban }) => (
+            <FactionImage
+              factionKey={ban}
+              style={{ width: 'auto', height: '3em' }}
+            />
+          ))}
           order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+          title={`${
+            draft.phase === PHASE.bans
+              ? 'Ban'
+              : draft.phase === PHASE.picks
+              ? 'Pick'
+              : ''
+          } order`}
         />
       )}
       {draft.phase === PHASE.speaker && (

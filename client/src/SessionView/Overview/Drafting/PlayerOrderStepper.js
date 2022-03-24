@@ -16,13 +16,13 @@ const useStepperStyles = makeStyles((theme) => ({
   },
 }))
 
-export function PlayerOrderStepper({ order, activePlayer }) {
+export function PlayerOrderStepper({ history, order, activePlayer, title }) {
   const classes = useStepperStyles()
 
   return (
     <>
       <Typography align="center" variant="h4">
-        Player order:
+        {title}
       </Typography>
       <Stepper
         activeStep={activePlayer}
@@ -39,7 +39,7 @@ export function PlayerOrderStepper({ order, activePlayer }) {
                   </Typography>
                 ) : index < activePlayer ? (
                   <Typography align="center">
-                    <DoneIcon color="secondary" />
+                    {history[index] || <DoneIcon color="secondary"/>}
                   </Typography>
                 ) : null
               }
