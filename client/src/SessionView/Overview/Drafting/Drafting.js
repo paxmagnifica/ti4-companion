@@ -375,7 +375,7 @@ export function Drafting({ editable, session, sessionService }) {
             type === 'faction' ? (
               <FactionImage
                 factionKey={pick}
-                style={{ width: 'auto', height: '3em' }}
+                style={{ width: 'auto', height: '100%' }}
               />
             ) : (
               <>
