@@ -30,7 +30,7 @@ export function PlayerOrderStepper({ history, order, activePlayer, title }) {
         className={classes.root}
       >
         {order.map((label, index) => (
-          <Step key={label} color="secondary">
+          <Step color="secondary">
             <StepLabel
               optional={
                 <Typography

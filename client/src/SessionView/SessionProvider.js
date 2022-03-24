@@ -1,7 +1,13 @@
-import React, { useMemo, useEffect, useState, useCallback } from 'react'
+import React, {
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+} from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
-import { useDomainErrors } from '../shared/errorHandling'
+import { DomainErrorContext, useDomainErrors } from '../shared/errorHandling'
 import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
@@ -22,10 +28,12 @@ export function SessionProvider({ children, state, dispatch }) {
   const { sessionId } = useParams()
   const history = useHistory()
   const { setError } = useDomainErrors()
+
   const [secret, setSecret] = useState(
-    JSON.parse(
-      localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
-    )[sessionId]?.secret,
+    () =>
+      JSON.parse(
+        localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
+      )[sessionId]?.secret,
   )
 
   const authorizedFetch = useMemo(() => {
@@ -63,11 +71,7 @@ export function SessionProvider({ children, state, dispatch }) {
 
         dispatch(action)
       } catch (e) {
-        if (e.domain) {
-          setError(e)
-        }
-
-        throw e
+        setError(e)
       }
     },
     [setError, dispatch, sessionService],
@@ -145,6 +149,19 @@ export function SessionProvider({ children, state, dispatch }) {
 
   const editFeature = useEdit()
 
+  const { setEnableEditDialogOpen } = editFeature
+  const originalDomainErrorContext = useContext(DomainErrorContext)
+  const setSessionError = useCallback(
+    (e) => {
+      if (e.domain && e.status === 401) {
+        setEnableEditDialogOpen(true)
+      }
+
+      setError(e)
+    },
+    [setError, setEnableEditDialogOpen],
+  )
+
   const contextValue = useMemo(
     () => ({
       session,
@@ -191,8 +208,15 @@ export function SessionProvider({ children, state, dispatch }) {
         toggle={togglePlasticColors}
       >
         <SessionContext.Provider value={contextValue}>
-          {children}
-          <EditPromptProvider />
+          <DomainErrorContext.Provider
+            value={{
+              ...originalDomainErrorContext,
+              setError: setSessionError,
+            }}
+          >
+            {children}
+            <EditPromptProvider />
+          </DomainErrorContext.Provider>
         </SessionContext.Provider>
       </PlasticColorsProvider>
     </ComboDispatchContext.Provider>
