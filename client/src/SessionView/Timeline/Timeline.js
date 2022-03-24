@@ -1,14 +1,7 @@
-import { useMemo, useCallback } from 'react'
+import { useCallback } from 'react'
 import clsx from 'clsx'
 import {
   Box,
-  Paper,
-  Table,
-  TableBody,
-  TableHead,
-  TableCell,
-  TableContainer,
-  TableRow,
   Typography,
   Link,
   List,
@@ -45,7 +38,7 @@ import useSmallViewport from '../../shared/useSmallViewport'
 import ScrollToBottom from '../../shared/ScrollToBottom'
 import Relic from '../../shared/Relic'
 import useInvalidateQueries from '../../useInvalidateQueries'
-import { MapPreview } from '../MapPreview'
+import { DraftSummaryTable } from '../components'
 
 import { Agenda } from './Agenda'
 import AddTimelineEvent from './AddTimelineEvent'
@@ -668,22 +661,6 @@ function SupportCreatorEvent() {
 }
 
 function DraftSummary({ payload, happenedAt, session }) {
-  const { t } = useTranslation()
-
-  const withTablePositions = Boolean(session.setup.options?.tablePick)
-  const showMap = withTablePositions && session.map
-  const picks = useMemo(() => {
-    if (withTablePositions) {
-      const memoized = [...payload.picks]
-
-      memoized.sort((a, b) => a.tablePosition - b.tablePosition)
-
-      return memoized
-    }
-
-    return payload.picks
-  }, [payload.picks, withTablePositions])
-
   return (
     <>
       <Ti4TimelineItem>
@@ -700,52 +677,12 @@ function DraftSummary({ payload, happenedAt, session }) {
           <Typography variant="h5">
             <Trans i18nKey="sessionTimeline.draftSummary.title" />
           </Typography>
-          <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <Trans i18nKey="general.labels.player" />
-                  </TableCell>
-                  <TableCell>
-                    <Trans i18nKey="general.labels.faction" />
-                  </TableCell>
-                  {withTablePositions && (
-                    <TableCell>
-                      <Trans i18nKey="general.labels.tablePosition" />
-                      {showMap && <MapPreview session={session} />}
-                    </TableCell>
-                  )}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {picks.map((pick) => (
-                  <TableRow key={pick.playerName}>
-                    <TableCell component="th" scope="row">
-                      {pick.playerName}{' '}
-                      <em>
-                        {pick.playerName === payload.speaker
-                          ? `(${t('general.labels.speaker')})`
-                          : ''}
-                      </em>
-                    </TableCell>
-                    <TableCell>
-                      <FactionFlag
-                        disabled
-                        factionKey={pick.faction}
-                        height="3em"
-                        selected
-                        width="4.5em"
-                      />
-                    </TableCell>
-                    {withTablePositions && (
-                      <TableCell>P{pick.tablePosition + 1}</TableCell>
-                    )}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <DraftSummaryTable
+            map={session.map}
+            picks={payload.picks}
+            speaker={payload.speaker}
+            withTablePositions={Boolean(session.setup.options?.tablePick)}
+          />
         </Ti4TimelineContent>
       </Ti4TimelineItem>
       <SupportCreatorEvent />
