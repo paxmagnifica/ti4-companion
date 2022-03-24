@@ -7,7 +7,7 @@ import {
   Done as DoneIcon,
 } from '@material-ui/icons'
 
-const useStepperStyles = makeStyles((theme) => ({
+const useStepperStyles = makeStyles(() => ({
   root: {
     backgroundColor: 'transparent',
   },
@@ -38,8 +38,11 @@ export function PlayerOrderStepper({ history, order, activePlayer, title }) {
                     <ActiveIcon color="secondary" />
                   </Typography>
                 ) : index < activePlayer ? (
-                  <Typography align="center">
-                    {history[index] || <DoneIcon color="secondary"/>}
+                  <Typography
+                    align="center"
+                    style={{ display: 'flex', justifyContent: 'center' }}
+                  >
+                    {history[index] || <DoneIcon color="secondary" />}
                   </Typography>
                 ) : null
               }

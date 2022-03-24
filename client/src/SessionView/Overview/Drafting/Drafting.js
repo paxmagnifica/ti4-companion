@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Grid, Box, Button, Typography } from '@material-ui/core'
-import { PanTool as PickedIcon } from '@material-ui/icons'
+import { PanTool as PickedIcon, Map as MapIcon } from '@material-ui/icons'
+import { useTranslation } from 'react-i18next'
 import Alert from '@material-ui/lab/Alert'
 import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
@@ -322,6 +323,7 @@ function Ban({
 }
 
 export function Drafting({ editable, session, sessionService }) {
+  const { t } = useTranslation()
   const [disableFactionSelection, setDisableFactionSelection] = useState(false)
   const [selected, setSelected] = useState([])
   const { draft } = useDraftQuery({
@@ -353,7 +355,7 @@ export function Drafting({ editable, session, sessionService }) {
         bans={Boolean(session.setup?.options?.bans)}
         phase={draft.phase}
       />
-      {draft.phase !== PHASE.speaker && (
+      {draft.phase === PHASE.bans && (
         <PlayerOrderStepper
           activePlayer={draft.activePlayerIndex}
           history={draft.bans.map(({ ban }) => (
@@ -363,13 +365,26 @@ export function Drafting({ editable, session, sessionService }) {
             />
           ))}
           order={draft.order.map((playerIndex) => draft.players[playerIndex])}
-          title={`${
-            draft.phase === PHASE.bans
-              ? 'Ban'
-              : draft.phase === PHASE.picks
-              ? 'Pick'
-              : ''
-          } order`}
+          title={t(`drafting.speakerOrder.${draft.phase}.title`)}
+        />
+      )}
+      {draft.phase === PHASE.picks && (
+        <PlayerOrderStepper
+          activePlayer={draft.activePlayerIndex}
+          history={draft.picks.map(({ type, pick }) =>
+            type === 'faction' ? (
+              <FactionImage
+                factionKey={pick}
+                style={{ width: 'auto', height: '3em' }}
+              />
+            ) : (
+              <>
+                <MapIcon /> {`P${Number(pick) + 1}`}
+              </>
+            ),
+          )}
+          order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+          title={t(`drafting.speakerOrder.${draft.phase}.title`)}
         />
       )}
       {draft.phase === PHASE.speaker && (
