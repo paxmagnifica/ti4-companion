@@ -10,19 +10,28 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import { Link, generatePath } from 'react-router-dom'
-import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
+import { LocalLibrary, PhotoLibrary, Info } from '@material-ui/icons'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from '../../shared/constants'
 import * as factions from '../../gameInfo/factions'
 
 import { FactionNutshell } from './FactionNutshell'
+import { DraftSummaryDialog } from './DraftSummaryDialog'
 
-function FactionNutshells({ players, classes, sessionId }) {
+function FactionNutshells({
+  players,
+  classes,
+  sessionId,
+  showTablePosition,
+  wasDrafted,
+}) {
   const { t } = useTranslation()
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
 
-  return players.map(({ faction, playerName, color, speaker }) => {
+  const [draftSummaryDialogOpen, setDraftSummaryDialogOpen] = useState(false)
+
+  return players.map(({ faction, playerName, color, speaker }, index) => {
     const factionData = factions.getData(faction)
     const factionName = t(`factions.${faction}.name`)
 
@@ -34,6 +43,30 @@ function FactionNutshells({ players, classes, sessionId }) {
             {' '}
             (<Trans i18nKey="sessionView.r1Speaker" />)
           </em>
+        )}
+        {showTablePosition && (
+          <em>
+            {' '}
+            (
+            <Trans
+              i18nKey="sessionView.factionNutshell.tablePosition"
+              values={{ position: index + 1 }}
+            />
+            )
+          </em>
+        )}
+        {wasDrafted && (
+          <Tooltip
+            placement="top"
+            title={t('sessionView.factionNutshell.draftDetails')}
+          >
+            <IconButton
+              aria-label={t('sessionView.factionNutshell.draftDetails')}
+              onClick={() => setDraftSummaryDialogOpen(true)}
+            >
+              <Info />
+            </IconButton>
+          </Tooltip>
         )}
       </span>
     )
@@ -109,6 +142,10 @@ function FactionNutshells({ players, classes, sessionId }) {
         <FactionNutshell
           factionKey={nutshellFactionKey}
           onClose={() => setFactionNutshellKey(null)}
+        />
+        <DraftSummaryDialog
+          open={draftSummaryDialogOpen}
+          set={setDraftSummaryDialogOpen}
         />
       </>
     )

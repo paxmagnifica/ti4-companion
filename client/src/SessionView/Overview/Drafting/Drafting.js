@@ -6,7 +6,7 @@ import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
-import { MapPreview } from '../../MapPreview'
+import { MapPreview } from '../../components'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { SessionNutshell } from '../SessionNutshell'
 import { EditPrompt } from '../../Edit'
@@ -395,7 +395,7 @@ export function Drafting({ editable, session, sessionService }) {
         )}
       </Box>
       <Box align="center" mb={2}>
-        <MapPreview session={session} />
+        <MapPreview map={session.map} />
       </Box>
       {draft.phase === PHASE.speaker && <Typography>picks:</Typography>}
       {session.setup.options.tablePick && draft.phase === PHASE.speaker && (

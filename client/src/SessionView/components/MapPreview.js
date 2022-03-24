@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Map as MapIcon } from '@material-ui/icons'
 import { Trans, useTranslation } from 'react-i18next'
 
-import useSmallViewport from '../shared/useSmallViewport'
+import useSmallViewport from '../../shared/useSmallViewport'
 
 const useStyles = makeStyles((theme) => ({
   bigDraftSummaryMap: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export function MapPreview({ session, variant }) {
+export function MapPreview({ map, variant }) {
   const { t } = useTranslation()
   const small = useSmallViewport()
   const classes = useStyles()
@@ -34,17 +34,15 @@ export function MapPreview({ session, variant }) {
   return (
     <>
       <Button
-        disabled={!session.map}
+        disabled={!map}
         onClick={toggleMapDrawer}
         startIcon={<MapIcon />}
         variant={variant}
       >
-        {session.map && (
-          <Trans i18nKey="sessionTimeline.draftSummary.toggleMap" />
-        )}
-        {!session.map && <Trans i18nKey="sessionMap.none" />}
+        {map && <Trans i18nKey="sessionTimeline.draftSummary.toggleMap" />}
+        {!map && <Trans i18nKey="sessionMap.none" />}
       </Button>
-      {session.map && (
+      {map && (
         <Drawer anchor="left" onClose={toggleMapDrawer} open={mapDrawerOpen}>
           <Grid
             alignItems="center"
@@ -59,7 +57,7 @@ export function MapPreview({ session, variant }) {
                 className={clsx(classes.draftSummaryMap, {
                   [classes.bigDraftSummaryMap]: small,
                 })}
-                src={session.map}
+                src={map}
               />
             </Grid>
           </Grid>
