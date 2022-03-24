@@ -361,7 +361,7 @@ export function Drafting({ editable, session, sessionService }) {
           history={draft.bans.map(({ ban }) => (
             <FactionImage
               factionKey={ban}
-              style={{ width: 'auto', height: '3em' }}
+              style={{ width: 'auto', height: '100%' }}
             />
           ))}
           order={draft.order.map((playerIndex) => draft.players[playerIndex])}
