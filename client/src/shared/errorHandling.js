@@ -19,7 +19,7 @@ export const handleErrors = (response) => {
   throw new DomainError(response)
 }
 
-const DomainErrorContext = React.createContext()
+export const DomainErrorContext = React.createContext()
 export const useDomainErrors = () => {
   const { setError } = useContext(DomainErrorContext)
 
@@ -36,6 +36,7 @@ export const useDomainErrors = () => {
 
   return { setError: setOnlyDomainError }
 }
+
 export const DomainErrorRenderer = () => {
   const { hasError, clearError, error } = useContext(DomainErrorContext)
 

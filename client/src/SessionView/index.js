@@ -12,9 +12,10 @@ function Thing({ children }) {
     return null
   }
 
-  const { state } = history.location
+  const { state, pathname } = history.location
   if (state?.secret) {
     setSecret(state.secret)
+    history.replace(pathname, null)
   }
 
   if (session.error) {
