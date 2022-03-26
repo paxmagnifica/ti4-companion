@@ -158,8 +158,14 @@ namespace server.Persistence
 
             if (!context.Sessions.Any())
             {
+                var sessionList = new SessionList {
+                    Id = "TESTID",
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    Sessions = new List<Session>(),
+                };
+
                 var sessionId = Guid.Parse("6fd5c725-30cd-4320-8889-c2f6427ba365");
-                context.Sessions.Add(new Session()
+                sessionList.Sessions.Add(new Session()
                 {
                     Id = sessionId,
                     HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
@@ -190,7 +196,7 @@ namespace server.Persistence
                 });
 
                 var sessionId2 = Guid.Parse("1811a152-b64c-41cd-bdfd-8885fdfb7620");
-                context.Sessions.Add(new Session()
+                sessionList.Sessions.Add(new Session()
                 {
                     Id = sessionId2,
                     HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
@@ -204,7 +210,7 @@ namespace server.Persistence
                         },
                         new GameEvent {
                             Id = Guid.NewGuid(),
-                            SessionId = sessionId,
+                            SessionId = sessionId2,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = nameof(MetadataUpdated),
                             SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload {
@@ -219,6 +225,8 @@ namespace server.Persistence
                     },
                     CreatedAt = DateTimeOffset.Now,
                 });
+
+                context.SessionLists.Add(sessionList);
             }
 
             context.SaveChanges();
