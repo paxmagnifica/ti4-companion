@@ -9,18 +9,19 @@ const LIST_IDENTIFIER_KEY = 'paxmagnifica-ti4companion-list-identifier'
 
 export function SessionsListContainer() {
   const [loading, setLoading] = useState(true)
-  const [listIdentifier, setListIdentifier] = useState(() => {
-    localStorage.getItem(LIST_IDENTIFIER_KEY)
-  })
+  const [listIdentifier, setListIdentifier] = useState(
+    localStorage.getItem(LIST_IDENTIFIER_KEY),
+  )
 
   useEffect(() => {
     if (listIdentifier) {
+      setLoading(false)
+
       return
     }
 
     getNewListIdentifier().then((identifier) => {
-      // TODO
-      // localStorage.setItem(LIST_IDENTIFIER_KEY, identifier)
+      localStorage.setItem(LIST_IDENTIFIER_KEY, identifier)
       setListIdentifier(identifier)
       setLoading(false)
     })

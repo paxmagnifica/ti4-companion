@@ -61,7 +61,6 @@ function App() {
   const { t } = useTranslation()
   const classes = useStyles()
   const [state, dispatch] = useReducer(reducer, null, init)
-  const { sessions } = state
   const { setChatVisible } = useChat()
   const [domainError, setDomainError] = useState(null)
 
