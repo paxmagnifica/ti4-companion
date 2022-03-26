@@ -90,8 +90,6 @@ function App() {
   })
 
   useEffect(() => {
-    dispatch({ type: 'LoadSessions', sessions: [] })
-
     const load = async () => {
       const objectives = await objectivesService.getAll()
 

@@ -44,15 +44,6 @@ export const init = () => ({
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'LoadSessions':
-      return {
-        ...state,
-        sessions: {
-          loading: false,
-          loaded: true,
-          data: action.sessions,
-        },
-      }
     case 'AddSession':
       return addSession(state, action)
     case 'LoadObjectives':
