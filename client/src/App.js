@@ -21,7 +21,6 @@ import {
 import { useTranslation, Trans } from 'react-i18next'
 
 import { SupportTheCreator } from './Support'
-import { getAllSessions } from './shared/persistence'
 import { DomainErrorProvider } from './shared/errorHandling'
 import homeIcon from './assets/icon.jpg'
 import { SessionSetup } from './SessionSetup'
@@ -91,8 +90,7 @@ function App() {
   })
 
   useEffect(() => {
-    const allSessions = getAllSessions()
-    dispatch({ type: 'LoadSessions', sessions: allSessions })
+    dispatch({ type: 'LoadSessions', sessions: [] })
 
     const load = async () => {
       const objectives = await objectivesService.getAll()

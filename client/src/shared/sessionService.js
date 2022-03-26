@@ -1,6 +1,5 @@
 import CONFIG from '../config'
 
-import { saveSession } from './persistence'
 import { handleErrors } from './errorHandling'
 
 const factory = ({ fetch }) => {
@@ -15,20 +14,19 @@ const factory = ({ fetch }) => {
     }).then(handleErrors)
 
   return {
-    createSession: async (payload) => {
-      const result = await fetch(`${CONFIG.apiUrl}/api/sessions`, {
+    createSession: (payload) =>
+      fetch(`${CONFIG.apiUrl}/api/sessions`, {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      }).then(handleErrors)
-      const session = await result.json()
+      })
+        .then(handleErrors)
+        .then((r) => r.json()),
 
-      await saveSession(session)
-
-      return session
-    },
-
-    get: (id) => fetch(`${CONFIG.apiUrl}/api/sessions/${id}`).json(),
+    get: (id) =>
+      fetch(`${CONFIG.apiUrl}/api/sessions/${id}`).then((response) =>
+        response.json(),
+      ),
 
     pushEvent,
     addTimelineEvent: ({ file: imageFile, title, description }, sessionId) => {
