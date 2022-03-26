@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using server.Domain;
@@ -6,7 +7,7 @@ using server.Persistence;
 
 namespace server.Infra
 {
-    public class Repository: IRepository
+    public class Repository : IRepository
     {
         private readonly SessionContext _sessionContext;
 
@@ -38,6 +39,13 @@ namespace server.Infra
         public void UpdateSession(Session session)
         {
             _sessionContext.Entry(session).State = EntityState.Modified;
+        }
+
+        public async Task SaveSessionToListAsync(string sessionListId, Session newSession)
+        {
+            var sessionList = await _sessionContext.SessionLists.FindAsync(sessionListId);
+            newSession.SessionLists = new List<SessionList>() { sessionList };
+            _sessionContext.Sessions.Add(newSession);
         }
     }
 }

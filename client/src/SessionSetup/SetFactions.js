@@ -15,6 +15,7 @@ import { Trans } from 'react-i18next'
 
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
+import { useFetch } from '../useFetch'
 import { factionsList } from '../gameInfo/factions'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
@@ -61,7 +62,8 @@ export function SetFactions({ dispatch }) {
   }, [])
 
   const history = useHistory()
-  const sessionService = useMemo(() => sessionFactory({ fetch }), [])
+  const { fetch } = useFetch()
+  const sessionService = useMemo(() => sessionFactory({ fetch }), [fetch])
   const createGameSession = useCallback(
     async ({ password }) => {
       setPasswordProtectionDialogOpen(false)

@@ -17,6 +17,7 @@ import {
 import { factionsList } from '../gameInfo/factions'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
+import { useFetch } from '../useFetch'
 import { useDispatch } from '../state'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
@@ -67,7 +68,8 @@ export function DraftSetup() {
   const toggleTablePick = useCallback(() => setTablePick((tp) => !tp), [])
 
   const history = useHistory()
-  const sessionService = useMemo(() => sessionFactory({ fetch }), [])
+  const { fetch } = useFetch()
+  const sessionService = useMemo(() => sessionFactory({ fetch }), [fetch])
   const startDraft = useCallback(
     async ({ password }) => {
       const session = await sessionService.createSession({

@@ -62,7 +62,8 @@ namespace server.Controllers
             {
                 newSession.Events.Add(GameEvent.GenerateOrderEvent(sessionId, payload, payload.Options.BanRounds, _timeProvider.Now));
             }
-            await _sessionContext.Sessions.AddAsync(newSession);
+
+            await _repository.SaveSessionToListAsync(this.HttpContext.Items["ListIdentifier"].ToString(), newSession);
             await _sessionContext.SaveChangesAsync();
 
             var dto = new SessionDto(newSession);

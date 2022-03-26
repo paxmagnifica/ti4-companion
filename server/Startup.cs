@@ -95,6 +95,13 @@ namespace server
 
             app.Use(async (context, next) =>
             {
+                context.Items.Add("ListIdentifier", context.Request.Headers["x-ti4companion-list-identifier"].ToString());
+
+                await next.Invoke();
+            });
+
+            app.Use(async (context, next) =>
+            {
                 var protect = context.Request.Method == "POST" && context.Request.Path.ToString().StartsWith("/api/sessions/") && !context.Request.Path.ToString().EndsWith("/edit");
                 context.Items.Add("Protect", protect);
                 if (protect) {
@@ -103,6 +110,7 @@ namespace server
 
                 await next.Invoke();
             });
+
             app.Use(async (context, next) =>
             {
                 if (MiddlewareHelpers.IsProtected(context))
