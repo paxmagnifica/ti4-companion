@@ -1,8 +1,5 @@
 import {
-  Button,
   Chip,
-  Grid,
-  CircularProgress,
   List,
   ListItem,
   ListItemIcon,
@@ -17,10 +14,10 @@ import {
   Done,
   Autorenew as InProgress,
 } from '@material-ui/icons'
-import { Link, useHistory, generatePath } from 'react-router-dom'
+import { useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from 'react-i18next'
 
-import { SESSION_VIEW_ROUTES } from './shared/constants'
+import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -51,31 +48,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // TODO handle drafts
-function SessionsList({ loading, sessions }) {
+export function SessionsList({ sessions, listId }) {
   const classes = useStyles()
   const history = useHistory()
   const { t } = useTranslation()
 
-  return loading ? (
-    <CircularProgress />
-  ) : (
+  return (
     <>
-      <Grid container justifyContent="space-around" spacing={4}>
-        <Grid item sm={4} xs={12}>
-          <Link className={classes.cta} to="/new/factions">
-            <Button color="primary" fullWidth variant="contained">
-              <Trans i18nKey="sessionList.cta.set" />
-            </Button>
-          </Link>
-        </Grid>
-        <Grid item sm={4} xs={12}>
-          <Link className={classes.cta} to="/new/draft">
-            <Button color="secondary" fullWidth variant="contained">
-              <Trans i18nKey="sessionList.cta.draft" />
-            </Button>
-          </Link>
-        </Grid>
-      </Grid>
       <List
         className={classes.list}
         subheader={
@@ -142,8 +121,9 @@ function SessionsList({ loading, sessions }) {
           )
         })}
       </List>
+      <em style={{ fontSize: '.85em', float: 'right' }}>
+        <Trans i18nKey="sessionList.yourListIdentifier" values={{ listId }} />
+      </em>
     </>
   )
 }
-
-export default SessionsList

@@ -62,7 +62,8 @@ namespace server.Controllers
             {
                 newSession.Events.Add(GameEvent.GenerateOrderEvent(sessionId, payload, payload.Options.BanRounds, _timeProvider.Now));
             }
-            await _sessionContext.Sessions.AddAsync(newSession);
+
+            await _repository.SaveSessionToListAsync(this.HttpContext.Items["ListIdentifier"].ToString(), newSession);
             await _sessionContext.SaveChangesAsync();
 
             var dto = new SessionDto(newSession);
@@ -77,26 +78,17 @@ namespace server.Controllers
             return CreatedAtAction(nameof(GetSession), new { sessionId = newSession.Id }, dto);
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<SessionDto>> GetSessions()
-        {
-            var sessionsFromDb = await _sessionContext.Sessions.OrderByDescending(session => session.CreatedAt).ToListAsync();
-
-            return sessionsFromDb.Select(fromDb => new SessionDto(fromDb));
-        }
-
         [HttpGet("{sessionId}")]
         public async Task<ActionResult<SessionDto>> GetSession(Guid sessionId)
         {
-            var sessionFromDb = await _sessionContext.Sessions.FindAsync(sessionId);
+            var sessionFromDb = await _repository.GetByIdWithEvents(sessionId);
             if (sessionFromDb == null)
             {
                 return new NotFoundResult();
             }
 
-            _sessionContext.Entry(sessionFromDb)
-                .Collection(session => session.Events)
-                .Load();
+            await _repository.RememberSessionInList(this.HttpContext.Items["ListIdentifier"].ToString(), sessionFromDb);
+            await _repository.SaveChangesAsync();
 
             var sessionDto = new SessionDto(sessionFromDb);
 

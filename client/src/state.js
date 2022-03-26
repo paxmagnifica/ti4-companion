@@ -1,7 +1,5 @@
 import React, { useContext } from 'react'
 
-import { saveAllSessions } from './shared/persistence'
-
 export const StateContext = React.createContext()
 export const ComboDispatchContext = React.createContext()
 export const DispatchContext = React.createContext()
@@ -46,15 +44,6 @@ export const init = () => ({
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'LoadSessions':
-      return {
-        ...state,
-        sessions: {
-          loading: false,
-          loaded: true,
-          data: action.sessions,
-        },
-      }
     case 'AddSession':
       return addSession(state, action)
     case 'LoadObjectives':
@@ -352,7 +341,6 @@ const addSession = (state, action) => {
     newSession,
     ...state.sessions.data.filter((s) => s.id !== action.session.id),
   ]
-  saveAllSessions(sessions)
 
   return {
     ...state,

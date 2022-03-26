@@ -158,8 +158,15 @@ namespace server.Persistence
 
             if (!context.Sessions.Any())
             {
+                var sessionList = new SessionList
+                {
+                    Id = "TESTID",
+                    CreatedAt = DateTimeOffset.UtcNow,
+                    Sessions = new List<Session>(),
+                };
+
                 var sessionId = Guid.Parse("6fd5c725-30cd-4320-8889-c2f6427ba365");
-                context.Sessions.Add(new Session()
+                sessionList.Sessions.Add(new Session()
                 {
                     Id = sessionId,
                     HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
@@ -169,7 +176,10 @@ namespace server.Persistence
                             SessionId = sessionId,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = GameEvent.GameStarted,
-                            SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" })
+                            SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload {
+                                SetupType = "simple",
+                                Factions = new List<string>() { "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" }
+                            })
                         },
                         new GameEvent {
                             Id = Guid.NewGuid(),
@@ -190,7 +200,7 @@ namespace server.Persistence
                 });
 
                 var sessionId2 = Guid.Parse("1811a152-b64c-41cd-bdfd-8885fdfb7620");
-                context.Sessions.Add(new Session()
+                sessionList.Sessions.Add(new Session()
                 {
                     Id = sessionId2,
                     HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
@@ -200,11 +210,14 @@ namespace server.Persistence
                             SessionId = sessionId2,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = GameEvent.GameStarted,
-                            SerializedPayload = JsonConvert.SerializeObject(new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance", "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" })
+                            SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload {
+                                SetupType = "simple",
+                                Factions = new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance", "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" }
+                            })
                         },
                         new GameEvent {
                             Id = Guid.NewGuid(),
-                            SessionId = sessionId,
+                            SessionId = sessionId2,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = nameof(MetadataUpdated),
                             SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload {
@@ -219,6 +232,8 @@ namespace server.Persistence
                     },
                     CreatedAt = DateTimeOffset.Now,
                 });
+
+                context.SessionLists.Add(sessionList);
             }
 
             context.SaveChanges();

@@ -95,12 +95,22 @@ namespace server
 
             app.Use(async (context, next) =>
             {
-                var protect = context.Request.Method == "POST" && context.Request.Path.ToString().StartsWith("/api/sessions/") && !context.Request.Path.ToString().EndsWith("/edit");
-                context.Items.Add("Protect", protect);
-                logger.LogDebug($"protecting {context.Request.Path.ToString()}");
+                context.Items.Add("ListIdentifier", context.Request.Headers["x-ti4companion-list-identifier"].ToString());
 
                 await next.Invoke();
             });
+
+            app.Use(async (context, next) =>
+            {
+                var protect = context.Request.Method == "POST" && context.Request.Path.ToString().StartsWith("/api/sessions/") && !context.Request.Path.ToString().EndsWith("/edit");
+                context.Items.Add("Protect", protect);
+                if (protect) {
+                    logger.LogDebug($"protecting {context.Request.Path.ToString()}");
+                }
+
+                await next.Invoke();
+            });
+
             app.Use(async (context, next) =>
             {
                 if (MiddlewareHelpers.IsProtected(context))
