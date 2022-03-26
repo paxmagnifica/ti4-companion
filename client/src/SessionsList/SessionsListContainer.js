@@ -5,13 +5,8 @@ import { getNewListIdentifier } from './getNewListIdentifier'
 import { useSessionsList } from './queries'
 import { SessionsList } from './SessionsList'
 
-const LIST_IDENTIFIER_KEY = 'paxmagnifica-ti4companion-list-identifier'
-
-export function SessionsListContainer() {
+export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
   const [loading, setLoading] = useState(true)
-  const [listIdentifier, setListIdentifier] = useState(
-    localStorage.getItem(LIST_IDENTIFIER_KEY),
-  )
 
   useEffect(() => {
     if (listIdentifier) {
@@ -21,11 +16,10 @@ export function SessionsListContainer() {
     }
 
     getNewListIdentifier().then((identifier) => {
-      localStorage.setItem(LIST_IDENTIFIER_KEY, identifier)
       setListIdentifier(identifier)
       setLoading(false)
     })
-  }, [listIdentifier])
+  }, [listIdentifier, setListIdentifier])
 
   const { sessions, queryInfo } = useSessionsList({ listId: listIdentifier })
 

@@ -2,12 +2,15 @@ import { useQuery } from 'react-query'
 
 import CONFIG from '../config'
 import { handleErrors } from '../shared/errorHandling'
+import { useFetch } from '../useFetch'
 
 export const sessionListKeys = {
   list: (listId) => ['sessions', listId],
 }
 
 export const useSessionsList = ({ listId }) => {
+  const { fetch } = useFetch()
+
   const { data, ...queryInfo } = useQuery(
     sessionListKeys.list(listId),
     async () => {
