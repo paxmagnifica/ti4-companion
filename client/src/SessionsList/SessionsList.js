@@ -54,71 +54,76 @@ export function SessionsList({ sessions, listId }) {
   const { t } = useTranslation()
 
   return (
-    <List
-      className={classes.list}
-      subheader={
-        <ListSubheader>
-          <Trans i18nKey="sessionList.title" values={{ listId }} />
-        </ListSubheader>
-      }
-    >
-      {sessions.map((session) => {
-        const defaultName = session.factions?.length
-          ? session.factions
-              .map((factionKey) => t(`factions.${factionKey}.name`))
-              .join(', ')
-          : `Drafting in progress...`
+    <>
+      <List
+        className={classes.list}
+        subheader={
+          <ListSubheader>
+            <Trans i18nKey="sessionList.title" />
+          </ListSubheader>
+        }
+      >
+        {sessions.map((session) => {
+          const defaultName = session.factions?.length
+            ? session.factions
+                .map((factionKey) => t(`factions.${factionKey}.name`))
+                .join(', ')
+            : `Drafting in progress...`
 
-        return (
-          <ListItem
-            key={session.id}
-            button
-            className={classes.listItem}
-            onClick={() =>
-              history.push(
-                generatePath(SESSION_VIEW_ROUTES.main, {
-                  sessionId: session.id,
-                  secret: session.editable ? session.secret : undefined,
-                }),
-              )
-            }
-          >
-            <ListItemIcon>
-              {session.finished ? (
-                <Tooltip placement="top" title={t('sessionList.done')}>
-                  <Done color="secondary" />
-                </Tooltip>
-              ) : (
-                <Tooltip placement="top" title={t('sessionList.inProgress')}>
-                  <InProgress />
-                </Tooltip>
-              )}
-              {session.editable && session.locked && (
-                <Tooltip placement="top" title={t('sessionList.locked')}>
-                  <Lock />
-                </Tooltip>
-              )}
-            </ListItemIcon>
-            <ListItemText
-              primary={session.displayName || defaultName}
-              secondary={`${session.start || ''} ${
-                session.displayName
-                  ? t('sessionList.secondaryTitle', { defaultName })
-                  : ''
-              }`}
-            />
-            {session.editable && !session.locked && (
+          return (
+            <ListItem
+              key={session.id}
+              button
+              className={classes.listItem}
+              onClick={() =>
+                history.push(
+                  generatePath(SESSION_VIEW_ROUTES.main, {
+                    sessionId: session.id,
+                    secret: session.editable ? session.secret : undefined,
+                  }),
+                )
+              }
+            >
               <ListItemIcon>
-                <Chip
-                  color="secondary"
-                  icon={<EditOutlined />}
-                  label={t('sessionList.edit')}
-                />
+                {session.finished ? (
+                  <Tooltip placement="top" title={t('sessionList.done')}>
+                    <Done color="secondary" />
+                  </Tooltip>
+                ) : (
+                  <Tooltip placement="top" title={t('sessionList.inProgress')}>
+                    <InProgress />
+                  </Tooltip>
+                )}
+                {session.editable && session.locked && (
+                  <Tooltip placement="top" title={t('sessionList.locked')}>
+                    <Lock />
+                  </Tooltip>
+                )}
               </ListItemIcon>
-            )}
-          </ListItem>
-        )
-      })}
-    </List>
+              <ListItemText
+                primary={session.displayName || defaultName}
+                secondary={`${session.start || ''} ${
+                  session.displayName
+                    ? t('sessionList.secondaryTitle', { defaultName })
+                    : ''
+                }`}
+              />
+              {session.editable && !session.locked && (
+                <ListItemIcon>
+                  <Chip
+                    color="secondary"
+                    icon={<EditOutlined />}
+                    label={t('sessionList.edit')}
+                  />
+                </ListItemIcon>
+              )}
+            </ListItem>
+          )
+        })}
+      </List>
+      <em style={{ fontSize: '.85em', float: 'right' }}>
+        <Trans i18nKey="sessionList.yourListIdentifier" values={{ listId }} />
+      </em>
+    </>
   )
 }

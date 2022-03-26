@@ -283,7 +283,8 @@ const factory = (options = { debug: true }) =>
               },
             },
             sessionList: {
-              title: 'Your remembered sessions ({{listId}})',
+              title: 'Your remembered sessions',
+              yourListIdentifier: 'Code of this list: {{listId}}',
               done: 'Finished',
               inProgress: 'In progress',
               locked: 'Locked for edit',
