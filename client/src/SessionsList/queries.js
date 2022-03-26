@@ -17,7 +17,14 @@ export const useSessionsList = ({ listId }) => {
 
       const sessionList = await result.json()
 
-      return sessionList
+      const secrets = JSON.parse(
+        localStorage.getItem('paxmagnifica-ti4companion-sessions') || '{}',
+      )
+
+      return sessionList.map((session) => ({
+        ...session,
+        ...(secrets[session.id] || {}),
+      }))
     },
     {
       enabled: Boolean(listId),
