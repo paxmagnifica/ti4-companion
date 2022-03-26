@@ -25,7 +25,8 @@ import { getAllSessions } from './shared/persistence'
 import { DomainErrorProvider } from './shared/errorHandling'
 import homeIcon from './assets/icon.jpg'
 import { SessionSetup } from './SessionSetup'
-import SessionsList from './SessionsList'
+import { SessionsListContainer } from './SessionsList'
+import { CallsToAction } from './CallsToAction'
 import SessionView from './SessionView'
 import { SessionProvider } from './SessionView/SessionProvider'
 import * as objectivesService from './objectivesService'
@@ -163,10 +164,8 @@ function App() {
                       </SessionProvider>
                     </Route>
                     <Route path="/">
-                      <SessionsList
-                        loading={sessions.loading || !sessions.loaded}
-                        sessions={sessions.data}
-                      />
+                      <CallsToAction />
+                      <SessionsListContainer />
                     </Route>
                   </Switch>
                 </Box>
