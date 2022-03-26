@@ -78,26 +78,17 @@ namespace server.Controllers
             return CreatedAtAction(nameof(GetSession), new { sessionId = newSession.Id }, dto);
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<SessionDto>> GetSessions()
-        {
-            var sessionsFromDb = await _sessionContext.Sessions.OrderByDescending(session => session.CreatedAt).ToListAsync();
-
-            return sessionsFromDb.Select(fromDb => new SessionDto(fromDb));
-        }
-
         [HttpGet("{sessionId}")]
         public async Task<ActionResult<SessionDto>> GetSession(Guid sessionId)
         {
-            var sessionFromDb = await _sessionContext.Sessions.FindAsync(sessionId);
+            var sessionFromDb = await _repository.GetByIdWithEvents(sessionId);
             if (sessionFromDb == null)
             {
                 return new NotFoundResult();
             }
 
-            _sessionContext.Entry(sessionFromDb)
-                .Collection(session => session.Events)
-                .Load();
+            await _repository.RememberSessionInList(this.HttpContext.Items["ListIdentifier"].ToString(), sessionFromDb);
+            await _repository.SaveChangesAsync();
 
             var sessionDto = new SessionDto(sessionFromDb);
 

@@ -11,5 +11,6 @@ namespace server.Domain
         Task<Session> GetByIdWithEvents(Guid sessionId);
         Task SaveSessionToListAsync(string sessionListId, Session session);
         void UpdateSession(Session session);
+        Task RememberSessionInList(string v, Session sessionFromDb);
     }
 }

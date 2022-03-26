@@ -28,13 +28,7 @@ const factory = ({ fetch }) => {
       return session
     },
 
-    get: async (id) => {
-      const result = await fetch(`${CONFIG.apiUrl}/api/sessions/${id}`)
-
-      // TODO check status code
-
-      return result.json()
-    },
+    get: (id) => fetch(`${CONFIG.apiUrl}/api/sessions/${id}`).json(),
 
     pushEvent,
     addTimelineEvent: ({ file: imageFile, title, description }, sessionId) => {

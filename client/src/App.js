@@ -192,7 +192,6 @@ function App() {
             {!fullscreen && <Footer />}
           </Router>
         </FetchProvider>
-        >
       </DomainErrorProvider>
     </ThemeProvider>
   )

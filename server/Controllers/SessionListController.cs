@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using server.Infra;
 using System.Linq;
 using System;
-using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace server.Controllers

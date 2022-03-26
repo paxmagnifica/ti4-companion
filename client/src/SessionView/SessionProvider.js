@@ -11,6 +11,7 @@ import { DomainErrorContext, useDomainErrors } from '../shared/errorHandling'
 import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
+import { useFetch } from '../useFetch'
 
 import { useEdit, EditPromptProvider } from './Edit'
 import { useSessionContext, SessionContext } from './useSessionContext'
@@ -27,6 +28,7 @@ export const useSessionSecret = () => {
 export function SessionProvider({ children, state, dispatch }) {
   const { sessionId } = useParams()
   const history = useHistory()
+  const { fetch } = useFetch()
   const { setError } = useDomainErrors()
 
   const [secret, setSecret] = useState(
@@ -52,7 +54,7 @@ export function SessionProvider({ children, state, dispatch }) {
 
       return fetch(link, modifiedOptions, ...rest)
     }
-  }, [secret])
+  }, [secret, fetch])
 
   const sessionService = useMemo(
     () => sessionServiceFactory({ fetch: authorizedFetch }),
