@@ -461,22 +461,20 @@ function KnowledgeBase() {
             {...objectiveFilters}
           />
         </TabPanel>
-        {explorationCards.map(
-          ({ type, tab, width, height, backgroundPosition }) => (
-            <TabPanel
-              key={`${type}-tabpanel`}
-              index={tab}
-              small={smallCards}
-              title={`${type} exploration cards`}
-              value={chosenTab}
-            >
-              <ExplorationCards
-                onFilterChange={setExplorationFilters}
-                {...explorationFilters}
-              />
-            </TabPanel>
-          ),
-        )}
+        {explorationCards.map(({ type, tab }) => (
+          <TabPanel
+            key={`${type}-tabpanel`}
+            index={tab}
+            small={smallCards}
+            title={`${type} exploration cards`}
+            value={chosenTab}
+          >
+            <ExplorationCards
+              onFilterChange={setExplorationFilters}
+              {...explorationFilters}
+            />
+          </TabPanel>
+        ))}
         <TabPanel
           index={TABS.RELICS}
           small={smallCards}

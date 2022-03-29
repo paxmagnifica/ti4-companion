@@ -18,7 +18,6 @@ import { factionsList } from '../gameInfo/factions'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
-import { useDispatch } from '../state'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -35,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export function DraftSetup() {
-  const dispatch = useDispatch()
   const classes = useStyles()
   const [playerCount, setPlayerCount] = useState(6)
   const [players, setPlayers] = useState([
@@ -84,7 +82,6 @@ export function DraftSetup() {
           tablePick,
         },
       })
-      dispatch({ type: 'CreateGameSession', session })
       history.push(
         generatePath(SESSION_VIEW_ROUTES.main, {
           sessionId: session.id,
@@ -99,7 +96,6 @@ export function DraftSetup() {
       banRounds,
       bansPerRound,
       tablePick,
-      dispatch,
       history,
     ],
   )

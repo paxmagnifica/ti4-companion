@@ -75,7 +75,7 @@ export function SessionProvider({ children, state }) {
   useRealTimeSession({ sessionId })
   const loading = !queryInfo.isFetched
 
-  const comboDispatch = useCallback(
+  const pushEvent = useCallback(
     async (action) => {
       const { payload } = action
 
@@ -95,12 +95,12 @@ export function SessionProvider({ children, state }) {
     async ({ sessionId: targetSessionId, faction, points }) => {
       const payload = { sessionId: targetSessionId, faction, points }
       try {
-        await comboDispatch({ type: 'VictoryPointsUpdated', payload })
+        await pushEvent({ type: 'VictoryPointsUpdated', payload })
       } catch (e) {
         // empty
       }
     },
-    [comboDispatch],
+    [pushEvent],
   )
 
   const [showPlasticColors, setShowPlasticColors] = useState(true)
@@ -167,7 +167,7 @@ export function SessionProvider({ children, state }) {
         setError: setSessionError,
       }}
     >
-      <ComboDispatchContext.Provider value={comboDispatch}>
+      <ComboDispatchContext.Provider value={pushEvent}>
         <PlasticColorsProvider
           hide={!showPlasticColors}
           plasticColors={session?.colors}

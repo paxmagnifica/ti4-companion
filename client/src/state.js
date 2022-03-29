@@ -4,12 +4,6 @@ export const StateContext = React.createContext()
 export const ComboDispatchContext = React.createContext()
 export const DispatchContext = React.createContext()
 
-export const useDispatch = () => {
-  const dispatch = useContext(DispatchContext)
-
-  return dispatch
-}
-
 export const useComboDispatch = () => {
   const dispatch = useContext(ComboDispatchContext)
 
@@ -34,11 +28,6 @@ export const init = () => ({
     loaded: false,
     data: {},
     slugs: [],
-  },
-  sessions: {
-    loading: true,
-    loaded: false,
-    data: [],
   },
 })
 
@@ -97,15 +86,6 @@ export const reducer = (state, action) => {
             {},
           ),
           slugs: action.explorationCards.map(({ slug }) => slug),
-        },
-      }
-    case 'CreateGameSession':
-      return {
-        ...state,
-        sessions: {
-          loading: false,
-          loaded: true,
-          data: [action.session, ...state.sessions.data],
         },
       }
     default:
