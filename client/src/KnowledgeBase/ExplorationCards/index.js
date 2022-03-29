@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import clsx from 'clsx'
 import {
   Grid,
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
 
-import * as explorationCardsService from './service'
+import { useExplorationCards } from './queries'
 import ExplorationCard, { PLANET_TYPE } from './ExplorationCard'
 
 function ExplorationCardsProvider({
@@ -21,32 +21,13 @@ function ExplorationCardsProvider({
   dispatch,
   ...props
 }) {
-  const { loading, loaded, data: availableCards } = explorationCardsState
+  const { explorationCards, queryInfo } = useExplorationCards()
 
-  useEffect(() => {
-    if (loading || loaded) {
-      return
-    }
-
-    const get = async () => {
-      dispatch({ type: 'LoadingExplorationCards' })
-      const cards = await explorationCardsService.getAll()
-
-      dispatch({ type: 'LoadExplorationCards', explorationCards: cards })
-    }
-
-    get()
-  }, [loaded, loading, dispatch])
-
-  if (!loaded) {
-    return null
-  }
-
-  if (loading) {
+  if (!queryInfo.isFetched) {
     return <CircularProgress color="secondary" />
   }
 
-  return <ExplorationCards availableCards={availableCards} {...props} />
+  return <ExplorationCards availableCards={explorationCards} {...props} />
 }
 
 const useStyles = makeStyles((theme) => ({

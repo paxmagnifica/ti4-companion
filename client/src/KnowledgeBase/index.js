@@ -477,7 +477,6 @@ function KnowledgeBase({ state, dispatch }) {
           >
             <ExplorationCards
               dispatch={dispatch}
-              explorationCardsState={state.explorationCards}
               onFilterChange={setExplorationFilters}
               {...explorationFilters}
             />

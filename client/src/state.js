@@ -17,18 +17,6 @@ export const init = () => ({
     data: {},
     slugs: [],
   },
-  explorationCards: {
-    loading: false,
-    loaded: false,
-    data: {},
-    slugs: [],
-  },
-  objectives: {
-    loading: true,
-    loaded: false,
-    data: {},
-    slugs: [],
-  },
 })
 
 export const reducer = (state, action) => {
@@ -52,27 +40,6 @@ export const reducer = (state, action) => {
             {},
           ),
           slugs: action.relics.map(({ slug }) => slug),
-        },
-      }
-    case 'LoadingExplorationCards':
-      return {
-        ...state,
-        explorationCards: {
-          loading: true,
-          loaded: false,
-        },
-      }
-    case 'LoadExplorationCards':
-      return {
-        ...state,
-        explorationCards: {
-          loading: false,
-          loaded: true,
-          data: action.explorationCards.reduce(
-            (accu, obj) => ({ ...accu, [obj.slug]: obj }),
-            {},
-          ),
-          slugs: action.explorationCards.map(({ slug }) => slug),
         },
       }
     default:
