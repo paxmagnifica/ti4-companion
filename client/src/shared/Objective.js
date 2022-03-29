@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { Dialog } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import Highlighter from 'react-highlight-words'
@@ -8,7 +8,7 @@ import publicObjectiveI from '../assets/objective-1.png'
 import publicObjectiveII from '../assets/objective-2.png'
 import secretObjective from '../assets/objective-secret.png'
 import reverseObjective from '../assets/objective-1-reverse.jpg'
-import { StateContext } from '../state'
+import { useObjectives } from '../queries'
 
 const useStyles = makeStyles({
   root: {
@@ -108,9 +108,7 @@ function Objective({
   highlight,
   onClick,
 }) {
-  const {
-    objectives: { data: availableObjectives },
-  } = useContext(StateContext)
+  const { objectives: availableObjectives } = useObjectives()
   const { secret, points, reward, when } = availableObjectives[slug] || {}
   const styles = getStyles(size)
   const classes = useStyles(styles)

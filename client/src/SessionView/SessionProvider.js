@@ -6,6 +6,7 @@ import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 import { useFetch } from '../useFetch'
+import { useObjectives } from '../queries'
 
 import { useEdit, EditPromptProvider } from './Edit'
 import { useSessionContext, SessionContext } from './useSessionContext'
@@ -21,7 +22,7 @@ export const useSessionSecret = () => {
 
   return { setSecret: context.setSecret }
 }
-export function SessionProvider({ children, state }) {
+export function SessionProvider({ children }) {
   const { sessionId } = useParams()
   const history = useHistory()
   const { fetch } = useFetch()
@@ -71,9 +72,12 @@ export function SessionProvider({ children, state }) {
     [setError, setEnableEditDialogOpen],
   )
 
+  const {
+    queryInfo: { isFetched: areObjectivesFetched },
+  } = useObjectives()
   const { session, queryInfo } = useSession({
     sessionId,
-    enabled: !state.objectives.loading,
+    enabled: areObjectivesFetched,
   })
   useRealTimeSession({ sessionId })
   const loading = !queryInfo.isFetched

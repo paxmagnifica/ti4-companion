@@ -33,19 +33,6 @@ export const init = () => ({
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case 'LoadObjectives':
-      return {
-        ...state,
-        objectives: {
-          loading: false,
-          loaded: true,
-          data: action.objectives.reduce(
-            (accu, obj) => ({ ...accu, [obj.slug]: obj }),
-            {},
-          ),
-          slugs: action.objectives.map(({ slug }) => slug),
-        },
-      }
     case 'LoadingRelics':
       return {
         ...state,

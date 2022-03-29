@@ -28,7 +28,6 @@ import { SessionsListContainer } from './SessionsList'
 import { CallsToAction } from './CallsToAction'
 import SessionView from './SessionView'
 import { SessionProvider } from './SessionView/SessionProvider'
-import * as objectivesService from './objectivesService'
 import { StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
@@ -40,6 +39,7 @@ import config from './config'
 import { Footer } from './Footer'
 import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
+import { useObjectives } from './queries'
 
 i18nFactory()
 
@@ -88,15 +88,7 @@ function App() {
     onFullscreenChange: (x) => setChatVisible(!x),
   })
 
-  useEffect(() => {
-    const load = async () => {
-      const objectives = await objectivesService.getAll()
-
-      dispatch({ type: 'LoadObjectives', objectives })
-    }
-
-    load()
-  }, [])
+  useObjectives()
 
   return (
     <ThemeProvider theme={theme}>
@@ -155,7 +147,7 @@ function App() {
                       <SessionSetup />
                     </Route>
                     <Route path="/:sessionId/:secret?">
-                      <SessionProvider state={state}>
+                      <SessionProvider>
                         <SessionView />
                       </SessionProvider>
                     </Route>
