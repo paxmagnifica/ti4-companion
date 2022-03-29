@@ -29,7 +29,7 @@ import { CallsToAction } from './CallsToAction'
 import SessionView from './SessionView'
 import { SessionProvider } from './SessionView/SessionProvider'
 import * as objectivesService from './objectivesService'
-import { DispatchContext, StateContext, reducer, init } from './state'
+import { StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
@@ -148,28 +148,26 @@ function App() {
               })}
             >
               <StateContext.Provider value={state}>
-                <DispatchContext.Provider value={dispatch}>
-                  <KnowledgeBase />
-                  <Box m={2}>
-                    <Switch>
-                      <Route path="/new">
-                        <SessionSetup />
-                      </Route>
-                      <Route path="/:sessionId/:secret?">
-                        <SessionProvider state={state}>
-                          <SessionView />
-                        </SessionProvider>
-                      </Route>
-                      <Route path="/">
-                        <CallsToAction />
-                        <SessionsListContainer
-                          listIdentifier={listIdentifier}
-                          setListIdentifier={setAndPersistListIdentifier}
-                        />
-                      </Route>
-                    </Switch>
-                  </Box>
-                </DispatchContext.Provider>
+                <KnowledgeBase dispatch={dispatch} state={state} />
+                <Box m={2}>
+                  <Switch>
+                    <Route path="/new">
+                      <SessionSetup />
+                    </Route>
+                    <Route path="/:sessionId/:secret?">
+                      <SessionProvider state={state}>
+                        <SessionView />
+                      </SessionProvider>
+                    </Route>
+                    <Route path="/">
+                      <CallsToAction />
+                      <SessionsListContainer
+                        listIdentifier={listIdentifier}
+                        setListIdentifier={setAndPersistListIdentifier}
+                      />
+                    </Route>
+                  </Switch>
+                </Box>
               </StateContext.Provider>
             </Container>
             {!fullscreen && <Footer />}

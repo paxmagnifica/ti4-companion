@@ -1,4 +1,4 @@
-import { useMemo, useState, useContext } from 'react'
+import { useMemo, useState } from 'react'
 import clsx from 'clsx'
 import {
   Grid,
@@ -10,7 +10,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 
-import { StateContext } from '../state'
 import Objective from '../shared/Objective'
 import useSmallViewport from '../shared/useSmallViewport'
 import DebouncedTextField from '../shared/DebouncedTextField'
@@ -27,12 +26,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function Objectives({ stageI, stageII, secrets, onFilterChange }) {
+function Objectives({
+  stageI,
+  stageII,
+  secrets,
+  onFilterChange,
+  availableObjectives,
+}) {
   const smallViewport = useSmallViewport()
   const classes = useStyles()
-  const {
-    objectives: { data: availableObjectives },
-  } = useContext(StateContext)
   const { t } = useTranslation()
 
   const [searchValue, setSearchValue] = useState('')

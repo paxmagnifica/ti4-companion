@@ -71,7 +71,10 @@ export function SessionProvider({ children, state }) {
     [setError, setEnableEditDialogOpen],
   )
 
-  const { session, queryInfo } = useSession({ sessionId })
+  const { session, queryInfo } = useSession({
+    sessionId,
+    enabled: !state.objectives.loading,
+  })
   useRealTimeSession({ sessionId })
   const loading = !queryInfo.isFetched
 
@@ -125,7 +128,7 @@ export function SessionProvider({ children, state }) {
   const contextValue = useMemo(
     () => ({
       session,
-      loading: loading || state.objectives.loading,
+      loading,
       editable: Boolean(secret),
       updateFactionPoints,
       sessionService,
@@ -152,7 +155,6 @@ export function SessionProvider({ children, state }) {
       sessionId,
       secret,
       loading,
-      state.objectives.loading,
       updateFactionPoints,
       sessionService,
       setSecret,

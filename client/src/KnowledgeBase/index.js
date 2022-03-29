@@ -165,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function KnowledgeBase() {
+function KnowledgeBase({ state, dispatch }) {
   const { t } = useTranslation()
   const { fullscreen } = useFullscreen()
   const smallCards = useMediaQuery('(max-width:599px)')
@@ -435,6 +435,7 @@ function KnowledgeBase() {
           value={chosenTab}
         >
           <Objectives
+            availableObjectives={state.objectives.data}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -446,6 +447,7 @@ function KnowledgeBase() {
           value={chosenTab}
         >
           <Objectives
+            availableObjectives={state.objectives.data}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -457,6 +459,7 @@ function KnowledgeBase() {
           value={chosenTab}
         >
           <Objectives
+            availableObjectives={state.objectives.data}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -470,6 +473,8 @@ function KnowledgeBase() {
             value={chosenTab}
           >
             <ExplorationCards
+              dispatch={dispatch}
+              explorationCardsState={state.explorationCards}
               onFilterChange={setExplorationFilters}
               {...explorationFilters}
             />
@@ -481,7 +486,7 @@ function KnowledgeBase() {
           title={t('kb.panels.relics.title')}
           value={chosenTab}
         >
-          <Relics />
+          <Relics dispatch={dispatch} relicsState={state.relics} />
         </TabPanel>
         <TabPanel
           index={TABS.STRATEGY_CARDS}
