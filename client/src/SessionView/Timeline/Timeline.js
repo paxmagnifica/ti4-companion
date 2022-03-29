@@ -39,11 +39,11 @@ import ScrollToBottom from '../../shared/ScrollToBottom'
 import Relic from '../../shared/Relic'
 import useInvalidateQueries from '../../useInvalidateQueries'
 import { DraftSummaryTable } from '../components'
+import { useTimelineEvents, queryKeys } from '../queries'
 
 import { Agenda } from './Agenda'
 import AddTimelineEvent from './AddTimelineEvent'
 import { VictoryPoint } from './VictoryPoint'
-import { useTimelineEvents, timelineKeys } from './queries'
 
 const Ti4TimelineContent = withStyles({
   root: {
@@ -836,13 +836,13 @@ export function Timeline({ editable, session, sessionService }) {
     sessionId: session.id,
     sessionService,
   })
+  // TODO make it a react-query mutation
   const invalidateQueries = useInvalidateQueries()
-
   const uploadEvent = useCallback(
     async (payload) => {
       const result = await sessionService.addTimelineEvent(payload, session.id)
       if (result.ok) {
-        invalidateQueries(timelineKeys.sessionTimeline(session.id))
+        invalidateQueries(queryKeys.sessionTimeline(session.id))
       }
     },
     [session.id, sessionService, invalidateQueries],
