@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import clsx from 'clsx'
 import { Grid, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -8,35 +8,16 @@ import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
 import Relic from '../../shared/Relic'
 
-import * as relicService from './service'
+import { useRelics } from './queries'
 
-function RelicsProvider({ relicsState, dispatch, ...props }) {
-  const { loading, loaded, data: availableRelics } = relicsState
+function RelicsProvider(props) {
+  const { relics, queryInfo } = useRelics()
 
-  useEffect(() => {
-    if (loading || loaded) {
-      return
-    }
-
-    const get = async () => {
-      dispatch({ type: 'LoadingRelics' })
-      const cards = await relicService.getAll()
-
-      dispatch({ type: 'LoadRelics', relics: cards })
-    }
-
-    get()
-  }, [loaded, loading, dispatch])
-
-  if (!loaded) {
-    return null
+  if (!queryInfo.isFetched) {
+    return <CircularProgress color="secondary" />
   }
 
-  if (loading) {
-    ;<CircularProgress color="secondary" />
-  }
-
-  return <Relics availableRelics={availableRelics} {...props} />
+  return <Relics availableRelics={relics} {...props} />
 }
 
 const useStyles = makeStyles((theme) => ({

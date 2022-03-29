@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useReducer, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import clsx from 'clsx'
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -27,10 +27,8 @@ import { SessionSetup } from './SessionSetup'
 import { SessionsListContainer } from './SessionsList'
 import { CallsToAction } from './CallsToAction'
 import SessionView from './SessionView'
-import { SessionProvider } from './SessionView/SessionProvider'
-import { StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
-import KnowledgeBase from './KnowledgeBase'
+import { KnowledgeBase } from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
 import i18nFactory from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
@@ -60,7 +58,6 @@ const LIST_IDENTIFIER_KEY = 'paxmagnifica-ti4companion-list-identifier'
 function App() {
   const { t } = useTranslation()
   const classes = useStyles()
-  const [state, dispatch] = useReducer(reducer, null, init)
   const { setChatVisible } = useChat()
   const [domainError, setDomainError] = useState(null)
   const [listIdentifier, setListIdentifier] = useState(
@@ -139,28 +136,24 @@ function App() {
                 [classes.fullWidth]: fullscreen,
               })}
             >
-              <StateContext.Provider value={state}>
-                <KnowledgeBase dispatch={dispatch} state={state} />
-                <Box m={2}>
-                  <Switch>
-                    <Route path="/new">
-                      <SessionSetup />
-                    </Route>
-                    <Route path="/:sessionId/:secret?">
-                      <SessionProvider>
-                        <SessionView />
-                      </SessionProvider>
-                    </Route>
-                    <Route path="/">
-                      <CallsToAction />
-                      <SessionsListContainer
-                        listIdentifier={listIdentifier}
-                        setListIdentifier={setAndPersistListIdentifier}
-                      />
-                    </Route>
-                  </Switch>
-                </Box>
-              </StateContext.Provider>
+              <KnowledgeBase />
+              <Box m={2}>
+                <Switch>
+                  <Route path="/new">
+                    <SessionSetup />
+                  </Route>
+                  <Route path="/:sessionId/:secret?">
+                    <SessionView />
+                  </Route>
+                  <Route path="/">
+                    <CallsToAction />
+                    <SessionsListContainer
+                      listIdentifier={listIdentifier}
+                      setListIdentifier={setAndPersistListIdentifier}
+                    />
+                  </Route>
+                </Switch>
+              </Box>
             </Container>
             {!fullscreen && <Footer />}
           </Router>

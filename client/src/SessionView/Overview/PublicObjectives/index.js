@@ -4,9 +4,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 
 import useSmallViewport from '../../../shared/useSmallViewport'
-import { StateContext, ComboDispatchContext } from '../../../state'
+import { ComboDispatchContext } from '../../../state'
 import Objective from '../../../shared/Objective'
 import { useFullscreen } from '../../../Fullscreen'
+import { useObjectives } from '../../../queries'
 
 import AddObjective from './AddObjective'
 import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
@@ -37,9 +38,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
   const { fullscreen } = useFullscreen()
   const classes = useStyles({ small: smallViewport, fullscreen })
   const comboDispatch = useContext(ComboDispatchContext)
-  const {
-    objectives: { data: availableObjectives },
-  } = useContext(StateContext)
+  const { objectives: availableObjectives } = useObjectives()
   const sessionObjectives = useMemo(() => session.objectives || [], [session])
   const [addObjectiveOpen, setAddObjectiveOpen] = useState(false)
 
@@ -150,6 +149,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
       </Grid>
       {editable && (
         <AddObjective
+          availableObjectives={availableObjectives}
           onCancel={() => setAddObjectiveOpen(false)}
           onSelect={objectiveAdded}
           open={addObjectiveOpen}

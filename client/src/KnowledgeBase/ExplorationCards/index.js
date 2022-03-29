@@ -16,11 +16,7 @@ import DebouncedTextField from '../../shared/DebouncedTextField'
 import { useExplorationCards } from './queries'
 import ExplorationCard, { PLANET_TYPE } from './ExplorationCard'
 
-function ExplorationCardsProvider({
-  explorationCardsState,
-  dispatch,
-  ...props
-}) {
+function ExplorationCardsProvider(props) {
   const { explorationCards, queryInfo } = useExplorationCards()
 
   if (!queryInfo.isFetched) {

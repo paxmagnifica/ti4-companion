@@ -22,7 +22,8 @@ export const useSessionSecret = () => {
 
   return { setSecret: context.setSecret }
 }
-export function SessionProvider({ children }) {
+
+export function SessionContainer({ children }) {
   const { sessionId } = useParams()
   const history = useHistory()
   const { fetch } = useFetch()
@@ -188,3 +189,4 @@ export function SessionProvider({ children }) {
     </DomainErrorContext.Provider>
   )
 }
+

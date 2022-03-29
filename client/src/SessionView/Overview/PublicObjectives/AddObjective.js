@@ -1,4 +1,4 @@
-import { useMemo, useContext, useCallback, useState } from 'react'
+import { useMemo, useCallback, useState } from 'react'
 import {
   Box,
   Button,
@@ -15,14 +15,10 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useTranslation } from 'react-i18next'
 
-import { StateContext } from '../../../state'
 import Objective from '../../../shared/Objective'
 
-function AddObjective({ open, onSelect, onCancel }) {
+function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
   const { t } = useTranslation()
-  const {
-    objectives: { data: availableObjectives },
-  } = useContext(StateContext)
 
   const [stageISelected, setStageI] = useState(true)
   const [stageIISelected, setStageII] = useState(false)

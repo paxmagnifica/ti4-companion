@@ -1,7 +1,5 @@
 import { render } from '@testing-library/react'
 
-import { StateContext } from '../state'
-
 import Objective from './Objective'
 
 const state = {
@@ -28,11 +26,7 @@ const state = {
 
 test('should display status phase on secret objective', async () => {
   // when
-  const { getByText } = render(
-    <StateContext.Provider value={state}>
-      <Objective slug="status-phase-objective" />
-    </StateContext.Provider>,
-  )
+  const { getByText } = render(<Objective slug="status-phase-objective" />)
 
   // then
   expect(getByText(/status phase/)).toBeDefined()
@@ -40,11 +34,7 @@ test('should display status phase on secret objective', async () => {
 
 test('should display action phase on secret objective', async () => {
   // when
-  const { getByText } = render(
-    <StateContext.Provider value={state}>
-      <Objective slug="action-phase-objective" />
-    </StateContext.Provider>,
-  )
+  const { getByText } = render(<Objective slug="action-phase-objective" />)
 
   // then
   expect(getByText(/action phase/)).toBeDefined()
@@ -52,11 +42,7 @@ test('should display action phase on secret objective', async () => {
 
 test('should display agenda phase on secret objective', async () => {
   // when
-  const { getByText } = render(
-    <StateContext.Provider value={state}>
-      <Objective slug="agenda-phase-objective" />
-    </StateContext.Provider>,
-  )
+  const { getByText } = render(<Objective slug="agenda-phase-objective" />)
 
   // then
   expect(getByText(/agenda phase/)).toBeDefined()
