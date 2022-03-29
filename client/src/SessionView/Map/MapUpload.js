@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
 import { Map as MapIcon } from '@material-ui/icons'
-import { useQueryClient } from 'react-query'
 
 import ImageUpload from '../../shared/ImageUpload'
 import { useDomainErrors } from '../../shared/errorHandling'
+import useInvalidateQueries from '../../useInvalidateQueries'
 
 function MapUpload({ sessionService, sessionId, onUpload }) {
   const { setError } = useDomainErrors()
-  const queryClient = useQueryClient()
+  const invalidateQueries = useInvalidateQueries()
 
   const upload = useCallback(
     async (file, previewUrl) => {
@@ -16,13 +16,13 @@ function MapUpload({ sessionService, sessionId, onUpload }) {
         if (result.ok) {
           onUpload(previewUrl)
           // TODO move out
-          queryClient.invalidateQueries(['session', sessionId])
+          invalidateQueries(['session', sessionId])
         }
       } catch (e) {
         setError(e)
       }
     },
-    [sessionId, onUpload, sessionService, setError, queryClient],
+    [sessionId, onUpload, sessionService, setError, invalidateQueries],
   )
 
   return (

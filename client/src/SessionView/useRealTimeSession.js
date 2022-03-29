@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
-import { useQueryClient } from 'react-query'
 
 import { useSignalRConnection } from '../signalR'
+import useInvalidateQueries from '../useInvalidateQueries'
 
 export const useRealTimeSession = ({ sessionId }) => {
   const signalRConnection = useSignalRConnection()
-  const queryClient = useQueryClient()
+  const invalidateQueries = useInvalidateQueries()
 
   useEffect(() => {
     if (!signalRConnection) {
@@ -21,12 +21,12 @@ export const useRealTimeSession = ({ sessionId }) => {
         window.location.reload()
       }
 
-      queryClient.invalidateQueries(['session', sessionEvent.sessionId])
+      invalidateQueries(['session', sessionEvent.sessionId])
     }
     signalRConnection.on('SessionEvent', handler)
 
     return () => signalRConnection.off('SessionEvent', handler)
-  }, [signalRConnection, sessionId, queryClient])
+  }, [signalRConnection, sessionId, invalidateQueries])
 
   useEffect(() => {
     if (!sessionId || !signalRConnection) {

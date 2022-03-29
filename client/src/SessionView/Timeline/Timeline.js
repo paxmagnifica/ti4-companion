@@ -842,7 +842,7 @@ export function Timeline({ editable, session, sessionService }) {
     async (payload) => {
       const result = await sessionService.addTimelineEvent(payload, session.id)
       if (result.ok) {
-        invalidateQueries(queryKeys.sessionTimeline(session.id))
+        invalidateQueries(queryKeys.timeline(session.id))
       }
     },
     [session.id, sessionService, invalidateQueries],

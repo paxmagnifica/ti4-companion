@@ -37,7 +37,6 @@ import i18nFactory from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
 import GitHubRibbon from './GitHubRibbon'
 import config from './config'
-import useInvalidateQueries from './useInvalidateQueries'
 import { Footer } from './Footer'
 import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
@@ -99,15 +98,6 @@ function App() {
     load()
   }, [])
 
-  const invalidateQueries = useInvalidateQueries()
-  const dispatchWithInvalidate = useCallback(
-    (...args) => {
-      invalidateQueries(['session'])
-      dispatch(...args)
-    },
-    [invalidateQueries, dispatch],
-  )
-
   return (
     <ThemeProvider theme={theme}>
       <DomainErrorProvider error={domainError} setError={setDomainError}>
@@ -158,7 +148,7 @@ function App() {
               })}
             >
               <StateContext.Provider value={state}>
-                <DispatchContext.Provider value={dispatchWithInvalidate}>
+                <DispatchContext.Provider value={dispatch}>
                   <KnowledgeBase />
                   <Box m={2}>
                     <Switch>
@@ -166,10 +156,7 @@ function App() {
                         <SessionSetup />
                       </Route>
                       <Route path="/:sessionId/:secret?">
-                        <SessionProvider
-                          dispatch={dispatchWithInvalidate}
-                          state={state}
-                        >
+                        <SessionProvider state={state}>
                           <SessionView />
                         </SessionProvider>
                       </Route>
