@@ -165,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function KnowledgeBase() {
+function KnowledgeBase({ state, dispatch }) {
   const { t } = useTranslation()
   const { fullscreen } = useFullscreen()
   const smallCards = useMediaQuery('(max-width:599px)')
@@ -435,6 +435,7 @@ function KnowledgeBase() {
           value={chosenTab}
         >
           <Objectives
+            availableObjectives={state.objectives.data}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -446,6 +447,7 @@ function KnowledgeBase() {
           value={chosenTab}
         >
           <Objectives
+            availableObjectives={state.objectives.data}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -457,33 +459,34 @@ function KnowledgeBase() {
           value={chosenTab}
         >
           <Objectives
+            availableObjectives={state.objectives.data}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
         </TabPanel>
-        {explorationCards.map(
-          ({ type, tab, width, height, backgroundPosition }) => (
-            <TabPanel
-              key={`${type}-tabpanel`}
-              index={tab}
-              small={smallCards}
-              title={`${type} exploration cards`}
-              value={chosenTab}
-            >
-              <ExplorationCards
-                onFilterChange={setExplorationFilters}
-                {...explorationFilters}
-              />
-            </TabPanel>
-          ),
-        )}
+        {explorationCards.map(({ type, tab }) => (
+          <TabPanel
+            key={`${type}-tabpanel`}
+            index={tab}
+            small={smallCards}
+            title={`${type} exploration cards`}
+            value={chosenTab}
+          >
+            <ExplorationCards
+              dispatch={dispatch}
+              explorationCardsState={state.explorationCards}
+              onFilterChange={setExplorationFilters}
+              {...explorationFilters}
+            />
+          </TabPanel>
+        ))}
         <TabPanel
           index={TABS.RELICS}
           small={smallCards}
           title={t('kb.panels.relics.title')}
           value={chosenTab}
         >
-          <Relics />
+          <Relics dispatch={dispatch} relicsState={state.relics} />
         </TabPanel>
         <TabPanel
           index={TABS.STRATEGY_CARDS}

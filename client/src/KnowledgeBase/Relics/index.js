@@ -1,21 +1,17 @@
-import { useState, useMemo, useEffect, useContext } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import clsx from 'clsx'
 import { Grid, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 
-import { DispatchContext, StateContext } from '../../state'
 import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
 import Relic from '../../shared/Relic'
 
 import * as relicService from './service'
 
-function RelicsProvider(props) {
-  const {
-    relics: { loading, loaded, data: availableRelics },
-  } = useContext(StateContext)
-  const dispatch = useContext(DispatchContext)
+function RelicsProvider({ relicsState, dispatch, ...props }) {
+  const { loading, loaded, data: availableRelics } = relicsState
 
   useEffect(() => {
     if (loading || loaded) {

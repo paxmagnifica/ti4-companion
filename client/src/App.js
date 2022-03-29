@@ -29,7 +29,7 @@ import { CallsToAction } from './CallsToAction'
 import SessionView from './SessionView'
 import { SessionProvider } from './SessionView/SessionProvider'
 import * as objectivesService from './objectivesService'
-import { DispatchContext, StateContext, reducer, init } from './state'
+import { StateContext, reducer, init } from './state'
 import { SignalRConnectionProvider } from './signalR'
 import KnowledgeBase from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
@@ -37,7 +37,6 @@ import i18nFactory from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
 import GitHubRibbon from './GitHubRibbon'
 import config from './config'
-import useInvalidateQueries from './useInvalidateQueries'
 import { Footer } from './Footer'
 import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
@@ -99,15 +98,6 @@ function App() {
     load()
   }, [])
 
-  const invalidateQueries = useInvalidateQueries()
-  const dispatchWithInvalidate = useCallback(
-    (...args) => {
-      invalidateQueries(['session'])
-      dispatch(...args)
-    },
-    [invalidateQueries, dispatch],
-  )
-
   return (
     <ThemeProvider theme={theme}>
       <DomainErrorProvider error={domainError} setError={setDomainError}>
@@ -158,31 +148,26 @@ function App() {
               })}
             >
               <StateContext.Provider value={state}>
-                <DispatchContext.Provider value={dispatchWithInvalidate}>
-                  <KnowledgeBase />
-                  <Box m={2}>
-                    <Switch>
-                      <Route path="/new">
-                        <SessionSetup />
-                      </Route>
-                      <Route path="/:sessionId/:secret?">
-                        <SessionProvider
-                          dispatch={dispatchWithInvalidate}
-                          state={state}
-                        >
-                          <SessionView />
-                        </SessionProvider>
-                      </Route>
-                      <Route path="/">
-                        <CallsToAction />
-                        <SessionsListContainer
-                          listIdentifier={listIdentifier}
-                          setListIdentifier={setAndPersistListIdentifier}
-                        />
-                      </Route>
-                    </Switch>
-                  </Box>
-                </DispatchContext.Provider>
+                <KnowledgeBase dispatch={dispatch} state={state} />
+                <Box m={2}>
+                  <Switch>
+                    <Route path="/new">
+                      <SessionSetup />
+                    </Route>
+                    <Route path="/:sessionId/:secret?">
+                      <SessionProvider state={state}>
+                        <SessionView />
+                      </SessionProvider>
+                    </Route>
+                    <Route path="/">
+                      <CallsToAction />
+                      <SessionsListContainer
+                        listIdentifier={listIdentifier}
+                        setListIdentifier={setAndPersistListIdentifier}
+                      />
+                    </Route>
+                  </Switch>
+                </Box>
               </StateContext.Provider>
             </Container>
             {!fullscreen && <Footer />}

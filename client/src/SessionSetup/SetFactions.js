@@ -37,7 +37,7 @@ const useStyles = makeStyles({
   },
 })
 
-export function SetFactions({ dispatch }) {
+export function SetFactions() {
   const classes = useStyles()
 
   const [selectedFactions, setSelected] = useState([])
@@ -72,7 +72,6 @@ export function SetFactions({ dispatch }) {
         factions: selectedFactions,
         password,
       })
-      dispatch({ type: 'CreateGameSession', session })
       history.push(
         generatePath(SESSION_VIEW_ROUTES.main, {
           sessionId: session.id,
@@ -80,7 +79,7 @@ export function SetFactions({ dispatch }) {
         { secret: session.secret },
       )
     },
-    [history, dispatch, selectedFactions, sessionService],
+    [history, selectedFactions, sessionService],
   )
 
   return (

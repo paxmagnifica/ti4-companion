@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useContext } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import clsx from 'clsx'
 import {
   Grid,
@@ -10,18 +10,18 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { useTranslation } from 'react-i18next'
 
-import { DispatchContext, StateContext } from '../../state'
 import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
 
 import * as explorationCardsService from './service'
 import ExplorationCard, { PLANET_TYPE } from './ExplorationCard'
 
-function ExplorationCardsProvider(props) {
-  const {
-    explorationCards: { loading, loaded, data: availableCards },
-  } = useContext(StateContext)
-  const dispatch = useContext(DispatchContext)
+function ExplorationCardsProvider({
+  explorationCardsState,
+  dispatch,
+  ...props
+}) {
+  const { loading, loaded, data: availableCards } = explorationCardsState
 
   useEffect(() => {
     if (loading || loaded) {
@@ -43,7 +43,7 @@ function ExplorationCardsProvider(props) {
   }
 
   if (loading) {
-    ;<CircularProgress color="secondary" />
+    return <CircularProgress color="secondary" />
   }
 
   return <ExplorationCards availableCards={availableCards} {...props} />
