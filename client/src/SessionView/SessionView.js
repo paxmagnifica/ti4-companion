@@ -11,7 +11,6 @@ import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import { TogglePlasticColorsButton } from '../shared/plasticColors'
 
 import { useSessionContext } from './useSessionContext'
-import useRealTimeSession from './useRealTimeSession'
 import { Overview } from './Overview'
 import ShareButton from './ShareButton'
 import { EditButton } from './Edit'
@@ -33,7 +32,6 @@ export function SessionView({
   session,
   updateFactionPoints,
 }) {
-  useRealTimeSession(session.id)
   const classes = useStyles()
 
   const sortedPoints = [...session.points]

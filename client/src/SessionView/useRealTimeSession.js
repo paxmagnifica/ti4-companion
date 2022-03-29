@@ -1,11 +1,11 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
+import { useQueryClient } from 'react-query'
 
 import { useSignalRConnection } from '../signalR'
-import { DispatchContext } from '../state'
 
-const useRealTimeSession = (sessionId) => {
+export const useRealTimeSession = ({ sessionId }) => {
   const signalRConnection = useSignalRConnection()
-  const dispatch = useContext(DispatchContext)
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (!signalRConnection) {
@@ -13,7 +13,6 @@ const useRealTimeSession = (sessionId) => {
     }
 
     const handler = (sessionEvent) => {
-      const payload = JSON.parse(sessionEvent.serializedPayload)
       if (
         // TODO also check if we are currently viewing the session?
         sessionEvent.eventType === 'CommitDraft' &&
@@ -22,12 +21,12 @@ const useRealTimeSession = (sessionId) => {
         window.location.reload()
       }
 
-      dispatch({ type: sessionEvent.eventType, payload })
+      queryClient.invalidateQueries(['session', sessionEvent.sessionId])
     }
     signalRConnection.on('SessionEvent', handler)
 
     return () => signalRConnection.off('SessionEvent', handler)
-  }, [signalRConnection, dispatch, sessionId])
+  }, [signalRConnection, sessionId, queryClient])
 
   useEffect(() => {
     if (!sessionId || !signalRConnection) {
@@ -40,5 +39,3 @@ const useRealTimeSession = (sessionId) => {
     return () => signalRConnection.invoke('UnsubscribeFromSession', sessionId)
   }, [signalRConnection, sessionId])
 }
-
-export default useRealTimeSession

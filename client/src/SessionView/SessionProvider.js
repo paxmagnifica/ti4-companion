@@ -1,10 +1,4 @@
-import React, {
-  useMemo,
-  useEffect,
-  useState,
-  useCallback,
-  useContext,
-} from 'react'
+import React, { useMemo, useState, useCallback, useContext } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
 import { DomainErrorContext, useDomainErrors } from '../shared/errorHandling'
@@ -15,6 +9,8 @@ import { useFetch } from '../useFetch'
 
 import { useEdit, EditPromptProvider } from './Edit'
 import { useSessionContext, SessionContext } from './useSessionContext'
+import { useSession } from './queries'
+import { useRealTimeSession } from './useRealTimeSession'
 
 export const useSessionSecret = () => {
   const context = useSessionContext()
@@ -25,7 +21,7 @@ export const useSessionSecret = () => {
 
   return { setSecret: context.setSecret }
 }
-export function SessionProvider({ children, state, dispatch }) {
+export function SessionProvider({ children, state }) {
   const { sessionId } = useParams()
   const history = useHistory()
   const { fetch } = useFetch()
@@ -75,6 +71,10 @@ export function SessionProvider({ children, state, dispatch }) {
     [setError, setEnableEditDialogOpen],
   )
 
+  const { session, queryInfo } = useSession({ sessionId })
+  useRealTimeSession({ sessionId })
+  const loading = !queryInfo.isFetched
+
   const comboDispatch = useCallback(
     async (action) => {
       const { payload } = action
@@ -84,13 +84,11 @@ export function SessionProvider({ children, state, dispatch }) {
           type: action.type,
           payload,
         })
-
-        dispatch(action)
       } catch (e) {
         setSessionError(e)
       }
     },
-    [setSessionError, dispatch, sessionService],
+    [setSessionError, sessionService],
   )
 
   const updateFactionPoints = useCallback(
@@ -105,49 +103,10 @@ export function SessionProvider({ children, state, dispatch }) {
     [comboDispatch],
   )
 
-  const [loading, setLoading] = useState(null)
-  const [sessionLoaded, setSessionLoaded] = useState(false)
-
-  useEffect(() => {
-    if (!sessionId) {
-      return
-    }
-
-    const loadSession = async () => {
-      setSessionLoaded(false)
-      setLoading(true)
-
-      try {
-        const session = await sessionService.get(sessionId)
-        if (session.status === 404) {
-          session.error = 'Not Found'
-        }
-
-        session.remote = true
-        dispatch({ type: 'AddSession', session })
-      } catch (e) {
-        console.error(e)
-      } finally {
-        setLoading(false)
-        setSessionLoaded(true)
-      }
-    }
-
-    loadSession()
-  }, [dispatch, sessionId, sessionService])
-
   const [showPlasticColors, setShowPlasticColors] = useState(true)
   const togglePlasticColors = useCallback(
     () => setShowPlasticColors((a) => !a),
     [],
-  )
-
-  const session = useMemo(
-    () =>
-      !sessionLoaded
-        ? null
-        : state.sessions.data.find((s) => s.id === sessionId),
-    [state, sessionId, sessionLoaded],
   )
 
   const disableEdit = useCallback(() => {
