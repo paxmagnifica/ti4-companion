@@ -7,18 +7,24 @@ const queryKey = ['objectives']
 
 // TODO could set a very high TTL
 export const useObjectives = () => {
-  const { data: objectives, ...queryInfo } = useQuery(queryKey, async () => {
-    const result = await fetch(`${CONFIG.apiUrl}/api/objectives`).then(
-      handleErrors,
-    )
+  const { data: objectives, ...queryInfo } = useQuery(
+    queryKey,
+    async () => {
+      const result = await fetch(`${CONFIG.apiUrl}/api/objectives`).then(
+        handleErrors,
+      )
 
-    const availableObjectives = await result.json()
+      const availableObjectives = await result.json()
 
-    return availableObjectives.reduce(
-      (accu, obj) => ({ ...accu, [obj.slug]: obj }),
-      {},
-    )
-  })
+      return availableObjectives.reduce(
+        (accu, obj) => ({ ...accu, [obj.slug]: obj }),
+        {},
+      )
+    },
+    {
+      placeholderData: {},
+    },
+  )
 
   return {
     objectives,

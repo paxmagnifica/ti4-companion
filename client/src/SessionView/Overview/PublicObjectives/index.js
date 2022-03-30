@@ -38,7 +38,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
   const { fullscreen } = useFullscreen()
   const classes = useStyles({ small: smallViewport, fullscreen })
   const comboDispatch = useContext(ComboDispatchContext)
-  const { objectives: availableObjectives } = useObjectives()
+  const { objectives: availableObjectives, queryInfo } = useObjectives()
   const sessionObjectives = useMemo(() => session.objectives || [], [session])
   const [addObjectiveOpen, setAddObjectiveOpen] = useState(false)
 
@@ -100,6 +100,10 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
       availableObjectives,
     ],
   )
+
+  if (!queryInfo.isFetched) {
+    return null
+  }
 
   return (
     <>

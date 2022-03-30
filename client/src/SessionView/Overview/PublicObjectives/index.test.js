@@ -1,23 +1,9 @@
-import { render, fireEvent } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 
-import { StateContext, ComboDispatchContext } from '../../../state'
+import { ComboDispatchContext } from '../../../state'
+import { renderWithClient, getTestQueryClient } from '../../../testUtils'
 
 import PublicObjectives from './index'
-
-const state = {
-  objectives: {
-    data: {
-      'diversify-research': {
-        secret: false,
-        points: 1,
-      },
-      'achieve-supremacy': {
-        secret: false,
-        points: 2,
-      },
-    },
-  },
-}
 
 test('should add one point to faction when stage one objective is scored', async () => {
   // given
@@ -43,20 +29,19 @@ test('should add one point to faction when stage one objective is scored', async
     remote: true,
   }
 
-  const { getByTitle } = render(
+  const { findByTitle } = renderWithClient(
+    getTestQueryClient(),
     <ComboDispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
-        <PublicObjectives
-          editable
-          session={session}
-          updateFactionPoints={updateFactionPoints}
-        />
-      </StateContext.Provider>
+      <PublicObjectives
+        editable
+        session={session}
+        updateFactionPoints={updateFactionPoints}
+      />
     </ComboDispatchContext.Provider>,
   )
 
   // when
-  fireEvent.click(getByTitle('The Universities of Jol-Nar'))
+  fireEvent.click(await findByTitle('The Universities of Jol-Nar'))
 
   // then
   expect(updateFactionPoints).toHaveBeenCalledWith({
@@ -90,20 +75,19 @@ test('should add two points to faction when second stage objective is scored', a
     remote: true,
   }
 
-  const { getByTitle } = render(
+  const { findByTitle } = renderWithClient(
+    getTestQueryClient(),
     <ComboDispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
-        <PublicObjectives
-          editable
-          session={session}
-          updateFactionPoints={updateFactionPoints}
-        />
-      </StateContext.Provider>
+      <PublicObjectives
+        editable
+        session={session}
+        updateFactionPoints={updateFactionPoints}
+      />
     </ComboDispatchContext.Provider>,
   )
 
   // when
-  fireEvent.click(getByTitle('The Universities of Jol-Nar'))
+  fireEvent.click(await findByTitle('The Universities of Jol-Nar'))
 
   // then
   expect(updateFactionPoints).toHaveBeenCalledWith({
