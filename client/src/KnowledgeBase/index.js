@@ -12,6 +12,7 @@ import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
 import explorationReverseSprite from '../assets/exploration-reverse-sprite.png'
 import relicSprite from '../assets/relic-sprite.jpg'
 import StrategyCard from '../gameInfo/strategyCards'
+import { useObjectives } from '../queries'
 
 import Objectives from './Objectives'
 import ExplorationCards from './ExplorationCards'
@@ -165,7 +166,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function KnowledgeBase({ state, dispatch }) {
+export function KnowledgeBase() {
   const { t } = useTranslation()
   const { fullscreen } = useFullscreen()
   const smallCards = useMediaQuery('(max-width:599px)')
@@ -269,6 +270,8 @@ function KnowledgeBase({ state, dispatch }) {
     },
     [chosenTab, drawerOpen],
   )
+
+  const { objectives: availableObjectives } = useObjectives()
 
   if (fullscreen) {
     return null
@@ -435,7 +438,7 @@ function KnowledgeBase({ state, dispatch }) {
           value={chosenTab}
         >
           <Objectives
-            availableObjectives={state.objectives.data}
+            availableObjectives={availableObjectives}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -447,7 +450,7 @@ function KnowledgeBase({ state, dispatch }) {
           value={chosenTab}
         >
           <Objectives
-            availableObjectives={state.objectives.data}
+            availableObjectives={availableObjectives}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -459,7 +462,7 @@ function KnowledgeBase({ state, dispatch }) {
           value={chosenTab}
         >
           <Objectives
-            availableObjectives={state.objectives.data}
+            availableObjectives={availableObjectives}
             onFilterChange={setObjectiveFilters}
             {...objectiveFilters}
           />
@@ -473,8 +476,6 @@ function KnowledgeBase({ state, dispatch }) {
             value={chosenTab}
           >
             <ExplorationCards
-              dispatch={dispatch}
-              explorationCardsState={state.explorationCards}
               onFilterChange={setExplorationFilters}
               {...explorationFilters}
             />
@@ -486,7 +487,7 @@ function KnowledgeBase({ state, dispatch }) {
           title={t('kb.panels.relics.title')}
           value={chosenTab}
         >
-          <Relics dispatch={dispatch} relicsState={state.relics} />
+          <Relics />
         </TabPanel>
         <TabPanel
           index={TABS.STRATEGY_CARDS}
@@ -500,5 +501,3 @@ function KnowledgeBase({ state, dispatch }) {
     </>
   )
 }
-
-export default KnowledgeBase

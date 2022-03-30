@@ -1,9 +1,10 @@
 import { useHistory } from 'react-router-dom'
 
+import { SessionContainer } from './SessionContainer'
 import { useSessionContext } from './useSessionContext'
 import { SessionView } from './SessionView'
 
-function Thing({ children }) {
+function Thing() {
   const history = useHistory()
   const { setSecret, sessionService, editable, session, updateFactionPoints } =
     useSessionContext()
@@ -28,10 +29,12 @@ function Thing({ children }) {
       session={session}
       sessionService={sessionService}
       updateFactionPoints={updateFactionPoints}
-    >
-      {children}
-    </SessionView>
+    />
   )
 }
 
-export default Thing
+export default () => (
+  <SessionContainer>
+    <Thing />
+  </SessionContainer>
+)

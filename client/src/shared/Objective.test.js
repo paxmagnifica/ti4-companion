@@ -1,63 +1,36 @@
-import { render } from '@testing-library/react'
-
-import { StateContext } from '../state'
-
 import Objective from './Objective'
 
-const state = {
-  objectives: {
-    data: {
-      'status-phase-objective': {
-        secret: true,
-        points: 1,
-        when: 0,
-      },
-      'action-phase-objective': {
-        secret: true,
-        points: 1,
-        when: 1,
-      },
-      'agenda-phase-objective': {
-        secret: true,
-        points: 1,
-        when: 2,
-      },
-    },
-  },
-}
+import { renderWithClient, getTestQueryClient } from '../testUtils'
 
 test('should display status phase on secret objective', async () => {
   // when
-  const { getByText } = render(
-    <StateContext.Provider value={state}>
-      <Objective slug="status-phase-objective" />
-    </StateContext.Provider>,
+  const { findByText } = renderWithClient(
+    getTestQueryClient(),
+    <Objective slug="status-phase-objective" />,
   )
 
   // then
-  expect(getByText(/status phase/)).toBeDefined()
+  expect(findByText(/status phase/)).toBeDefined()
 })
 
 test('should display action phase on secret objective', async () => {
   // when
-  const { getByText } = render(
-    <StateContext.Provider value={state}>
-      <Objective slug="action-phase-objective" />
-    </StateContext.Provider>,
+  const { findByText } = renderWithClient(
+    getTestQueryClient(),
+    <Objective slug="action-phase-objective" />,
   )
 
   // then
-  expect(getByText(/action phase/)).toBeDefined()
+  expect(findByText(/action phase/)).toBeDefined()
 })
 
 test('should display agenda phase on secret objective', async () => {
   // when
-  const { getByText } = render(
-    <StateContext.Provider value={state}>
-      <Objective slug="agenda-phase-objective" />
-    </StateContext.Provider>,
+  const { findByText } = renderWithClient(
+    getTestQueryClient(),
+    <Objective slug="agenda-phase-objective" />,
   )
 
   // then
-  expect(getByText(/agenda phase/)).toBeDefined()
+  expect(findByText(/agenda phase/)).toBeDefined()
 })
