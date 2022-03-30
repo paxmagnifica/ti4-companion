@@ -22,6 +22,7 @@ export const useObjectives = () => {
       )
     },
     {
+      staleTime: Infinity,
       placeholderData: {},
     },
   )
