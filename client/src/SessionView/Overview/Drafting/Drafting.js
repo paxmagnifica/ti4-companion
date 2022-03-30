@@ -277,25 +277,27 @@ function Pick({
 
 function BanStepper({ draft, setup }) {
   const { t } = useTranslation()
-  const { playerCount, bansPerRound } = setup.options
+  const { playerCount, bansPerRound, banRounds } = setup.options
 
-  const history = new Array(playerCount).fill().map((_p, playerIndex) => (
-    <>
-      {new Array(bansPerRound).fill().map((_b, banIndex) => {
-        const ban = draft.bans[playerIndex * bansPerRound + banIndex]
-        if (!ban) {
-          return null
-        }
+  const history = new Array(playerCount * banRounds)
+    .fill()
+    .map((_p, playerIndex) => (
+      <>
+        {new Array(bansPerRound).fill().map((_b, banIndex) => {
+          const ban = draft.bans[playerIndex * bansPerRound + banIndex]
+          if (!ban) {
+            return null
+          }
 
-        return (
-          <FactionImage
-            factionKey={ban.ban}
-            style={{ width: 'auto', height: '100%' }}
-          />
-        )
-      })}
-    </>
-  ))
+          return (
+            <FactionImage
+              factionKey={ban.ban}
+              style={{ width: 'auto', height: '100%' }}
+            />
+          )
+        })}
+      </>
+    ))
 
   return (
     <PlayerOrderStepper
