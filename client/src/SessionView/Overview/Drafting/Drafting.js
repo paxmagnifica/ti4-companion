@@ -282,7 +282,7 @@ function BanStepper({ draft, setup }) {
   const history = new Array(playerCount).fill().map((_p, playerIndex) => (
     <>
       {new Array(bansPerRound).fill().map((_b, banIndex) => {
-        const ban = draft.bans[playerIndex + banIndex]
+        const ban = draft.bans[playerIndex * bansPerRound + banIndex]
         if (!ban) {
           return null
         }
