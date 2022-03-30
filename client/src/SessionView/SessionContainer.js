@@ -189,4 +189,3 @@ export function SessionContainer({ children }) {
     </DomainErrorContext.Provider>
   )
 }
-
