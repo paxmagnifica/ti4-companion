@@ -275,6 +275,38 @@ function Pick({
   )
 }
 
+function BanStepper({ draft, setup }) {
+  const { t } = useTranslation()
+  const { playerCount, bansPerRound } = setup.options
+
+  const history = new Array(playerCount).fill().map((_p, playerIndex) => (
+    <>
+      {new Array(bansPerRound).fill().map((_b, banIndex) => {
+        const ban = draft.bans[playerIndex + banIndex]
+        if (!ban) {
+          return null
+        }
+
+        return (
+          <FactionImage
+            factionKey={ban.ban}
+            style={{ width: 'auto', height: '100%' }}
+          />
+        )
+      })}
+    </>
+  ))
+
+  return (
+    <PlayerOrderStepper
+      activePlayer={draft.activePlayerIndex}
+      history={history}
+      order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+      title={t(`drafting.speakerOrder.${draft.phase}.title`)}
+    />
+  )
+}
+
 function Ban({
   disabled,
   bans,
@@ -356,17 +388,7 @@ export function Drafting({ editable, session, sessionService }) {
         phase={draft.phase}
       />
       {draft.phase === PHASE.bans && (
-        <PlayerOrderStepper
-          activePlayer={draft.activePlayerIndex}
-          history={draft.bans.map(({ ban }) => (
-            <FactionImage
-              factionKey={ban}
-              style={{ width: 'auto', height: '100%' }}
-            />
-          ))}
-          order={draft.order.map((playerIndex) => draft.players[playerIndex])}
-          title={t(`drafting.speakerOrder.${draft.phase}.title`)}
-        />
+        <BanStepper draft={draft} setup={session.setup} />
       )}
       {draft.phase === PHASE.picks && (
         <PlayerOrderStepper
