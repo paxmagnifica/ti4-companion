@@ -31,7 +31,7 @@ function FactionNutshells({
 
   const [draftSummaryDialogOpen, setDraftSummaryDialogOpen] = useState(false)
 
-  return players.map(({ faction, playerName, color, speaker }, index) => {
+  return players.map(({ atTable, faction, playerName, color, speaker }) => {
     const factionData = factions.getData(faction)
     const factionName = t(`factions.${faction}.name`)
 
@@ -50,7 +50,7 @@ function FactionNutshells({
             (
             <Trans
               i18nKey="sessionView.factionNutshell.tablePosition"
-              values={{ position: index + 1 }}
+              values={{ position: atTable + 1 }}
             />
             )
           </em>

@@ -11,9 +11,9 @@ export function DraftSummaryDialog({ open, set }) {
 
   const picks = useMemo(
     () =>
-      session.players.map((player, index) => ({
+      session.players.map((player) => ({
         ...player,
-        tablePosition: index,
+        tablePosition: player.atTable,
       })),
     [session.players],
   )

@@ -12,26 +12,29 @@ namespace server.Controllers
         public string Faction { get; set; }
         public string Color { get; set; }
         public bool Speaker { get; set; }
+        public int AtTable { get; set; }
 
         public static IEnumerable<PlayerDto> GetPlayers(SessionDto session)
         {
             var factionPicks = session.Draft?.Picks?.Where(p => p.Type == "faction") ?? new PickedPayload[0];
+            var tablePicks = session.Draft?.Picks?.Where(p => p.Type == "tablePosition") ?? new PickedPayload[0];
 
             var picks = session.Factions.Select(faction =>
             {
                 var playerName = factionPicks.FirstOrDefault(fp => fp.Pick == faction)?.PlayerName;
+                var tablePick = tablePicks.FirstOrDefault(tp => tp.PlayerName == playerName)?.Pick;
 
                 return new PlayerDto
                 {
                     Faction = faction,
                     PlayerName = playerName,
                     Color = session.Colors?.GetValueOrDefault(faction),
-                    Speaker = playerName != null && session.Draft?.Speaker == playerName
+                    Speaker = playerName != null && session.Draft?.Speaker == playerName,
+                    AtTable = Int32.Parse(tablePick ?? "-1")
                 };
             });
 
             var speaker = session.Draft?.Speaker;
-            var tablePicks = session.Draft?.Picks?.Where(p => p.Type == "tablePosition") ?? new PickedPayload[0];
 
             if (!string.IsNullOrEmpty(speaker) && tablePicks.Any())
             {
@@ -40,9 +43,6 @@ namespace server.Controllers
                 var speakerIndex = duplicated.FindIndex(a => a.PlayerName == speaker);
 
                 var inOrderAfterSpeaker = duplicated.Skip(speakerIndex).Take(picks.Count());
-
-                Console.WriteLine(JsonConvert.SerializeObject(inOrderAfterSpeaker));
-                Console.WriteLine(JsonConvert.SerializeObject(picks));
 
                 return inOrderAfterSpeaker.Select(orderedPick => picks.First(pick => pick.PlayerName == orderedPick.PlayerName));
             }
