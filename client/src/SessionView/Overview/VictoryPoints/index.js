@@ -10,6 +10,7 @@ import { useFullscreen } from '../../../Fullscreen'
 import { handleErrors } from '../../../shared/errorHandling'
 import { useFetch } from '../../../useFetch'
 import CONFIG from '../../../config'
+import { VP_SOURCE } from '../../../shared/constants'
 /* eslint-disable camelcase */
 import vp10_0 from '../../../assets/victory-points-10/0.jpg'
 import vp10_1 from '../../../assets/victory-points-10/1.jpg'
@@ -40,7 +41,7 @@ import vp14_13 from '../../../assets/victory-points-14/13.jpg'
 import vp14_14 from '../../../assets/victory-points-14/14.jpg'
 
 import { PointContainer, DraggableFlag } from './draggableIndicators'
-import { PointsContextHelper } from './PointsContextHelper'
+import { PointsSourceHelper } from './PointsSourceHelper'
 
 const vp10_images = [
   vp10_0,
@@ -133,18 +134,18 @@ function VictoryPoints({ editable, target, onChange, points, sessionId }) {
   )
 
   const { fetch } = useFetch()
-  const addContext = useCallback(
+  const addSource = useCallback(
     async ({ index, faction, points: newFactionPoints, context }) => {
       try {
         await fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            eventType: 'AddPointContext',
+            eventType: 'AddPointSource',
             serializedPayload: JSON.stringify({
               faction,
               points: newFactionPoints,
-              context,
+              source: VP_SOURCE.fromFrontendToBackend(context),
             }),
           }),
         }).then(handleErrors)
@@ -224,8 +225,8 @@ function VictoryPoints({ editable, target, onChange, points, sessionId }) {
       </DndProvider>
       <Grid container justifyContent="center">
         <Grid item>
-          <PointsContextHelper
-            addContext={addContext}
+          <PointsSourceHelper
+            addSource={addSource}
             history={pointChangesHistory}
           />
         </Grid>

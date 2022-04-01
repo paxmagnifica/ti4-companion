@@ -7,8 +7,6 @@ import Relic from '../../shared/Relic'
 import mecatol from '../../assets/guac-mecatol.png'
 import { VP_SOURCE } from '../../shared/constants'
 
-const mapVpSource = (src) => Object.values(VP_SOURCE)[src]
-
 const images = {
   [VP_SOURCE.mecatol]: mecatol,
 }
@@ -38,7 +36,7 @@ function Context({ source, context }) {
 
 export function VictoryPoint({ src, context }) {
   const { t } = useTranslation()
-  const source = mapVpSource(src)
+  const source = VP_SOURCE.fromBackendToFrontend(src)
   const small = useSmallViewport()
 
   if (!source || source === VP_SOURCE.other) {

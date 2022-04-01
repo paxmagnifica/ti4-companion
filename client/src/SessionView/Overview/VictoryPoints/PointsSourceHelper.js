@@ -14,7 +14,7 @@ import { Details as DetailsIcon } from '@material-ui/icons'
 import FactionFlag from '../../../shared/FactionFlag'
 import { VP_SOURCE } from '../../../shared/constants'
 
-export function PointsContextHelper({ history, addContext }) {
+export function PointsSourceHelper({ history, addSource }) {
   const [open, setOpen] = useState(false)
   const closeDrawer = useCallback(() => setOpen(false), [])
   const openDrawer = useCallback(() => setOpen(true), [])
@@ -47,7 +47,7 @@ export function PointsContextHelper({ history, addContext }) {
                 <Button
                   disabled={context === VP_SOURCE.custodian}
                   onClick={() =>
-                    addContext({
+                    addSource({
                       index,
                       faction,
                       points,
@@ -60,7 +60,7 @@ export function PointsContextHelper({ history, addContext }) {
                 <Button
                   disabled={context === VP_SOURCE.mecatol}
                   onClick={() =>
-                    addContext({
+                    addSource({
                       index,
                       faction,
                       points,
@@ -73,7 +73,7 @@ export function PointsContextHelper({ history, addContext }) {
                 <Button
                   disabled={context === VP_SOURCE.support}
                   onClick={() =>
-                    addContext({
+                    addSource({
                       index,
                       faction,
                       points,

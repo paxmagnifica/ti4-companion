@@ -13,4 +13,8 @@ export const VP_SOURCE = {
   emphidia: 'emphidia',
   shard: 'shard',
   custodian: 'custodian', // TODO
+
+  fromBackendToFrontend: (src) => Object.values(VP_SOURCE)[src],
+  fromFrontendToBackend: (source) =>
+    Object.values(VP_SOURCE).findIndex((x) => x === source),
 }
