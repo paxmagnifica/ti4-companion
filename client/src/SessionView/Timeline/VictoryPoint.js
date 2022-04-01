@@ -6,6 +6,7 @@ import FactionFlag from '../../shared/FactionFlag'
 import Relic from '../../shared/Relic'
 import custodian from '../../assets/guac-mecatol.png'
 import { VP_SOURCE } from '../../shared/constants'
+import imperial from '../../assets/strat-8-imperial.png'
 
 const images = {
   [VP_SOURCE.custodian]: custodian,
@@ -60,6 +61,24 @@ export function VictoryPoint({ src, context }) {
           />
           <br />
         </>
+      )}
+      {source === VP_SOURCE.mecatol && (
+        <div
+          style={{
+            position: 'relative',
+            borderRadius: '50%',
+            height: 150,
+            width: 150,
+            overflow: 'hidden',
+          }}
+        >
+          <img
+            alt={readable}
+            src={imperial}
+            style={{ position: 'absolute', height: 600, top: -334, left: -428 }}
+            title={readable}
+          />
+        </div>
       )}
       {source === VP_SOURCE.shard && (
         <>
