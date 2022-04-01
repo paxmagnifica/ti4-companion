@@ -177,11 +177,13 @@ function VictoryPoints({ editable, target, onChange, points, factions }) {
           })}
         </Grid>
       </DndProvider>
-      <Grid container justifyContent="center">
-        <Grid item>
-          <PointsSourceHelper factions={factions} />
+      {editable && (
+        <Grid container justifyContent="center">
+          <Grid item>
+            <PointsSourceHelper factions={factions} />
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </>
   )
 }

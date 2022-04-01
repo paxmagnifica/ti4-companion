@@ -36,7 +36,24 @@ export function PointsSourceHelper({ factions }) {
           <DetailsIcon />
         </IconButton>
       )}
-      <Drawer anchor="left" onClose={closeDrawer} open={open}>
+      <Drawer
+        anchor="left"
+        onClose={closeDrawer}
+        open={open}
+        style={{ maxWidth: '100vw' }}
+      >
+        <Button
+          onClick={closeDrawer}
+          style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 999999,
+            maxWidth: '100vw',
+          }}
+          variant="contained"
+        >
+          Close
+        </Button>
         <List>
           {history.map(({ faction, points, source, context }, index) => (
             <Fragment key={`${faction}->${points}`}>
@@ -54,6 +71,8 @@ export function PointsSourceHelper({ factions }) {
                   {'-> '}
                   {points}
                 </ListItemText>
+              </ListItem>
+              <ListItem>
                 <ButtonGroup>
                   <Button
                     color={
