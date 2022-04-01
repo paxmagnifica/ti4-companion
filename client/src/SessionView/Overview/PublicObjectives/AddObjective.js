@@ -9,13 +9,10 @@ import {
   DialogTitle,
   FormControlLabel,
   FormGroup,
-  Grid,
-  TextField,
 } from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useTranslation } from 'react-i18next'
 
-import Objective from '../../../shared/Objective'
+import { ObjectiveSelector } from '../../../shared/ObjectiveSelector'
 
 function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
   const { t } = useTranslation()
@@ -34,24 +31,18 @@ function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
   }, [selected, onSelect])
 
   const filteredObjectives = useMemo(() => {
-    const withMeta = Object.values(availableObjectives).map(
-      (availableObjective) => ({
-        ...availableObjective,
-        name: t(`objectives.${availableObjective.slug}.name`),
-        condition: t(`objectives.${availableObjective.slug}.condition`),
-      }),
-    )
+    const objectives = Object.values(availableObjectives)
 
     return [
       ...(stageISelected
-        ? withMeta.filter((obj) => obj.points === 1 && !obj.secret)
+        ? objectives.filter((obj) => obj.points === 1 && !obj.secret)
         : []),
       ...(stageIISelected
-        ? withMeta.filter((obj) => obj.points === 2 && !obj.secret)
+        ? objectives.filter((obj) => obj.points === 2 && !obj.secret)
         : []),
-      ...(secretSelected ? withMeta.filter((obj) => obj.secret) : []),
+      ...(secretSelected ? objectives.filter((obj) => obj.secret) : []),
     ]
-  }, [availableObjectives, stageISelected, stageIISelected, secretSelected, t])
+  }, [availableObjectives, stageISelected, stageIISelected, secretSelected])
 
   return (
     <Dialog onClose={onCancel} open={open}>
@@ -90,31 +81,11 @@ function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
             />
           </FormGroup>
         </Box>
-        <Box m={1}>
-          <FormGroup row>
-            <Autocomplete
-              getOptionLabel={(option) => option.name}
-              id="search-for-objective"
-              onChange={(event, value, reason) => setSelected(value)}
-              options={filteredObjectives}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t('general.labels.objective')}
-                  variant="outlined"
-                />
-              )}
-              style={{ width: 300 }}
-            />
-          </FormGroup>
-        </Box>
-        {selected && (
-          <Box m={1}>
-            <Grid container justifyContent="center">
-              <Objective {...selected} />
-            </Grid>
-          </Box>
-        )}
+        <ObjectiveSelector
+          objectives={filteredObjectives}
+          onChange={setSelected}
+          value={selected}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={select}>{t('general.labels.add')}</Button>

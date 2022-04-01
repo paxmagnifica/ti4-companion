@@ -1,0 +1,50 @@
+import { useMemo } from 'react'
+import { Box, FormGroup, Grid, TextField } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { useTranslation } from 'react-i18next'
+
+import Objective from './Objective'
+
+export function ObjectiveSelector({ objectives, value, onChange }) {
+  const { t } = useTranslation()
+
+  const objectivesWithMeta = useMemo(
+    () =>
+      Object.values(objectives).map((availableObjective) => ({
+        ...availableObjective,
+        name: t(`objectives.${availableObjective.slug}.name`),
+        condition: t(`objectives.${availableObjective.slug}.condition`),
+      })),
+    [objectives, t],
+  )
+
+  return (
+    <>
+      <Box m={1}>
+        <FormGroup row>
+          <Autocomplete
+            getOptionLabel={(option) => option.name}
+            id="search-for-objective"
+            onChange={(_, v) => onChange(v)}
+            options={objectivesWithMeta}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('general.labels.objective')}
+                variant="outlined"
+              />
+            )}
+            style={{ width: 300 }}
+          />
+        </FormGroup>
+      </Box>
+      {value && (
+        <Box m={1}>
+          <Grid container justifyContent="center">
+            <Objective {...value} />
+          </Grid>
+        </Box>
+      )}
+    </>
+  )
+}
