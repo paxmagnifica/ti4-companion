@@ -4,30 +4,32 @@ import { Typography } from '@material-ui/core'
 import useSmallViewport from '../../shared/useSmallViewport'
 import FactionFlag from '../../shared/FactionFlag'
 import Relic from '../../shared/Relic'
-import mecatol from '../../assets/guac-mecatol.png'
+import custodian from '../../assets/guac-mecatol.png'
 import { VP_SOURCE } from '../../shared/constants'
 
 const images = {
-  [VP_SOURCE.mecatol]: mecatol,
+  [VP_SOURCE.custodian]: custodian,
 }
 
 function Context({ source, context }) {
   switch (source) {
     case VP_SOURCE.support:
       return (
-        <>
-          <br />
-          <Typography variant="caption">
-            <Trans i18nKey="general.from" />
-            <FactionFlag
-              disabled
-              factionKey={context}
-              height="3em"
-              selected
-              width="4.5em"
-            />
-          </Typography>
-        </>
+        Boolean(context) && (
+          <>
+            <br />
+            <Typography variant="caption">
+              <Trans i18nKey="general.from" />
+              <FactionFlag
+                disabled
+                factionKey={context}
+                height="3em"
+                selected
+                width="4.5em"
+              />
+            </Typography>
+          </>
+        )
       )
     default:
       return null
