@@ -13,8 +13,11 @@ import { Details as DetailsIcon } from '@material-ui/icons'
 
 import FactionFlag from '../../../shared/FactionFlag'
 import { VP_SOURCE } from '../../../shared/constants'
+import { useSessionContext } from '../../useSessionContext'
 
-export function PointsSourceHelper({ history, addSource, factions }) {
+export function PointsSourceHelper({ factions }) {
+  const { pointChangesHistory: history, addPointSource: addSource } =
+    useSessionContext()
   const [open, setOpen] = useState(false)
   const closeDrawer = useCallback(() => setOpen(false), [])
   const openDrawer = useCallback(() => setOpen(true), [])

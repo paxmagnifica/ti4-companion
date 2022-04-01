@@ -1,4 +1,3 @@
-import { useState, useCallback } from 'react'
 import { DndProvider } from 'react-dnd'
 import { TouchBackend } from 'react-dnd-touch-backend'
 import clsx from 'clsx'
@@ -7,10 +6,6 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../../shared/useSmallViewport'
 import { useFullscreen } from '../../../Fullscreen'
-import { handleErrors } from '../../../shared/errorHandling'
-import { useFetch } from '../../../useFetch'
-import CONFIG from '../../../config'
-import { VP_SOURCE } from '../../../shared/constants'
 /* eslint-disable camelcase */
 import vp10_0 from '../../../assets/victory-points-10/0.jpg'
 import vp10_1 from '../../../assets/victory-points-10/1.jpg'
@@ -112,66 +107,12 @@ const useStyles = makeStyles({
   },
 })
 
-function VictoryPoints({
-  editable,
-  target,
-  onChange,
-  points,
-  sessionId,
-  factions,
-}) {
+function VictoryPoints({ editable, target, onChange, points, factions }) {
   const smallViewport = useSmallViewport()
   const { fullscreen } = useFullscreen()
   const inputWidth = 100 / (target + 1)
   const classes = useStyles({ inputWidth, fullscreen })
   const vpImages = target === 10 ? vp10_images : vp14_images
-
-  const [pointChangesHistory, setPointChangeHistory] = useState([])
-  const updatePoints = useCallback(
-    async (faction, newPoints) => {
-      const success = await onChange(faction, newPoints)
-      if (success) {
-        setPointChangeHistory((oldHistory) => [
-          ...oldHistory,
-          { faction, points: newPoints },
-        ])
-      }
-    },
-    [onChange],
-  )
-
-  const { fetch } = useFetch()
-  const addSource = useCallback(
-    async ({ index, faction, points: newFactionPoints, source, context }) => {
-      try {
-        await fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
-          method: 'post',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            eventType: 'AddPointSource',
-            serializedPayload: JSON.stringify({
-              faction,
-              points: newFactionPoints,
-              source: VP_SOURCE.fromFrontendToBackend(source),
-              context,
-            }),
-          }),
-        }).then(handleErrors)
-        setPointChangeHistory((oldHistory) =>
-          oldHistory.map((historyPoint, historyIndex) =>
-            historyPoint.faction === faction &&
-            historyPoint.points === newFactionPoints &&
-            index === historyIndex
-              ? { ...historyPoint, source, context }
-              : historyPoint,
-          ),
-        )
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    [fetch, sessionId],
-  )
 
   return (
     <>
@@ -213,7 +154,7 @@ function VictoryPoints({
                         factionKey={faction}
                         onClick={
                           editable
-                            ? () => updatePoints(faction, numberOfPoints + 1)
+                            ? () => onChange(faction, numberOfPoints + 1)
                             : undefined
                         }
                         updatePoints={
@@ -223,7 +164,7 @@ function VictoryPoints({
                                   return
                                 }
 
-                                updatePoints(faction, factionPoints)
+                                onChange(faction, factionPoints)
                               }
                             : undefined
                         }
@@ -238,11 +179,7 @@ function VictoryPoints({
       </DndProvider>
       <Grid container justifyContent="center">
         <Grid item>
-          <PointsSourceHelper
-            addSource={addSource}
-            factions={factions}
-            history={pointChangesHistory}
-          />
+          <PointsSourceHelper factions={factions} />
         </Grid>
       </Grid>
     </>
