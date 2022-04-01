@@ -99,7 +99,7 @@ export function PointsSourceHelper({ history, addSource, factions }) {
                       key={factionKey}
                       disabled={faction === factionKey}
                       factionKey={factionKey}
-                      height="1.5em"
+                      height="2em"
                       onClick={() =>
                         addSource({
                           index,
@@ -110,7 +110,7 @@ export function PointsSourceHelper({ history, addSource, factions }) {
                         })
                       }
                       selected={factionKey === context}
-                      width="2em"
+                      width="2.5em"
                     />
                   ))}
                 </ListItem>
