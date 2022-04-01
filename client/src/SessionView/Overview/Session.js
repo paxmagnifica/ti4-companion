@@ -75,6 +75,7 @@ export function Session({ editable, session, updateFactionPoints }) {
           item
         >
           <VictoryPoints
+            factions={session.factions}
             editable={editable && !fullscreen}
             onChange={updateFactionPointsInSession}
             points={session.points}

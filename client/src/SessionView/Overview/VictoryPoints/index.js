@@ -112,7 +112,14 @@ const useStyles = makeStyles({
   },
 })
 
-function VictoryPoints({ editable, target, onChange, points, sessionId }) {
+function VictoryPoints({
+  editable,
+  target,
+  onChange,
+  points,
+  sessionId,
+  factions,
+}) {
   const smallViewport = useSmallViewport()
   const { fullscreen } = useFullscreen()
   const inputWidth = 100 / (target + 1)
@@ -135,7 +142,7 @@ function VictoryPoints({ editable, target, onChange, points, sessionId }) {
 
   const { fetch } = useFetch()
   const addSource = useCallback(
-    async ({ index, faction, points: newFactionPoints, context }) => {
+    async ({ index, faction, points: newFactionPoints, source, context }) => {
       try {
         await fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
           method: 'post',
@@ -145,7 +152,8 @@ function VictoryPoints({ editable, target, onChange, points, sessionId }) {
             serializedPayload: JSON.stringify({
               faction,
               points: newFactionPoints,
-              source: VP_SOURCE.fromFrontendToBackend(context),
+              source: VP_SOURCE.fromFrontendToBackend(source),
+              context,
             }),
           }),
         }).then(handleErrors)
@@ -154,7 +162,7 @@ function VictoryPoints({ editable, target, onChange, points, sessionId }) {
             historyPoint.faction === faction &&
             historyPoint.points === newFactionPoints &&
             index === historyIndex
-              ? { ...historyPoint, context }
+              ? { ...historyPoint, source, context }
               : historyPoint,
           ),
         )
@@ -227,6 +235,7 @@ function VictoryPoints({ editable, target, onChange, points, sessionId }) {
         <Grid item>
           <PointsSourceHelper
             addSource={addSource}
+            factions={factions}
             history={pointChangesHistory}
           />
         </Grid>
