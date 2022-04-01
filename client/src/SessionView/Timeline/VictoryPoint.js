@@ -37,9 +37,8 @@ function Context({ source, context }) {
   }
 }
 
-export function VictoryPoint({ src, context }) {
+export function VictoryPoint({ source, context }) {
   const { t } = useTranslation()
-  const source = VP_SOURCE.fromBackendToFrontend(src)
   const small = useSmallViewport()
 
   if (!source || source === VP_SOURCE.other) {

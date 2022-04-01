@@ -1,4 +1,4 @@
-import { useState, useCallback, Fragment } from 'react'
+import { useState, useCallback, Fragment, useMemo } from 'react'
 import {
   IconButton,
   Button,
@@ -12,7 +12,9 @@ import {
 import { Details as DetailsIcon } from '@material-ui/icons'
 
 import FactionFlag from '../../../shared/FactionFlag'
+import { ObjectiveSelector } from '../../../shared/ObjectiveSelector'
 import { VP_SOURCE } from '../../../shared/constants'
+import { useObjectives } from '../../../queries'
 import { useSessionContext } from '../../useSessionContext'
 
 export function PointsSourceHelper({ factions }) {
@@ -21,6 +23,11 @@ export function PointsSourceHelper({ factions }) {
   const [open, setOpen] = useState(false)
   const closeDrawer = useCallback(() => setOpen(false), [])
   const openDrawer = useCallback(() => setOpen(true), [])
+  const { objectives: availableObjectives } = useObjectives()
+  const secretObjectives = useMemo(
+    () => Object.values(availableObjectives).filter((obj) => obj.secret),
+    [availableObjectives],
+  )
 
   return (
     <>
@@ -65,6 +72,21 @@ export function PointsSourceHelper({ factions }) {
                   </Button>
                   <Button
                     color={
+                      source === VP_SOURCE.objective ? 'secondary' : 'default'
+                    }
+                    onClick={() =>
+                      addSource({
+                        index,
+                        faction,
+                        points,
+                        source: VP_SOURCE.objective,
+                      })
+                    }
+                  >
+                    Secret
+                  </Button>
+                  <Button
+                    color={
                       source === VP_SOURCE.mecatol ? 'secondary' : 'default'
                     }
                     onClick={() =>
@@ -95,6 +117,23 @@ export function PointsSourceHelper({ factions }) {
                   </Button>
                 </ButtonGroup>
               </ListItem>
+              {source === VP_SOURCE.objective && (
+                <ListItem>
+                  <ObjectiveSelector
+                    objectives={secretObjectives}
+                    onChange={(selectedObjective) =>
+                      addSource({
+                        index,
+                        faction,
+                        points,
+                        source: VP_SOURCE.objective,
+                        context: selectedObjective.slug,
+                      })
+                    }
+                    value={secretObjectives.find((o) => o.slug === context)}
+                  />
+                </ListItem>
+              )}
               {source === VP_SOURCE.support && (
                 <ListItem>
                   {factions.map((factionKey) => (
