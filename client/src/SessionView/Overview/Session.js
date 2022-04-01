@@ -76,9 +76,9 @@ export function Session({ editable, session, updateFactionPoints }) {
         >
           <VictoryPoints
             editable={editable && !fullscreen}
-            factions={session.factions}
             onChange={updateFactionPointsInSession}
             points={session.points}
+            sessionId={session.id}
             target={session.vpCount}
           />
         </Grid>

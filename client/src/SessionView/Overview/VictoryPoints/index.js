@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react'
 import { DndProvider } from 'react-dnd'
 import { TouchBackend } from 'react-dnd-touch-backend'
 import clsx from 'clsx'
@@ -6,6 +7,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import useSmallViewport from '../../../shared/useSmallViewport'
 import { useFullscreen } from '../../../Fullscreen'
+import { handleErrors } from '../../../shared/errorHandling'
+import { useFetch } from '../../../useFetch'
+import CONFIG from '../../../config'
 /* eslint-disable camelcase */
 import vp10_0 from '../../../assets/victory-points-10/0.jpg'
 import vp10_1 from '../../../assets/victory-points-10/1.jpg'
@@ -36,6 +40,7 @@ import vp14_13 from '../../../assets/victory-points-14/13.jpg'
 import vp14_14 from '../../../assets/victory-points-14/14.jpg'
 
 import { PointContainer, DraggableFlag } from './draggableIndicators'
+import { PointsContextHelper } from './PointsContextHelper'
 
 const vp10_images = [
   vp10_0,
@@ -106,69 +111,126 @@ const useStyles = makeStyles({
   },
 })
 
-function VictoryPoints({ editable, target, onChange, points }) {
+function VictoryPoints({ editable, target, onChange, points, sessionId }) {
   const smallViewport = useSmallViewport()
   const { fullscreen } = useFullscreen()
   const inputWidth = 100 / (target + 1)
   const classes = useStyles({ inputWidth, fullscreen })
   const vpImages = target === 10 ? vp10_images : vp14_images
 
-  return (
-    <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
-      <Grid
-        className={clsx(classes.root, {
-          [classes.fullWidth]: smallViewport,
-        })}
-        container
-        justifyContent="center"
-      >
-        {[...Array(target + 1).keys()].map((numberOfPoints) => {
-          const factionsWithThisManyPoints = points.filter(
-            ({ points: factionPoints }) => factionPoints === numberOfPoints,
-          )
+  const [pointChangesHistory, setPointChangeHistory] = useState([])
+  const updatePoints = useCallback(
+    async (faction, newPoints) => {
+      const success = await onChange(faction, newPoints)
+      if (success) {
+        setPointChangeHistory((oldHistory) => [
+          ...oldHistory,
+          { faction, points: newPoints },
+        ])
+      }
+    },
+    [onChange],
+  )
 
-          return (
-            <Grid key={numberOfPoints} className={classes.img} item>
-              <img
-                alt={`${numberOfPoints} victory points background`}
-                src={vpImages[numberOfPoints]}
-              />
-              <Grid
-                alignItems="center"
-                className={classes.dropContainerWrapper}
-                container
-                direction="column"
-                justifyContent="center"
-              >
-                <PointContainer
-                  className={classes.dropContainer}
-                  id={numberOfPoints}
-                  points={numberOfPoints}
+  const { fetch } = useFetch()
+  const addContext = useCallback(
+    async ({ index, faction, points: newFactionPoints, context }) => {
+      try {
+        await fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventType: 'AddPointContext',
+            serializedPayload: JSON.stringify({
+              faction,
+              points: newFactionPoints,
+              context,
+            }),
+          }),
+        }).then(handleErrors)
+        setPointChangeHistory((oldHistory) =>
+          oldHistory.map((historyPoint, historyIndex) =>
+            historyPoint.faction === faction &&
+            historyPoint.points === newFactionPoints &&
+            index === historyIndex
+              ? { ...historyPoint, context }
+              : historyPoint,
+          ),
+        )
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    [fetch, sessionId],
+  )
+
+  return (
+    <>
+      <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+        <Grid
+          className={clsx(classes.root, {
+            [classes.fullWidth]: smallViewport,
+          })}
+          container
+          justifyContent="center"
+        >
+          {[...Array(target + 1).keys()].map((numberOfPoints) => {
+            const factionsWithThisManyPoints = points.filter(
+              ({ points: factionPoints }) => factionPoints === numberOfPoints,
+            )
+
+            return (
+              <Grid key={numberOfPoints} className={classes.img} item>
+                <img
+                  alt={`${numberOfPoints} victory points background`}
+                  src={vpImages[numberOfPoints]}
+                />
+                <Grid
+                  alignItems="center"
+                  className={classes.dropContainerWrapper}
+                  container
+                  direction="column"
+                  justifyContent="center"
                 >
-                  {factionsWithThisManyPoints.map(({ faction }) => (
-                    <DraggableFlag
-                      key={faction}
-                      editable={editable}
-                      factionKey={faction}
-                      onClick={
-                        editable
-                          ? () => onChange(faction, numberOfPoints + 1)
-                          : undefined
-                      }
-                      updatePoints={
-                        editable
-                          ? (factionPoints) => onChange(faction, factionPoints)
-                          : undefined
-                      }
-                    />
-                  ))}
-                </PointContainer>
+                  <PointContainer
+                    className={classes.dropContainer}
+                    id={numberOfPoints}
+                    points={numberOfPoints}
+                  >
+                    {factionsWithThisManyPoints.map(({ faction }) => (
+                      <DraggableFlag
+                        key={faction}
+                        editable={editable}
+                        factionKey={faction}
+                        onClick={
+                          editable
+                            ? () => updatePoints(faction, numberOfPoints + 1)
+                            : undefined
+                        }
+                        updatePoints={
+                          editable
+                            ? (factionPoints) =>
+                                updatePoints(faction, factionPoints)
+                            : undefined
+                        }
+                      />
+                    ))}
+                  </PointContainer>
+                </Grid>
               </Grid>
-            </Grid>
-          )
-        })}
+            )
+          })}
+        </Grid>
+      </DndProvider>
+      <Grid container justifyContent="center">
+        <Grid item>
+          <PointsContextHelper
+            addContext={addContext}
+            history={pointChangesHistory}
+          />
+        </Grid>
       </Grid>
-    </DndProvider>
+    </>
   )
 }
 

@@ -5,15 +5,7 @@ import useSmallViewport from '../../shared/useSmallViewport'
 import FactionFlag from '../../shared/FactionFlag'
 import Relic from '../../shared/Relic'
 import mecatol from '../../assets/guac-mecatol.png'
-
-const VP_SOURCE = {
-  other: 'other',
-  objective: 'objective',
-  mecatol: 'mecatol',
-  support: 'support',
-  emphidia: 'emphidia',
-  shard: 'shard',
-}
+import { VP_SOURCE } from '../../shared/constants'
 
 const mapVpSource = (src) => Object.values(VP_SOURCE)[src]
 
