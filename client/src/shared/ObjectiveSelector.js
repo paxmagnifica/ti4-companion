@@ -19,32 +19,36 @@ export function ObjectiveSelector({ objectives, value, onChange }) {
   )
 
   return (
-    <>
-      <Box m={1}>
-        <FormGroup row>
-          <Autocomplete
-            getOptionLabel={(option) => option.name}
-            id="search-for-objective"
-            onChange={(_, v) => onChange(v)}
-            options={objectivesWithMeta}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('general.labels.objective')}
-                variant="outlined"
-              />
-            )}
-            style={{ width: 300 }}
-          />
-        </FormGroup>
-      </Box>
-      {value && (
+    <Grid container direction="column">
+      <Grid item>
         <Box m={1}>
-          <Grid container justifyContent="center">
-            <Objective {...value} />
-          </Grid>
+          <FormGroup row>
+            <Autocomplete
+              getOptionLabel={(option) => option.name}
+              id="search-for-objective"
+              onChange={(_, v) => onChange(v)}
+              options={objectivesWithMeta}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label={t('general.labels.objective')}
+                  variant="outlined"
+                />
+              )}
+              style={{ width: 300 }}
+            />
+          </FormGroup>
         </Box>
+      </Grid>
+      {value && (
+        <Grid item>
+          <Box m={1}>
+            <Grid container justifyContent="center">
+              <Objective {...value} />
+            </Grid>
+          </Box>
+        </Grid>
       )}
-    </>
+    </Grid>
   )
 }
