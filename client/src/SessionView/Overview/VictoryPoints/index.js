@@ -218,8 +218,13 @@ function VictoryPoints({
                         }
                         updatePoints={
                           editable
-                            ? (factionPoints) =>
+                            ? (factionPoints) => {
+                                if (factionPoints === numberOfPoints) {
+                                  return
+                                }
+
                                 updatePoints(faction, factionPoints)
+                              }
                             : undefined
                         }
                       />
