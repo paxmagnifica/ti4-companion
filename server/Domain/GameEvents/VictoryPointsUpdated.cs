@@ -8,10 +8,11 @@ namespace server.Domain
     {
         Other,
         Objective,
-        Mecatol,
+        Custodian,
         SupportForTheThrone,
         Emphidia,
         ShardOfTheThrone,
+        Mecatol,
     }
 
     public class VictoryPointsUpdated : IHandler

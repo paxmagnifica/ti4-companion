@@ -14,6 +14,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 
 namespace server
 {
@@ -22,6 +23,11 @@ namespace server
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
         }
 
         public IConfiguration Configuration { get; }
