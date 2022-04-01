@@ -243,7 +243,8 @@ const factory = (options = { debug: true }) =>
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vpSource: {
-                mecatol: 'First to control Mecatol Rex',
+                custodian: 'First to control Mecatol Rex',
+                mecatol: 'Controlled Rex on Imperial primary',
                 support: 'Support for the Throne promissory note received',
                 shard: 'Shard of the Throne',
                 shardCaption: {

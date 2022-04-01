@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 
-const FetchContext = React.createContext()
+export const FetchContext = React.createContext()
 export const FetchProvider = ({ sessionListIdentifier, children }) => {
   const magnificentFetch = useCallback(
     (link, options, ...rest) => {

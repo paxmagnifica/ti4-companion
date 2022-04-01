@@ -4,40 +4,33 @@ import { Typography } from '@material-ui/core'
 import useSmallViewport from '../../shared/useSmallViewport'
 import FactionFlag from '../../shared/FactionFlag'
 import Relic from '../../shared/Relic'
-import mecatol from '../../assets/guac-mecatol.png'
-
-const VP_SOURCE = {
-  other: 'other',
-  objective: 'objective',
-  mecatol: 'mecatol',
-  support: 'support',
-  emphidia: 'emphidia',
-  shard: 'shard',
-}
-
-const mapVpSource = (src) => Object.values(VP_SOURCE)[src]
+import custodian from '../../assets/guac-mecatol.png'
+import { VP_SOURCE } from '../../shared/constants'
+import imperial from '../../assets/strat-8-imperial.png'
 
 const images = {
-  [VP_SOURCE.mecatol]: mecatol,
+  [VP_SOURCE.custodian]: custodian,
 }
 
 function Context({ source, context }) {
   switch (source) {
     case VP_SOURCE.support:
       return (
-        <>
-          <br />
-          <Typography variant="caption">
-            <Trans i18nKey="general.from" />
-            <FactionFlag
-              disabled
-              factionKey={context}
-              height="3em"
-              selected
-              width="4.5em"
-            />
-          </Typography>
-        </>
+        Boolean(context) && (
+          <>
+            <br />
+            <Typography variant="caption">
+              <Trans i18nKey="general.from" />
+              <FactionFlag
+                disabled
+                factionKey={context}
+                height="3em"
+                selected
+                width="4.5em"
+              />
+            </Typography>
+          </>
+        )
       )
     default:
       return null
@@ -46,7 +39,7 @@ function Context({ source, context }) {
 
 export function VictoryPoint({ src, context }) {
   const { t } = useTranslation()
-  const source = mapVpSource(src)
+  const source = VP_SOURCE.fromBackendToFrontend(src)
   const small = useSmallViewport()
 
   if (!source || source === VP_SOURCE.other) {
@@ -68,6 +61,24 @@ export function VictoryPoint({ src, context }) {
           />
           <br />
         </>
+      )}
+      {source === VP_SOURCE.mecatol && (
+        <div
+          style={{
+            position: 'relative',
+            borderRadius: '50%',
+            height: 150,
+            width: 150,
+            overflow: 'hidden',
+          }}
+        >
+          <img
+            alt={readable}
+            src={imperial}
+            style={{ position: 'absolute', height: 600, top: -334, left: -428 }}
+            title={readable}
+          />
+        </div>
       )}
       {source === VP_SOURCE.shard && (
         <>

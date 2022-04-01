@@ -36,6 +36,7 @@ import vp14_13 from '../../../assets/victory-points-14/13.jpg'
 import vp14_14 from '../../../assets/victory-points-14/14.jpg'
 
 import { PointContainer, DraggableFlag } from './draggableIndicators'
+import { PointsSourceHelper } from './PointsSourceHelper'
 
 const vp10_images = [
   vp10_0,
@@ -106,7 +107,7 @@ const useStyles = makeStyles({
   },
 })
 
-function VictoryPoints({ editable, target, onChange, points }) {
+function VictoryPoints({ editable, target, onChange, points, factions }) {
   const smallViewport = useSmallViewport()
   const { fullscreen } = useFullscreen()
   const inputWidth = 100 / (target + 1)
@@ -114,61 +115,74 @@ function VictoryPoints({ editable, target, onChange, points }) {
   const vpImages = target === 10 ? vp10_images : vp14_images
 
   return (
-    <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
-      <Grid
-        className={clsx(classes.root, {
-          [classes.fullWidth]: smallViewport,
-        })}
-        container
-        justifyContent="center"
-      >
-        {[...Array(target + 1).keys()].map((numberOfPoints) => {
-          const factionsWithThisManyPoints = points.filter(
-            ({ points: factionPoints }) => factionPoints === numberOfPoints,
-          )
+    <>
+      <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+        <Grid
+          className={clsx(classes.root, {
+            [classes.fullWidth]: smallViewport,
+          })}
+          container
+          justifyContent="center"
+        >
+          {[...Array(target + 1).keys()].map((numberOfPoints) => {
+            const factionsWithThisManyPoints = points.filter(
+              ({ points: factionPoints }) => factionPoints === numberOfPoints,
+            )
 
-          return (
-            <Grid key={numberOfPoints} className={classes.img} item>
-              <img
-                alt={`${numberOfPoints} victory points background`}
-                src={vpImages[numberOfPoints]}
-              />
-              <Grid
-                alignItems="center"
-                className={classes.dropContainerWrapper}
-                container
-                direction="column"
-                justifyContent="center"
-              >
-                <PointContainer
-                  className={classes.dropContainer}
-                  id={numberOfPoints}
-                  points={numberOfPoints}
+            return (
+              <Grid key={numberOfPoints} className={classes.img} item>
+                <img
+                  alt={`${numberOfPoints} victory points background`}
+                  src={vpImages[numberOfPoints]}
+                />
+                <Grid
+                  alignItems="center"
+                  className={classes.dropContainerWrapper}
+                  container
+                  direction="column"
+                  justifyContent="center"
                 >
-                  {factionsWithThisManyPoints.map(({ faction }) => (
-                    <DraggableFlag
-                      key={faction}
-                      editable={editable}
-                      factionKey={faction}
-                      onClick={
-                        editable
-                          ? () => onChange(faction, numberOfPoints + 1)
-                          : undefined
-                      }
-                      updatePoints={
-                        editable
-                          ? (factionPoints) => onChange(faction, factionPoints)
-                          : undefined
-                      }
-                    />
-                  ))}
-                </PointContainer>
+                  <PointContainer
+                    className={classes.dropContainer}
+                    id={numberOfPoints}
+                    points={numberOfPoints}
+                  >
+                    {factionsWithThisManyPoints.map(({ faction }) => (
+                      <DraggableFlag
+                        key={faction}
+                        editable={editable}
+                        factionKey={faction}
+                        onClick={
+                          editable
+                            ? () => onChange(faction, numberOfPoints + 1)
+                            : undefined
+                        }
+                        updatePoints={
+                          editable
+                            ? (factionPoints) => {
+                                if (factionPoints === numberOfPoints) {
+                                  return
+                                }
+
+                                onChange(faction, factionPoints)
+                              }
+                            : undefined
+                        }
+                      />
+                    ))}
+                  </PointContainer>
+                </Grid>
               </Grid>
-            </Grid>
-          )
-        })}
+            )
+          })}
+        </Grid>
+      </DndProvider>
+      <Grid container justifyContent="center">
+        <Grid item>
+          <PointsSourceHelper factions={factions} />
+        </Grid>
       </Grid>
-    </DndProvider>
+    </>
   )
 }
 

@@ -4,3 +4,17 @@ export const SESSION_VIEW_ROUTES = {
   details: '/:sessionId/:secret?/details',
   timeline: '/:sessionId/:secret?/timeline',
 }
+
+export const VP_SOURCE = {
+  other: 'other',
+  objective: 'objective',
+  custodian: 'custodian', // TODO
+  support: 'support',
+  emphidia: 'emphidia',
+  shard: 'shard',
+  mecatol: 'mecatol',
+
+  fromBackendToFrontend: (src) => Object.values(VP_SOURCE)[src],
+  fromFrontendToBackend: (source) =>
+    Object.values(VP_SOURCE).findIndex((x) => x === source),
+}
