@@ -40,6 +40,7 @@ import Relic from '../../shared/Relic'
 import useInvalidateQueries from '../../useInvalidateQueries'
 import { DraftSummaryTable } from '../components'
 import { useTimelineEvents, queryKeys } from '../queries'
+import { VP_SOURCE } from '../../shared/constants'
 
 import { Agenda } from './Agenda'
 import AddTimelineEvent from './AddTimelineEvent'
@@ -394,6 +395,20 @@ function RelicEvent({ payload, happenedAt, eventType }) {
 function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
   const { t } = useTranslation()
 
+  if (payload.source === VP_SOURCE.fromFrontendToBackend(VP_SOURCE.objective)) {
+    return (
+      <ObjectiveScored
+        eventType="ObjectiveScored"
+        happenedAt={happenedAt}
+        payload={{
+          faction: payload.faction,
+          points: payload.points,
+          slug: payload.context,
+        }}
+      />
+    )
+  }
+
   return (
     <Ti4TimelineItem>
       <Ti4TimelineOppositeContent>
@@ -421,7 +436,10 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
           <Trans i18nKey="vpCount" values={{ points: payload.points }} />
         </Typography>
         {payload.source !== undefined && payload.source !== null && (
-          <VictoryPoint context={payload.context} src={payload.source} />
+          <VictoryPoint
+            context={payload.context}
+            source={VP_SOURCE.fromBackendToFrontend(payload.source)}
+          />
         )}
       </Ti4TimelineContent>
     </Ti4TimelineItem>
