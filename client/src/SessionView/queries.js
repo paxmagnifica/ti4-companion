@@ -1,8 +1,9 @@
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient, useMutation } from 'react-query'
 
 import CONFIG from '../config'
 import { handleErrors } from '../shared/errorHandling'
 import { useFetch } from '../useFetch'
+import { VP_SOURCE } from '../shared/constants'
 
 export const queryKeys = {
   session: (sessionId) => ['session', sessionId, 'data'],
@@ -46,11 +47,17 @@ const parsePayload = (serializedPayload) => {
   }
 }
 
-export const useTimelineEvents = ({ sessionId, sessionService }) => {
+export const useTimelineEvents = ({ sessionId }) => {
+  const { fetch } = useFetch()
+
   const { data, ...queryInfo } = useQuery(
     queryKeys.timeline(sessionId),
     async () => {
-      const timeline = await sessionService.getTimeline(sessionId)
+      const timeline = await (
+        await fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/timeline`).then(
+          handleErrors,
+        )
+      ).json()
 
       return timeline
         .map((timelineEvent) => ({
@@ -68,4 +75,33 @@ export const useTimelineEvents = ({ sessionId, sessionService }) => {
     timeline: data,
     queryInfo,
   }
+}
+
+const addPointSource = (
+  fetch,
+  sessionId,
+  { faction, points, source, context },
+) =>
+  fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      eventType: 'AddPointSource',
+      serializedPayload: JSON.stringify({
+        faction,
+        points,
+        source: VP_SOURCE.fromFrontendToBackend(source),
+        context,
+      }),
+    }),
+  }).then(handleErrors)
+export const useAddPointSourceMutation = ({ sessionId }) => {
+  const { fetch } = useFetch()
+  const queryClient = useQueryClient()
+
+  return useMutation((payload) => addPointSource(fetch, sessionId, payload), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKeys.timeline(sessionId))
+    },
+  })
 }

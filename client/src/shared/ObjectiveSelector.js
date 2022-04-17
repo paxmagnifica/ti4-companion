@@ -24,6 +24,9 @@ export function ObjectiveSelector({ objectives, value, onChange }) {
         <Box m={1}>
           <FormGroup row>
             <Autocomplete
+              defaultValue={objectivesWithMeta.find(
+                (obj) => obj.slug === value.slug,
+              )}
               getOptionLabel={(option) => option.name}
               id="search-for-objective"
               onChange={(_, v) => onChange(v)}

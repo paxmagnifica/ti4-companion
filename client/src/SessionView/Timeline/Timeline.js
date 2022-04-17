@@ -850,10 +850,7 @@ function EventOnATimeline({ eventType, payload, happenedAt, session }) {
 }
 
 export function Timeline({ editable, session, sessionService }) {
-  const { timeline } = useTimelineEvents({
-    sessionId: session.id,
-    sessionService,
-  })
+  const { timeline } = useTimelineEvents({ sessionId: session.id })
   // TODO make it a react-query mutation
   const invalidateQueries = useInvalidateQueries()
   const uploadEvent = useCallback(
