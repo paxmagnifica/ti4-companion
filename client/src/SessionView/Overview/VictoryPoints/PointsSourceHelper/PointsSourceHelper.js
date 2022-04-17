@@ -8,6 +8,9 @@ export function PointsSourceHelper({ factions }) {
   const [open, setOpen] = useState(false)
   const closeDrawer = useCallback(() => setOpen(false), [])
   const openDrawer = useCallback(() => setOpen(true), [])
+  const [visibilityState, setVisibilityState] = useState({})
+  const toggleVisibility = (happenedAt, visible) =>
+    setVisibilityState((s) => ({ ...s, [happenedAt]: visible }))
 
   return (
     <>
@@ -32,7 +35,11 @@ export function PointsSourceHelper({ factions }) {
         >
           Close
         </Button>
-        <PointsHistory factions={factions} />
+        <PointsHistory
+          factions={factions}
+          toggleVisibility={toggleVisibility}
+          visibilityState={visibilityState}
+        />
       </Drawer>
     </>
   )

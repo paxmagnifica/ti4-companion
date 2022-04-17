@@ -181,7 +181,7 @@ function VictoryPoints({ editable, target, onChange, points, factions }) {
         <Grid
           container
           justifyContent="center"
-          style={{ marginBottom: '-3em' }}
+          style={{ marginBottom: '-2em' }}
         >
           <Grid item>
             <PointsSourceHelper factions={factions} />

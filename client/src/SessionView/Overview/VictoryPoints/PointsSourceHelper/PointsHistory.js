@@ -17,9 +17,12 @@ import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
 import Objective from '../../../../shared/Objective'
 import { VP_SOURCE } from '../../../../shared/constants'
 
-const pointsHistoryEvents = ['VictoryPointsUpdated', 'ObjectiveScored']
+import { Toggle, Show } from './Toggle'
 
-export function PointsHistory({ factions }) {
+const pointsHistoryEvents = ['VictoryPointsUpdated', 'ObjectiveScored']
+const objectivesWithControls = [VP_SOURCE.objective, VP_SOURCE.support]
+
+export function PointsHistory({ factions, visibilityState, toggleVisibility }) {
   const {
     session: { id: sessionId },
   } = useSessionContext()
@@ -40,7 +43,8 @@ export function PointsHistory({ factions }) {
     () =>
       timeline
         .filter(({ eventType }) => pointsHistoryEvents.includes(eventType))
-        .map(({ payload, eventType }) => ({
+        .map(({ happenedAt, payload, eventType }) => ({
+          happenedAt,
           context: payload.slug, // public objectives have slug instead of context
           ...payload,
           source:
@@ -55,7 +59,7 @@ export function PointsHistory({ factions }) {
   return (
     <List>
       {pointsHistory.map(
-        ({ faction, points, source, context, isPublic }, index) => (
+        ({ happenedAt, faction, points, source, context, isPublic }) => (
           <Fragment key={`${faction}->${points}`}>
             <ListItem>
               <ListItemIcon>
@@ -70,6 +74,15 @@ export function PointsHistory({ factions }) {
               <ListItemText>
                 {'-> '}
                 {points}
+                {objectivesWithControls.includes(source) && (
+                  <Toggle
+                    defaultVisibility={!isPublic}
+                    onToggle={(visible) =>
+                      toggleVisibility(happenedAt, visible)
+                    }
+                    visible={visibilityState[happenedAt]}
+                  />
+                )}
               </ListItemText>
             </ListItem>
             <ListItem>
@@ -81,7 +94,6 @@ export function PointsHistory({ factions }) {
                   disabled={isPublic}
                   onClick={() =>
                     addSource({
-                      index,
                       faction,
                       points,
                       source: VP_SOURCE.custodian,
@@ -99,7 +111,6 @@ export function PointsHistory({ factions }) {
                       ? () => null
                       : () =>
                           addSource({
-                            index,
                             faction,
                             points,
                             source: VP_SOURCE.objective,
@@ -113,7 +124,6 @@ export function PointsHistory({ factions }) {
                   disabled={isPublic}
                   onClick={() =>
                     addSource({
-                      index,
                       faction,
                       points,
                       source: VP_SOURCE.mecatol,
@@ -127,7 +137,6 @@ export function PointsHistory({ factions }) {
                   disabled={isPublic}
                   onClick={() =>
                     addSource({
-                      index,
                       faction,
                       points,
                       source: VP_SOURCE.support,
@@ -138,55 +147,58 @@ export function PointsHistory({ factions }) {
                 </Button>
               </ButtonGroup>
             </ListItem>
-            {source === VP_SOURCE.objective && !isPublic && (
-              <ListItem>
-                <ObjectiveSelector
-                  objectives={secretObjectives}
-                  onChange={(selectedObjective) =>
-                    addSource({
-                      index,
-                      faction,
-                      points,
-                      source: VP_SOURCE.objective,
-                      context: selectedObjective.slug,
-                    })
-                  }
-                  value={secretObjectives.find((o) => o.slug === context)}
-                />
-              </ListItem>
-            )}
-            {source === VP_SOURCE.objective && isPublic && (
-              <ListItem>
-                <Grid container justifyContent="center">
-                  <Objective
-                    {...availableObjectives.find((o) => o.slug === context)}
-                  />
-                </Grid>
-              </ListItem>
-            )}
-            {source === VP_SOURCE.support && (
-              <ListItem>
-                {factions.map((factionKey) => (
-                  <FactionFlag
-                    key={factionKey}
-                    disabled={faction === factionKey}
-                    factionKey={factionKey}
-                    height="2em"
-                    onClick={() =>
+            <Show
+              defaultVisibility={!isPublic}
+              visible={visibilityState[happenedAt]}
+            >
+              {source === VP_SOURCE.objective && !isPublic && (
+                <ListItem>
+                  <ObjectiveSelector
+                    objectives={secretObjectives}
+                    onChange={(selectedObjective) =>
                       addSource({
-                        index,
                         faction,
                         points,
-                        source: VP_SOURCE.support,
-                        context: factionKey,
+                        source: VP_SOURCE.objective,
+                        context: selectedObjective.slug,
                       })
                     }
-                    selected={factionKey === context}
-                    width="2.5em"
+                    value={secretObjectives.find((o) => o.slug === context)}
                   />
-                ))}
-              </ListItem>
-            )}
+                </ListItem>
+              )}
+              {source === VP_SOURCE.objective && isPublic && (
+                <ListItem>
+                  <Grid container justifyContent="center">
+                    <Objective
+                      {...availableObjectives.find((o) => o.slug === context)}
+                    />
+                  </Grid>
+                </ListItem>
+              )}
+              {source === VP_SOURCE.support && (
+                <ListItem>
+                  {factions.map((factionKey) => (
+                    <FactionFlag
+                      key={factionKey}
+                      disabled={faction === factionKey}
+                      factionKey={factionKey}
+                      height="2em"
+                      onClick={() =>
+                        addSource({
+                          faction,
+                          points,
+                          source: VP_SOURCE.support,
+                          context: factionKey,
+                        })
+                      }
+                      selected={factionKey === context}
+                      width="2.5em"
+                    />
+                  ))}
+                </ListItem>
+              )}
+            </Show>
           </Fragment>
         ),
       )}
