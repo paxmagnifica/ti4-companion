@@ -1,18 +1,12 @@
 import React, { useMemo, useState, useCallback, useContext } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
-import {
-  DomainErrorContext,
-  useDomainErrors,
-  handleErrors,
-} from '../shared/errorHandling'
+import { DomainErrorContext, useDomainErrors } from '../shared/errorHandling'
 import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 import { FetchContext, useFetch } from '../useFetch'
 import { useObjectives } from '../queries'
-import { VP_SOURCE } from '../shared/constants'
-import CONFIG from '../config'
 
 import { useEdit, EditPromptProvider } from './Edit'
 import { useSessionContext, SessionContext } from './useSessionContext'
@@ -109,54 +103,13 @@ export function SessionContainer({ children }) {
     [setSessionError, sessionService],
   )
 
-  const [pointChangesHistory, setPointChangeHistory] = useState([])
   const updateFactionPoints = useCallback(
     async ({ sessionId: targetSessionId, faction, points }) => {
       const payload = { sessionId: targetSessionId, faction, points }
 
-      const success = await pushEvent({ type: 'VictoryPointsUpdated', payload })
-      if (success) {
-        setPointChangeHistory((oldHistory) => [
-          ...oldHistory,
-          { faction, points },
-        ])
-      }
+      await pushEvent({ type: 'VictoryPointsUpdated', payload })
     },
     [pushEvent],
-  )
-  const addPointSource = useCallback(
-    async ({ index, faction, points: newFactionPoints, source, context }) => {
-      try {
-        await authorizedFetch(
-          `${CONFIG.apiUrl}/api/sessions/${sessionId}/events`,
-          {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              eventType: 'AddPointSource',
-              serializedPayload: JSON.stringify({
-                faction,
-                points: newFactionPoints,
-                source: VP_SOURCE.fromFrontendToBackend(source),
-                context,
-              }),
-            }),
-          },
-        ).then(handleErrors)
-        setPointChangeHistory((oldHistory) =>
-          oldHistory.map((historyPoint, historyIndex) =>
-            historyPoint.faction === faction &&
-            historyPoint.points === newFactionPoints &&
-            index === historyIndex
-              ? { ...historyPoint, source, context }
-              : historyPoint,
-          ),
-        )
-      } catch (e) {
-        console.error(e)
-      }
-    },
-    [authorizedFetch, sessionId],
   )
 
   const [showPlasticColors, setShowPlasticColors] = useState(true)
@@ -201,11 +154,8 @@ export function SessionContainer({ children }) {
       },
       disableEdit,
       editFeature,
-      pointChangesHistory,
-      addPointSource,
     }),
     [
-      pointChangesHistory,
       editFeature,
       session,
       sessionId,
@@ -215,7 +165,6 @@ export function SessionContainer({ children }) {
       sessionService,
       setSecret,
       disableEdit,
-      addPointSource,
     ],
   )
 
