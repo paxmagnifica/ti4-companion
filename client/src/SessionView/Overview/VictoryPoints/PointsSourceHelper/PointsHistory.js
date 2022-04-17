@@ -22,7 +22,12 @@ import { Toggle, Show } from './Toggle'
 const pointsHistoryEvents = ['VictoryPointsUpdated', 'ObjectiveScored']
 const objectivesWithControls = [VP_SOURCE.objective, VP_SOURCE.support]
 
-export function PointsHistory({ factions, visibilityState, toggleVisibility }) {
+export function PointsHistory({
+  editable,
+  factions,
+  visibilityState,
+  toggleVisibility,
+}) {
   const {
     session: { id: sessionId },
   } = useSessionContext()
@@ -86,7 +91,7 @@ export function PointsHistory({ factions, visibilityState, toggleVisibility }) {
               </ListItemText>
             </ListItem>
             <ListItem>
-              <ButtonGroup>
+              <ButtonGroup disabled={!editable}>
                 <Button
                   color={
                     source === VP_SOURCE.custodian ? 'secondary' : 'default'
@@ -154,6 +159,7 @@ export function PointsHistory({ factions, visibilityState, toggleVisibility }) {
               {source === VP_SOURCE.objective && !isPublic && (
                 <ListItem>
                   <ObjectiveSelector
+                    disabled={!editable}
                     objectives={secretObjectives}
                     onChange={(selectedObjective) =>
                       addSource({
@@ -181,7 +187,7 @@ export function PointsHistory({ factions, visibilityState, toggleVisibility }) {
                   {factions.map((factionKey) => (
                     <FactionFlag
                       key={factionKey}
-                      disabled={faction === factionKey}
+                      disabled={!editable || faction === factionKey}
                       factionKey={factionKey}
                       height="2em"
                       onClick={() =>
