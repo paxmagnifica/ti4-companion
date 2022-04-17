@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import Objective from './Objective'
 
-export function ObjectiveSelector({ objectives, value, onChange }) {
+export function ObjectiveSelector({ disabled, objectives, value, onChange }) {
   const { t } = useTranslation()
 
   const objectivesWithMeta = useMemo(
@@ -27,6 +27,7 @@ export function ObjectiveSelector({ objectives, value, onChange }) {
               defaultValue={objectivesWithMeta.find(
                 (obj) => obj.slug === value.slug,
               )}
+              disabled={disabled}
               getOptionLabel={(option) => option.name}
               id="search-for-objective"
               onChange={(_, v) => onChange(v)}

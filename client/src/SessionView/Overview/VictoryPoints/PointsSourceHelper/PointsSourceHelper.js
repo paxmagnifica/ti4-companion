@@ -4,7 +4,7 @@ import { Details as DetailsIcon } from '@material-ui/icons'
 
 import { PointsHistory } from './PointsHistory'
 
-export function PointsSourceHelper({ factions }) {
+export function PointsSourceHelper({ editable, factions }) {
   const [open, setOpen] = useState(false)
   const closeDrawer = useCallback(() => setOpen(false), [])
   const openDrawer = useCallback(() => setOpen(true), [])
@@ -36,6 +36,7 @@ export function PointsSourceHelper({ factions }) {
           Close
         </Button>
         <PointsHistory
+          editable={editable}
           factions={factions}
           toggleVisibility={toggleVisibility}
           visibilityState={visibilityState}
