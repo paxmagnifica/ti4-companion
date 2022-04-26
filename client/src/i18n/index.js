@@ -341,6 +341,12 @@ const factory = (options = { debug: true }) =>
               content:
                 'There are already points scored, are you sure you want to delete a Public Objective?',
             },
+            panicPage: {
+              message:
+                "Something went wrong, please try again and if it doesn't help, you can try notifying this guy:",
+              or: 'or you can',
+              submitAnIssue: 'submit an issue on github',
+            },
           },
         },
         pl: {
