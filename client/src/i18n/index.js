@@ -160,6 +160,10 @@ const factory = (options = { debug: true }) =>
               },
             },
             sessionView: {
+              pointsHistory: {
+                empty:
+                  'When you add points to anyone, you can assign its source here',
+              },
               r1Speaker: 'R1 speaker',
               factionNutshell: {
                 tablePosition: 'at table: P{{position}}',
@@ -177,6 +181,7 @@ const factory = (options = { debug: true }) =>
                 goToWiki: 'go to wiki',
                 openOriginal: 'open original image',
                 sessionStart: 'session date: {{when}}',
+                vpSource: 'Victory Points Source',
               },
             },
             sessionMap: {
