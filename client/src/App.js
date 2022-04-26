@@ -38,6 +38,7 @@ import { Footer } from './Footer'
 import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
 import { useObjectives } from './queries'
+import { PanicPage } from './PanicPage'
 
 i18nFactory()
 
@@ -137,23 +138,25 @@ function App() {
               })}
             >
               <KnowledgeBase />
-              <Box m={2}>
-                <Switch>
-                  <Route path="/new">
-                    <SessionSetup />
-                  </Route>
-                  <Route path="/:sessionId/:secret?">
-                    <SessionView />
-                  </Route>
-                  <Route path="/">
-                    <CallsToAction />
-                    <SessionsListContainer
-                      listIdentifier={listIdentifier}
-                      setListIdentifier={setAndPersistListIdentifier}
-                    />
-                  </Route>
-                </Switch>
-              </Box>
+              <PanicPage>
+                <Box m={2}>
+                  <Switch>
+                    <Route path="/new">
+                      <SessionSetup />
+                    </Route>
+                    <Route path="/:sessionId/:secret?">
+                      <SessionView />
+                    </Route>
+                    <Route path="/">
+                      <CallsToAction />
+                      <SessionsListContainer
+                        listIdentifier={listIdentifier}
+                        setListIdentifier={setAndPersistListIdentifier}
+                      />
+                    </Route>
+                  </Switch>
+                </Box>
+              </PanicPage>
             </Container>
             {!fullscreen && <Footer />}
           </Router>
