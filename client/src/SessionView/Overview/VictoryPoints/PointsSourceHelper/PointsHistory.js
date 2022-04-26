@@ -8,6 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@material-ui/core'
+import { Trans } from 'react-i18next'
 
 import { useTimelineEvents, useAddPointSourceMutation } from '../../../queries'
 import { useObjectives } from '../../../../queries'
@@ -63,6 +64,11 @@ export function PointsHistory({
 
   return (
     <List>
+      {!pointsHistory.length && (
+        <p style={{ margin: '1em' }}>
+          <Trans i18nKey="sessionView.pointsHistory.empty" />
+        </p>
+      )}
       {pointsHistory.map(
         ({ happenedAt, faction, points, source, context, isPublic }) => (
           <Fragment key={`${faction}->${points}`}>

@@ -25,7 +25,7 @@ export function ObjectiveSelector({ disabled, objectives, value, onChange }) {
           <FormGroup row>
             <Autocomplete
               defaultValue={objectivesWithMeta.find(
-                (obj) => obj.slug === value.slug,
+                (obj) => obj.slug === value?.slug,
               )}
               disabled={disabled}
               getOptionLabel={(option) => option.name}

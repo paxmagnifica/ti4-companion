@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
-import { IconButton, Button, Drawer } from '@material-ui/core'
+import { Button, Drawer } from '@material-ui/core'
 import { Details as DetailsIcon } from '@material-ui/icons'
+import { Trans } from 'react-i18next'
 
 import { PointsHistory } from './PointsHistory'
 
@@ -14,9 +15,13 @@ export function PointsSourceHelper({ editable, factions }) {
 
   return (
     <>
-      <IconButton onClick={openDrawer}>
-        <DetailsIcon />
-      </IconButton>
+      <Button
+        endIcon={<DetailsIcon />}
+        onClick={openDrawer}
+        startIcon={<DetailsIcon />}
+      >
+        <Trans i18nKey="sessionView.overview.vpSource" />
+      </Button>
       <Drawer
         anchor="left"
         onClose={closeDrawer}

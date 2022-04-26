@@ -47,11 +47,11 @@ export const DomainErrorRenderer = () => {
       onClose={clearError}
       open={hasError}
     >
-      {hasError && (
+      {hasError ? (
         <Alert onClose={clearError} severity="error">
           <Trans i18nKey={`errors.${error.status}`} />
         </Alert>
-      )}
+      ) : undefined}
     </Snackbar>
   )
 }
