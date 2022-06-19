@@ -73,4 +73,7 @@ export const en = {
   [FACTION.The_VuilRaith_Cabal]: {
     name: "The Vuil'Raith Cabal",
   },
+  [FACTION.The_Council_Keleres]: {
+    name: 'The Council Keleres',
+  },
 }

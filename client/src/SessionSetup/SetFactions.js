@@ -26,9 +26,10 @@ const useStyles = makeStyles({
   },
   fab: {
     position: 'sticky',
-    right: 0,
-    bottom: 0,
+    right: '1em',
+    bottom: '1em',
     zIndex: 1199,
+    float: 'right',
   },
   containedButton: {
     '&:not(.MuiButton-containedSecondary)': {
@@ -107,16 +108,16 @@ export function SetFactions() {
             </Button>
           </Grid>
         ))}
-        <Fab
-          aria-label="add"
-          className={classes.fab}
-          color="secondary"
-          disabled={!selectedFactions.length}
-          onClick={openPasswordProtectionDialog}
-        >
-          <Check />
-        </Fab>
       </Grid>
+      <Fab
+        className={classes.fab}
+        aria-label="add"
+        color="secondary"
+        disabled={!selectedFactions.length}
+        onClick={openPasswordProtectionDialog}
+      >
+        <Check />
+      </Fab>
       <PasswordProtectionDialog
         callback={createGameSession}
         onClose={() => setPasswordProtectionDialogOpen(false)}

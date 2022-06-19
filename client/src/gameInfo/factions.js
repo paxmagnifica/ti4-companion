@@ -23,6 +23,7 @@ export const FACTION = {
   The_Nomad: 'The_Nomad',
   The_Titans_of_Ul: 'The_Titans_of_Ul',
   The_VuilRaith_Cabal: 'The_VuilRaith_Cabal',
+  The_Council_Keleres: 'The_Council_Keleres',
 }
 
 const factions = {
@@ -169,6 +170,12 @@ const factions = {
     image:
       'https://static.wikia.nocookie.net/twilight-imperium-4/images/0/04/CabalFactionSymbol.png',
     key: 'The_VuilRaith_Cabal',
+  },
+  The_Council_Keleres: {
+    link: 'https://twilight-imperium.fandom.com/wiki/The_Council_Keleres',
+    image:
+      'https://static.wikia.nocookie.net/twilight-imperium-4/images/8/86/KeleresFactionSymbol.png',
+    key: 'The_Council_Keleres',
   },
 }
 
