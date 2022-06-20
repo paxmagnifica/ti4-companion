@@ -26,6 +26,9 @@ namespace server.Controllers
 
             var picks = session.Factions.Select(faction =>
             {
+
+                var decapitalizedFaction = faction;
+                decapitalizedFaction = Char.ToLower(decapitalizedFaction[0]) + decapitalizedFaction.Substring(1);
                 var playerName = factionPicks.FirstOrDefault(fp => fp.Pick == faction)?.PlayerName;
                 var tablePick = tablePicks.FirstOrDefault(tp => tp.PlayerName == playerName)?.Pick;
 
@@ -33,7 +36,7 @@ namespace server.Controllers
                 {
                     Faction = faction,
                     PlayerName = playerName,
-                    Color = session.Colors?.GetValueOrDefault(faction),
+                    Color = session.Colors?.GetValueOrDefault(faction) ?? session.Colors?.GetValueOrDefault(decapitalizedFaction),
                     Speaker = playerName != null && session.Draft?.Speaker == playerName,
                     AtTable = Int32.Parse(tablePick ?? "-1")
                 };

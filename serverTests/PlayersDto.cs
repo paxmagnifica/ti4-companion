@@ -95,6 +95,30 @@ namespace serverTests
         }
 
         [Test]
+        public void ShouldIncludeColorsEvenOnFactionKeyBeingLowercased()
+        {
+            // given
+            var session = new SessionDto()
+            {
+                Factions = new List<string>() { "The_Mentak_Coalition", "F2", "F3", "The_Arborec" },
+                Colors = new Dictionary<string, string>() { { "the_Mentak_Coalition", "yellow" }, { "the_Arborec", "black" } }
+            };
+            var expected = new[]
+            {
+                new PlayerDto { Faction = "The_Mentak_Coalition", Color = "yellow" },
+                new PlayerDto { Faction = "F2" },
+                new PlayerDto { Faction = "F3" },
+                new PlayerDto { Faction = "The_Arborec", Color = "black" }
+            };
+
+            // when
+            var actual = PlayerDto.GetPlayers(session);
+
+            // then
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
         public void ShouldIndicateTheSpeakerIfDraftAvailable()
         {
             // given
