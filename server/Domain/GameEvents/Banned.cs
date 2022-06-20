@@ -30,7 +30,7 @@ namespace server.Domain
             var payload = GameStarted.GetPayload(gameStartEvent);
             var previousBanEvents = session.Events.Where(e => e.EventType == nameof(Banned));
 
-            if (previousBanEvents.Count() + 1 == payload.Options.PlayerCount)
+            if (previousBanEvents.Count() + 1 == (payload.Options.PlayerCount * payload.Options.BanRounds))
             {
                 var pickRounds = payload.Options.TablePick ? 2 : 1;
                 eventsToAdd.Add(GameEvent.GenerateOrderEvent(gameEvent.SessionId, payload, pickRounds, _timeProvider.Now));
