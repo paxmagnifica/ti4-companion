@@ -14,6 +14,11 @@ namespace server.Controllers
         public bool Speaker { get; set; }
         public int AtTable { get; set; }
 
+        public PlayerDto()
+        {
+            AtTable = -1;
+        }
+
         public static IEnumerable<PlayerDto> GetPlayers(SessionDto session)
         {
             var factionPicks = session.Draft?.Picks?.Where(p => p.Type == "faction") ?? new PickedPayload[0];

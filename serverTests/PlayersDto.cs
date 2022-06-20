@@ -151,10 +151,10 @@ namespace serverTests
             };
             var expected = new[]
             {
-                new PlayerDto { Faction = "F3", PlayerName = "P3", Speaker = true },
-                new PlayerDto { Faction = "F2", PlayerName = "P2" },
-                new PlayerDto { Faction = "F1", PlayerName = "P1" },
-                new PlayerDto { Faction = "F4", PlayerName = "P4" }
+                new PlayerDto { Faction = "F3", PlayerName = "P3", Speaker = true, AtTable = 4 },
+                new PlayerDto { Faction = "F2", PlayerName = "P2", AtTable = 1 },
+                new PlayerDto { Faction = "F1", PlayerName = "P1", AtTable = 2 },
+                new PlayerDto { Faction = "F4", PlayerName = "P4", AtTable = 3 }
             };
 
             // when
