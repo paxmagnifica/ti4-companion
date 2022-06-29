@@ -18,6 +18,7 @@ import { factionsList } from '../gameInfo/factions'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
+import { GameContentsPicker } from '../GameContentsPicker'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -35,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 export function DraftSetup() {
   const classes = useStyles()
+
+  const [gameVersion, setGameVersion] = useState()
   const [playerCount, setPlayerCount] = useState(6)
   const [players, setPlayers] = useState([
     'Player 1',
@@ -71,6 +74,7 @@ export function DraftSetup() {
   const startDraft = useCallback(
     async ({ password }) => {
       const session = await sessionService.createSession({
+        gameVersion,
         password,
         setupType: 'draft',
         options: {
@@ -97,6 +101,7 @@ export function DraftSetup() {
       bansPerRound,
       tablePick,
       history,
+      gameVersion,
     ],
   )
   const [passwordProtectionOpen, setPasswordProtectionOpen] = useState(false)
@@ -133,6 +138,8 @@ export function DraftSetup() {
 
   return (
     <>
+      <GameContentsPicker onChange={setGameVersion} value={gameVersion} />
+
       <Box mb={2}>
         <Container>
           <Typography variant="h4">Setup your draft</Typography>
