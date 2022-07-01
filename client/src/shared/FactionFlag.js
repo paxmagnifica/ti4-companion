@@ -34,8 +34,8 @@ function FactionFlag(
   ref,
 ) {
   const { t } = useTranslation()
-  const plasticColors = usePlasticColors()
-  const plasticColor = plasticColors[factionKey]
+  const getPlasticColor = usePlasticColors()
+  const plasticColor = getPlasticColor(factionKey)
   const classes = useFlagStyles({
     selected,
     width,

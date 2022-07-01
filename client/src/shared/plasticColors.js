@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { IconButton, Tooltip } from '@material-ui/core'
 import { ColorLens } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
@@ -36,13 +36,19 @@ export const usePlasticColors = () => {
     () =>
       Object.fromEntries(
         Object.entries(plasticColorsContext?.colors || {}).map(
-          ([key, value]) => [key, { color: value, hex: colors[value] }],
+          ([key, value]) => [
+            key.toLowerCase(),
+            { color: value, hex: colors[value] },
+          ],
         ),
       ),
     [plasticColorsContext?.colors],
   )
 
-  return colorsWithHexValues
+  return useCallback(
+    (factionKey) => colorsWithHexValues[factionKey.toLowerCase()],
+    [colorsWithHexValues],
+  )
 }
 
 export const TogglePlasticColorsButton = () => {
