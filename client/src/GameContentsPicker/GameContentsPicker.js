@@ -13,6 +13,7 @@ export const GameVersion = {
   PoK_Codex3: 3,
 }
 
+// WARNING if you're changing this default version, change the default in /server/Startup.cs
 export const DEFAULT_VERSION = GameVersion.PoK_Codex2
 
 export const GameContentsPicker = ({ value, onChange }) => {
