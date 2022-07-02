@@ -14,11 +14,10 @@ import {
 } from '@material-ui/core'
 
 import { Trans } from '../i18n'
-import { factionsList } from '../gameInfo/factions'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
-import { GameVersionPicker } from '../GameComponents'
+import { GameVersionPicker, useFactionsList } from '../GameComponents'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -38,6 +37,7 @@ export function DraftSetup() {
   const classes = useStyles()
 
   const [gameVersion, setGameVersion] = useState()
+  const { factions: factionsList } = useFactionsList(gameVersion)
   const [playerCount, setPlayerCount] = useState(6)
   const [players, setPlayers] = useState([
     'Player 1',
@@ -78,7 +78,7 @@ export function DraftSetup() {
         password,
         setupType: 'draft',
         options: {
-          initialPool: factionsList.map(({ key }) => key),
+          initialPool: factionsList,
           players,
           bans,
           banRounds,
@@ -94,6 +94,7 @@ export function DraftSetup() {
       )
     },
     [
+      factionsList,
       players,
       sessionService,
       bans,

@@ -1,4 +1,4 @@
-import { FACTION } from '../gameInfo/factions'
+import { FACTION } from '../GameComponents/gameInfo/factions'
 
 export const en = {
   [FACTION.The_Arborec]: {

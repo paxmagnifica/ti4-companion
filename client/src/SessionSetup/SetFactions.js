@@ -16,8 +16,7 @@ import { Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
-import { factionsList } from '../gameInfo/factions'
-import { GameVersionPicker } from '../GameComponents'
+import { GameVersionPicker, useFactionsData } from '../GameComponents'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -85,6 +84,8 @@ export function SetFactions() {
     },
     [history, selectedFactions, sessionService, gameVersion],
   )
+
+  const { factions: factionsList } = useFactionsData(gameVersion)
 
   return (
     <>

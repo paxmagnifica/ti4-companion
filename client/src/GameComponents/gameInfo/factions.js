@@ -26,7 +26,7 @@ export const FACTION = {
   The_Council_Keleres: 'The_Council_Keleres',
 }
 
-const factions = {
+export const factionsData = {
   The_Arborec: {
     link: 'https://twilight-imperium.fandom.com/wiki/The_Arborec',
     image:
@@ -179,10 +179,10 @@ const factions = {
   },
 }
 
-export const factionsList = Object.values(factions)
-export const getData = (key) => factions[key]
+// export const factionsList = Object.values(factions)
+// export const getData = (key) => factions[key]
 
-export const getFactionCheatSheetPath = (factionKey) =>
-  `/factionCheatsheets/${factionKey.toLowerCase()}.png`
+// export const getFactionCheatSheetPath = (factionKey) =>
+// `/factionCheatsheets/${factionKey.toLowerCase()}.png`
 
-export default factions
+// export default factions

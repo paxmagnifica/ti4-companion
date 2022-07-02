@@ -8,11 +8,12 @@ import {
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
 
 import { useTranslation } from '../../i18n'
-import { getFactionCheatSheetPath } from '../../gameInfo/factions'
+import { useFactionData } from '../../GameComponents'
 
 export function FactionNutshell({ onClose, factionKey }) {
   const { t } = useTranslation()
   const factionName = factionKey ? t(`factions.${factionKey}.name`) : ''
+  const { getData } = useFactionData()
 
   return (
     <Dialog maxWidth="lg" onClose={onClose} open={factionKey !== null}>
@@ -21,7 +22,7 @@ export function FactionNutshell({ onClose, factionKey }) {
           <CardContent>
             <img
               alt={factionKey}
-              src={getFactionCheatSheetPath(factionKey)}
+              src={getData(factionKey).cheatSheetPath}
               title={factionName}
             />
           </CardContent>
@@ -38,7 +39,7 @@ export function FactionNutshell({ onClose, factionKey }) {
             </Button>
             <Button
               aria-label={t('sessionView.overview.openOriginal')}
-              href={getFactionCheatSheetPath(factionKey)}
+              href={getData(factionKey).cheatSheetPath}
               startIcon={<PhotoLibrary />}
               target="about:blank"
             >

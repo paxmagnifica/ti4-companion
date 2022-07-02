@@ -4,8 +4,7 @@ import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Route, Switch } from 'react-router-dom'
 
-import * as factions from '../gameInfo/factions'
-import { getFactionCheatSheetPath } from '../gameInfo/factions'
+import { useFactionData } from '../GameComponents'
 import { FullscreenButton, HideInFullscreen } from '../Fullscreen'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import { TogglePlasticColorsButton } from '../shared/plasticColors'
@@ -45,6 +44,8 @@ export function SessionView({
     setEnableEditPromptOpen(!editable)
   }, [editable, setEnableEditPromptOpen])
 
+  const { getData: getFactionData } = useFactionData()
+
   // TODO draft title etc
   return (
     <>
@@ -54,7 +55,7 @@ export function SessionView({
           content={sortedPoints
             .map(
               ({ faction, points }) =>
-                `${factions.getData(faction).name}(${points}vp)`,
+                `${getFactionData(faction).name}(${points}vp)`,
             )
             .join(', ')}
           name="description"
@@ -68,16 +69,16 @@ export function SessionView({
           content={sortedPoints
             .map(
               ({ faction, points }) =>
-                `${factions.getData(faction).name}(${points}vp)`,
+                `${getFactionData(faction).name}(${points}vp)`,
             )
             .join(', ')}
           property="og:description"
         />
         {winningFaction && (
           <meta
-            content={`${window.location.origin}${getFactionCheatSheetPath(
-              winningFaction,
-            )}`}
+            content={`${window.location.origin}${
+              getFactionData(winningFaction).cheatSheetPath
+            }`}
             property="og:image"
           />
         )}

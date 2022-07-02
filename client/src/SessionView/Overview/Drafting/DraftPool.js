@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
 import { Trans } from '../../../i18n'
-import { getData } from '../../../gameInfo/factions'
+import { useFactionData } from '../../../GameComponents'
 import { EditPrompt } from '../../Edit'
 import { FactionNutshell } from '../FactionNutshell'
 
@@ -81,6 +81,7 @@ export function DraftPool({
     [selected, onSelected, isSelected],
   )
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
+  const { getData } = useFactionData()
 
   return (
     <>
