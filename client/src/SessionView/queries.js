@@ -10,7 +10,7 @@ export const queryKeys = {
   timeline: (sessionId) => ['session', sessionId, 'timeline'],
 }
 
-export const useSession = ({ sessionId, enabled }) => {
+export const useSession = ({ sessionId, enabled, callback }) => {
   const { fetch } = useFetch()
 
   const { data, ...queryInfo } = useQuery(
@@ -25,6 +25,7 @@ export const useSession = ({ sessionId, enabled }) => {
       return session
     },
     {
+      onSuccess: callback,
       enabled: enabled && Boolean(sessionId),
     },
   )

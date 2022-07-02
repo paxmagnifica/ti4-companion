@@ -13,7 +13,7 @@ export const GameVersion = {
   PoK_Codex3: 3,
 }
 
-const DEFAULT_VERSION = GameVersion.PoK_Codex2
+export const DEFAULT_VERSION = GameVersion.PoK_Codex2
 
 export const GameContentsPicker = ({ value, onChange }) => {
   const getFromEvent = (event) => {

@@ -6,7 +6,7 @@ import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 import { FetchContext, useFetch } from '../useFetch'
-import { useObjectives } from '../queries'
+import { useGameVersion } from '../GameContentsPicker'
 
 import { useEdit, EditPromptProvider } from './Edit'
 import { useSessionContext, SessionContext } from './useSessionContext'
@@ -73,12 +73,10 @@ export function SessionContainer({ children }) {
     [setError, setEnableEditDialogOpen],
   )
 
-  const {
-    queryInfo: { isFetched: areObjectivesFetched },
-  } = useObjectives()
+  const { setGameVersion } = useGameVersion()
   const { session, queryInfo } = useSession({
     sessionId,
-    enabled: areObjectivesFetched,
+    callback: (s) => setGameVersion(s.setup.gameVersion),
   })
   useRealTimeSession({ sessionId })
   const loading = !queryInfo.isFetched
