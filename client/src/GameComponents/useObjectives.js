@@ -2,7 +2,7 @@ import { useQuery } from 'react-query'
 
 import CONFIG from '../config'
 import { handleErrors } from '../shared/errorHandling'
-import { useGameVersion } from '../GameComponents/useGameVersion'
+import { useGameVersion } from '../GameComponents'
 
 const queryKey = (gameVersion) => ['objectives', gameVersion]
 
