@@ -178,3 +178,5 @@ export const en = {
     effect: 'This card counts as a relic fragment of any type.',
   },
 }
+
+export const pl = {}

@@ -8,11 +8,11 @@ import {
   Checkbox,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useTranslation } from 'react-i18next'
 
 import Objective from '../shared/Objective'
 import useSmallViewport from '../shared/useSmallViewport'
 import DebouncedTextField from '../shared/DebouncedTextField'
+import { useTranslation } from '../i18n'
 
 const useStyles = makeStyles((theme) => ({
   objectivesGrid: {

@@ -1,15 +1,40 @@
+import { useCallback } from 'react'
 import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
+import {
+  initReactI18next,
+  useTranslation as i18NextUseTranslation,
+} from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-import { en as objectivesEn, pl as objectivesPl } from './objectives'
+import { useGameVersion } from '../GameComponents'
+
+import objectivesI18n from './objectives'
+import explorationI18n from './explorationCards'
 import { en as factionsEn } from './factions'
 import { en as strategyCardsEn } from './strategyCards'
-import { en as explorationCardsEn } from './explorationCards'
 import { en as relicsEn } from './relics'
 import { en as agendasEn } from './agendas'
 
-const factory = (options = { debug: true }) =>
+const translationNamespaces = ['translation', 'pok', 'codex2', 'codex3']
+export const useTranslation = () => {
+  const { t } = i18NextUseTranslation()
+  const { gameVersion } = useGameVersion()
+
+  const componentT = useCallback(
+    (thing) => {
+      const val = t(thing, {
+        ns: translationNamespaces.slice(0, gameVersion + 1).reverse(),
+      })
+
+      return val
+    },
+    [t, gameVersion],
+  )
+
+  return { t: componentT }
+}
+
+export const factory = (options = { debug: true }) =>
   i18n
     // detect user language
     // learn more: https://github.com/i18next/i18next-browser-languageDetector
@@ -20,16 +45,22 @@ const factory = (options = { debug: true }) =>
     // for all options read: https://www.i18next.com/overview/configuration-options
     .init({
       ...options,
+      ns: ['codex3', 'translation'],
+      defaultNS: 'translation',
       fallbackLng: 'en',
       interpolation: {
         escapeValue: false, // not needed for react as it escapes by default
       },
       resources: {
         en: {
+          codex3: {
+            objectives: objectivesI18n.en.codex3,
+            explorationCards: explorationI18n.en.codex3,
+          },
           translation: {
             factions: factionsEn,
-            objectives: objectivesEn,
-            explorationCards: explorationCardsEn,
+            objectives: objectivesI18n.en.translation,
+            explorationCards: explorationI18n.en.translation,
             strategyCards: strategyCardsEn,
             relics: relicsEn,
             agendas: agendasEn,
@@ -350,8 +381,13 @@ const factory = (options = { debug: true }) =>
           },
         },
         pl: {
+          codex3: {
+            objectives: objectivesI18n.pl.codex3,
+            explorationCards: explorationI18n.pl.codex3,
+          },
           translation: {
-            objectives: objectivesPl,
+            objectives: objectivesI18n.pl.translation,
+            explorationCards: explorationI18n.pl.codex3,
             general: {
               switchLanguage: 'Zmień język',
               home: 'Home',
@@ -484,5 +520,3 @@ const factory = (options = { debug: true }) =>
         },
       },
     })
-
-export default factory
