@@ -12,7 +12,7 @@ import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
 import explorationReverseSprite from '../assets/exploration-reverse-sprite.png'
 import relicSprite from '../assets/relic-sprite.jpg'
 import StrategyCard from '../gameInfo/strategyCards'
-import { useObjectives } from '../queries'
+import { useObjectives } from '../GameComponents'
 
 import Objectives from './Objectives'
 import ExplorationCards from './ExplorationCards'

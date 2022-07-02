@@ -8,7 +8,7 @@ import publicObjectiveI from '../assets/objective-1.png'
 import publicObjectiveII from '../assets/objective-2.png'
 import secretObjective from '../assets/objective-secret.png'
 import reverseObjective from '../assets/objective-1-reverse.jpg'
-import { useObjectives } from '../queries'
+import { useObjectives } from '../GameComponents'
 
 const useStyles = makeStyles({
   root: {

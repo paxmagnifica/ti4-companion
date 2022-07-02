@@ -11,7 +11,7 @@ import {
 import { Trans } from 'react-i18next'
 
 import { useTimelineEvents, useAddPointSourceMutation } from '../../../queries'
-import { useObjectives } from '../../../../queries'
+import { useObjectives } from '../../../../GameComponents'
 import { useSessionContext } from '../../../useSessionContext'
 import FactionFlag from '../../../../shared/FactionFlag'
 import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'

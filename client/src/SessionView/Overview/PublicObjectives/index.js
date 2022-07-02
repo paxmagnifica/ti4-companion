@@ -7,7 +7,7 @@ import useSmallViewport from '../../../shared/useSmallViewport'
 import { ComboDispatchContext } from '../../../state'
 import Objective from '../../../shared/Objective'
 import { useFullscreen } from '../../../Fullscreen'
-import { useObjectives } from '../../../queries'
+import { useObjectives } from '../../../GameComponents'
 
 import AddObjective from './AddObjective'
 import ObjectiveWithFactionSelector from './ObjectiveWithFactionSelector'
