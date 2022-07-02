@@ -1,8 +1,8 @@
 import { useState, useContext, useCallback } from 'react'
 import { Snackbar, Grid, Button, IconButton } from '@material-ui/core'
-import { useTranslation, Trans } from 'react-i18next'
 import { Lock, Close } from '@material-ui/icons'
 
+import { useTranslation, Trans } from '../i18n'
 import { ComboDispatchContext } from '../state'
 
 export default function LockForEdit({ session }) {

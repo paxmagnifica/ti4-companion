@@ -1,7 +1,8 @@
 import { Button, Grid } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import { Trans } from 'react-i18next'
 import { makeStyles } from '@material-ui/core/styles'
+
+import { Trans } from './i18n'
 
 const useStyles = makeStyles(() => ({
   cta: {

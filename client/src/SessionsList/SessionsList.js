@@ -15,8 +15,8 @@ import {
   Autorenew as InProgress,
 } from '@material-ui/icons'
 import { useHistory, generatePath } from 'react-router-dom'
-import { useTranslation, Trans } from 'react-i18next'
 
+import { useTranslation, Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 
 const useStyles = makeStyles((theme) => ({

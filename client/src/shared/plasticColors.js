@@ -1,7 +1,8 @@
 import React, { useCallback, useContext, useMemo } from 'react'
 import { IconButton, Tooltip } from '@material-ui/core'
 import { ColorLens } from '@material-ui/icons'
-import { useTranslation } from 'react-i18next'
+
+import { useTranslation } from '../i18n'
 
 const PlasticColorsContext = React.createContext()
 

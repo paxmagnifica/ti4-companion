@@ -5,7 +5,8 @@ import {
   DialogContent,
   DialogActions,
 } from '@material-ui/core'
-import { useTranslation, Trans } from 'react-i18next'
+
+import { useTranslation, Trans } from '../i18n'
 
 function Confirmation({ open, title, children, confirm, cancel }) {
   const { t } = useTranslation()

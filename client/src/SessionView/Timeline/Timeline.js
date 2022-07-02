@@ -19,7 +19,6 @@ import {
   TimelineContent,
 } from '@material-ui/lab'
 import { withStyles, makeStyles } from '@material-ui/core/styles'
-import { Trans, useTranslation } from 'react-i18next'
 import {
   AccessibilityNew as UserEventIcon,
   Map as MapIcon,
@@ -30,6 +29,7 @@ import {
   WhereToVote as SessionSummaryIcon,
 } from '@material-ui/icons'
 
+import { Trans, useTranslation } from '../../i18n'
 import tradeGoods from '../../assets/tradegoods.png'
 import config from '../../config'
 import Objective from '../../shared/Objective'

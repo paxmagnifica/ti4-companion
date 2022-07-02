@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import {
   Typography,
   TextField,
@@ -9,6 +8,8 @@ import {
   DialogTitle,
   DialogContent,
 } from '@material-ui/core'
+
+import { Trans } from '../i18n'
 
 export function PasswordProtectionDialog({ open, callback, onClose }) {
   const [password, setPassword] = useState('')

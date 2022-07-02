@@ -1,8 +1,8 @@
 import { useMemo, useCallback } from 'react'
 import { Container } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 
+import { useTranslation } from '../i18n'
 import { Tab, Tabs } from '../components/navigation'
 
 import { SetFactions } from './SetFactions'

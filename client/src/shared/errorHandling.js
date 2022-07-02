@@ -1,7 +1,8 @@
 import React, { useContext, useCallback } from 'react'
 import { Snackbar } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import { Trans } from 'react-i18next'
+
+import { Trans } from '../i18n'
 
 export class DomainError extends Error {
   constructor(fetchResponse) {

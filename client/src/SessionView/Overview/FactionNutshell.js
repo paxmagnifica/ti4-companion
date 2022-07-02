@@ -6,8 +6,8 @@ import {
   CardActions,
 } from '@material-ui/core'
 import { LocalLibrary, PhotoLibrary } from '@material-ui/icons'
-import { useTranslation } from 'react-i18next'
 
+import { useTranslation } from '../../i18n'
 import { getFactionCheatSheetPath } from '../../gameInfo/factions'
 
 export function FactionNutshell({ onClose, factionKey }) {

@@ -2,7 +2,8 @@ import { useMemo, useCallback, useState } from 'react'
 import { TextField, IconButton } from '@material-ui/core'
 import { Clear } from '@material-ui/icons'
 import debounce from 'lodash.debounce'
-import { useTranslation } from 'react-i18next'
+
+import { useTranslation } from '../i18n'
 
 function DebouncedTextField({ onChange, setLoading, debounceTime, ...others }) {
   const { t } = useTranslation()

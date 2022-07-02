@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { Box, FormGroup, Grid, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useTranslation } from 'react-i18next'
+
+import { useTranslation } from '../i18n'
 
 import Objective from './Objective'
 

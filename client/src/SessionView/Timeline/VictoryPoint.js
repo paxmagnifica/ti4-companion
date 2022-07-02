@@ -1,6 +1,6 @@
-import { Trans, useTranslation } from 'react-i18next'
 import { Typography } from '@material-ui/core'
 
+import { Trans, useTranslation } from '../../i18n'
 import useSmallViewport from '../../shared/useSmallViewport'
 import FactionFlag from '../../shared/FactionFlag'
 import Relic from '../../shared/Relic'

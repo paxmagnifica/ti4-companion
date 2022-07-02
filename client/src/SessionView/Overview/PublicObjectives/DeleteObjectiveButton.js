@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react'
 import { IconButton, Tooltip } from '@material-ui/core'
 import { Delete } from '@material-ui/icons'
-import { useTranslation, Trans } from 'react-i18next'
 
+import { useTranslation, Trans } from '../../../i18n'
 import Confirmation from '../../../shared/Confirmation'
 import { ComboDispatchContext } from '../../../state'
 

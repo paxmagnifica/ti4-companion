@@ -1,7 +1,8 @@
 import { Button } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import { Trans } from 'react-i18next'
+
+import { Trans } from '../i18n'
 
 function ScrollToBottom(props) {
   const scrollToBottom = () => {

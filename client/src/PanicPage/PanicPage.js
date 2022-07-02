@@ -1,6 +1,6 @@
 import React from 'react'
-import { Trans } from 'react-i18next'
 
+import { Trans } from '../i18n'
 import destroyed from '../assets/destroyed.webp'
 
 export class PanicPage extends React.Component {

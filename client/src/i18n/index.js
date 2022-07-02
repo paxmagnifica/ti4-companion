@@ -1,8 +1,9 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import i18n from 'i18next'
 import {
   initReactI18next,
   useTranslation as i18NextUseTranslation,
+  Trans as I18NextTrans,
 } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
@@ -16,22 +17,34 @@ import { en as relicsEn } from './relics'
 import { en as agendasEn } from './agendas'
 
 const translationNamespaces = ['translation', 'pok', 'codex2', 'codex3']
+const getTranslationNamespace = (gameVersion) =>
+  translationNamespaces.slice(0, gameVersion + 1).reverse()
 export const useTranslation = () => {
-  const { t } = i18NextUseTranslation()
+  const { t, ...otherI18n } = i18NextUseTranslation()
   const { gameVersion } = useGameVersion()
 
+  const ns = useMemo(() => getTranslationNamespace(gameVersion), [gameVersion])
+
   const componentT = useCallback(
-    (thing) => {
+    (thing, options) => {
       const val = t(thing, {
-        ns: translationNamespaces.slice(0, gameVersion + 1).reverse(),
+        ...options,
+        ns,
       })
 
       return val
     },
-    [t, gameVersion],
+    [t, ns],
   )
 
-  return { t: componentT }
+  return { t: componentT, ...otherI18n }
+}
+
+export const Trans = (props) => {
+  const { gameVersion } = useGameVersion()
+  const ns = useMemo(() => getTranslationNamespace(gameVersion), [gameVersion])
+
+  return <I18NextTrans {...props} ns={ns} />
 }
 
 export const factory = (options = { debug: true }) =>

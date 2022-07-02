@@ -11,8 +11,8 @@ import {
 import { Check } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { generatePath, useHistory } from 'react-router-dom'
-import { Trans } from 'react-i18next'
 
+import { Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'

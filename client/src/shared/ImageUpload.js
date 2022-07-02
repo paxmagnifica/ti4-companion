@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { Button, Grid, CircularProgress } from '@material-ui/core'
-import { Trans } from 'react-i18next'
 
+import { Trans } from '../i18n'
 import ImagePicker from './ImagePicker'
 
 function ImageUpload({ upload, translations, Icon }) {

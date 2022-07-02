@@ -1,5 +1,4 @@
-import { useTranslation } from 'react-i18next'
-
+import { useTranslation } from '../i18n'
 import * as factions from '../gameInfo/factions'
 
 export function FactionImage({ factionKey, ...props }) {

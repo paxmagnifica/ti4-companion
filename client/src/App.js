@@ -18,7 +18,6 @@ import {
   createTheme,
   ThemeProvider,
 } from '@material-ui/core/styles'
-import { useTranslation, Trans } from 'react-i18next'
 
 import { SupportTheCreator } from './Support'
 import { DomainErrorProvider } from './shared/errorHandling'
@@ -30,7 +29,7 @@ import SessionView from './SessionView'
 import { SignalRConnectionProvider } from './signalR'
 import { KnowledgeBase } from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
-import { factory as i18nFactory } from './i18n'
+import { factory as i18nFactory, useTranslation, Trans } from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
 import GitHubRibbon from './GitHubRibbon'
 import config from './config'
@@ -103,66 +102,72 @@ function App() {
             />
           </Helmet>
 
-          <GameVersionProvider>
-            <Router>
-              <CssBaseline />
-              <AppBar>
-                <Toolbar>
-                  <Link onClick={exitFullscreen} to="/">
-                    <IconButton>
-                      <img
-                        alt={t('general.home')}
-                        src={homeIcon}
-                        style={{
-                          height: '1.2em',
-                          width: '1.2em',
-                          borderRadius: '50%',
-                        }}
-                        title={t('general.home')}
+          <Router>
+            <CssBaseline />
+            <AppBar>
+              <Toolbar>
+                <Link onClick={exitFullscreen} to="/">
+                  <IconButton>
+                    <img
+                      alt={t('general.home')}
+                      src={homeIcon}
+                      style={{
+                        height: '1.2em',
+                        width: '1.2em',
+                        borderRadius: '50%',
+                      }}
+                      title={t('general.home')}
+                    />
+                  </IconButton>
+                </Link>
+                <Typography className={classes.title} variant="h5">
+                  <Trans i18nKey="general.title" />
+                </Typography>
+                <SupportTheCreator />
+                <LanguageSwitcher />
+                <GitHubRibbon />
+              </Toolbar>
+            </AppBar>
+            <Toolbar />
+            <Container
+              className={clsx(classes.main, {
+                [classes.fullWidth]: fullscreen,
+              })}
+            >
+              <KnowledgeBase />
+              <PanicPage>
+                <Box m={2}>
+                  <Switch>
+                    <Route path="/new">
+                      <SessionSetup />
+                    </Route>
+                    <Route path="/:sessionId/:secret?">
+                      <SessionView />
+                    </Route>
+                    <Route path="/">
+                      <CallsToAction />
+                      <SessionsListContainer
+                        listIdentifier={listIdentifier}
+                        setListIdentifier={setAndPersistListIdentifier}
                       />
-                    </IconButton>
-                  </Link>
-                  <Typography className={classes.title} variant="h5">
-                    <Trans i18nKey="general.title" />
-                  </Typography>
-                  <SupportTheCreator />
-                  <LanguageSwitcher />
-                  <GitHubRibbon />
-                </Toolbar>
-              </AppBar>
-              <Toolbar />
-              <Container
-                className={clsx(classes.main, {
-                  [classes.fullWidth]: fullscreen,
-                })}
-              >
-                <KnowledgeBase />
-                <PanicPage>
-                  <Box m={2}>
-                    <Switch>
-                      <Route path="/new">
-                        <SessionSetup />
-                      </Route>
-                      <Route path="/:sessionId/:secret?">
-                        <SessionView />
-                      </Route>
-                      <Route path="/">
-                        <CallsToAction />
-                        <SessionsListContainer
-                          listIdentifier={listIdentifier}
-                          setListIdentifier={setAndPersistListIdentifier}
-                        />
-                      </Route>
-                    </Switch>
-                  </Box>
-                </PanicPage>
-              </Container>
-              {!fullscreen && <Footer />}
-            </Router>
-          </GameVersionProvider>
+                    </Route>
+                  </Switch>
+                </Box>
+              </PanicPage>
+            </Container>
+            {!fullscreen && <Footer />}
+          </Router>
         </FetchProvider>
       </DomainErrorProvider>
     </ThemeProvider>
+  )
+}
+
+function AppWithProviders() {
+  return (
+    <GameVersionProvider>
+      <App />
+    </GameVersionProvider>
   )
 }
 
@@ -179,7 +184,7 @@ function SignalRConnectedApp() {
   return (
     <SignalRConnectionProvider>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <AppWithProviders />
         {config.isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </SignalRConnectionProvider>

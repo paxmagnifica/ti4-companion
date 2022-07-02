@@ -11,8 +11,8 @@ import {
 } from '@material-ui/core'
 import { Link, generatePath } from 'react-router-dom'
 import { LocalLibrary, PhotoLibrary, Info } from '@material-ui/icons'
-import { useTranslation, Trans } from 'react-i18next'
 
+import { useTranslation, Trans } from '../../i18n'
 import { SESSION_VIEW_ROUTES } from '../../shared/constants'
 import * as factions from '../../gameInfo/factions'
 

@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react'
 import { Button, Drawer } from '@material-ui/core'
 import { Details as DetailsIcon } from '@material-ui/icons'
-import { Trans } from 'react-i18next'
+
+import { Trans } from '../../../../i18n'
 
 import { PointsHistory } from './PointsHistory'
 

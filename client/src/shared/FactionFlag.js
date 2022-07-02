@@ -1,7 +1,8 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { useTranslation } from 'react-i18next'
 import clsx from 'clsx'
+
+import { useTranslation } from '../i18n'
 
 import { usePlasticColors } from './plasticColors'
 import { FactionImage } from './FactionImage'

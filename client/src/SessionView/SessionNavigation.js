@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import {
   Drawer,
   IconButton,
@@ -21,6 +20,7 @@ import {
 import { useTheme, makeStyles } from '@material-ui/core/styles'
 import { useHistory, useRouteMatch, generatePath } from 'react-router-dom'
 
+import { useTranslation } from '../i18n'
 import { SupportMenuListItem } from '../Support'
 import { Tab, Tabs } from '../components/navigation'
 import useSmallViewport from '../shared/useSmallViewport'

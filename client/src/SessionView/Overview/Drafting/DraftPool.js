@@ -9,12 +9,12 @@ import {
 } from '@material-ui/core'
 import { Info as InfoIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-import { Trans } from 'react-i18next'
 import clsx from 'clsx'
 
+import { Trans } from '../../../i18n'
 import { getData } from '../../../gameInfo/factions'
-import { FactionNutshell } from '../FactionNutshell'
 import { EditPrompt } from '../../Edit'
+import { FactionNutshell } from '../FactionNutshell'
 
 const useStyles = makeStyles((theme) => ({
   containedButton: {

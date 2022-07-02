@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo } from 'react'
-import { Trans } from 'react-i18next'
 import { makeStyles } from '@material-ui/core/styles'
 import { generatePath, useHistory } from 'react-router-dom'
 import {
@@ -14,6 +13,7 @@ import {
   Button,
 } from '@material-ui/core'
 
+import { Trans } from '../i18n'
 import { factionsList } from '../gameInfo/factions'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
