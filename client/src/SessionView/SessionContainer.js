@@ -6,7 +6,7 @@ import sessionServiceFactory from '../shared/sessionService'
 import { PlasticColorsProvider } from '../shared/plasticColors'
 import { ComboDispatchContext } from '../state'
 import { FetchContext, useFetch } from '../useFetch'
-import { useGameVersion } from '../GameContentsPicker'
+import { useGameVersion } from '../GameComponents'
 
 import { useEdit, EditPromptProvider } from './Edit'
 import { useSessionContext, SessionContext } from './useSessionContext'

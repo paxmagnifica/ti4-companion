@@ -38,7 +38,7 @@ import { Footer } from './Footer'
 import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
 import { PanicPage } from './PanicPage'
-import { GameVersionProvider } from './GameContentsPicker'
+import { GameVersionProvider } from './GameComponents'
 
 i18nFactory()
 

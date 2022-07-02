@@ -18,7 +18,7 @@ import { factionsList } from '../gameInfo/factions'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
-import { GameContentsPicker } from '../GameContentsPicker'
+import { GameVersionPicker } from '../GameComponents'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -138,7 +138,7 @@ export function DraftSetup() {
 
   return (
     <>
-      <GameContentsPicker onChange={setGameVersion} value={gameVersion} />
+      <GameVersionPicker onChange={setGameVersion} value={gameVersion} />
 
       <Box mb={2}>
         <Container>

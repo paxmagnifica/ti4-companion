@@ -109,7 +109,7 @@ namespace server
                 }
                 else
                 {
-                    // WARNING if you're changing this default version, change the default in /client/src/GameContentsPicker/GameContentsPicker.js
+                    // WARNING if you're changing this default version, change the default in /client/src/GameComponents/GameVersionPicker.js
                     context.Items.Add("GameVersion", GameVersion.PoK_Codex2);
 
                 }

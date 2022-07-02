@@ -17,7 +17,7 @@ import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
 import { factionsList } from '../gameInfo/factions'
-import { GameContentsPicker } from '../GameContentsPicker'
+import { GameVersionPicker } from '../GameComponents'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -88,7 +88,7 @@ export function SetFactions() {
 
   return (
     <>
-      <GameContentsPicker onChange={setGameVersion} value={gameVersion} />
+      <GameVersionPicker onChange={setGameVersion} value={gameVersion} />
 
       <Box className={classes.root} mb={2}>
         <Container>

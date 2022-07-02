@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useContext } from 'react'
 
-import { DEFAULT_VERSION } from './GameContentsPicker'
+import { DEFAULT_VERSION } from './GameVersionPicker'
 
 const GameVersionContext = React.createContext()
 
