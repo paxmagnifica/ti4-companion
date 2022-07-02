@@ -23,7 +23,7 @@ export const GameVersionPicker = ({ value, onChange }) => {
   }
 
   useEffect(() => {
-    if (!value) {
+    if (!value && value !== 0) {
       onChange(DEFAULT_VERSION)
     }
   }, [value, onChange])
@@ -37,31 +37,31 @@ export const GameVersionPicker = ({ value, onChange }) => {
             name="gameVersion"
             onChange={getFromEvent}
             row
-            value={value || DEFAULT_VERSION}
+            value={value === 0 ? '0' : value?.toString() || DEFAULT_VERSION}
           >
             <FormControlLabel
               control={<Radio color="secondary" />}
               label="Base"
               labelPlacement="bottom"
-              value={GameVersion.Base}
+              value={GameVersion.Base.toString()}
             />
             <FormControlLabel
               control={<Radio color="secondary" />}
               label="PoK"
               labelPlacement="bottom"
-              value={GameVersion.PoK}
+              value={GameVersion.PoK.toString()}
             />
             <FormControlLabel
               control={<Radio color="secondary" />}
               label="Codex 2"
               labelPlacement="bottom"
-              value={GameVersion.PoK_Codex2}
+              value={GameVersion.PoK_Codex2.toString()}
             />
             <FormControlLabel
               control={<Radio color="secondary" />}
               label="Codex 3"
               labelPlacement="bottom"
-              value={GameVersion.PoK_Codex3}
+              value={GameVersion.PoK_Codex3.toString()}
             />
           </RadioGroup>
         }
