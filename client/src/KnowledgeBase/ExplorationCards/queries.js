@@ -23,7 +23,7 @@ export const useExplorationCards = () => {
       return results.reduce((accu, obj) => ({ ...accu, [obj.slug]: obj }), {})
     },
     {
-      staleTime: Infinity,
+      placeholderData: {},
     },
   )
 

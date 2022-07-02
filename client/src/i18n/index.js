@@ -7,7 +7,8 @@ import {
 } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-import { useGameVersion } from '../GameComponents'
+// SPECIFICALLY importing from ../GameComponenets/useGameVersion to avoid circular dependency with ../GameComponenets
+import { useGameVersion } from '../GameComponents/useGameVersion'
 
 import objectivesI18n from './objectives'
 import explorationI18n from './explorationCards'
