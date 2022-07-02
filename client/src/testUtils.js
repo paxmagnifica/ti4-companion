@@ -1,16 +1,22 @@
 import { render } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-export function renderWithClient(client, ui) {
+import { GameVersionProvider } from './GameComponents'
+
+export function renderWithProviders(client, ui) {
   const { rerender, ...result } = render(
-    <QueryClientProvider client={client}>{ui}</QueryClientProvider>,
+    <QueryClientProvider client={client}>
+      <GameVersionProvider>{ui}</GameVersionProvider>
+    </QueryClientProvider>,
   )
 
   return {
     ...result,
     rerender: (rerenderUi) =>
       rerender(
-        <QueryClientProvider client={client}>{rerenderUi}</QueryClientProvider>,
+        <QueryClientProvider client={client}>
+          <GameVersionProvider>{rerenderUi}</GameVersionProvider>
+        </QueryClientProvider>,
       ),
   }
 }
