@@ -1,4 +1,4 @@
-import StrategyCard from '../gameInfo/strategyCards'
+import StrategyCard from '../GameComponents/gameInfo/strategyCards'
 
 export const en = {
   [StrategyCard.Leadership]: {

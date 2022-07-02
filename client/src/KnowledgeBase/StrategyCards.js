@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 
 import useSmallViewport from '../shared/useSmallViewport'
-import StrategyCard from '../gameInfo/strategyCards'
+import StrategyCard from '../GameComponents/gameInfo/strategyCards'
 
 import StrategyFront from './StrategyFront'
 

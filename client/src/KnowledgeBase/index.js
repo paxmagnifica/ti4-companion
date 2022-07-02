@@ -11,7 +11,7 @@ import stageIIObjectiveReverse from '../assets/objective-2-reverse.jpg'
 import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
 import explorationReverseSprite from '../assets/exploration-reverse-sprite.png'
 import relicSprite from '../assets/relic-sprite.jpg'
-import StrategyCard from '../gameInfo/strategyCards'
+import StrategyCard from '../GameComponents/gameInfo/strategyCards'
 import { useObjectives } from '../GameComponents'
 
 import Objectives from './Objectives'

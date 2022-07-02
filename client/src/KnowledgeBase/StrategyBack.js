@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { images } from '../gameInfo/strategyCards'
+import { images } from '../GameComponents/gameInfo/strategyCards'
 
 const referenceWidth = 358
 const referenceHeight = 450
