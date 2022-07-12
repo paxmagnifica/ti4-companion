@@ -68,6 +68,6 @@ export const useFactionData = (factionKey) => {
       return factions.find((a) => a.key === factionKey)
     }
 
-    return { getData: (key) => factions.find((a) => a.key === key) }
+    return { getData: (key) => factions.find((a) => a.key === key) || {} }
   }, [factionKey, factions])
 }
