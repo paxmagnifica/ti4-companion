@@ -65,7 +65,7 @@ export const useFactionData = (factionKey) => {
 
   return useMemo(() => {
     if (factionKey) {
-      return factions.find((a) => a.key === factionKey)
+      return factions.find((a) => a.key === factionKey) || {}
     }
 
     return { getData: (key) => factions.find((a) => a.key === key) || {} }
