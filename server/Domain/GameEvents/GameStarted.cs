@@ -22,6 +22,7 @@ namespace server.Domain
         public GameStartedPayload()
         {
             Factions = new List<string>();
+            GameVersion = GameVersion.PoK_Codex3;
         }
 
         public string SetupType { get; set; }
