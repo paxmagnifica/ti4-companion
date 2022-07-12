@@ -20,6 +20,7 @@ import MuiAlert from '@material-ui/lab/Alert'
 import { Trans, useTranslation } from '../../i18n'
 import { ComboDispatchContext } from '../../state'
 import Confirmation from '../../shared/Confirmation'
+import { GameVersionPicker } from '../../GameComponents'
 
 import { ColorsPicker } from './ColorsPicker'
 
@@ -136,6 +137,7 @@ function DetailsForm({ disabled, session }) {
     <>
       <Paper>
         <Container className={classes.root}>
+          <GameVersionPicker disabled value={session.setup.gameVersion} />
           <form autoComplete="off" noValidate>
             <Grid container spacing={3}>
               <Grid item sm={2} xs={12}>
