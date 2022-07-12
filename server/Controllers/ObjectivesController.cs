@@ -26,7 +26,7 @@ namespace server.Controllers
         public IEnumerable<ObjectiveDto> GetObjectives()
         {
             var gameVersionInContext = (GameVersion)HttpContext.Items["GameVersion"];
-            var objectivesFromDb = _sessionContext.Objectives.Where(o => o.GameVersion <= gameVersionInContext).ToList();
+            var objectivesFromDb = _sessionContext.Objectives.Where(o => o.GameVersion <= gameVersionInContext).OrderBy(o => o.Slug).ToList();
 
             return objectivesFromDb.Select(fromDb => new ObjectiveDto(fromDb));
         }
