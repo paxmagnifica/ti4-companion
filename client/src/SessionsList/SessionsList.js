@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   Chip,
   List,
@@ -18,6 +19,7 @@ import { useHistory, generatePath } from 'react-router-dom'
 
 import { useTranslation, Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
+import { useGameVersion, DEFAULT_VERSION } from '../GameComponents'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -52,6 +54,11 @@ export function SessionsList({ sessions, listId }) {
   const classes = useStyles()
   const history = useHistory()
   const { t } = useTranslation()
+  const { setGameVersion } = useGameVersion()
+
+  useEffect(() => {
+    setGameVersion(DEFAULT_VERSION)
+  }, [setGameVersion])
 
   return (
     <>
