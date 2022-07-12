@@ -9,7 +9,7 @@ import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
 import CONFIG from './config'
-import factory from './i18n'
+import { factory } from './i18n'
 
 const server = setupServer(
   ...[

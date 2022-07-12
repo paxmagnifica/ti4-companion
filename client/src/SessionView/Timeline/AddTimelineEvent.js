@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react'
 import { CircularProgress, Button, TextField } from '@material-ui/core'
 import { Image as ImageIcon, Close as CloseIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-import { Trans, useTranslation } from 'react-i18next'
 
+import { Trans, useTranslation } from '../../i18n'
 import ImagePicker from '../../shared/ImagePicker'
 import { useDomainErrors } from '../../shared/errorHandling'
 

@@ -1,6 +1,5 @@
 import { useMemo, useCallback, useState } from 'react'
 import clsx from 'clsx'
-import { useTranslation } from 'react-i18next'
 import Flags from 'country-flag-icons/react/3x2'
 import {
   ListItemIcon,
@@ -12,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useFullscreen } from '../Fullscreen'
+import { useTranslation } from '.'
 
 const langNames = {
   pl: 'Polski',

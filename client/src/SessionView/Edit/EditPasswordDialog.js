@@ -8,8 +8,8 @@ import {
   DialogTitle,
   DialogContent,
 } from '@material-ui/core'
-import { Trans } from 'react-i18next'
 
+import { Trans } from '../../i18n'
 import { useSessionContext } from '../useSessionContext'
 
 import { usePassword } from './queries'

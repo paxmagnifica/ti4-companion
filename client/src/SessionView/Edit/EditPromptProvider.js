@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { Snackbar, Button, IconButton } from '@material-ui/core'
 import { Edit as EditIcon, Close as CloseIcon } from '@material-ui/icons'
-import { Trans, useTranslation } from 'react-i18next'
 
+import { Trans, useTranslation } from '../../i18n'
 import { useSessionContext } from '../useSessionContext'
 
 export function EditPromptProvider() {

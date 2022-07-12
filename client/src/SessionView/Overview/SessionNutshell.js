@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core'
-import { Trans } from 'react-i18next'
 
+import { Trans } from '../../i18n'
 import { useSessionContext } from '../useSessionContext'
 
 export function SessionNutshell() {

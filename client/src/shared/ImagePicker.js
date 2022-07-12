@@ -3,7 +3,8 @@ import { useDropzone } from 'react-dropzone'
 import { Grid, Snackbar } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import { makeStyles } from '@material-ui/core/styles'
-import { useTranslation, Trans } from 'react-i18next'
+
+import { useTranslation, Trans } from '../i18n'
 
 import useSmallViewport from './useSmallViewport'
 

@@ -11,10 +11,10 @@ import {
 } from '@material-ui/core'
 import { Link, generatePath } from 'react-router-dom'
 import { LocalLibrary, PhotoLibrary, Info } from '@material-ui/icons'
-import { useTranslation, Trans } from 'react-i18next'
 
+import { useTranslation, Trans } from '../../i18n'
 import { SESSION_VIEW_ROUTES } from '../../shared/constants'
-import * as factions from '../../gameInfo/factions'
+import { useFactionData } from '../../GameComponents'
 
 import { FactionNutshell } from './FactionNutshell'
 import { DraftSummaryDialog } from './DraftSummaryDialog'
@@ -27,12 +27,13 @@ function FactionNutshells({
   wasDrafted,
 }) {
   const { t } = useTranslation()
+  const { getData: getFactionData } = useFactionData()
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
 
   const [draftSummaryDialogOpen, setDraftSummaryDialogOpen] = useState(false)
 
   return players.map(({ atTable, faction, playerName, color, speaker }) => {
-    const factionData = factions.getData(faction)
+    const factionData = getFactionData(faction)
     const factionName = t(`factions.${faction}.name`)
 
     const player = (
@@ -103,7 +104,7 @@ function FactionNutshells({
             />
             <CardMedia
               className={classes.media}
-              image={factions.getFactionCheatSheetPath(factionData.key)}
+              image={getFactionData(factionData.key).cheatSheetPath}
               onClick={() => setFactionNutshellKey(factionData.key)}
               title={factionName}
             />
@@ -130,7 +131,7 @@ function FactionNutshells({
                 <IconButton
                   aria-label={t('sessionView.overview.openOriginal')}
                   className={classes.factionCardIcon}
-                  href={factions.getFactionCheatSheetPath(factionData.key)}
+                  href={getFactionData(factionData.key).cheatSheetPath}
                   target="about:blank"
                 >
                   <PhotoLibrary />

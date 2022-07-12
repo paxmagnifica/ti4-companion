@@ -11,12 +11,12 @@ import {
 import { Check } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { generatePath, useHistory } from 'react-router-dom'
-import { Trans } from 'react-i18next'
 
+import { Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
-import { factionsList } from '../gameInfo/factions'
+import { GameVersionPicker, useFactionsData } from '../GameComponents'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -41,6 +41,7 @@ const useStyles = makeStyles({
 export function SetFactions() {
   const classes = useStyles()
 
+  const [gameVersion, setGameVersion] = useState()
   const [selectedFactions, setSelected] = useState([])
   const isSelected = useCallback(
     (factionKey) => selectedFactions.includes(factionKey),
@@ -70,6 +71,7 @@ export function SetFactions() {
       setPasswordProtectionDialogOpen(false)
       const session = await sessionService.createSession({
         setupType: 'simple',
+        gameVersion,
         factions: selectedFactions,
         password,
       })
@@ -80,11 +82,15 @@ export function SetFactions() {
         { secret: session.secret },
       )
     },
-    [history, selectedFactions, sessionService],
+    [history, selectedFactions, sessionService, gameVersion],
   )
+
+  const { factions: factionsList } = useFactionsData(gameVersion)
 
   return (
     <>
+      <GameVersionPicker onChange={setGameVersion} value={gameVersion} />
+
       <Box className={classes.root} mb={2}>
         <Container>
           <Typography variant="h4">
@@ -110,8 +116,8 @@ export function SetFactions() {
         ))}
       </Grid>
       <Fab
-        className={classes.fab}
         aria-label="add"
+        className={classes.fab}
         color="secondary"
         disabled={!selectedFactions.length}
         onClick={openPasswordProtectionDialog}

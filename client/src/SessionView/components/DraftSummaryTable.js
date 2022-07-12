@@ -9,10 +9,11 @@ import {
   TableContainer,
   TableRow,
 } from '@material-ui/core'
-import { Trans, useTranslation } from 'react-i18next'
+
+import { Trans, useTranslation } from '../../i18n'
+import FactionFlag from '../../shared/FactionFlag'
 
 import { MapPreview } from './MapPreview'
-import FactionFlag from '../../shared/FactionFlag'
 
 export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
   const { t } = useTranslation()

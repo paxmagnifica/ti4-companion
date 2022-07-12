@@ -103,6 +103,17 @@ namespace server
             {
                 context.Items.Add("ListIdentifier", context.Request.Headers["x-ti4companion-list-identifier"].ToString());
 
+                if (context.Request.Headers.ContainsKey("x-ti4companion-game-version"))
+                {
+                    context.Items.Add("GameVersion", (GameVersion)Enum.Parse(typeof(GameVersion), context.Request.Headers["x-ti4companion-game-version"].ToString()));
+                }
+                else
+                {
+                    // WARNING if you're changing this default version, change the default in /client/src/GameComponents/GameVersionPicker.js
+                    context.Items.Add("GameVersion", GameVersion.PoK_Codex2);
+
+                }
+
                 await next.Invoke();
             });
 
@@ -110,7 +121,8 @@ namespace server
             {
                 var protect = context.Request.Method == "POST" && context.Request.Path.ToString().StartsWith("/api/sessions/") && !context.Request.Path.ToString().EndsWith("/edit");
                 context.Items.Add("Protect", protect);
-                if (protect) {
+                if (protect)
+                {
                     logger.LogDebug($"protecting {context.Request.Path.ToString()}");
                 }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 
+import { useTranslation } from './i18n'
 import config from './config'
 
 const BASE_URL = 'https://app.chatwoot.com'

@@ -1,4 +1,4 @@
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation, Trans } from './i18n'
 
 export function Footer() {
   const { t } = useTranslation()

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Link } from '@material-ui/core'
-import { Trans, useTranslation } from 'react-i18next'
 
+import { Trans, useTranslation } from '../i18n'
 import tradeGoods from '../assets/tradegoods.png'
 import useSmallViewport from '../shared/useSmallViewport'
 

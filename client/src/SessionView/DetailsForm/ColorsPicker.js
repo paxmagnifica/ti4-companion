@@ -1,4 +1,3 @@
-import { Trans } from 'react-i18next'
 import {
   Typography,
   Select,
@@ -7,6 +6,8 @@ import {
   Grid,
   InputLabel,
 } from '@material-ui/core'
+
+import { Trans } from '../../i18n'
 import { colors as plasticColors } from '../../shared/plasticColors'
 
 export function ColorsPicker({ colors, players, onChange, disabled }) {

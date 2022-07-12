@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo } from 'react'
-import { Trans } from 'react-i18next'
 import { makeStyles } from '@material-ui/core/styles'
 import { generatePath, useHistory } from 'react-router-dom'
 import {
@@ -14,10 +13,11 @@ import {
   Button,
 } from '@material-ui/core'
 
-import { factionsList } from '../gameInfo/factions'
+import { Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
+import { GameVersionPicker, useFactionsList } from '../GameComponents'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
 
@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
 
 export function DraftSetup() {
   const classes = useStyles()
+
+  const [gameVersion, setGameVersion] = useState()
+  const { factions: factionsList } = useFactionsList(gameVersion)
   const [playerCount, setPlayerCount] = useState(6)
   const [players, setPlayers] = useState([
     'Player 1',
@@ -71,10 +74,11 @@ export function DraftSetup() {
   const startDraft = useCallback(
     async ({ password }) => {
       const session = await sessionService.createSession({
+        gameVersion,
         password,
         setupType: 'draft',
         options: {
-          initialPool: factionsList.map(({ key }) => key),
+          initialPool: factionsList,
           players,
           bans,
           banRounds,
@@ -90,6 +94,7 @@ export function DraftSetup() {
       )
     },
     [
+      factionsList,
       players,
       sessionService,
       bans,
@@ -97,6 +102,7 @@ export function DraftSetup() {
       bansPerRound,
       tablePick,
       history,
+      gameVersion,
     ],
   )
   const [passwordProtectionOpen, setPasswordProtectionOpen] = useState(false)
@@ -133,6 +139,8 @@ export function DraftSetup() {
 
   return (
     <>
+      <GameVersionPicker onChange={setGameVersion} value={gameVersion} />
+
       <Box mb={2}>
         <Container>
           <Typography variant="h4">Setup your draft</Typography>

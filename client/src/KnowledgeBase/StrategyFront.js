@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
-import { useTranslation } from 'react-i18next'
 
-import { images } from '../gameInfo/strategyCards'
+import { useTranslation } from '../i18n'
+import { images } from '../GameComponents/gameInfo/strategyCards'
 
 const referenceWidth = 805
 const referenceHeight = 1000

@@ -1,9 +1,8 @@
-import { useTranslation } from 'react-i18next'
-
-import * as factions from '../gameInfo/factions'
+import { useTranslation } from '../i18n'
+import { useFactionData } from '../GameComponents'
 
 export function FactionImage({ factionKey, ...props }) {
-  const factionData = factions.getData(factionKey)
+  const factionData = useFactionData(factionKey)
   const { t } = useTranslation()
 
   return (

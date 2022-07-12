@@ -2,17 +2,21 @@ import { useQuery } from 'react-query'
 
 import CONFIG from '../config'
 import { handleErrors } from '../shared/errorHandling'
+import { useGameVersion } from './useGameVersion'
 
-const queryKey = ['objectives']
+const queryKey = (gameVersion) => ['objectives', gameVersion]
 
-// TODO could set a very high TTL
 export const useObjectives = () => {
+  const { gameVersion } = useGameVersion()
+
   const { data: objectives, ...queryInfo } = useQuery(
-    queryKey,
+    queryKey(gameVersion),
     async () => {
-      const result = await fetch(`${CONFIG.apiUrl}/api/objectives`).then(
-        handleErrors,
-      )
+      const result = await fetch(`${CONFIG.apiUrl}/api/objectives`, {
+        headers: {
+          'x-ti4companion-game-version': gameVersion,
+        },
+      }).then(handleErrors)
 
       const availableObjectives = await result.json()
 
@@ -22,7 +26,6 @@ export const useObjectives = () => {
       )
     },
     {
-      staleTime: Infinity,
       placeholderData: {},
     },
   )

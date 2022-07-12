@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Map as MapIcon } from '@material-ui/icons'
-import { useTranslation, Trans } from 'react-i18next'
+
+import { useTranslation, Trans } from '../../i18n'
 
 import MapUpload from './MapUpload'
 

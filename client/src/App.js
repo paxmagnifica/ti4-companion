@@ -18,7 +18,6 @@ import {
   createTheme,
   ThemeProvider,
 } from '@material-ui/core/styles'
-import { useTranslation, Trans } from 'react-i18next'
 
 import { SupportTheCreator } from './Support'
 import { DomainErrorProvider } from './shared/errorHandling'
@@ -30,15 +29,15 @@ import SessionView from './SessionView'
 import { SignalRConnectionProvider } from './signalR'
 import { KnowledgeBase } from './KnowledgeBase'
 import { useFullscreen } from './Fullscreen'
-import i18nFactory from './i18n'
+import { factory as i18nFactory, useTranslation, Trans } from './i18n'
 import LanguageSwitcher from './i18n/languageSwitcher'
 import GitHubRibbon from './GitHubRibbon'
 import config from './config'
 import { Footer } from './Footer'
 import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
-import { useObjectives } from './queries'
 import { PanicPage } from './PanicPage'
+import { GameVersionProvider } from './GameComponents'
 
 i18nFactory()
 
@@ -85,8 +84,6 @@ function App() {
   const { fullscreen, exitFullscreen } = useFullscreen({
     onFullscreenChange: (x) => setChatVisible(!x),
   })
-
-  useObjectives()
 
   return (
     <ThemeProvider theme={theme}>
@@ -166,6 +163,14 @@ function App() {
   )
 }
 
+function AppWithProviders() {
+  return (
+    <GameVersionProvider>
+      <App />
+    </GameVersionProvider>
+  )
+}
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -179,7 +184,7 @@ function SignalRConnectedApp() {
   return (
     <SignalRConnectionProvider>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <AppWithProviders />
         {config.isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </SignalRConnectionProvider>

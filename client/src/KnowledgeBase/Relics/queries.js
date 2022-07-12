@@ -2,23 +2,27 @@ import { useQuery } from 'react-query'
 
 import CONFIG from '../../config'
 import { handleErrors } from '../../shared/errorHandling'
+import { useGameVersion } from '../../GameComponents'
 
-const queryKey = ['relics']
+const queryKey = (gameVersion) => ['relics', gameVersion]
 
-// TODO could set a very high TTL
 export const useRelics = () => {
+  const { gameVersion } = useGameVersion()
+
   const { data: relics, ...queryInfo } = useQuery(
-    queryKey,
+    queryKey(gameVersion),
     async () => {
-      const result = await fetch(`${CONFIG.apiUrl}/api/relics`).then(
-        handleErrors,
-      )
+      const result = await fetch(`${CONFIG.apiUrl}/api/relics`, {
+        headers: {
+          'x-ti4companion-game-version': gameVersion,
+        },
+      }).then(handleErrors)
 
       const results = await result.json()
 
       return results.reduce((accu, obj) => ({ ...accu, [obj.slug]: obj }), {})
     },
-    { staleTime: Infinity },
+    { placeholderData: {} },
   )
 
   return {

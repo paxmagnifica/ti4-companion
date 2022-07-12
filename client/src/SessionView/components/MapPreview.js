@@ -3,8 +3,8 @@ import clsx from 'clsx'
 import { Button, Drawer, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Map as MapIcon } from '@material-ui/icons'
-import { Trans, useTranslation } from 'react-i18next'
 
+import { Trans, useTranslation } from '../../i18n'
 import useSmallViewport from '../../shared/useSmallViewport'
 
 const useStyles = makeStyles((theme) => ({

@@ -9,12 +9,12 @@ import {
 } from '@material-ui/core'
 import { Info as InfoIcon } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-import { Trans } from 'react-i18next'
 import clsx from 'clsx'
 
-import { getData } from '../../../gameInfo/factions'
-import { FactionNutshell } from '../FactionNutshell'
+import { Trans } from '../../../i18n'
+import { useFactionData } from '../../../GameComponents'
 import { EditPrompt } from '../../Edit'
+import { FactionNutshell } from '../FactionNutshell'
 
 const useStyles = makeStyles((theme) => ({
   containedButton: {
@@ -81,6 +81,7 @@ export function DraftPool({
     [selected, onSelected, isSelected],
   )
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
+  const { getData } = useFactionData()
 
   return (
     <>

@@ -16,7 +16,7 @@ namespace server.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.15")
+                .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("SessionSessionList", b =>
@@ -81,6 +81,9 @@ namespace server.Migrations
 
                     b.HasKey("Slug");
 
+                    b.HasIndex("Slug", "GameVersion")
+                        .IsUnique();
+
                     b.ToTable("Explorations");
                 });
 
@@ -131,6 +134,9 @@ namespace server.Migrations
 
                     b.HasKey("Slug");
 
+                    b.HasIndex("Slug", "GameVersion")
+                        .IsUnique();
+
                     b.ToTable("Objectives");
                 });
 
@@ -143,6 +149,9 @@ namespace server.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Slug");
+
+                    b.HasIndex("Slug", "GameVersion")
+                        .IsUnique();
 
                     b.ToTable("Relics");
                 });

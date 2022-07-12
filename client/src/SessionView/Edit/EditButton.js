@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
 import {
   DialogActions,
   Button,
@@ -12,6 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { Edit } from '@material-ui/icons'
 
+import { Trans, useTranslation } from '../../i18n'
 import { useSessionContext } from '../useSessionContext'
 
 import { EditPasswordDialog } from './EditPasswordDialog'

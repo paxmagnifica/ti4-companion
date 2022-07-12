@@ -1,10 +1,10 @@
 import Objective from './Objective'
 
-import { renderWithClient, getTestQueryClient } from '../testUtils'
+import { renderWithProviders, getTestQueryClient } from '../testUtils'
 
 test('should display status phase on secret objective', async () => {
   // when
-  const { findByText } = renderWithClient(
+  const { findByText } = renderWithProviders(
     getTestQueryClient(),
     <Objective slug="status-phase-objective" />,
   )
@@ -15,7 +15,7 @@ test('should display status phase on secret objective', async () => {
 
 test('should display action phase on secret objective', async () => {
   // when
-  const { findByText } = renderWithClient(
+  const { findByText } = renderWithProviders(
     getTestQueryClient(),
     <Objective slug="action-phase-objective" />,
   )
@@ -26,7 +26,7 @@ test('should display action phase on secret objective', async () => {
 
 test('should display agenda phase on secret objective', async () => {
   // when
-  const { findByText } = renderWithClient(
+  const { findByText } = renderWithProviders(
     getTestQueryClient(),
     <Objective slug="agenda-phase-objective" />,
   )

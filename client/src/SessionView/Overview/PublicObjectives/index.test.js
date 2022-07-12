@@ -1,7 +1,7 @@
 import { fireEvent } from '@testing-library/react'
 
 import { ComboDispatchContext } from '../../../state'
-import { renderWithClient, getTestQueryClient } from '../../../testUtils'
+import { renderWithProviders, getTestQueryClient } from '../../../testUtils'
 
 import PublicObjectives from './index'
 
@@ -29,7 +29,7 @@ test('should add one point to faction when stage one objective is scored', async
     remote: true,
   }
 
-  const { findByTitle } = renderWithClient(
+  const { findByTitle } = renderWithProviders(
     getTestQueryClient(),
     <ComboDispatchContext.Provider value={dispatch}>
       <PublicObjectives
@@ -75,7 +75,7 @@ test('should add two points to faction when second stage objective is scored', a
     remote: true,
   }
 
-  const { findByTitle } = renderWithClient(
+  const { findByTitle } = renderWithProviders(
     getTestQueryClient(),
     <ComboDispatchContext.Provider value={dispatch}>
       <PublicObjectives

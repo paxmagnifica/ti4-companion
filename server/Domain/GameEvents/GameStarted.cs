@@ -26,6 +26,7 @@ namespace server.Domain
 
         public string SetupType { get; set; }
         public List<string> Factions { get; set; }
+        public GameVersion GameVersion { get; set; }
         public DraftOptions Options { get; set; }
         public string Password { get; set; }
     }
