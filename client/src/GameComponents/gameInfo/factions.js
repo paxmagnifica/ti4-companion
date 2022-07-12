@@ -1,3 +1,5 @@
+import { GameVersion } from '../GameVersionPicker'
+
 export const FACTION = {
   The_Arborec: 'The_Arborec',
   The_Barony_of_Letnev: 'The_Barony_of_Letnev',
@@ -86,6 +88,7 @@ export const factionsData = {
     image:
       'https://static.wikia.nocookie.net/twilight-imperium-4/images/a/a7/Naalu.png',
     key: 'The_Naalu_Collective',
+    versionOverrides: [GameVersion.PoK_Codex3],
   },
   The_Nekro_Virus: {
     link: 'https://twilight-imperium.fandom.com/wiki/The_Nekro_Virus',
@@ -116,12 +119,14 @@ export const factionsData = {
     image:
       'https://static.wikia.nocookie.net/twilight-imperium-4/images/1/1a/Xxcha.png',
     key: 'The_Xxcha_Kingdom',
+    versionOverrides: [GameVersion.PoK_Codex3],
   },
   The_Yin_Brotherhood: {
     link: 'https://twilight-imperium.fandom.com/wiki/The_Yin_Brotherhood',
     image:
       'https://static.wikia.nocookie.net/twilight-imperium-4/images/f/f6/Yin.png',
     key: 'The_Yin_Brotherhood',
+    versionOverrides: [GameVersion.PoK_Codex3],
   },
   The_Yssaril_Tribes: {
     link: 'https://twilight-imperium.fandom.com/wiki/The_Yssaril_Tribes',
@@ -178,11 +183,3 @@ export const factionsData = {
     key: 'The_Council_Keleres',
   },
 }
-
-// export const factionsList = Object.values(factions)
-// export const getData = (key) => factions[key]
-
-// export const getFactionCheatSheetPath = (factionKey) =>
-// `/factionCheatsheets/${factionKey.toLowerCase()}.png`
-
-// export default factions

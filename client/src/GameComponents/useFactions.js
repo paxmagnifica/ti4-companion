@@ -38,6 +38,9 @@ export const useFactionsList = (versionOverride) => {
 }
 
 export const useFactionsData = (versionOverride) => {
+  const { gameVersion } = useGameVersion()
+  const versionToUse =
+    versionOverride === undefined ? gameVersion : versionOverride
   const { factions: list } = useFactionsList(versionOverride)
 
   return useMemo(
@@ -46,10 +49,14 @@ export const useFactionsData = (versionOverride) => {
         .filter(([key]) => list.includes(key))
         .map(([, factionData]) => ({
           ...factionData,
-          cheatSheetPath: `/factionCheatsheets/${factionData.key.toLowerCase()}.png`,
+          cheatSheetPath:
+            factionData.versionOverrides &&
+            factionData.versionOverrides.includes(versionToUse)
+              ? `/factionCheatsheets/${factionData.key.toLowerCase()}_${versionToUse}.png`
+              : `/factionCheatsheets/${factionData.key.toLowerCase()}.png`,
         })),
     }),
-    [list],
+    [list, versionToUse],
   )
 }
 
