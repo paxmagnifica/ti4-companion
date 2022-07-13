@@ -67,6 +67,8 @@ export function DraftSetup() {
 
   const [tablePick, setTablePick] = useState(true)
   const toggleTablePick = useCallback(() => setTablePick((tp) => !tp), [])
+  const [speakerPick, setSpeakerPick] = useState(true)
+  const toggleSpeakerPick = useCallback(() => setSpeakerPick((spp) => !spp), [])
 
   const history = useHistory()
   const { fetch } = useFetch()
@@ -84,6 +86,7 @@ export function DraftSetup() {
           banRounds,
           bansPerRound,
           tablePick,
+          speakerPick,
         },
       })
       history.push(
@@ -101,6 +104,7 @@ export function DraftSetup() {
       banRounds,
       bansPerRound,
       tablePick,
+      speakerPick,
       history,
       gameVersion,
     ],
@@ -209,6 +213,14 @@ export function DraftSetup() {
         <FormControlLabel
           control={<Switch checked={tablePick} onChange={toggleTablePick} />}
           label="pick place at the table as well as the faction"
+        />
+      </FormGroup>
+      <FormGroup className={classes.row} row>
+        <FormControlLabel
+          control={
+            <Switch checked={speakerPick} onChange={toggleSpeakerPick} />
+          }
+          label="pick speaker instead of assigning at random"
         />
       </FormGroup>
       <Button

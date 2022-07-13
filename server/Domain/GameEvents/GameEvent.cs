@@ -46,7 +46,7 @@ namespace server.Domain
             var reversedPlayerOrder = new List<int>();
             reversedPlayerOrder.AddRange(randomizedPlayerOrder);
             reversedPlayerOrder.Reverse();
-            var order = Enumerable.Range(0, rounds).SelectMany(round =>
+            List<int> order = Enumerable.Range(0, rounds).SelectMany(round =>
             {
                 if (round % 2 == 0)
                 {
@@ -54,7 +54,10 @@ namespace server.Domain
                 }
 
                 return reversedPlayerOrder;
-            });
+            }).ToList();
+            if (payload.Options.SpeakerPick) {
+                order.Add(-1);
+            }
 
             return new GameEvent
             {

@@ -97,10 +97,15 @@ namespace server.Controllers
             Picks = pickEvents.Select(Picked.GetPayload).ToArray();
             ActivePlayerIndex = Phase == "bans" ? banEvents.Count() : pickEvents.Count();
 
-            var speakerEvent = orderedEvents.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
-            if (speakerEvent != null)
+            var speakerSelectedEvent = orderedEvents.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
+            if (speakerSelectedEvent != null)
             {
-                Speaker = SpeakerSelected.GetPayload(speakerEvent).SpeakerName;
+                Speaker = SpeakerSelected.GetPayload(speakerSelectedEvent).SpeakerName;
+            }
+            var speakerPickedEvent = pickEvents.LastOrDefault(e => Picked.GetPayload(e.SerializedPayload).Type == "speaker");
+            if (speakerPickedEvent != null)
+            {
+                Speaker = Picked.GetPayload(speakerPickedEvent.SerializedPayload).PlayerName;
             }
         }
 

@@ -47,6 +47,7 @@ namespace server.Domain
         public int BanRounds { get; set; }
         public int BansPerRound { get; set; }
         public bool TablePick { get; set; }
+        public bool SpeakerPick { get; set; }
         public int AllBansCount { get => PlayerCount * BansPerRound * BanRounds; }
     }
 }
