@@ -59,7 +59,7 @@ namespace server.Controllers
 
             if (payload.SetupType == "draft")
             {
-                newSession.Events.Add(GameEvent.GenerateOrderEvent(sessionId, payload, payload.Options.BanRounds, _timeProvider.Now));
+                newSession.Events.Add(GameEvent.GenerateOrderEvent(sessionId, payload, payload.Options.BanRounds, _timeProvider.Now, addForSpeaker: false));
             }
 
             await _repository.SaveSessionToListAsync(this.HttpContext.Items["ListIdentifier"].ToString(), newSession);
