@@ -387,7 +387,9 @@ function PickStepper({ draft }) {
           />
         )
       case 'speaker':
-        return 'speaker'
+        return (
+          <img src={speakerFront} style={{ height: 'auto', width: '100%' }} alt='speaker' />
+        )
       default:
         return (
           <>
