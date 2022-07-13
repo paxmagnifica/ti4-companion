@@ -187,7 +187,7 @@ function TablePositionPick({
   )
 }
 
-function SpeakerSelectorToggle({ selected, onChange, disabled }) {
+function SpeakerSelectorToggle({ selected, onChange, disabled, cannotSelect }) {
   const classes = useStyles()
 
   const onClick = () => {
@@ -207,18 +207,19 @@ function SpeakerSelectorToggle({ selected, onChange, disabled }) {
           onClick={onClick}
           role="checkbox"
           style={{
-            cursor: disabled ? 'auto' : 'pointer',
+            cursor: disabled || cannotSelect ? 'auto' : 'pointer',
             borderRadius: '2%',
             width: '200px',
             height: '81px',
             backgroundSize: '100% auto',
             border: `2px solid ${selected ? '#f50057' : 'transparent'}`,
-            opacity: !selected || disabled ? 0.7 : 1,
-            backgroundImage: disabled
+            opacity: !selected || disabled || cannotSelect ? 0.7 : 1,
+            backgroundImage: cannotSelect
               ? `url(${speakerBack})`
               : `url(${speakerFront})`,
           }}
           tabIndex={0}
+          title={cannotSelect ? 'already selected' : 'select speaker'}
         />
       </Grid>
     </Grid>
@@ -310,14 +311,10 @@ function Pick({
       </EditPrompt>
       {session.setup.options.speakerPick && (
         <SpeakerSelectorToggle
-          disabled={
-            disabled || draft.picks.some(({ type }) => type === 'speaker')
-          }
+          cannotSelect={draft.picks.some(({ type }) => type === 'speaker')}
+          disabled={disabled}
           onChange={handleSpeakerSelected}
-          selected={
-            speakerSelected ||
-            draft.picks.some(({ type }) => type === 'speaker')
-          }
+          selected={speakerSelected}
         />
       )}
       {session.setup.options.tablePick && (
@@ -329,7 +326,7 @@ function Pick({
               ({ type, playerIndex }) =>
                 type === 'tablePosition' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           draft={draft}
@@ -550,7 +547,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           initialPool={draft.initialPool}
@@ -570,7 +567,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           initialPool={draft.initialPool.filter(
