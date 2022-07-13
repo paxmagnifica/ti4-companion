@@ -203,9 +203,7 @@ function SpeakerSelectorToggle({ selected, onChange, disabled, cannotSelect }) {
     >
       <Grid item>
         <div
-          aria-checked={selected}
           onClick={onClick}
-          role="checkbox"
           style={{
             cursor: disabled || cannotSelect ? 'auto' : 'pointer',
             borderRadius: '2%',
@@ -218,7 +216,6 @@ function SpeakerSelectorToggle({ selected, onChange, disabled, cannotSelect }) {
               ? `url(${speakerBack})`
               : `url(${speakerFront})`,
           }}
-          tabIndex={0}
           title={cannotSelect ? 'already selected' : 'select speaker'}
         />
       </Grid>
@@ -388,7 +385,11 @@ function PickStepper({ draft }) {
         )
       case 'speaker':
         return (
-          <img src={speakerFront} style={{ height: 'auto', width: '100%' }} alt='speaker' />
+          <img
+            src={speakerFront}
+            style={{ height: 'auto', width: '100%' }}
+            alt="speaker"
+          />
         )
       default:
         return (
