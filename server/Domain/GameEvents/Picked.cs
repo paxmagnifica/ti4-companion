@@ -43,31 +43,34 @@ namespace server.Domain
             }
             var gameStartEvent = orderedEvents.FirstOrDefault(e => e.EventType == nameof(GameStarted));
             var gameStartOptions = GameStarted.GetPayload(gameStartEvent).Options;
-            var expectedPicksCount = gameStartOptions.PlayerCount;
-            if (gameStartOptions.TablePick)
-            {
-                expectedPicksCount = expectedPicksCount * 2;
-            }
             if (gameStartOptions.SpeakerPick)
             {
-                expectedPicksCount += 1;
-            }
-            var pickEventsCount = session.Events.Count(e => e.EventType == nameof(Picked));
-            if (pickEventsCount == expectedPicksCount)
-            {
-                // WARNING copied from CommitDraft
-                // TODO we should implement proper CQRS and return CommitDraft event from here as a side effect
-                var factionPicks = session.Events.Where(e => e.EventType == nameof(Picked)).Select(Picked.GetPayload).Where(fp => fp.Type == "faction").Select(fp => fp.Pick);
-                var commitDraft = new GameEvent
+                var expectedPicksCount = gameStartOptions.PlayerCount;
+                if (gameStartOptions.TablePick)
                 {
-                    SessionId = session.Id,
-                    HappenedAt = gameEvent.HappenedAt.AddMilliseconds(2),
-                    EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new { factions = factionPicks })
-                };
-                session.Events.Add(commitDraft);
-            }
+                    expectedPicksCount = expectedPicksCount * 2;
+                }
+                if (gameStartOptions.SpeakerPick)
+                {
+                    expectedPicksCount += 1;
+                }
+                var pickEventsCount = session.Events.Count(e => e.EventType == nameof(Picked));
+                if (pickEventsCount == expectedPicksCount)
+                {
+                    // WARNING copied from CommitDraft
+                    // TODO we should implement proper CQRS and return CommitDraft event from here as a side effect
+                    var factionPicks = session.Events.Where(e => e.EventType == nameof(Picked)).Select(Picked.GetPayload).Where(fp => fp.Type == "faction").Select(fp => fp.Pick);
+                    var commitDraft = new GameEvent
+                    {
+                        SessionId = session.Id,
+                        HappenedAt = gameEvent.HappenedAt.AddMilliseconds(2),
+                        EventType = nameof(CommitDraft),
+                        SerializedPayload = JsonConvert.SerializeObject(new { factions = factionPicks })
+                    };
+                    session.Events.Add(commitDraft);
+                }
 
+            }
             _repository.UpdateSession(session);
 
             await _repository.SaveChangesAsync();
