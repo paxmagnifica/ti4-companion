@@ -39,14 +39,14 @@ namespace server.Domain
         public const string MapAdded = "MapAdded";
         public const string TimelineUserEvent = "TimelineUserEvent";
 
-        public static GameEvent GenerateOrderEvent(Guid sessionId, GameStartedPayload payload, int rounds, DateTimeOffset When)
+        public static GameEvent GenerateOrderEvent(Guid sessionId, GameStartedPayload payload, int rounds, DateTimeOffset When, bool addForSpeaker)
         {
             var randomizedPlayerOrder = Enumerable.Range(0, payload.Options.Players.Length).ToList();
             randomizedPlayerOrder.Shuffle();
             var reversedPlayerOrder = new List<int>();
             reversedPlayerOrder.AddRange(randomizedPlayerOrder);
             reversedPlayerOrder.Reverse();
-            var order = Enumerable.Range(0, rounds).SelectMany(round =>
+            List<int> order = Enumerable.Range(0, rounds).SelectMany(round =>
             {
                 if (round % 2 == 0)
                 {
@@ -54,7 +54,10 @@ namespace server.Domain
                 }
 
                 return reversedPlayerOrder;
-            });
+            }).ToList();
+            if (addForSpeaker && payload.Options.SpeakerPick) {
+                order.Add(-1);
+            }
 
             return new GameEvent
             {

@@ -84,18 +84,24 @@ const useStepperStyles = makeStyles((theme) => ({
   },
 }))
 
-export function PhaseStepper({ phase, bans }) {
+export function PhaseStepper({ phase, bans, speakerInPicks }) {
   const classes = useStepperStyles()
 
-  const phases = bans
-    ? [PHASE.bans, PHASE.picks, PHASE.speaker]
-    : [PHASE.picks, PHASE.speaker]
-  const steps = bans
-    ? ['Ban', 'Pick', 'Speaker selection']
-    : ['Pick', 'Speaker selection']
-  const icons = bans
-    ? [<BanIcon />, <PickIcon />, <SpeakerIcon />]
-    : [<PickIcon />, <SpeakerIcon />]
+  const phases = [
+    bans ? PHASE.bans : null,
+    PHASE.picks,
+    speakerInPicks ? null : PHASE.speaker,
+  ].filter((a) => a !== null)
+  const steps = [
+    bans ? 'Ban' : null,
+    'Pick',
+    speakerInPicks ? null : 'Speaker selection',
+  ].filter((a) => a !== null)
+  const icons = [
+    bans ? <BanIcon /> : null,
+    <PickIcon />,
+    speakerInPicks ? null : <SpeakerIcon />,
+  ].filter((a) => a !== null)
   const activeStep = phases.findIndex((a) => a === phase)
 
   return (

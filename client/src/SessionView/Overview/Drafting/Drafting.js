@@ -6,6 +6,8 @@ import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
+import speakerFront from '../../../assets/speaker-front.png'
+import speakerBack from '../../../assets/speaker-back.png'
 import { useTranslation } from '../../../i18n'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { FactionImage } from '../../../shared/FactionImage'
@@ -185,7 +187,44 @@ function TablePositionPick({
   )
 }
 
+function SpeakerSelectorToggle({ selected, onChange, disabled, cannotSelect }) {
+  const classes = useStyles()
+
+  const onClick = () => {
+    onChange(!selected)
+  }
+
+  return (
+    <Grid
+      className={classes.marginTop}
+      container
+      justifyContent="center"
+      spacing={4}
+    >
+      <Grid item>
+        <div
+          onClick={onClick}
+          style={{
+            cursor: disabled || cannotSelect ? 'auto' : 'pointer',
+            borderRadius: '2%',
+            width: '200px',
+            height: '81px',
+            backgroundSize: '100% auto',
+            border: `2px solid ${selected ? '#f50057' : 'transparent'}`,
+            opacity: !selected || disabled || cannotSelect ? 0.7 : 1,
+            backgroundImage: cannotSelect
+              ? `url(${speakerBack})`
+              : `url(${speakerFront})`,
+          }}
+          title={cannotSelect ? 'already selected' : 'select speaker'}
+        />
+      </Grid>
+    </Grid>
+  )
+}
+
 // TODO onPositionSelected ugly hack because of state being in the wrong place
+// same with onSpeakerSelected (heh)
 function Pick({
   disabled,
   pick,
@@ -194,9 +233,18 @@ function Pick({
   session,
   sessionService,
   onPositionSelected,
+  onSpeakerSelected,
 }) {
+  const [speakerSelected, setSpeakerSelected] = useState(false)
   const [selectedPosition, setSelectedPosition] = useState(null)
   const { setError } = useDomainErrors()
+  const handleSpeakerSelected = useCallback(
+    (v) => {
+      setSpeakerSelected(v)
+      onSpeakerSelected(v)
+    },
+    [onSpeakerSelected],
+  )
   const handleSelectedPosition = useCallback(
     (playerIndex) => {
       const value = selectedPosition === playerIndex ? null : playerIndex
@@ -206,34 +254,36 @@ function Pick({
     },
     [selectedPosition, onPositionSelected],
   )
-  const pickMutation = useCallback(async () => {
+  const pickMutation = async () => {
+    let eventPick = pick || selectedPosition
+    if (speakerSelected) {
+      eventPick = 'speaker'
+    }
+
+    let eventType = pick ? 'faction' : 'tablePosition'
+    if (speakerSelected) {
+      eventType = 'speaker'
+    }
+
     try {
       await sessionService.pushEvent(session.id, {
         type: 'Picked',
         payload: {
           sessionId: session.id,
-          pick: pick || selectedPosition,
-          type: pick ? 'faction' : 'tablePosition',
+          pick: eventPick,
+          type: eventType,
           playerIndex: draft.order[draft.activePlayerIndex],
           playerName: draft.players[draft.order[draft.activePlayerIndex]],
         },
       })
       setSelectedPosition(null)
       onPositionSelected(null)
+      handleSpeakerSelected(false)
       clearSelection()
     } catch (e) {
       setError(e)
     }
-  }, [
-    setError,
-    selectedPosition,
-    clearSelection,
-    sessionService,
-    pick,
-    session.id,
-    draft,
-    onPositionSelected,
-  ])
+  }
 
   const { mutate: pickFaction } = useDraftMutation({
     sessionId: session.id,
@@ -245,18 +295,30 @@ function Pick({
       <EditPrompt>
         <Button
           color="secondary"
-          disabled={disabled || (!pick && selectedPosition === null)}
+          disabled={
+            disabled || (!pick && selectedPosition === null && !speakerSelected)
+          }
           onClick={pickFaction}
           variant="contained"
         >
           pick{' '}
           {session.setup.options.tablePick ? ' (faction or table spot)' : ''}
+          {session.setup.options.speakerPick ? ' (or speaker)' : ''}
         </Button>
       </EditPrompt>
+      {session.setup.options.speakerPick && (
+        <SpeakerSelectorToggle
+          cannotSelect={draft.picks.some(({ type }) => type === 'speaker')}
+          disabled={disabled}
+          onChange={handleSpeakerSelected}
+          selected={speakerSelected}
+        />
+      )}
       {session.setup.options.tablePick && (
         <TablePositionPick
           disabled={
             disabled ||
+            speakerSelected ||
             draft.picks.some(
               ({ type, playerIndex }) =>
                 type === 'tablePosition' &&
@@ -304,6 +366,47 @@ function BanStepper({ draft, setup }) {
       activePlayer={draft.activePlayerIndex}
       history={history}
       order={draft.order.map((playerIndex) => draft.players[playerIndex])}
+      title={t(`drafting.speakerOrder.${draft.phase}.title`)}
+    />
+  )
+}
+
+function PickStepper({ draft }) {
+  const { t } = useTranslation()
+
+  const history = draft.picks.map(({ type, pick }) => {
+    switch (type) {
+      case 'faction':
+        return (
+          <FactionImage
+            factionKey={pick}
+            style={{ width: 'auto', height: '100%' }}
+          />
+        )
+      case 'speaker':
+        return (
+          <img
+            src={speakerFront}
+            style={{ height: 'auto', width: '100%' }}
+            alt="speaker"
+          />
+        )
+      default:
+        return (
+          <>
+            <MapIcon /> {`P${Number(pick) + 1}`}
+          </>
+        )
+    }
+  })
+
+  return (
+    <PlayerOrderStepper
+      activePlayer={draft.activePlayerIndex}
+      history={history}
+      order={draft.order.map(
+        (playerIndex) => draft.players[playerIndex] || 'TBD',
+      )}
       title={t(`drafting.speakerOrder.${draft.phase}.title`)}
     />
   )
@@ -357,7 +460,6 @@ function Ban({
 }
 
 export function Drafting({ editable, session, sessionService }) {
-  const { t } = useTranslation()
   const [disableFactionSelection, setDisableFactionSelection] = useState(false)
   const [selected, setSelected] = useState([])
   const { draft } = useDraftQuery({
@@ -388,29 +490,12 @@ export function Drafting({ editable, session, sessionService }) {
       <PhaseStepper
         bans={Boolean(session.setup?.options?.bans)}
         phase={draft.phase}
+        speakerInPicks={Boolean(session.setup?.options?.speakerPick)}
       />
       {draft.phase === PHASE.bans && (
         <BanStepper draft={draft} setup={session.setup} />
       )}
-      {draft.phase === PHASE.picks && (
-        <PlayerOrderStepper
-          activePlayer={draft.activePlayerIndex}
-          history={draft.picks.map(({ type, pick }) =>
-            type === 'faction' ? (
-              <FactionImage
-                factionKey={pick}
-                style={{ width: 'auto', height: '100%' }}
-              />
-            ) : (
-              <>
-                <MapIcon /> {`P${Number(pick) + 1}`}
-              </>
-            ),
-          )}
-          order={draft.order.map((playerIndex) => draft.players[playerIndex])}
-          title={t(`drafting.speakerOrder.${draft.phase}.title`)}
-        />
-      )}
+      {draft.phase === PHASE.picks && <PickStepper draft={draft} />}
       {draft.phase === PHASE.speaker && (
         <SpeakerIndicator indicated={draft.speaker} players={draft.players} />
       )}
@@ -423,6 +508,7 @@ export function Drafting({ editable, session, sessionService }) {
             onPositionSelected={(selectedPosition) => {
               setDisableFactionSelection(selectedPosition !== null)
             }}
+            onSpeakerSelected={setDisableFactionSelection}
             pick={selected[0]}
             session={session}
             sessionService={sessionService}
@@ -490,7 +576,7 @@ export function Drafting({ editable, session, sessionService }) {
           initialPool={draft.initialPool.filter(
             (factionKey) => !bannedFactionKeys.includes(factionKey),
           )}
-          max={draft.phase === PHASE.bans ? draft.bansPerRound : 1}
+          max={1}
           onSelected={setSelected}
           picks={draft.picks}
           selected={selected}

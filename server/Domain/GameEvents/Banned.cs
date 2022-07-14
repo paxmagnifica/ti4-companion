@@ -33,7 +33,7 @@ namespace server.Domain
             if (previousBanEvents.Count() + 1 == (payload.Options.PlayerCount * payload.Options.BanRounds))
             {
                 var pickRounds = payload.Options.TablePick ? 2 : 1;
-                eventsToAdd.Add(GameEvent.GenerateOrderEvent(gameEvent.SessionId, payload, pickRounds, _timeProvider.Now));
+                eventsToAdd.Add(GameEvent.GenerateOrderEvent(gameEvent.SessionId, payload, pickRounds, _timeProvider.Now, addForSpeaker: true));
             }
 
             session.Events.AddRange(eventsToAdd);
