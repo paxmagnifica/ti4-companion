@@ -24,45 +24,47 @@ export function PlayerOrderStepper({ history, order, activePlayer, title }) {
       <Typography align="center" variant="h4">
         {title}
       </Typography>
-      <Stepper
-        activeStep={activePlayer}
-        alternativeLabel
-        className={classes.root}
-      >
-        {order.map((label, index) => (
-          <Step color="secondary">
-            <StepLabel
-              optional={
-                <Typography
-                  align="center"
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '3em',
-                  }}
-                >
-                  {index === activePlayer ? (
-                    <ActiveIcon color="secondary" />
-                  ) : index < activePlayer ? (
-                    history[index] || <DoneIcon color="secondary" />
-                  ) : null}
-                </Typography>
-              }
-              StepIconComponent={PlayerIcon}
-              StepIconProps={{
-                className: clsx({ [classes.done]: index < activePlayer }),
-              }}
-            >
-              <Typography
-                className={clsx({ [classes.done]: index < activePlayer })}
+      <div style={{ maxWidth: '100%', overflow: 'auto' }}>
+        <Stepper
+          activeStep={activePlayer}
+          alternativeLabel
+          className={classes.root}
+        >
+          {order.map((label, index) => (
+            <Step color="secondary">
+              <StepLabel
+                optional={
+                  <Typography
+                    align="center"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '3em',
+                    }}
+                  >
+                    {index === activePlayer ? (
+                      <ActiveIcon color="secondary" />
+                    ) : index < activePlayer ? (
+                      history[index] || <DoneIcon color="secondary" />
+                    ) : null}
+                  </Typography>
+                }
+                StepIconComponent={PlayerIcon}
+                StepIconProps={{
+                  className: clsx({ [classes.done]: index < activePlayer }),
+                }}
               >
-                {label}
-              </Typography>
-            </StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+                <Typography
+                  className={clsx({ [classes.done]: index < activePlayer })}
+                >
+                  {label}
+                </Typography>
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </div>
     </>
   )
 }
