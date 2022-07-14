@@ -135,6 +135,7 @@ export const factory = (options = { debug: true }) =>
               consider: 'Consider supporting the creator',
             },
             general: {
+              releaseNotes: 'Release notes',
               paxmagnifica: 'Pax Magnifica Bellum Gloriosum',
               switchLanguage: 'Change language',
               home: 'Home',
