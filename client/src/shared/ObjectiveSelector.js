@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Box, FormGroup, Grid, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
+import { matchSorter } from 'match-sorter'
 
 import { useTranslation } from '../i18n'
 
@@ -19,6 +20,9 @@ export function ObjectiveSelector({ disabled, objectives, value, onChange }) {
     [objectives, t],
   )
 
+  const filterOptions = (options, { inputValue }) =>
+    matchSorter(options, inputValue, { keys: ['name', 'condition'] })
+
   return (
     <Grid container direction="column">
       <Grid item>
@@ -29,6 +33,7 @@ export function ObjectiveSelector({ disabled, objectives, value, onChange }) {
                 (obj) => obj.slug === value?.slug,
               )}
               disabled={disabled}
+              filterOptions={filterOptions}
               getOptionLabel={(option) => option.name}
               id="search-for-objective"
               onChange={(_, v) => onChange(v)}
