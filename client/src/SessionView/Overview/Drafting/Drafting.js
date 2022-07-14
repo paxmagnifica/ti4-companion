@@ -54,7 +54,6 @@ function Speaker({ disabled, draft, session, sessionService }) {
       await sessionService.pushEvent(session.id, {
         type: 'CommitDraft',
       })
-      window.location.reload()
     } catch (e) {
       setError(e)
     }
