@@ -8,6 +8,7 @@ Bear in mind that release notes before 2022-08-14 were compiled post-factum and 
 ## 2022-07-14
 - [feat] Added the ability to select speaker position in addition to faction and table position when drafting. [PR](https://github.com/paxmagnifica/ti4-companion/pull/255)
 - [feat] Added release notes and link to them in the app footer. [PR](https://github.com/paxmagnifica/ti4-companion/pull/256)
+- [fix] Fixed player order stepper on draft to not break layout and to scroll active picking player into view [issue](https://github.com/paxmagnifica/ti4-companion/issues/257)
 
 ## 2022-07-12
 - [feat] Added game version configuration when starting a session. Data on cheatsheets and in Knowledge Base is now contextual to the selected version (base, PoK, C2, C3). [PR](https://github.com/paxmagnifica/ti4-companion/pull/252)
