@@ -6,6 +6,7 @@ Bear in mind that release notes before 2022-08-14 were compiled post-factum and 
 
 ## 2022-07-21
 - [feat] If nobody selects speaker during draft, it is assigned randomly, excluding the last person who was picking and didn't select speaker. [PR](https://github.com/paxmagnifica/ti4-companion/pull/261)
+- [fix] Fixed Timeline - included Speaker Pick in the timeline and correctly assigns speaker based on pick [PR](https://github.com/paxmagnifica/ti4-companion/pull/263)
 
 ## 2022-07-14
 - [feat] Added the ability to select speaker position in addition to faction and table position when drafting. [PR](https://github.com/paxmagnifica/ti4-companion/pull/255)

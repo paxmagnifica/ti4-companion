@@ -280,6 +280,7 @@ export const factory = (options = { debug: true }) =>
               banned: '{{player}} banned:',
               picked: '{{player}} picked:',
               tableSpotPicked: 'Picked position at the table',
+              speakerPicked: 'Speaker picked by {{player}}',
               speakerAssigned: 'Speaker: {{speaker}}',
               draftSummary: {
                 title: 'Draft finished',

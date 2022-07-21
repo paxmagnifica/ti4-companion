@@ -41,6 +41,7 @@ import useInvalidateQueries from '../../useInvalidateQueries'
 import { DraftSummaryTable } from '../components'
 import { useTimelineEvents, queryKeys } from '../queries'
 import { VP_SOURCE } from '../../shared/constants'
+import speakerFront from '../../assets/speaker-front.png'
 
 import { Agenda } from './Agenda'
 import AddTimelineEvent from './AddTimelineEvent'
@@ -613,7 +614,7 @@ function Picked({ eventType, payload, happenedAt }) {
             values={{ player: payload.playerName }}
           />
         </Typography>
-        {payload.type === 'faction' ? (
+        {payload.type === 'faction' && (
           <Box key={payload.pick} style={{ display: 'inline-block' }}>
             <FactionFlag
               disabled
@@ -623,10 +624,25 @@ function Picked({ eventType, payload, happenedAt }) {
               width="4.5em"
             />
           </Box>
-        ) : (
+        )}
+        {payload.type === 'tablePosition' && (
           <Typography>
             <Trans i18nKey="sessionTimeline.tableSpotPicked" />:{' '}
             <strong>P{payload.pick + 1}</strong>
+          </Typography>
+        )}
+        {payload.type === 'speaker' && (
+          <Typography>
+            <img
+              alt={t('sessionTimeline.speakerPicked', {
+                player: payload.playerName,
+              })}
+              src={speakerFront}
+              style={{ width: '200px' }}
+              title={t('sessionTimeline.speakerPicked', {
+                player: payload.playerName,
+              })}
+            />
           </Typography>
         )}
       </Ti4TimelineContent>
