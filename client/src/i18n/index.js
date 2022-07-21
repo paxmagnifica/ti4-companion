@@ -135,7 +135,7 @@ export const factory = (options = { debug: true }) =>
               consider: 'Consider supporting the creator',
             },
             general: {
-              releaseNotes: 'Release notes',
+              releaseNotes: 'Change log',
               paxmagnifica: 'Pax Magnifica Bellum Gloriosum',
               switchLanguage: 'Change language',
               home: 'Home',
@@ -362,6 +362,10 @@ export const factory = (options = { debug: true }) =>
                 secretObj: {
                   button: 'Browse secret objectives',
                   title: 'Secret objectives',
+                },
+                technology: {
+                  button: 'See technologies and units',
+                  title: 'Technologies and units',
                 },
                 exploration: {
                   button: 'Browse {{type}} exploration cards',
