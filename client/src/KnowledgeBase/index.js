@@ -11,6 +11,7 @@ import stageIIObjectiveReverse from '../assets/objective-2-reverse.jpg'
 import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
 import explorationReverseSprite from '../assets/exploration-reverse-sprite.png'
 import relicSprite from '../assets/relic-sprite.jpg'
+import technologReverse from '../assets/tech_back.jpg'
 import StrategyCard from '../GameComponents/gameInfo/strategyCards'
 import { useObjectives } from '../GameComponents'
 
@@ -19,6 +20,7 @@ import ExplorationCards from './ExplorationCards'
 import Relics from './Relics'
 import StrategyCards from './StrategyCards'
 import StrategyBack from './StrategyBack'
+import TechnologyCards from './TechnologyCards'
 
 const useTabPanelStyles = makeStyles({
   root: {
@@ -40,6 +42,7 @@ const TABS = {
   EXPLORATION_BIOTIC: 6,
   EXPLORATION_FRONTIER: 7,
   RELICS: 8,
+  TECHNOLOGY: 9,
 }
 
 function TabPanel({ small, children, value, index, title }) {
@@ -345,6 +348,23 @@ export function KnowledgeBase() {
               title={t('kb.panels.secretObj.button')}
             />
           </div>
+          <div
+            className={clsx(classes.card, {
+              [classes.hoverableCard]: hoverable,
+              [classes.smallCard]: smallCards,
+              [classes.cardActive]: drawerOpen && chosenTab === TABS.TECHNOLOGY,
+            })}
+          >
+            <img
+              alt={t('kb.panels.technology.button')}
+              height={80}
+              onClick={() => {
+                open(TABS.TECHNOLOGY)
+              }}
+              src={technologReverse}
+              title={t('kb.panels.technology.button')}
+            />
+          </div>
           {explorationCards.map(
             ({ type, tab, width, height, backgroundPosition }) => (
               <div
@@ -496,6 +516,14 @@ export function KnowledgeBase() {
           value={chosenTab}
         >
           <StrategyCards />
+        </TabPanel>
+        <TabPanel
+          index={TABS.TECHNOLOGY}
+          small={smallCards}
+          title={t('kb.panels.technology.title')}
+          value={chosenTab}
+        >
+          <TechnologyCards />
         </TabPanel>
       </Drawer>
     </>

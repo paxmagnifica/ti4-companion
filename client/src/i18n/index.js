@@ -363,6 +363,10 @@ export const factory = (options = { debug: true }) =>
                   button: 'Browse secret objectives',
                   title: 'Secret objectives',
                 },
+                technology: {
+                  button: 'See technology tree',
+                  title: 'Technology tree',
+                },
                 exploration: {
                   button: 'Browse {{type}} exploration cards',
                   title: '{{type}} exploration cards',
