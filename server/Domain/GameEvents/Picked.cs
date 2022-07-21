@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace server.Domain
 
         public async Task Handle(GameEvent gameEvent)
         {
+            int counter = 0;
             var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
@@ -36,7 +38,7 @@ namespace server.Domain
                 session.Events.Add(new GameEvent
                 {
                     SessionId = session.Id,
-                    HappenedAt = gameEvent.HappenedAt.AddMilliseconds(1),
+                    HappenedAt = gameEvent.HappenedAt.AddMilliseconds(++counter),
                     EventType = "PlayerOrder",
                     SerializedPayload = JsonConvert.SerializeObject(order),
                 });
@@ -54,8 +56,31 @@ namespace server.Domain
                 {
                     expectedPicksCount += 1;
                 }
-                var pickEventsCount = session.Events.Count(e => e.EventType == nameof(Picked));
-                if (pickEventsCount == expectedPicksCount)
+
+                var speakerPick = session.Events.Where(e => e.EventType == nameof(Picked)).Select(Picked.GetPayload).Where(fp => fp.Type == "speaker").FirstOrDefault();
+                if (GetPickEventsCount(session) + 1 == expectedPicksCount && speakerPick == null)
+                {
+                    var orderEvent = orderedEvents.LastOrDefault(e => e.EventType == "PlayerOrder");
+                    var order = JsonConvert.DeserializeObject<List<int>>(orderEvent.SerializedPayload);
+                    var playersWithoutTheGuyWhoDidNotPickSpeakerAsLast = order.Skip(1).ToList();
+                    var random = new Random();
+                    int indexInList = random.Next(playersWithoutTheGuyWhoDidNotPickSpeakerAsLast.Count);
+                    int speakerPlayerIndex = playersWithoutTheGuyWhoDidNotPickSpeakerAsLast[indexInList];
+
+                    session.Events.Add(new GameEvent{
+                        SessionId = session.Id,
+                        HappenedAt = gameEvent.HappenedAt.AddMilliseconds(++counter),
+                        EventType = "Picked",
+                        SerializedPayload = JsonConvert.SerializeObject(new PickedPayload{
+                            Pick = "speaker",
+                            Type = "speaker",
+                            PlayerIndex = speakerPlayerIndex,
+                            PlayerName = gameStartOptions.Players[speakerPlayerIndex],
+                        }),
+                    });
+                }
+
+                if (GetPickEventsCount(session) == expectedPicksCount)
                 {
                     // WARNING copied from CommitDraft
                     // TODO we should implement proper CQRS and return CommitDraft event from here as a side effect
@@ -63,7 +88,7 @@ namespace server.Domain
                     var commitDraft = new GameEvent
                     {
                         SessionId = session.Id,
-                        HappenedAt = gameEvent.HappenedAt.AddMilliseconds(2),
+                        HappenedAt = gameEvent.HappenedAt.AddMilliseconds(++counter),
                         EventType = nameof(CommitDraft),
                         SerializedPayload = JsonConvert.SerializeObject(new { factions = factionPicks })
                     };
@@ -74,6 +99,11 @@ namespace server.Domain
             _repository.UpdateSession(session);
 
             await _repository.SaveChangesAsync();
+        }
+
+        private int GetPickEventsCount(Session session)
+        {
+            return session.Events.Count(e => e.EventType == nameof(Picked));
         }
 
         internal static PickedPayload GetPayload(GameEvent gameEvent)
