@@ -7,6 +7,13 @@ import { useGameVersion } from '../../GameComponents'
 const queryKey = (gameVersion) => ['techs', gameVersion]
 
 export const useTechs = () => {
+  return {
+    techs: [],
+    queryInfo: {
+      isFetched: true,
+    },
+  }
+
   const { gameVersion } = useGameVersion()
 
   const { data: techs, ...queryInfo } = useQuery(

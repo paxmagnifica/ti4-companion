@@ -58,10 +58,26 @@ function TechnologyCards({ availableTechs }) {
     <Grid
       className={classes.grid}
       container
+      direction="column"
       justifyContent={smallViewport ? 'center' : 'flex-start'}
-      spacing={2}
     >
-      <Grid item xs={12}>
+      <p>
+        we are working on a proper filterable tech tree, for now check out
+        camo's tech tree below
+      </p>
+      <p>(click for bigger image)</p>
+      <a
+        href="https://camo.githubusercontent.com/a3512aaebfafd0e2046faf5a8495c1fe3108aa9085726a6c2f245bccbec0fb4e/68747470733a2f2f692e726564642e69742f3163746b63766d3238683936312e706e67"
+        rel="nofollow"
+        target="about:blank"
+        title="click to open in new card"
+      >
+        <img
+          src="https://camo.githubusercontent.com/a3512aaebfafd0e2046faf5a8495c1fe3108aa9085726a6c2f245bccbec0fb4e/68747470733a2f2f692e726564642e69742f3163746b63766d3238683936312e706e67"
+          style={{ width: '100%' }}
+        />
+      </a>
+      {/* <Grid item xs={12}>
         <Grid alignItems="center" container justifyContent="center">
           <DebouncedTextField
             onChange={setSearchValue}
@@ -74,7 +90,7 @@ function TechnologyCards({ availableTechs }) {
             size={18}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
       {filtered.map((card) => (
         <Grid key={card.slug} item>
           <Tech
