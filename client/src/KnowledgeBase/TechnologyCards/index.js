@@ -62,8 +62,8 @@ function TechnologyCards({ availableTechs }) {
       justifyContent={smallViewport ? 'center' : 'flex-start'}
     >
       <p>
-        we are working on a proper filterable tech tree, for now check out
-        camo's tech tree below
+        we are working on a proper filterable tech tree, for now check out tech
+        tree below
       </p>
       <p>(click for bigger image)</p>
       <a
@@ -73,6 +73,7 @@ function TechnologyCards({ availableTechs }) {
         title="click to open in new card"
       >
         <img
+          alt="tech tree"
           src="https://camo.githubusercontent.com/a3512aaebfafd0e2046faf5a8495c1fe3108aa9085726a6c2f245bccbec0fb4e/68747470733a2f2f692e726564642e69742f3163746b63766d3238683936312e706e67"
           style={{ width: '100%' }}
         />
