@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -154,7 +155,6 @@ namespace server.Domain
                 return timelineEvents;
             }
 
-            var speakerEvent = timelineEvents.Last(e => e.EventType == nameof(SpeakerSelected));
             var picks = timelineEvents.Where(e => e.EventType == nameof(Picked)).OrderBy(e => Picked.GetPayload(e.SerializedPayload).PlayerIndex);
             var playerPicks = new Dictionary<string, (string, int)>();
 
@@ -177,6 +177,7 @@ namespace server.Domain
                 }
             }
 
+            var speakerName = GetSpeakerName(timelineEvents);
             var commitDraftIndex = timelineEvents.ToList().FindIndex(e => e.EventType == nameof(CommitDraft));
             var draftSummary = new TimelineEvent
             {
@@ -184,7 +185,7 @@ namespace server.Domain
                 HappenedAt = commitDraftEvent.HappenedAt,
                 SerializedPayload = JsonConvert.SerializeObject(new
                 {
-                    speaker = SpeakerSelected.GetPayload(speakerEvent.SerializedPayload).SpeakerName,
+                    speaker = speakerName,
                     picks = playerPicks.Select(kvp => new { playerName = kvp.Key, faction = kvp.Value.Item1, tablePosition = kvp.Value.Item2 })
                 })
             };
@@ -192,6 +193,23 @@ namespace server.Domain
             timelineEventsWithDraftSummary.Insert(commitDraftIndex + 1, draftSummary);
 
             return timelineEventsWithDraftSummary;
+        }
+
+        private object GetSpeakerName(IEnumerable<TimelineEvent> timelineEvents)
+        {
+            var speakerSelectedEvent = timelineEvents.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
+
+            if (speakerSelectedEvent != null) {
+                return SpeakerSelected.GetPayload(speakerSelectedEvent.SerializedPayload).SpeakerName;
+            }
+
+            var speakerPickedEvent = timelineEvents.LastOrDefault(e => e.EventType == nameof(Picked) && Picked.GetPayload(e.SerializedPayload).Type == "speaker");
+
+            if (speakerPickedEvent != null) {
+                return Picked.GetPayload(speakerPickedEvent.SerializedPayload).PlayerName;
+            }
+
+            return "";
         }
 
         private IEnumerable<TimelineEvent> Deduplicate(IEnumerable<TimelineEvent> possiblyDuplicatedEvents)
