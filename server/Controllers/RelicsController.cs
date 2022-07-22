@@ -21,11 +21,11 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<RelicDto> GetObjectives()
+        public IEnumerable<RelicDto> GetRelics()
         {
-            var objectivesFromDb = _sessionContext.Relics.ToList();
+            var relicsFromDb = _sessionContext.Relics.ToList();
 
-            return objectivesFromDb.Select(fromDb => new RelicDto(fromDb));
+            return relicsFromDb.Select(fromDb => new RelicDto(fromDb));
         }
     }
 

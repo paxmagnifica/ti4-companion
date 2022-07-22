@@ -11,7 +11,7 @@ import stageIIObjectiveReverse from '../assets/objective-2-reverse.jpg'
 import secretObjectiveReverse from '../assets/objective-secret-reverse.jpg'
 import explorationReverseSprite from '../assets/exploration-reverse-sprite.png'
 import relicSprite from '../assets/relic-sprite.jpg'
-import technologReverse from '../assets/tech_back.jpg'
+import technologyReverse from '../assets/blue_tech_reverse_single.png'
 import StrategyCard from '../GameComponents/gameInfo/strategyCards'
 import { useObjectives } from '../GameComponents'
 
@@ -361,7 +361,7 @@ export function KnowledgeBase() {
               onClick={() => {
                 open(TABS.TECHNOLOGY)
               }}
-              src={technologReverse}
+              src={technologyReverse}
               title={t('kb.panels.technology.button')}
             />
           </div>

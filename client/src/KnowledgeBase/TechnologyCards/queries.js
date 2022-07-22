@@ -6,32 +6,36 @@ import { useGameVersion } from '../../GameComponents'
 
 const queryKey = (gameVersion) => ['techs', gameVersion]
 
-export const useTechs = () => ({
-  techs: [],
-  queryInfo: {
-    isFetched: true,
-  },
-})
+export const useTechs = () => {
+  const { gameVersion } = useGameVersion()
 
-// const { gameVersion } = useGameVersion()
+  const { data: techs, ...queryInfo } = useQuery(
+    queryKey(gameVersion),
+    async () => {
+      const result = await fetch(`${CONFIG.apiUrl}/api/tech`, {
+        headers: {
+          'x-ti4companion-game-version': gameVersion,
+        },
+      }).then(handleErrors)
 
-// const { data: techs, ...queryInfo } = useQuery(
-// queryKey(gameVersion),
-// async () => {
-// const result = await fetch(`${CONFIG.apiUrl}/api/techs`, {
-// headers: {
-// 'x-ti4companion-game-version': gameVersion,
-// },
-// }).then(handleErrors)
+      const results = await result.json()
 
-// const results = await result.json()
+      return {
+        techs: results.techs.reduce(
+          (accu, obj) => ({ ...accu, [obj.slug]: obj }),
+          {},
+        ),
+        units: results.units.reduce(
+          (accu, obj) => ({ ...accu, [obj.slug]: obj }),
+          {},
+        ),
+      }
+    },
+    { placeholderData: {} },
+  )
 
-// return results.reduce((accu, obj) => ({ ...accu, [obj.slug]: obj }), {})
-// },
-// { placeholderData: {} },
-// )
-
-// return {
-// techs,
-// queryInfo,
-// }
+  return {
+    techs,
+    queryInfo,
+  }
+}

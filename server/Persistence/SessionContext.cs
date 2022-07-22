@@ -27,5 +27,10 @@ namespace server.Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
                 => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("SessionContext"));
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Technology>().HasKey(t => new { t.Slug, t.GameVersion });
+        }
     }
 }

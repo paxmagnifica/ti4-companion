@@ -79,7 +79,7 @@ namespace server.Migrations
                     b.Property<int?>("TechSkip")
                         .HasColumnType("integer");
 
-                    b.HasKey("Slug");
+                    b.HasKey("Slug", "GameVersion");
 
                     b.ToTable("Explorations");
                 });
@@ -129,7 +129,7 @@ namespace server.Migrations
                     b.Property<int>("When")
                         .HasColumnType("integer");
 
-                    b.HasKey("Slug");
+                    b.HasKey("Slug", "GameVersion");
 
                     b.ToTable("Objectives");
                 });
@@ -142,7 +142,7 @@ namespace server.Migrations
                     b.Property<int>("GameVersion")
                         .HasColumnType("integer");
 
-                    b.HasKey("Slug");
+                    b.HasKey("Slug", "GameVersion");
 
                     b.ToTable("Relics");
                 });
@@ -194,7 +194,10 @@ namespace server.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
-                    b.HasKey("Slug");
+                    b.Property<string>("Faction")
+                        .HasColumnType("string");
+
+                    b.HasKey("Slug", "GameVersion");
 
                     b.ToTable("Techs");
                 });
@@ -266,7 +269,10 @@ namespace server.Migrations
                     b.Property<bool>("SustainDamage")
                         .HasColumnType("boolean");
 
-                    b.HasKey("Slug");
+                    b.Property<string>("Faction")
+                        .HasColumnType("text");
+
+                    b.HasKey("Slug", "GameVersion");
 
                     b.ToTable("Units");
                 });

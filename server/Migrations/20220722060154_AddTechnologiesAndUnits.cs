@@ -13,11 +13,12 @@ namespace server.Migrations
                     Slug = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     Level = table.Column<int>(type: "integer", nullable: false),
+                    Faction = table.Column<string>(type: "text", nullable: false),
                     GameVersion = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Techs", x => x.Slug);
+                    table.PrimaryKey(name: "PK_Techs_Slug_GameVersion", x => new { x.Slug, x.GameVersion });
                 });
 
             migrationBuilder.CreateTable(
@@ -39,11 +40,12 @@ namespace server.Migrations
                     AntiFighterBarrageDice = table.Column<int>(type: "integer", nullable: false),
                     Bombardment = table.Column<int>(type: "integer", nullable: false),
                     BombardmentDice = table.Column<int>(type: "integer", nullable: false),
-                    GameVersion = table.Column<int>(type: "integer", nullable: false)
+                    GameVersion = table.Column<int>(type: "integer", nullable: false),
+                    Faction = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Units", x => x.Slug);
+                    table.PrimaryKey(name: "PK_Units_Slug_GameVersion", x => new { x.Slug, x.GameVersion });
                 });
         }
 

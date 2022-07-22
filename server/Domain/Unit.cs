@@ -20,5 +20,6 @@ namespace server.Domain
         public int AntiFighterBarrageDice { get; set; }
         public int Bombardment { get; set; }
         public int BombardmentDice { get; set; }
+        public string Faction { get; set; }
     }
 }

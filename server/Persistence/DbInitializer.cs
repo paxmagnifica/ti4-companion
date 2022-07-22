@@ -236,6 +236,144 @@ namespace server.Persistence
                 context.SessionLists.Add(sessionList);
             }
 
+            if (context.Techs.FirstOrDefault(t => t.Slug == "neural-motivator" && t.GameVersion == GameVersion.Base) == null)
+            {
+                var techs = new Technology[] {
+                    new Technology("neural-motivator", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Biotic,
+                        Level = 0,
+                    },
+                    new Technology("psychoarcheology", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Biotic,
+                        Level = 0,
+                    },
+                    new Technology("dacxive-animators", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Biotic,
+                        Level = 1,
+                    },
+                    new Technology("bio-stims", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Biotic,
+                        Level = 1,
+                    },
+                    new Technology("hyper-metabolism", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Biotic,
+                        Level = 2,
+                    },
+                    new Technology("x-89-bacterial-weapon", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Biotic,
+                        Level = 3,
+                    },
+                    // new Technology("x-89-bacterial-weapon", GameVersion.PoK_Codex2)
+                    // {
+                        // Type = TechnologyType.Biotic,
+                        // Level = 3,
+                    // },
+                    new Technology("antimass-deflectors", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Propulsion,
+                        Level = 0,
+                    },
+                    new Technology("dark-energy-tap", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Propulsion,
+                        Level = 0,
+                    },
+                    new Technology("gravity-drive", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Propulsion,
+                        Level = 1,
+                    },
+                    new Technology("sling-relay", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Propulsion,
+                        Level = 1,
+                    },
+                    new Technology("fleet-logistics", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Propulsion,
+                        Level = 2,
+                    },
+                    new Technology("light-wave-deflector", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Propulsion,
+                        Level = 3,
+                    },
+                    new Technology("sarween-tools", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Cybernetic,
+                        Level = 0,
+                    },
+                    new Technology("scanlink-drone-network", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Cybernetic,
+                        Level = 0,
+                    },
+                    new Technology("graviton-laser-system", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Cybernetic,
+                        Level = 1,
+                    },
+                    new Technology("predictive-intelligence", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Cybernetic,
+                        Level = 1,
+                    },
+                    new Technology("transit-diodes", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Cybernetic,
+                        Level = 2,
+                    },
+                    new Technology("integrated-economy", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Cybernetic,
+                        Level = 3,
+                    },
+                    new Technology("plasma-scoring", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Warfare,
+                        Level = 0,
+                    },
+                    new Technology("ai-development-algorithm", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Warfare,
+                        Level = 0,
+                    },
+                    new Technology("magen-defense-grid", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Warfare,
+                        Level = 1,
+                    },
+                    new Technology("magen-defense-grid", GameVersion.PoK_Codex2)
+                    {
+                        Type = TechnologyType.Warfare,
+                        Level = 1,
+                    },
+                    new Technology("self-assembly-routines", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Warfare,
+                        Level = 1,
+                    },
+                    new Technology("duranium-armor", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Warfare,
+                        Level = 2,
+                    },
+                    new Technology("assault-cannon", GameVersion.Base)
+                    {
+                        Type = TechnologyType.Warfare,
+                        Level = 3,
+                    },
+                };
+
+                context.Techs.AddRange(techs);
+            }
+
             context.SaveChanges();
         }
     }
