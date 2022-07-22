@@ -19,6 +19,8 @@ namespace server.Persistence
         public DbSet<GameEvent> Events { get; set; }
         public DbSet<Exploration> Explorations { get; set; }
         public DbSet<Relic> Relics { get; set; }
+        public DbSet<Technology> Techs { get; set; }
+        public DbSet<Unit> Units { get; set; }
         public DbSet<Agenda> Agendas { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<SessionList> SessionLists { get; set; }

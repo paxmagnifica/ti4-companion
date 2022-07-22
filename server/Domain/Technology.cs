@@ -1,10 +1,12 @@
 namespace server.Domain
 {
-    public enum Technology
+    public class Technology : Card
     {
-        Biotic,
-        Propulsion,
-        Cybernetic,
-        Warfare,
+        public Technology(string slug, GameVersion gameVersion) : base(slug, gameVersion)
+        {
+        }
+
+        public TechnologyType Type { get; set; }
+        public int Level { get; set; }
     }
 }
