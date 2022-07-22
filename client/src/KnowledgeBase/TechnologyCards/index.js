@@ -11,13 +11,18 @@ import Tech from './Tech'
 import { useTechs } from './queries'
 
 function TechnologyCardsProvider(props) {
-  const { techs, queryInfo } = useTechs()
+  const {
+    techs: { techs, units },
+    queryInfo,
+  } = useTechs()
 
   if (!queryInfo.isFetched) {
     return <CircularProgress color="secondary" />
   }
 
-  return <TechnologyCards availableTechs={techs} {...props} />
+  return (
+    <TechnologyCards availableTechs={techs} availableUnits={units} {...props} />
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function TechnologyCards({ availableTechs }) {
+function TechnologyCards({ availableTechs, availableUnits }) {
   const classes = useStyles()
   const smallViewport = useSmallViewport()
   const { t } = useTranslation()
@@ -61,24 +66,7 @@ function TechnologyCards({ availableTechs }) {
       direction="column"
       justifyContent={smallViewport ? 'center' : 'flex-start'}
     >
-      <p>
-        we are working on a proper filterable tech tree, for now check out tech
-        tree below
-      </p>
-      <p>(click for bigger image)</p>
-      <a
-        href="https://camo.githubusercontent.com/a3512aaebfafd0e2046faf5a8495c1fe3108aa9085726a6c2f245bccbec0fb4e/68747470733a2f2f692e726564642e69742f3163746b63766d3238683936312e706e67"
-        rel="nofollow"
-        target="about:blank"
-        title="click to open in new card"
-      >
-        <img
-          alt="tech tree"
-          src="https://camo.githubusercontent.com/a3512aaebfafd0e2046faf5a8495c1fe3108aa9085726a6c2f245bccbec0fb4e/68747470733a2f2f692e726564642e69742f3163746b63766d3238683936312e706e67"
-          style={{ width: '100%' }}
-        />
-      </a>
-      {/* <Grid item xs={12}>
+      <Grid item xs={12}>
         <Grid alignItems="center" container justifyContent="center">
           <DebouncedTextField
             onChange={setSearchValue}
@@ -91,7 +79,7 @@ function TechnologyCards({ availableTechs }) {
             size={18}
           />
         </Grid>
-      </Grid> */}
+      </Grid>
       {filtered.map((card) => (
         <Grid key={card.slug} item>
           <Tech
