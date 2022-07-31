@@ -7,7 +7,7 @@ import { useTranslation } from '../../i18n'
 import useSmallViewport from '../../shared/useSmallViewport'
 import DebouncedTextField from '../../shared/DebouncedTextField'
 
-import Tech from './Tech'
+import { Tech } from './Tech'
 import { useTechs } from './queries'
 
 function TechnologyCardsProvider(props) {
@@ -63,8 +63,8 @@ function TechnologyCards({ availableTechs, availableUnits }) {
     <Grid
       className={classes.grid}
       container
-      direction="column"
       justifyContent={smallViewport ? 'center' : 'flex-start'}
+      spacing={2}
     >
       <Grid item xs={12}>
         <Grid alignItems="center" container justifyContent="center">
