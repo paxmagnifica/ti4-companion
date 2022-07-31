@@ -21,10 +21,15 @@ export const useTechs = () => {
       const results = await result.json()
 
       return {
-        techs: results.techs.reduce(
-          (accu, obj) => ({ ...accu, [obj.slug]: obj }),
-          {},
-        ),
+        techs: results.techs
+          .sort((a, b) => {
+            if (a.type !== b.type) {
+              return a.type - b.type
+            }
+
+            return a.level - b.level
+          })
+          .reduce((accu, obj) => ({ ...accu, [obj.slug]: obj }), {}),
         units: results.units.reduce(
           (accu, obj) => ({ ...accu, [obj.slug]: obj }),
           {},
