@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,19 +28,36 @@ namespace server.Domain
             }
 
             var gameStartEvent = session.Events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
-            var payload = GameStarted.GetPayload(gameStartEvent);
+            var gameStartPayload = GameStarted.GetPayload(gameStartEvent);
             var previousBanEvents = session.Events.Where(e => e.EventType == nameof(Banned));
 
-            if (previousBanEvents.Count() + 1 == (payload.Options.PlayerCount * payload.Options.BanRounds))
+            AssurePlayerCanStillBan(gameEvent, previousBanEvents, gameStartPayload.Options);
+
+            if (previousBanEvents.Count() + 1 == (gameStartPayload.Options.PlayerCount * gameStartPayload.Options.BanRounds))
             {
-                var pickRounds = payload.Options.TablePick ? 2 : 1;
-                eventsToAdd.Add(GameEvent.GenerateOrderEvent(gameEvent.SessionId, payload, pickRounds, _timeProvider.Now, addForSpeaker: true));
+                var pickRounds = gameStartPayload.Options.TablePick ? 2 : 1;
+                eventsToAdd.Add(GameEvent.GenerateOrderEvent(gameEvent.SessionId, gameStartPayload, pickRounds, _timeProvider.Now, addForSpeaker: true));
             }
 
             session.Events.AddRange(eventsToAdd);
             _repository.UpdateSession(session);
 
             await _repository.SaveChangesAsync();
+        }
+
+        private void AssurePlayerCanStillBan(GameEvent gameEvent, IEnumerable<GameEvent> previousBanEvents, DraftOptions options)
+        {
+            if (previousBanEvents.Count() == 0) {
+                return;
+            }
+
+            var bannedEventPayload = GetPayload(gameEvent);
+            var samePlayerBans = previousBanEvents.Select(pbe => GetPayload(pbe)).Where(pbe => pbe.PlayerName == bannedEventPayload.PlayerName);
+
+            if (samePlayerBans.Count() >= options.BanRounds)
+            {
+                throw new AlreadyDoneException();
+            }
         }
 
         internal static BannedPayload GetPayload(GameEvent gameEvent)
