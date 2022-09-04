@@ -1,6 +1,6 @@
 using System;
 
-namespace server.Domain
+namespace server.Domain.Exceptions
 {
     [Serializable]
     public class Ti4CompanionDomainException : Exception

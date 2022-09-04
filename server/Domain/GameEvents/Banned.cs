@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using server.Domain.Exceptions;
 
 namespace server.Domain
 {
@@ -31,7 +31,7 @@ namespace server.Domain
             var gameStartPayload = GameStarted.GetPayload(gameStartEvent);
             var previousBanEvents = session.Events.Where(e => e.EventType == nameof(Banned));
 
-            AssurePlayerCanStillBan(gameEvent, previousBanEvents, gameStartPayload.Options);
+            AssurePlayerCanBan(gameEvent, previousBanEvents, gameStartPayload.Options);
 
             if (previousBanEvents.Count() + 1 == (gameStartPayload.Options.PlayerCount * gameStartPayload.Options.BanRounds))
             {
@@ -45,16 +45,20 @@ namespace server.Domain
             await _repository.SaveChangesAsync();
         }
 
-        private void AssurePlayerCanStillBan(GameEvent gameEvent, IEnumerable<GameEvent> previousBanEvents, DraftOptions options)
+        private void AssurePlayerCanBan(GameEvent gameEvent, IEnumerable<GameEvent> previousBanEvents, DraftOptions options)
         {
+            if (options.Bans != true) {
+                throw new BansNotAllowedException();
+            }
+
             if (previousBanEvents.Count() == 0) {
                 return;
             }
 
             var bannedEventPayload = GetPayload(gameEvent);
-            var samePlayerBans = previousBanEvents.Select(pbe => GetPayload(pbe)).Where(pbe => pbe.PlayerName == bannedEventPayload.PlayerName);
+            var previousSamePlayerBans = previousBanEvents.Select(pbe => GetPayload(pbe)).Where(pbe => pbe.PlayerName == bannedEventPayload.PlayerName);
 
-            if (samePlayerBans.Count() >= options.BanRounds)
+            if (previousSamePlayerBans.Count() >= options.BanRounds)
             {
                 throw new AlreadyDoneException();
             }
