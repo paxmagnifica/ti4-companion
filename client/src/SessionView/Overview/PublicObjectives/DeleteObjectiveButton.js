@@ -46,7 +46,7 @@ function DeleteObjectiveButton({ className, session, objective }) {
   return (
     <div className={className}>
       <Tooltip placement="bottom" title={t('deletePO.tooltip')}>
-        <IconButton onClick={deletePo}>
+        <IconButton onClick={deletePo} style={{ padding: 5 }}>
           <Delete title={t('deletePO.tooltip')} />
         </IconButton>
       </Tooltip>

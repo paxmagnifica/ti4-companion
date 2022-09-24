@@ -8,8 +8,8 @@ import DeleteObjectiveButton from './DeleteObjectiveButton'
 const useStyles = makeStyles({
   deleteButton: {
     position: 'absolute',
-    top: '-1.5em',
-    right: '-1.5em',
+    bottom: '0',
+    right: '0',
     zIndex: 2,
     opacity: 0.4,
     '&:hover': {
