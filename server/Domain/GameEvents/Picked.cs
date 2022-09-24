@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using server.Domain.Exceptions;
 
 namespace server.Domain
 {
@@ -24,11 +25,18 @@ namespace server.Domain
             {
                 session.Events = new List<GameEvent>();
             }
+
+            var orderedEvents = session.Events.OrderBy(e => e.HappenedAt);
+            var gameStartEvent = orderedEvents.FirstOrDefault(e => e.EventType == nameof(GameStarted));
+            var gameStartOptions = GameStarted.GetPayload(gameStartEvent).Options;
+            var previousPickEvents = orderedEvents.Where(e => e.EventType == nameof(Picked));
+            var pickedPayload = GetPayload(gameEvent);
+
+            AssurePlayerCanPick(pickedPayload, previousPickEvents, gameStartOptions);
+
             session.Events.Add(gameEvent);
 
             // TODO not tested territory
-            var pickedPayload = GetPayload(gameEvent);
-            var orderedEvents = session.Events.OrderBy(e => e.HappenedAt);
             if (pickedPayload.Type == "speaker")
             {
                 var orderEvent = orderedEvents.LastOrDefault(e => e.EventType == "PlayerOrder");
@@ -43,8 +51,7 @@ namespace server.Domain
                     SerializedPayload = JsonConvert.SerializeObject(order),
                 });
             }
-            var gameStartEvent = orderedEvents.FirstOrDefault(e => e.EventType == nameof(GameStarted));
-            var gameStartOptions = GameStarted.GetPayload(gameStartEvent).Options;
+
             if (gameStartOptions.SpeakerPick)
             {
                 var expectedPicksCount = gameStartOptions.PlayerCount;
@@ -67,11 +74,13 @@ namespace server.Domain
                     int indexInList = random.Next(playersWithoutTheGuyWhoDidNotPickSpeakerAsLast.Count);
                     int speakerPlayerIndex = playersWithoutTheGuyWhoDidNotPickSpeakerAsLast[indexInList];
 
-                    session.Events.Add(new GameEvent{
+                    session.Events.Add(new GameEvent
+                    {
                         SessionId = session.Id,
                         HappenedAt = gameEvent.HappenedAt.AddMilliseconds(++counter),
                         EventType = "Picked",
-                        SerializedPayload = JsonConvert.SerializeObject(new PickedPayload{
+                        SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
+                        {
                             Pick = "speaker",
                             Type = "speaker",
                             PlayerIndex = speakerPlayerIndex,
@@ -101,6 +110,26 @@ namespace server.Domain
             await _repository.SaveChangesAsync();
         }
 
+        private void AssurePlayerCanPick(PickedPayload currentPickPayload, IEnumerable<GameEvent> previousPickEvents, DraftOptions gameStartOptions)
+        {
+            if (currentPickPayload.Type == "tablePosition" && !gameStartOptions.TablePick)
+            {
+                throw new TablePickNotAllowedException();
+            }
+
+            if (currentPickPayload.Type == "speaker" && !gameStartOptions.SpeakerPick)
+            {
+                throw new SpeakerPickNotAllowedException();
+            }
+
+            var payloads = previousPickEvents.Select(ppe => GetPayload(ppe.SerializedPayload));
+            var previousPicksOfTheSameType = payloads.Where(ppe => ppe.PlayerName == currentPickPayload.PlayerName && ppe.Type == currentPickPayload.Type);
+            if (previousPicksOfTheSameType.Count() >= 1)
+            {
+                throw new AlreadyDoneException();
+            }
+        }
+
         private int GetPickEventsCount(Session session)
         {
             return session.Events.Count(e => e.EventType == nameof(Picked));
@@ -119,7 +148,7 @@ namespace server.Domain
     public class PickedPayload
     {
         public string Pick { get; set; }
-        public string Type { get; set; }
+        public string Type { get; set; } // "faction", "tablePosition"
         public int PlayerIndex { get; set; }
         public string PlayerName { get; set; }
     }
