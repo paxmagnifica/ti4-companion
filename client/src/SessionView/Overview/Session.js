@@ -106,6 +106,7 @@ export function Session({ editable, session, updateFactionPoints }) {
         >
           <PointControls
             editable={editable}
+            objectives={session.objectives}
             players={session.players}
             points={session.points}
             updatePoints={updateFactionPointsInSession}

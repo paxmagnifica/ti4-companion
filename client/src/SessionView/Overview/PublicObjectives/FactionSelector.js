@@ -24,7 +24,7 @@ function FactionSelector({ disabled, factions, value, onChange, size }) {
           key={factionKey}
           disabled={disabled}
           factionKey={factionKey}
-          height={{ small: '1em', fullscreen: '3.3vh' }[size] || '2em'}
+          height={{ small: '1.3em', fullscreen: '3.3vh' }[size] || '2em'}
           onClick={() => clicked(factionKey, !value.includes(factionKey))}
           selected={value.includes(factionKey)}
           width="auto"

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using server.Domain.Exceptions;
 
 namespace server.Domain
 {
@@ -32,6 +33,14 @@ namespace server.Domain
             {
                 session.Events = new List<GameEvent>();
             }
+
+            var payload = GetPayload(gameEvent);
+
+            if (payload.Points < 0)
+            {
+                throw new Ti4CompanionDomainException("Points cannot be negative");
+            }
+
             session.Events.Add(gameEvent);
 
             _repository.UpdateSession(session);
