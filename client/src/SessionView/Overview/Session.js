@@ -9,6 +9,7 @@ import { SessionNutshell } from './SessionNutshell'
 import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 import FactionNutshells from './FactionNutshells'
+import { PointControls } from './PointControls'
 
 const useStyles = makeStyles({
   root: {
@@ -103,6 +104,12 @@ export function Session({ editable, session, updateFactionPoints }) {
           justifyContent="center"
           spacing={4}
         >
+          <PointControls
+            editable={editable}
+            players={session.players}
+            points={session.points}
+            updatePoints={updateFactionPointsInSession}
+          />
           <FactionNutshells
             classes={classes}
             players={session.players}

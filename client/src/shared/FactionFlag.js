@@ -17,8 +17,8 @@ const useFlagStyles = makeStyles({
     cursor: ({ disabled }) => (disabled ? 'default' : 'pointer'),
     display: 'flex',
     justifyContent: 'center',
-    border: ({ plasticColor }) =>
-      plasticColor ? `2px solid ${plasticColor}` : '',
+    border: ({ plasticColor, borderWidth }) =>
+      plasticColor ? `${borderWidth} solid ${plasticColor}` : '',
     margin: '1px 1px',
   },
   factionImage: {
@@ -31,13 +31,23 @@ const useFlagStyles = makeStyles({
 })
 
 function FactionFlag(
-  { disabled, factionKey, selected, onClick, width, height, className },
+  {
+    disabled,
+    factionKey,
+    selected,
+    onClick,
+    width,
+    height,
+    className,
+    borderWidth,
+  },
   ref,
 ) {
   const { t } = useTranslation()
   const getPlasticColor = usePlasticColors()
   const plasticColor = getPlasticColor(factionKey)
   const classes = useFlagStyles({
+    borderWidth: borderWidth ?? '2px',
     selected,
     width,
     height,
