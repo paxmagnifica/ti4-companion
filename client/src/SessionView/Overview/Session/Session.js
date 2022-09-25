@@ -100,18 +100,13 @@ export function Session({ editable, session, updateFactionPoints }) {
       <HideInFullscreen>
         <Grid
           alignItems="center"
-          className={classes.root}
           container
+          direction="column"
           justifyContent="center"
-          spacing={4}
+          style={{ gridRowGap: '2em' }}
         >
-          <Grid item>
-            <PointsSourceHelper
-              editable={editable}
-              factions={session.factions}
-            />
-          </Grid>
-          <Grid alignItems="center" container item>
+          <PointsSourceHelper editable={editable} factions={session.factions} />
+          {!session.locked && (
             <PointControls
               editable={editable}
               objectives={session.objectives}
@@ -119,14 +114,22 @@ export function Session({ editable, session, updateFactionPoints }) {
               points={session.points}
               updatePoints={updateFactionPointsInSession}
             />
+          )}
+          <Grid
+            alignItems="center"
+            className={classes.root}
+            container
+            justifyContent="center"
+            spacing={4}
+          >
+            <FactionNutshells
+              classes={classes}
+              players={session.players}
+              sessionId={session.id}
+              showTablePosition={Boolean(session.setup.options?.tablePick)}
+              wasDrafted={session.setup.setupType === 'draft'}
+            />
           </Grid>
-          <FactionNutshells
-            classes={classes}
-            players={session.players}
-            sessionId={session.id}
-            showTablePosition={Boolean(session.setup.options?.tablePick)}
-            wasDrafted={session.setup.setupType === 'draft'}
-          />
         </Grid>
       </HideInFullscreen>
     </>
