@@ -10,6 +10,7 @@ import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 import FactionNutshells from './FactionNutshells'
 import { PointControls } from './PointControls'
+import { PointsSourceHelper } from './PointsSourceHelper'
 
 const useStyles = makeStyles({
   root: {
@@ -104,13 +105,21 @@ export function Session({ editable, session, updateFactionPoints }) {
           justifyContent="center"
           spacing={4}
         >
-          <PointControls
-            editable={editable}
-            objectives={session.objectives}
-            players={session.players}
-            points={session.points}
-            updatePoints={updateFactionPointsInSession}
-          />
+          <Grid item>
+            <PointsSourceHelper
+              editable={editable}
+              factions={session.factions}
+            />
+          </Grid>
+          <Grid alignItems="center" container item>
+            <PointControls
+              editable={editable}
+              objectives={session.objectives}
+              players={session.players}
+              points={session.points}
+              updatePoints={updateFactionPointsInSession}
+            />
+          </Grid>
           <FactionNutshells
             classes={classes}
             players={session.players}
