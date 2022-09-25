@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { Button, Drawer } from '@material-ui/core'
 import { Details as DetailsIcon } from '@material-ui/icons'
 
-import { Trans } from '../../../i18n'
+import { Trans } from '../../../../i18n'
 
 import { PointsHistory } from './PointsHistory'
 

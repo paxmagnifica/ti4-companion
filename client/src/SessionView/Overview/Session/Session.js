@@ -3,9 +3,9 @@ import clsx from 'clsx'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
+import { HideInFullscreen, useFullscreen } from '../../../Fullscreen'
+import { SessionNutshell } from '../SessionNutshell'
 
-import { SessionNutshell } from './SessionNutshell'
 import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 import FactionNutshells from './FactionNutshells'

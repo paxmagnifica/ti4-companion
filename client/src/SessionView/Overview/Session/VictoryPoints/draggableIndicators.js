@@ -1,7 +1,7 @@
 import { useDrag, useDrop } from 'react-dnd'
 import { Grid } from '@material-ui/core'
 
-import FactionFlag from '../../../shared/FactionFlag'
+import FactionFlag from '../../../../shared/FactionFlag'
 
 const DRAGGABLE = {
   FLAG: 'flag',

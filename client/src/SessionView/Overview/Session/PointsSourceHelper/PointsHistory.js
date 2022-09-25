@@ -9,14 +9,14 @@ import {
   ListItemText,
 } from '@material-ui/core'
 
-import { Trans } from '../../../i18n'
-import { useObjectives } from '../../../GameComponents'
-import { useSessionContext } from '../../useSessionContext'
-import FactionFlag from '../../../shared/FactionFlag'
-import { ObjectiveSelector } from '../../../shared/ObjectiveSelector'
-import Objective from '../../../shared/Objective'
-import { VP_SOURCE } from '../../../shared/constants'
-import { useTimelineEvents, useAddPointSourceMutation } from '../../queries'
+import { Trans } from '../../../../i18n'
+import { useObjectives } from '../../../../GameComponents'
+import { useSessionContext } from '../../../useSessionContext'
+import FactionFlag from '../../../../shared/FactionFlag'
+import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
+import Objective from '../../../../shared/Objective'
+import { VP_SOURCE } from '../../../../shared/constants'
+import { useTimelineEvents, useAddPointSourceMutation } from '../../../queries'
 
 import { Toggle, Show } from './Toggle'
 

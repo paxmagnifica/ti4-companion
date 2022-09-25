@@ -1,7 +1,7 @@
 import { fireEvent } from '@testing-library/react'
 
-import { ComboDispatchContext } from '../../../state'
-import { renderWithProviders, getTestQueryClient } from '../../../testUtils'
+import { ComboDispatchContext } from '../../../../state'
+import { renderWithProviders, getTestQueryClient } from '../../../../testUtils'
 
 import PublicObjectives from './index'
 
