@@ -3,6 +3,10 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
+## 2022-09-26
+- [improvement] hide "victory points source" button in fullscreen
+- [improvement] hide "victory points source" and "points control" sections when session is locked
+
 ## 2022-09-24
 - [feat] Added new way of adding points to factions. Instead of clicking flags or dragging them, there is a grid of factions flags with "+1" and "-1". ![points control](https://user-images.githubusercontent.com/9142942/192339505-a9dc4c86-742e-454c-aba0-dead3e12b052.png)
 
