@@ -3,6 +3,8 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
+## 2022-09-24
+- [feat] Added new way of adding points to factions. Instead of clicking flags or dragging them, there is a grid of factions flags with "+1" and "-1". ![points control](https://user-images.githubusercontent.com/9142942/192339505-a9dc4c86-742e-454c-aba0-dead3e12b052.png)
 
 ## 2022-07-21
 - [feat] If nobody selects speaker during draft, it is assigned randomly, excluding the last person who was picking and didn't select speaker. [PR](https://github.com/paxmagnifica/ti4-companion/pull/261)
