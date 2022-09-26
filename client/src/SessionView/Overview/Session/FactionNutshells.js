@@ -12,12 +12,12 @@ import {
 import { Link, generatePath } from 'react-router-dom'
 import { LocalLibrary, PhotoLibrary, Info } from '@material-ui/icons'
 
-import { useTranslation, Trans } from '../../i18n'
-import { SESSION_VIEW_ROUTES } from '../../shared/constants'
-import { useFactionData } from '../../GameComponents'
+import { useTranslation, Trans } from '../../../i18n'
+import { SESSION_VIEW_ROUTES } from '../../../shared/constants'
+import { useFactionData } from '../../../GameComponents'
 
-import { FactionNutshell } from './FactionNutshell'
-import { DraftSummaryDialog } from './DraftSummaryDialog'
+import { FactionNutshell } from '../FactionNutshell'
+import { DraftSummaryDialog } from '../DraftSummaryDialog'
 
 function FactionNutshells({
   players,

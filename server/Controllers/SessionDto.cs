@@ -136,6 +136,7 @@ namespace server.Controllers
             Map = GetMap(session.Events);
             CreatedAt = session.CreatedAt;
             Locked = session.Locked;
+            Editable = !session.Locked;
             SetSessionDetails(session.Events);
             Draft = new DraftDto(session);
             Players = PlayerDto.GetPlayers(this);

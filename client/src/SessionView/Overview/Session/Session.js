@@ -3,13 +3,14 @@ import clsx from 'clsx'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { HideInFullscreen, useFullscreen } from '../../Fullscreen'
+import { HideInFullscreen, useFullscreen } from '../../../Fullscreen'
+import { SessionNutshell } from '../SessionNutshell'
 
-import { SessionNutshell } from './SessionNutshell'
 import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 import FactionNutshells from './FactionNutshells'
 import { PointControls } from './PointControls'
+import { PointsSourceHelper } from './PointsSourceHelper'
 
 const useStyles = makeStyles({
   root: {
@@ -99,25 +100,41 @@ export function Session({ editable, session, updateFactionPoints }) {
       <HideInFullscreen>
         <Grid
           alignItems="center"
-          className={classes.root}
           container
+          direction="column"
           justifyContent="center"
-          spacing={4}
+          style={{ gridRowGap: '2em' }}
         >
-          <PointControls
-            editable={editable}
-            objectives={session.objectives}
-            players={session.players}
-            points={session.points}
-            updatePoints={updateFactionPointsInSession}
-          />
-          <FactionNutshells
-            classes={classes}
-            players={session.players}
-            sessionId={session.id}
-            showTablePosition={Boolean(session.setup.options?.tablePick)}
-            wasDrafted={session.setup.setupType === 'draft'}
-          />
+          {!session.locked && (
+            <PointsSourceHelper
+              editable={editable}
+              factions={session.factions}
+            />
+          )}
+          {!session.locked && (
+            <PointControls
+              editable={editable}
+              objectives={session.objectives}
+              players={session.players}
+              points={session.points}
+              updatePoints={updateFactionPointsInSession}
+            />
+          )}
+          <Grid
+            alignItems="center"
+            className={classes.root}
+            container
+            justifyContent="center"
+            spacing={4}
+          >
+            <FactionNutshells
+              classes={classes}
+              players={session.players}
+              sessionId={session.id}
+              showTablePosition={Boolean(session.setup.options?.tablePick)}
+              wasDrafted={session.setup.setupType === 'draft'}
+            />
+          </Grid>
         </Grid>
       </HideInFullscreen>
     </>

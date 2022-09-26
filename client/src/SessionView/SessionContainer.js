@@ -133,7 +133,7 @@ export function SessionContainer({ children }) {
     () => ({
       session,
       loading,
-      editable: Boolean(secret),
+      editable: Boolean(secret) && Boolean(session?.editable),
       updateFactionPoints,
       sessionService,
       setSecret: (s) => {

@@ -11,8 +11,8 @@ import {
   FormGroup,
 } from '@material-ui/core'
 
-import { useTranslation } from '../../../i18n'
-import { ObjectiveSelector } from '../../../shared/ObjectiveSelector'
+import { useTranslation } from '../../../../i18n'
+import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
 
 function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
   const { t } = useTranslation()

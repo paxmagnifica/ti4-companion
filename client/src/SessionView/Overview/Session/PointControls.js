@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Typography, Button, Grid } from '@material-ui/core'
 
-import { useObjectives } from '../../GameComponents'
-import { useTranslation, Trans } from '../../i18n'
-import FactionFlag from '../../shared/FactionFlag'
+import { useObjectives } from '../../../GameComponents'
+import { useTranslation, Trans } from '../../../i18n'
+import FactionFlag from '../../../shared/FactionFlag'
 
 export function PointControls({
   editable,

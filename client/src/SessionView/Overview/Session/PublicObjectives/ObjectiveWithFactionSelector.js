@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-import Objective from '../../../shared/Objective'
+import Objective from '../../../../shared/Objective'
 
 import FactionSelector from './FactionSelector'
 import DeleteObjectiveButton from './DeleteObjectiveButton'

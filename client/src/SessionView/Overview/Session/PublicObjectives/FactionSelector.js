@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Grid } from '@material-ui/core'
 
-import FactionFlag from '../../../shared/FactionFlag'
+import FactionFlag from '../../../../shared/FactionFlag'
 
 function FactionSelector({ disabled, factions, value, onChange, size }) {
   const clicked = useCallback(
