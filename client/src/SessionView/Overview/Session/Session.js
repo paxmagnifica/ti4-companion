@@ -105,7 +105,12 @@ export function Session({ editable, session, updateFactionPoints }) {
           justifyContent="center"
           style={{ gridRowGap: '2em' }}
         >
-          <PointsSourceHelper editable={editable} factions={session.factions} />
+          {!session.locked && (
+            <PointsSourceHelper
+              editable={editable}
+              factions={session.factions}
+            />
+          )}
           {!session.locked && (
             <PointControls
               editable={editable}
