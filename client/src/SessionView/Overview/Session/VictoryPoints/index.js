@@ -106,7 +106,7 @@ const useStyles = makeStyles({
   },
 })
 
-function VictoryPoints({ editable, target, onChange, points, factions }) {
+function VictoryPoints({ editable, target, onChange, points }) {
   const smallViewport = useSmallViewport()
   const { fullscreen } = useFullscreen()
   const inputWidth = 100 / (target + 1)
@@ -158,12 +158,12 @@ function VictoryPoints({ editable, target, onChange, points, factions }) {
                       updatePoints={
                         editable
                           ? (factionPoints) => {
-                            if (factionPoints === numberOfPoints) {
-                              return
-                            }
+                              if (factionPoints === numberOfPoints) {
+                                return
+                              }
 
-                            onChange(faction, factionPoints)
-                          }
+                              onChange(faction, factionPoints)
+                            }
                           : undefined
                       }
                     />
