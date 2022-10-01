@@ -2,13 +2,11 @@ import { useMemo, useCallback, useState } from 'react'
 import {
   Box,
   Button,
-  Checkbox,
+  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
-  FormGroup,
 } from '@material-ui/core'
 
 import { useTranslation } from '../../../../i18n'
@@ -44,6 +42,24 @@ function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
     ]
   }, [availableObjectives, stageISelected, stageIISelected, secretSelected])
 
+  const selectStageI = useCallback(() => {
+    setStageI(true)
+    setStageII(false)
+    setSecret(false)
+  }, [])
+
+  const selectStageII = useCallback(() => {
+    setStageI(false)
+    setStageII(true)
+    setSecret(false)
+  }, [])
+
+  const selectSecret = useCallback(() => {
+    setStageI(false)
+    setStageII(false)
+    setSecret(true)
+  }, [])
+
   return (
     <Dialog onClose={onCancel} open={open}>
       <DialogTitle id="form-dialog-title">
@@ -51,35 +67,26 @@ function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
       </DialogTitle>
       <DialogContent>
         <Box m={1}>
-          <FormGroup row>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={stageISelected}
-                  onChange={() => setStageI((x) => !x)}
-                />
-              }
-              label={t('general.labels.stageI')}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={stageIISelected}
-                  onChange={() => setStageII((x) => !x)}
-                />
-              }
-              label={t('general.labels.stageII')}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={secretSelected}
-                  onChange={() => setSecret((x) => !x)}
-                />
-              }
-              label={t('general.labels.secretObj')}
-            />
-          </FormGroup>
+          <ButtonGroup aria-label="outlined primary button group">
+            <Button
+              color={stageISelected ? 'secondary' : undefined}
+              onClick={selectStageI}
+            >
+              {t('general.labels.stageI')}
+            </Button>
+            <Button
+              color={stageIISelected ? 'secondary' : undefined}
+              onClick={selectStageII}
+            >
+              {t('general.labels.stageII')}
+            </Button>
+            <Button
+              color={secretSelected ? 'secondary' : undefined}
+              onClick={selectSecret}
+            >
+              {t('general.labels.secretObj')}
+            </Button>
+          </ButtonGroup>
         </Box>
         <ObjectiveSelector
           objectives={filteredObjectives}
