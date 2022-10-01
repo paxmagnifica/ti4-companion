@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Box, FormGroup, Grid, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { matchSorter } from 'match-sorter'
+import Highlighter from 'react-highlight-words'
 
 import { useTranslation } from '../i18n'
 
@@ -44,6 +45,23 @@ export function ObjectiveSelector({ disabled, objectives, value, onChange }) {
                   label={t('general.labels.objective')}
                   variant="outlined"
                 />
+              )}
+              renderOption={(props, option) => (
+                <li {...props}>
+                  <Highlighter
+                    autoEscape
+                    searchWords={[option.inputValue]}
+                    textToHighlight={props.name}
+                  />
+                  <br />
+                  <em>
+                    <Highlighter
+                      autoEscape
+                      searchWords={[option.inputValue]}
+                      textToHighlight={props.condition}
+                    />
+                  </em>
+                </li>
               )}
               style={{ width: 300 }}
             />
