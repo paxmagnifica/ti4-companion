@@ -46,18 +46,21 @@ function AddObjective({ availableObjectives, open, onSelect, onCancel }) {
     setStageI(true)
     setStageII(false)
     setSecret(false)
+    setSelected(null)
   }, [])
 
   const selectStageII = useCallback(() => {
     setStageI(false)
     setStageII(true)
     setSecret(false)
+    setSelected(null)
   }, [])
 
   const selectSecret = useCallback(() => {
     setStageI(false)
     setStageII(false)
     setSecret(true)
+    setSelected(null)
   }, [])
 
   return (
