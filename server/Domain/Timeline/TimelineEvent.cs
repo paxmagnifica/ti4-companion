@@ -7,6 +7,7 @@ namespace server.Domain
         public int Order { get; set; }
         public string EventType { get; set; }
         public string SerializedPayload { get; set; }
+        public int FromPoints { get; set; }
         public DateTimeOffset HappenedAt { get; set; }
     }
 }

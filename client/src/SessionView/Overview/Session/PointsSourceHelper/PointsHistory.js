@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
 } from '@material-ui/core'
 
 import { Trans } from '../../../../i18n'
@@ -16,6 +15,7 @@ import FactionFlag from '../../../../shared/FactionFlag'
 import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
 import Objective from '../../../../shared/Objective'
 import { VP_SOURCE } from '../../../../shared/constants'
+import { PointsWithDelta } from '../../../../shared'
 import { useTimelineEvents, useAddPointSourceMutation } from '../../../queries'
 
 import { Toggle, Show } from './Toggle'
@@ -49,8 +49,9 @@ export function PointsHistory({
     () =>
       timeline
         .filter(({ eventType }) => pointsHistoryEvents.includes(eventType))
-        .map(({ happenedAt, payload, eventType }) => ({
+        .map(({ happenedAt, payload, fromPoints, eventType }) => ({
           happenedAt,
+          fromPoints,
           context: payload.slug, // public objectives have slug instead of context
           ...payload,
           source:
@@ -70,7 +71,15 @@ export function PointsHistory({
         </p>
       )}
       {pointsHistory.map(
-        ({ happenedAt, faction, points, source, context, isPublic }) => (
+        ({
+          happenedAt,
+          faction,
+          points,
+          fromPoints,
+          source,
+          context,
+          isPublic,
+        }) => (
           <Fragment key={`${faction}->${points}`}>
             <ListItem>
               <ListItemIcon>
@@ -82,9 +91,8 @@ export function PointsHistory({
                   width="3em"
                 />
               </ListItemIcon>
-              <ListItemText>
-                {'-> '}
-                {points}
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <PointsWithDelta from={fromPoints} to={points} />
                 {objectivesWithControls.includes(source) && (
                   <Toggle
                     defaultVisibility={!isPublic}
@@ -94,7 +102,7 @@ export function PointsHistory({
                     visible={visibilityState[happenedAt]}
                   />
                 )}
-              </ListItemText>
+              </div>
             </ListItem>
             <ListItem>
               <ButtonGroup disabled={!editable}>

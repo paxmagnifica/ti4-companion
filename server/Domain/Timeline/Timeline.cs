@@ -12,6 +12,7 @@ namespace server.Domain
         bool _addDraftSummary = false;
         bool _addSessionSummary = false;
         bool _deduplicate = false;
+        bool _addDeltas = false;
 
         public Timeline(Session session)
         {
@@ -40,6 +41,13 @@ namespace server.Domain
             return this;
         }
 
+        public Timeline CalculateDeltas()
+        {
+            _addDeltas = true;
+
+            return this;
+        }
+
         public IEnumerable<TimelineEvent> GetEvents()
         {
             var events = GenerateTimelineEvents();
@@ -60,6 +68,12 @@ namespace server.Domain
             {
                 events = Deduplicate(events);
                 _deduplicate = false;
+            }
+
+            if (_addDeltas)
+            {
+                events = CalculateDeltas(events);
+                _addDeltas = false;
             }
 
             return events.Select((e, index) =>
@@ -341,6 +355,39 @@ namespace server.Domain
             });
 
             return withSessionSummary;
+        }
+
+        private IEnumerable<TimelineEvent> CalculateDeltas(IEnumerable<TimelineEvent> timelineEvents)
+        {
+            var eventsWithDeltas = new List<TimelineEvent>(timelineEvents);
+            var points = new Dictionary<string, int>();
+
+            foreach (var timelineEvent in eventsWithDeltas)
+            {
+                if (timelineEvent.EventType == nameof(ObjectiveScored))
+                {
+                    var payload = ObjectiveScored.GetPayload(timelineEvent.SerializedPayload);
+                    if (!points.ContainsKey(payload.Faction)) {
+                        points.Add(payload.Faction, 0);
+                    }
+
+                    timelineEvent.FromPoints = points[payload.Faction];
+                    points[payload.Faction] = payload.Points;
+                }
+
+                if (timelineEvent.EventType == nameof(VictoryPointsUpdated))
+                {
+                    var payload = VictoryPointsUpdated.GetPayload(timelineEvent.SerializedPayload);
+                    if (!points.ContainsKey(payload.Faction)) {
+                        points.Add(payload.Faction, 0);
+                    }
+
+                    timelineEvent.FromPoints = points[payload.Faction];
+                    points[payload.Faction] = payload.Points;
+                }
+            }
+
+            return timelineEvents;
         }
     }
 }

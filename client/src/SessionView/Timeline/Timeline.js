@@ -37,6 +37,7 @@ import FactionFlag from '../../shared/FactionFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
 import ScrollToBottom from '../../shared/ScrollToBottom'
 import Relic from '../../shared/Relic'
+import { PointsWithDelta } from '../../shared'
 import useInvalidateQueries from '../../useInvalidateQueries'
 import { DraftSummaryTable } from '../components'
 import { useTimelineEvents, queryKeys } from '../queries'
@@ -317,7 +318,7 @@ function LawRemoved({ eventType, payload, happenedAt }) {
   )
 }
 
-function ObjectiveScored({ payload, happenedAt, eventType }) {
+function ObjectiveScored({ payload, happenedAt, eventType, fromPoints }) {
   const small = useSmallViewport()
   const { t } = useTranslation()
 
@@ -344,9 +345,7 @@ function ObjectiveScored({ payload, happenedAt, eventType }) {
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
-        <Typography variant="h5">
-          <Trans i18nKey="vpCount" values={{ points: payload.points }} />
-        </Typography>
+        <PointsWithDelta from={fromPoints} to={payload.points} />
         <Box style={{ display: 'inline-block' }}>
           <Objective slug={payload.slug} small={small} />
         </Box>
@@ -393,7 +392,7 @@ function RelicEvent({ payload, happenedAt, eventType }) {
   )
 }
 
-function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
+function VictoryPointsUpdated({ eventType, fromPoints, payload, happenedAt }) {
   const { t } = useTranslation()
 
   if (payload.source === VP_SOURCE.fromFrontendToBackend(VP_SOURCE.objective)) {
@@ -433,9 +432,7 @@ function VictoryPointsUpdated({ eventType, payload, happenedAt }) {
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
-        <Typography variant="h5">
-          <Trans i18nKey="vpCount" values={{ points: payload.points }} />
-        </Typography>
+        <PointsWithDelta from={fromPoints} to={payload.points} />
         {payload.source !== undefined && payload.source !== null && (
           <VictoryPoint
             context={payload.context}
@@ -825,8 +822,14 @@ function SpeakerSelected({ payload, happenedAt }) {
   )
 }
 
-function EventOnATimeline({ eventType, payload, happenedAt, session }) {
-  const props = { eventType, payload, happenedAt }
+function EventOnATimeline({
+  eventType,
+  payload,
+  happenedAt,
+  session,
+  fromPoints,
+}) {
+  const props = { eventType, payload, happenedAt, fromPoints }
   switch (eventType) {
     case 'GameStarted':
       return <GameStarted {...props} />
