@@ -97,6 +97,7 @@ namespace server.Controllers
                 .AddSessionSummary()
                 .AddDraftSummary()
                 .Deduplicate()
+                .CalculateDeltas()
                 .GetEvents();
         }
     }
