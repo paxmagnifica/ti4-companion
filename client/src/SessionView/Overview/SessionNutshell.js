@@ -1,10 +1,23 @@
 import { Grid } from '@material-ui/core'
 
-import { Trans } from '../../i18n'
+import { useTranslation } from '../../i18n'
 import { useSessionContext } from '../useSessionContext'
+
+export function getSessionDetails(session, t) {
+  return `${
+    session.displayName &&
+    `${session.displayName}, ${t('playersCount', {
+      players: session.players?.length || session.draft?.players?.length,
+    })}, ${t('vpCount', { points: session.vpCount })}${
+      session.start &&
+      `, ${t('sessionView.overview.sessionStart', { when: session.start })}`
+    }`
+  }`
+}
 
 export function SessionNutshell() {
   const { session } = useSessionContext()
+  const { t } = useTranslation()
 
   return (
     <Grid
@@ -15,23 +28,7 @@ export function SessionNutshell() {
       styles={{ color: 'white' }}
     >
       <Grid item xs={12}>
-        {session.displayName && `${session.displayName}, `}
-        <Trans
-          i18nKey="playersCount"
-          values={{
-            players: session.players?.length || session.draft?.players?.length,
-          }}
-        />
-        , <Trans i18nKey="vpCount" values={{ points: session.vpCount }} />
-        {session.start && (
-          <>
-            {', '}
-            <Trans
-              i18nKey="sessionView.overview.sessionStart"
-              values={{ when: session.start }}
-            />
-          </>
-        )}
+        {getSessionDetails(session, t)}
       </Grid>
     </Grid>
   )

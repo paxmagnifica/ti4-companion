@@ -10,6 +10,7 @@ import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import { TogglePlasticColorsButton } from '../shared/plasticColors'
 
 import { useSessionContext } from './useSessionContext'
+import { useTranslation } from '../i18n'
 import { Overview } from './Overview'
 import ShareButton from './ShareButton'
 import { EditButton } from './Edit'
@@ -18,6 +19,7 @@ import SessionNavigation from './SessionNavigation'
 import DetailsForm from './DetailsForm'
 import LockForEdit from './LockForEdit'
 import { Timeline } from './Timeline'
+import { getSessionDetails } from './Overview/SessionNutshell'
 
 const useStyles = makeStyles({
   header: {
@@ -32,6 +34,7 @@ export function SessionView({
   updateFactionPoints,
 }) {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   const sortedPoints = [...session.points]
   sortedPoints.sort((a, b) => b.points - a.points)
@@ -50,7 +53,7 @@ export function SessionView({
   return (
     <>
       <Helmet>
-        <title>{`TI4 Companion session- ${session.factions.length} players - 10VP`}</title>
+        <title>{`TI4 Companion - ${getSessionDetails(session, t)}`}</title>
         <meta
           content={sortedPoints
             .map(
@@ -61,10 +64,7 @@ export function SessionView({
           name="description"
         />
 
-        <meta
-          content={`TI4 Companion session - ${session.factions.length} players - 10VP`}
-          property="og:title"
-        />
+        <meta content={getSessionDetails(session, t)} property="og:title" />
         <meta
           content={sortedPoints
             .map(
