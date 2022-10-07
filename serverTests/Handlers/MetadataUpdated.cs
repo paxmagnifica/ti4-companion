@@ -75,5 +75,57 @@ namespace serverTests.Handlers
             Assert.That(loggedEvent.EventType == givenEvent.EventType);
             Assert.AreEqual(givenEvent.SerializedPayload, loggedEvent.SerializedPayload);
         }
+        
+        [TestCase(
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}", 
+            TestName = "ShouldRewriteFieldsWhenAllGiven",
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}"
+            )]
+        [TestCase(
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06T01:12:12.123Z\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}", 
+            TestName = "ShouldSetEmptySessionEndWhenThisIsNotSplitSession",
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}"
+            )]
+        [TestCase(
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06T01:12:12.123Z\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}", 
+            TestName = "ShouldUseGivenSessionEndWhenSplitSessionGiven",
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06T01:12:12.123Z\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}"
+            )]
+        [TestCase(
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06T01:12:12.123Z\",\"Duration\":0.0,\"VpCount\":0,\"Colors\":{}}", 
+            TestName = "ShouldReturn10VpCountWhenZeroVpCountGiven",
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06T01:12:12.123Z\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}"
+            )]
+        [TestCase(
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06T01:12:12.123Z\",\"Duration\":0.0,\"VpCount\":9,\"Colors\":{}}", 
+            TestName = "ShouldReturnGivenVpCountWhenPositiveVpCountGiven",
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06T01:12:12.123Z\",\"Duration\":0.0,\"VpCount\":9,\"Colors\":{}}"
+            )]
+        public async Task<string> ShouldSanitizeReceivedGameEventBeforeAddingToEventsCollection(string givenPayload)
+        {
+            // given
+            var sessionId = Guid.NewGuid();
+            var session = new Session()
+            {
+                Id = sessionId,
+            };
+
+            Repository.GetByIdWithEvents(sessionId).Returns(session);
+
+            var handler = new server.Domain.MetadataUpdated(Repository);
+
+            var givenEvent = new GameEvent()
+            {
+                SessionId = sessionId,
+                SerializedPayload = givenPayload
+            };
+
+            // when
+            await handler.Handle(givenEvent);
+
+            // then
+            var loggedEvent = session.Events[0];
+            return loggedEvent.SerializedPayload;
+        }
     }
 }

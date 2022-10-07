@@ -39,7 +39,6 @@ namespace server.Domain
             await _repository.SaveChangesAsync();
         }
 
-        // TODO add tests
         private MetadataUpdatedPayload Sanitize(MetadataUpdatedPayload payload)
         {
             return new MetadataUpdatedPayload
