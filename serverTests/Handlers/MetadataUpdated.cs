@@ -43,5 +43,37 @@ namespace serverTests.Handlers
             // then
             Assert.NotNull(session.Events);
         }
+
+        [Test]
+        public async Task ShouldAddReceivedGameEventToEventsCollection()
+        {
+            // given
+            var sessionId = Guid.NewGuid();
+            var session = new Session()
+            {
+                Id = sessionId,
+            };
+
+            Repository.GetByIdWithEvents(sessionId).Returns(session);
+
+            var handler = new server.Domain.MetadataUpdated(Repository);
+
+            var givenEvent = new GameEvent()
+            {
+                SessionId = sessionId,
+                SerializedPayload = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":10,\"Colors\":{}}"
+            };
+
+            // when
+            await handler.Handle(givenEvent);
+
+            // then
+            var loggedEvent = session.Events[0];
+            Assert.That(loggedEvent.Id == givenEvent.Id);
+            Assert.That(loggedEvent.SessionId == givenEvent.SessionId);
+            Assert.That(loggedEvent.HappenedAt == givenEvent.HappenedAt);
+            Assert.That(loggedEvent.EventType == givenEvent.EventType);
+            Assert.AreEqual(givenEvent.SerializedPayload, loggedEvent.SerializedPayload);
+        }
     }
 }
