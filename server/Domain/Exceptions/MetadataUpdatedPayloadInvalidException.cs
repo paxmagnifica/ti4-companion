@@ -1,6 +1,6 @@
 using System;
 
-namespace server.Domain.Exceptions
+namespace Server.Domain.Exceptions
 {
     [Serializable]
     public class MetadataUpdatedPayloadInvalidException : Ti4CompanionDomainException

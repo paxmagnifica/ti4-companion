@@ -1,19 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Newtonsoft.Json;
 using NSubstitute;
 using NUnit.Framework;
-using server.Domain;
-using server.Domain.Exceptions;
+using Server.Domain.Exceptions;
+using Server.Domain;
 
 namespace serverTests.Handlers
 {
     public class MetadataUpdated
     {
         IRepository Repository { get; set; }
-        
+
         public MetadataUpdated()
         {
             Repository = Substitute.For<IRepository>();
@@ -31,8 +28,8 @@ namespace serverTests.Handlers
 
             Repository.GetByIdWithEvents(sessionId).Returns(session);
 
-            var handler = new server.Domain.MetadataUpdated(Repository);
-            
+            var handler = new Server.Domain.MetadataUpdated(Repository);
+
             // when
             await handler.Handle(new GameEvent()
             {
@@ -56,7 +53,7 @@ namespace serverTests.Handlers
 
             Repository.GetByIdWithEvents(sessionId).Returns(session);
 
-            var handler = new server.Domain.MetadataUpdated(Repository);
+            var handler = new Server.Domain.MetadataUpdated(Repository);
 
             var givenEvent = new GameEvent()
             {
@@ -75,24 +72,24 @@ namespace serverTests.Handlers
             Assert.That(loggedEvent.EventType == givenEvent.EventType);
             Assert.AreEqual(givenEvent.SerializedPayload, loggedEvent.SerializedPayload);
         }
-        
+
         [TestCase(
-            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}", 
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldRewriteFieldsWhenAllGiven",
             ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}"
             )]
         [TestCase(
-            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}", 
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldSetEmptySessionEndWhenThisIsNotSplitSession",
             ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}"
             )]
         [TestCase(
-            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}", 
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldUseGivenSessionEndWhenSplitSessionGiven",
             ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}"
             )]
         [TestCase(
-            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}", 
+            "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldReturnGivenVpCountWhenPositiveVpCountGiven",
             ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}"
             )]
@@ -107,7 +104,7 @@ namespace serverTests.Handlers
 
             Repository.GetByIdWithEvents(sessionId).Returns(session);
 
-            var handler = new server.Domain.MetadataUpdated(Repository);
+            var handler = new Server.Domain.MetadataUpdated(Repository);
 
             var givenEvent = new GameEvent()
             {
@@ -165,7 +162,7 @@ namespace serverTests.Handlers
 
             Repository.GetByIdWithEvents(sessionId).Returns(session);
 
-            var handler = new server.Domain.MetadataUpdated(Repository);
+            var handler = new Server.Domain.MetadataUpdated(Repository);
 
             // when & then
             var exception = Assert.ThrowsAsync<MetadataUpdatedPayloadInvalidException>(async () => await handler.Handle(givenEvent));

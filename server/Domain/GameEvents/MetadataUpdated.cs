@@ -2,6 +2,8 @@ using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Server.Domain.Exceptions;
+using System.Globalization;
 
 namespace Server.Domain
 {
@@ -96,10 +98,14 @@ namespace Server.Domain
                 throw new MetadataUpdatedPayloadInvalidException("End should occur after start");
 
             if (payload.VpCount < 10)
+            {
                 throw new MetadataUpdatedPayloadInvalidException("VP count below 10");
+            }
             
             if (payload.VpCount > 14)
+            {
                 throw new MetadataUpdatedPayloadInvalidException("VP count above 14");
+            }
         }
     }
 
