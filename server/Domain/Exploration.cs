@@ -1,13 +1,16 @@
+//
+
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class Exploration : Card
     {
-        public Exploration() : base()
+        public Exploration()
+            : base()
         {
-            Influence = 0;
-            Resources = 0;
+            this.Influence = 0;
+            this.Resources = 0;
         }
 
         public Exploration(
@@ -17,24 +20,30 @@ namespace server.Domain
             int numberOfCards,
             int additionalInfluence,
             int additionalResources,
-            Technology? techSkip = null
-        ) : base(slug, gameVersion)
+            Technology? techSkip = null)
+            : base(slug, gameVersion)
         {
-            PlanetType = planetType;
-            NumberOfCards = numberOfCards;
-            Influence = additionalInfluence;
-            Resources = additionalResources;
-            TechSkip = techSkip;
+            this.PlanetType = planetType;
+            this.NumberOfCards = numberOfCards;
+            this.Influence = additionalInfluence;
+            this.Resources = additionalResources;
+            this.TechSkip = techSkip;
         }
 
         public PlanetType PlanetType { get; set; }
+
         public int NumberOfCards { get; set; }
+
         public int Resources { get; set; }
+
         public int Influence { get; set; }
+
         public Technology? TechSkip { get; set; }
+
         [NotMapped]
-        public bool Relic => Slug.Contains("-relic-");
+        public bool Relic => this.Slug.Contains("-relic-");
+
         [NotMapped]
-        public bool Attachment => Influence > 0 || Resources > 0;
+        public bool Attachment => this.Influence > 0 || this.Resources > 0;
     }
 }

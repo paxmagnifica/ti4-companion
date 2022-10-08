@@ -1,8 +1,10 @@
+//
+
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class GameStarted : IHandler
     {
@@ -21,14 +23,18 @@ namespace server.Domain
     {
         public GameStartedPayload()
         {
-            Factions = new List<string>();
-            GameVersion = GameVersion.PoK_Codex3;
+            this.Factions = new List<string>();
+            this.GameVersion = GameVersion.PoK_Codex3;
         }
 
         public string SetupType { get; set; }
+
         public List<string> Factions { get; set; }
+
         public GameVersion GameVersion { get; set; }
+
         public DraftOptions Options { get; set; }
+
         public string Password { get; set; }
     }
 
@@ -36,18 +42,29 @@ namespace server.Domain
     {
         public DraftOptions()
         {
-            InitialPool = new string[0];
-            Players = new string[0];
+            this.InitialPool = new string[0];
+            this.Players = new string[0];
         }
 
         public string[] InitialPool { get; set; }
+
         public string[] Players { get; set; }
-        public int PlayerCount { get { return Players.Length; } }
+
+        public int PlayerCount
+        {
+            get { return this.Players.Length; }
+        }
+
         public bool Bans { get; set; }
+
         public int BanRounds { get; set; }
+
         public int BansPerRound { get; set; }
+
         public bool TablePick { get; set; }
+
         public bool SpeakerPick { get; set; }
-        public int AllBansCount { get => PlayerCount * BansPerRound * BanRounds; }
+
+        public int AllBansCount { get => this.PlayerCount * this.BansPerRound * this.BanRounds; }
     }
 }

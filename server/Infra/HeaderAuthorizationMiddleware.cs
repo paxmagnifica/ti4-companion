@@ -1,18 +1,20 @@
+//
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
-namespace server.Infra
+namespace Server.Infra
 {
     public class HeaderAuthorizationMiddleware
     {
-        private readonly RequestDelegate _next;
+        private readonly RequestDelegate next;
 
         public HeaderAuthorizationMiddleware(RequestDelegate next)
         {
-            this._next = next;
+            this.next = next;
         }
 
         public async Task Invoke(HttpContext httpContext, Authorization authorization, ILogger<HeaderAuthorizationMiddleware> logger)
@@ -24,7 +26,6 @@ namespace server.Infra
                 logger.LogTrace($"validating token {sessionSecret} for session {sessionId}");
                 var tokenValid = await authorization.ValidateToken(sessionId, sessionSecret);
 
-
                 if (!tokenValid)
                 {
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
@@ -34,7 +35,7 @@ namespace server.Infra
                 }
             }
 
-            await _next(httpContext);
+            await this.next(httpContext);
         }
     }
 }

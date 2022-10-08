@@ -1,7 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿//
 
-namespace server.Migrations
+using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+
+namespace Server.Migrations
 {
     public partial class AddedEventsToSessions : Migration
     {
@@ -15,7 +17,7 @@ namespace server.Migrations
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
                     HappenedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     EventType = table.Column<string>(type: "text", nullable: true),
-                    SerializedPayload = table.Column<string>(type: "text", nullable: true)
+                    SerializedPayload = table.Column<string>(type: "text", nullable: true),
                 },
                 constraints: table =>
                 {

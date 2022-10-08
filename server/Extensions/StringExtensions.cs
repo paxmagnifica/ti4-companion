@@ -1,7 +1,9 @@
+//
+
 using System;
 using System.Linq;
 
-namespace server.Extensions
+namespace Server.Extensions
 {
     public static class StringExtensions
     {

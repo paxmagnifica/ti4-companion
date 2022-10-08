@@ -1,23 +1,29 @@
+//
+
+using Newtonsoft.Json;
+using server.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using server.Domain;
 
-namespace server.Controllers
+namespace Server.Controllers
 {
     public class PlayerDto
     {
-        public string PlayerName { get; set; }
-        public string Faction { get; set; }
-        public string Color { get; set; }
-        public bool Speaker { get; set; }
-        public int AtTable { get; set; }
-
         public PlayerDto()
         {
-            AtTable = -1;
+            this.AtTable = -1;
         }
+
+        public string PlayerName { get; set; }
+
+        public string Faction { get; set; }
+
+        public string Color { get; set; }
+
+        public bool Speaker { get; set; }
+
+        public int AtTable { get; set; }
 
         public static IEnumerable<PlayerDto> GetPlayers(SessionDto session)
         {
@@ -26,9 +32,8 @@ namespace server.Controllers
 
             var picks = session.Factions.Select(faction =>
             {
-
                 var decapitalizedFaction = faction;
-                decapitalizedFaction = Char.ToLower(decapitalizedFaction[0]) + decapitalizedFaction.Substring(1);
+                decapitalizedFaction = char.ToLower(decapitalizedFaction[0]) + decapitalizedFaction.Substring(1);
                 var playerName = factionPicks.FirstOrDefault(fp => fp.Pick == faction)?.PlayerName;
                 var tablePick = tablePicks.FirstOrDefault(tp => tp.PlayerName == playerName)?.Pick;
 
@@ -38,7 +43,7 @@ namespace server.Controllers
                     PlayerName = playerName,
                     Color = session.Colors?.GetValueOrDefault(faction) ?? session.Colors?.GetValueOrDefault(decapitalizedFaction),
                     Speaker = playerName != null && session.Draft?.Speaker == playerName,
-                    AtTable = Int32.Parse(tablePick ?? "-1")
+                    AtTable = int.Parse(tablePick ?? "-1"),
                 };
             });
 
@@ -62,6 +67,7 @@ namespace server.Controllers
     public class BanDto
     {
         public string Ban { get; set; }
+
         public string PlayerName { get; set; }
     }
 
@@ -87,36 +93,45 @@ namespace server.Controllers
             var banOrder = JsonConvert.DeserializeObject<int[]>(orderedEvents.FirstOrDefault(e => e.EventType == "PlayerOrder")?.SerializedPayload ?? "[]");
             var orderEvent = orderedEvents.LastOrDefault(e => e.EventType == "PlayerOrder");
 
-            Order = JsonConvert.DeserializeObject<int[]>(orderEvent?.SerializedPayload ?? "[]");
-            Phase = ((gameStartOptions?.Bans ?? false) && banEvents.Count() < banOrder.Count()) ? "bans" :
-              (pickEvents.Count() < Order.Count() ? "picks" : "speaker");
-            InitialPool = gameStartOptions?.InitialPool;
-            Players = gameStartOptions?.Players ?? new string[0];
-            BansPerRound = gameStartOptions?.BansPerRound ?? 1;
-            Bans = bans;
-            Picks = pickEvents.Select(Picked.GetPayload).ToArray();
-            ActivePlayerIndex = Phase == "bans" ? banEvents.Count() : pickEvents.Count();
+            this.Order = JsonConvert.DeserializeObject<int[]>(orderEvent?.SerializedPayload ?? "[]");
+            this.Phase = ((gameStartOptions?.Bans ?? false) && banEvents.Count() < banOrder.Count()) ? "bans" :
+              (pickEvents.Count() < this.Order.Count() ? "picks" : "speaker");
+            this.InitialPool = gameStartOptions?.InitialPool;
+            this.Players = gameStartOptions?.Players ?? new string[0];
+            this.BansPerRound = gameStartOptions?.BansPerRound ?? 1;
+            this.Bans = bans;
+            this.Picks = pickEvents.Select(Picked.GetPayload).ToArray();
+            this.ActivePlayerIndex = this.Phase == "bans" ? banEvents.Count() : pickEvents.Count();
 
             var speakerSelectedEvent = orderedEvents.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
             if (speakerSelectedEvent != null)
             {
-                Speaker = SpeakerSelected.GetPayload(speakerSelectedEvent).SpeakerName;
+                this.Speaker = SpeakerSelected.GetPayload(speakerSelectedEvent).SpeakerName;
             }
+
             var speakerPickedEvent = pickEvents.LastOrDefault(e => Picked.GetPayload(e.SerializedPayload).Type == "speaker");
             if (speakerPickedEvent != null)
             {
-                Speaker = Picked.GetPayload(speakerPickedEvent.SerializedPayload).PlayerName;
+                this.Speaker = Picked.GetPayload(speakerPickedEvent.SerializedPayload).PlayerName;
             }
         }
 
         public string[] InitialPool { get; set; }
+
         public string[] Players { get; set; }
+
         public BanDto[] Bans { get; set; }
+
         public PickedPayload[] Picks { get; set; }
+
         public int BansPerRound { get; set; }
+
         public string Phase { get; set; }
+
         public int[] Order { get; set; }
+
         public int ActivePlayerIndex { get; set; }
+
         public string Speaker { get; set; }
     }
 
@@ -130,55 +145,80 @@ namespace server.Controllers
         {
             Id = session.Id;
             SetupGameState(session.Events);
-            Factions = GetFactions(session.Events);
-            Points = GetPoints(session.Events);
-            Objectives = GetObjectives(session.Events);
-            Map = GetMap(session.Events);
+            this.Factions = GetFactions(session.Events);
+            this.Points = GetPoints(session.Events);
+            this.Objectives = GetObjectives(session.Events);
+            this.Map = GetMap(session.Events);
             CreatedAt = session.CreatedAt;
             Locked = session.Locked;
-            Editable = !session.Locked;
+            this.Editable = !session.Locked;
             SetSessionDetails(session.Events);
-            Draft = new DraftDto(session);
-            Players = PlayerDto.GetPlayers(this);
-            Secured = !string.IsNullOrEmpty(session.HashedPassword);
+            this.Draft = new DraftDto(session);
+            this.Players = PlayerDto.GetPlayers(this);
+            this.Secured = !string.IsNullOrEmpty(session.HashedPassword);
 
-            Setup.Password = null;
+            this.Setup.Password = null;
         }
 
         public DraftDto Draft { get; set; }
 
         public bool Secured { get; set; }
-        public bool IsDraft { get { return !Factions.Any(); } }
+
+        public bool IsDraft
+        {
+            get { return !this.Factions.Any(); }
+        }
+
         public GameStartedPayload Setup { get; set; }
+
+        public Guid Secret { get; set; }
+
         private void SetupGameState(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
 
-            Setup = GameStarted.GetPayload(gameStartEvent);
+            this.Setup = GameStarted.GetPayload(gameStartEvent);
         }
 
-        public Guid Secret { get; set; }
         public bool Editable { get; internal set; }
+
         public bool Finished
         {
             get
             {
-                return Points.Any(point => point.Points == VpCount);
+                return this.Points.Any(point => point.Points == this.VpCount);
             }
         }
 
         public string DisplayName { get; internal set; }
+
         public bool TTS { get; internal set; }
+
         public bool Split { get; internal set; }
+
         public string Start { get; internal set; }
+
         public string End { get; internal set; }
+
         public decimal Duration { get; internal set; }
+
         public int VpCount { get; internal set; }
+
         public Dictionary<string, string> Colors { get; set; }
+
         public IEnumerable<PlayerDto> Players { get; internal set; }
+
+        public string Map { get; internal set; }
+
+        public List<ScorableObjectiveDto> Objectives { get; internal set; }
+
+        public List<string> Factions { get; set; }
+
+        public List<FactionPoint> Points { get; internal set; }
+
         private void SetSessionDetails(List<GameEvent> events)
         {
-            VpCount = 10;
+            this.VpCount = 10;
             var latestMetadataEvent = (events ?? new List<GameEvent>())
                 .OrderByDescending(e => e.HappenedAt)
                 .FirstOrDefault(e => e.EventType == nameof(MetadataUpdated));
@@ -189,17 +229,16 @@ namespace server.Controllers
             }
 
             var payload = MetadataUpdated.GetPayload(latestMetadataEvent);
-            DisplayName = payload.SessionDisplayName;
-            TTS = payload.IsTTS;
-            Split = payload.IsSplit;
-            Start = payload.SessionStart;
-            End = payload.SessionEnd;
-            Duration = payload.Duration;
-            VpCount = payload.VpCount == 0 ? 10 : payload.VpCount;
-            Colors = payload.Colors;
+            this.DisplayName = payload.SessionDisplayName;
+            this.TTS = payload.IsTTS;
+            this.Split = payload.IsSplit;
+            this.Start = payload.SessionStart;
+            this.End = payload.SessionEnd;
+            this.Duration = payload.Duration;
+            this.VpCount = payload.VpCount == 0 ? 10 : payload.VpCount;
+            this.Colors = payload.Colors;
         }
 
-        public string Map { get; internal set; }
         private string GetMap(List<GameEvent> events)
         {
             var mapEvent = (events ?? new List<GameEvent>()).OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => e.EventType == GameEvent.MapAdded);
@@ -216,7 +255,6 @@ namespace server.Controllers
             return mapEvent.SerializedPayload;
         }
 
-        public List<ScorableObjectiveDto> Objectives { get; internal set; }
         private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)
         {
             IEnumerable<string> deletedObjectives = (events ?? new List<GameEvent>())
@@ -265,7 +303,6 @@ namespace server.Controllers
             }).ToList();
         }
 
-        public List<string> Factions { get; set; }
         private List<string> GetFactions(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
@@ -287,12 +324,11 @@ namespace server.Controllers
             return FactionsShuffled.GetPayload(lastShuffle).Factions;
         }
 
-        public List<FactionPoint> Points { get; internal set; }
         private List<FactionPoint> GetPoints(List<GameEvent> events)
         {
             Dictionary<string, int> points = new Dictionary<string, int>();
 
-            foreach (var faction in Factions)
+            foreach (var faction in this.Factions)
             {
                 points[faction] = 0;
             }
@@ -310,7 +346,7 @@ namespace server.Controllers
             return points.ToArray().Select(kvp => new FactionPoint
             {
                 Faction = kvp.Key,
-                Points = kvp.Value
+                Points = kvp.Value,
             }).ToList();
         }
     }
@@ -318,6 +354,7 @@ namespace server.Controllers
     public class ScorableObjectiveDto
     {
         public string Slug { get; set; }
+
         public List<string> ScoredBy { get; set; }
     }
 }

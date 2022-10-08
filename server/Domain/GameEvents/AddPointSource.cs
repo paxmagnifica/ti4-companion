@@ -1,21 +1,23 @@
+//
+
+using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class AddPointSource : IHandler
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
 
         public AddPointSource(IRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         public async Task Handle(GameEvent gameEvent)
         {
-            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
+            var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
             {
@@ -40,9 +42,9 @@ namespace server.Domain
             payloadToUpdate.Context = sourcePayload.Context;
             lastMatchingPoint.SerializedPayload = JsonConvert.SerializeObject(payloadToUpdate);
 
-            _repository.UpdateSession(session);
+            this.repository.UpdateSession(session);
 
-            await _repository.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
         }
     }
 }

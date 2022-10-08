@@ -1,27 +1,29 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+//
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using server.Domain;
-using server.Persistence;
-using Microsoft.Extensions.Configuration;
 using server.Infra;
-using System.Linq;
+using server.Persistence;
 using System;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace server.Controllers
+namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class SessionListController : ControllerBase
     {
-        private readonly ILogger<SessionListController> _logger;
-        private readonly SessionContext _sessionContext;
-        private readonly ITimeProvider _timeProvider;
-        private readonly IConfiguration _configuration;
-        private readonly IRepository _repository;
-        private readonly Authorization _authorization;
+        private readonly ILogger<SessionListController> logger;
+        private readonly SessionContext sessionContext;
+        private readonly ITimeProvider timeProvider;
+        private readonly IConfiguration configuration;
+        private readonly IRepository repository;
+        private readonly Authorization authorization;
 
         public SessionListController(
             ILogger<SessionListController> logger,
@@ -29,40 +31,65 @@ namespace server.Controllers
             ITimeProvider timeProvider,
             IConfiguration configuration,
             IRepository repository,
-            Authorization authorization
-        )
+            Authorization authorization)
         {
-            _logger = logger;
-            _sessionContext = sessionContext;
-            _timeProvider = timeProvider;
-            _configuration = configuration;
-            _repository = repository;
-            _authorization = authorization;
+            this.logger = logger;
+            this.sessionContext = sessionContext;
+            this.timeProvider = timeProvider;
+            this.configuration = configuration;
+            this.repository = repository;
+            this.authorization = authorization;
         }
 
-        public class SessionListIdDto
-        {
-            public string SessionId { get; set; }
-        }
         [HttpPost]
         public async Task<SessionListIdDto> CreateSessionList(Guid[] sessionIds)
         {
-            var sessions = _sessionContext.Sessions.Where(session => sessionIds.Contains(session.Id)).ToList();
+            var sessions = this.sessionContext.Sessions.Where(session => sessionIds.Contains(session.Id)).ToList();
 
-            var id = await GenerateUniqueId();
-            await _sessionContext.SessionLists.AddAsync(new SessionList
+            var id = await this.GenerateUniqueId();
+            await this.sessionContext.SessionLists.AddAsync(new SessionList
             {
                 Id = id,
-                CreatedAt = _timeProvider.Now,
-                Sessions = sessions
+                CreatedAt = this.timeProvider.Now,
+                Sessions = sessions,
             });
-            sessions.ForEach(s => _sessionContext.Entry(s).State = EntityState.Modified);
-            await _sessionContext.SaveChangesAsync();
+            sessions.ForEach(s => this.sessionContext.Entry(s).State = EntityState.Modified);
+            await this.sessionContext.SaveChangesAsync();
 
             return new SessionListIdDto
             {
                 SessionId = id,
             };
+        }
+
+        [HttpGet("{listId}")]
+        public async Task<ActionResult<IEnumerable<SessionDto>>> GetSessionsFromList(string listId)
+        {
+            var sessionList = await this.sessionContext.SessionLists.FindAsync(listId);
+
+            if (sessionList == null)
+            {
+                return new NotFoundResult();
+            }
+
+            await this.sessionContext.Entry(sessionList)
+                .Collection(s => s.Sessions)
+                .LoadAsync();
+
+            var sessionsFromDb = sessionList.Sessions.OrderByDescending(session => session.CreatedAt);
+
+            return new OkObjectResult(sessionsFromDb.Select(fromDb =>
+            {
+                this.sessionContext.Entry(fromDb).Collection(s => s.Events)
+                .Load();
+
+                return new SessionDto(fromDb);
+            }));
+        }
+
+        public class SessionListIdDto
+        {
+            public string SessionId { get; set; }
         }
 
         private async Task<string> GenerateUniqueId()
@@ -73,48 +100,22 @@ namespace server.Controllers
 
             while (!generatedAndUnique)
             {
-                var now = _timeProvider.Now;
+                var now = this.timeProvider.Now;
                 char[] chars = new char[7];
-                chars[0] = (char)(65 + now.Year % 25);
+                chars[0] = (char)(65 + (now.Year % 25));
                 chars[1] = (char)(65 + now.Month);
-                chars[2] = (char)(65 + now.Day % 25);
+                chars[2] = (char)(65 + (now.Day % 25));
                 chars[3] = (char)(65 + now.Hour);
-                chars[4] = (char)(65 + now.Minute % 25);
-                chars[5] = (char)(65 + now.Second % 25);
-                chars[6] = (char)(65 + (now.Millisecond + offset) % 25);
+                chars[4] = (char)(65 + (now.Minute % 25));
+                chars[5] = (char)(65 + (now.Second % 25));
+                chars[6] = (char)(65 + ((now.Millisecond + offset) % 25));
 
                 id = new string(chars);
-                generatedAndUnique = !(await _sessionContext.SessionLists.AnyAsync(sl => sl.Id == id));
+                generatedAndUnique = !(await this.sessionContext.SessionLists.AnyAsync(sl => sl.Id == id));
                 offset++;
             }
 
             return id;
         }
-
-        [HttpGet("{listId}")]
-        public async Task<ActionResult<IEnumerable<SessionDto>>> GetSessionsFromList(string listId)
-        {
-            var sessionList = await _sessionContext.SessionLists.FindAsync(listId);
-
-            if (sessionList == null)
-            {
-                return new NotFoundResult();
-            }
-
-            await _sessionContext.Entry(sessionList)
-                .Collection(s => s.Sessions)
-                .LoadAsync();
-
-            var sessionsFromDb = sessionList.Sessions.OrderByDescending(session => session.CreatedAt);
-
-            return new OkObjectResult(sessionsFromDb.Select(fromDb =>
-            {
-                _sessionContext.Entry(fromDb).Collection(s => s.Events)
-                .Load();
-
-                return new SessionDto(fromDb);
-            }));
-        }
-
     }
 }

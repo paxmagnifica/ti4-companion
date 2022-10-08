@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿//
 
-namespace server.Migrations
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace Server.Migrations
 {
     public partial class AddObjectives : Migration
     {
@@ -15,7 +17,7 @@ namespace server.Migrations
                     Secret = table.Column<bool>(type: "boolean", nullable: false),
                     When = table.Column<int>(type: "integer", nullable: false),
                     Reward = table.Column<int>(type: "integer", nullable: false),
-                    GameVersion = table.Column<int>(type: "integer", nullable: false)
+                    GameVersion = table.Column<int>(type: "integer", nullable: false),
                 },
                 constraints: table =>
                 {

@@ -1,7 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿//
 
-namespace server.Migrations
+using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+
+namespace Server.Migrations
 {
     public partial class AddSessionLists : Migration
     {
@@ -12,7 +14,7 @@ namespace server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -24,7 +26,7 @@ namespace server.Migrations
                 columns: table => new
                 {
                     SessionListsId = table.Column<string>(type: "text", nullable: false),
-                    SessionsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    SessionsId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {

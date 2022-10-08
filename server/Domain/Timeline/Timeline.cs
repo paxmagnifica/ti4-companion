@@ -1,79 +1,81 @@
+//
+
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class Timeline
     {
-        IOrderedEnumerable<GameEvent> _originalOrderedEvents;
-        IOrderedEnumerable<GameEvent> _orderedEvents;
-        bool _addDraftSummary = false;
-        bool _addSessionSummary = false;
-        bool _deduplicate = false;
-        bool _addDeltas = false;
+        private IOrderedEnumerable<GameEvent> originalOrderedEvents;
+        private IOrderedEnumerable<GameEvent> orderedEvents;
+        private bool addDraftSummary = false;
+        private bool addSessionSummary = false;
+        private bool deduplicate = false;
+        private bool addDeltas = false;
 
         public Timeline(Session session)
         {
-            _originalOrderedEvents = session.Events.OrderBy(e => e.HappenedAt);
-            _orderedEvents = session.Events.OrderBy(e => e.HappenedAt);
+            this.originalOrderedEvents = session.Events.OrderBy(e => e.HappenedAt);
+            this.orderedEvents = session.Events.OrderBy(e => e.HappenedAt);
         }
 
         public Timeline AddDraftSummary()
         {
-            _addDraftSummary = true;
+            this.addDraftSummary = true;
 
             return this;
         }
 
         public Timeline AddSessionSummary()
         {
-            _addSessionSummary = true;
+            this.addSessionSummary = true;
 
             return this;
         }
 
         public Timeline Deduplicate()
         {
-            _deduplicate = true;
+            this.deduplicate = true;
 
             return this;
         }
 
         public Timeline CalculateDeltas()
         {
-            _addDeltas = true;
+            this.addDeltas = true;
 
             return this;
         }
 
         public IEnumerable<TimelineEvent> GetEvents()
         {
-            var events = GenerateTimelineEvents();
+            var events = this.GenerateTimelineEvents();
 
-            if (_addSessionSummary)
+            if (this.addSessionSummary)
             {
-                events = AddSessionSummary(events);
-                _addSessionSummary = false;
+                events = this.AddSessionSummary(events);
+                this.addSessionSummary = false;
             }
 
-            if (_addDraftSummary)
+            if (this.addDraftSummary)
             {
-                events = AddDraftSummary(events);
-                _addDraftSummary = false;
+                events = this.AddDraftSummary(events);
+                this.addDraftSummary = false;
             }
 
-            if (_deduplicate)
+            if (this.deduplicate)
             {
-                events = Deduplicate(events);
-                _deduplicate = false;
+                events = this.Deduplicate(events);
+                this.deduplicate = false;
             }
 
-            if (_addDeltas)
+            if (this.addDeltas)
             {
-                events = CalculateDeltas(events);
-                _addDeltas = false;
+                events = this.CalculateDeltas(events);
+                this.addDeltas = false;
             }
 
             return events.Select((e, index) =>
@@ -89,7 +91,7 @@ namespace server.Domain
             var previousVpCount = defaultVpCount;
             var timelineEvents = new List<KeyValuePair<GameEvent, TimelineEvent>>();
 
-            foreach (var sessionEvent in _orderedEvents)
+            foreach (var sessionEvent in this.orderedEvents)
             {
                 if (sessionEvent.EventType == nameof(MetadataUpdated))
                 {
@@ -98,13 +100,14 @@ namespace server.Domain
                     {
                         continue;
                     }
+
                     var newPayload = JsonConvert.SerializeObject(new { from = previousVpCount, to = payload.VpCount });
                     previousVpCount = payload.VpCount;
                     timelineEvents.Add(KeyValuePair.Create(sessionEvent, new TimelineEvent
                     {
                         EventType = "VpCountChanged",
                         SerializedPayload = newPayload,
-                        HappenedAt = sessionEvent.HappenedAt
+                        HappenedAt = sessionEvent.HappenedAt,
                     }));
 
                     continue;
@@ -117,7 +120,7 @@ namespace server.Domain
                     {
                         EventType = sessionEvent.EventType,
                         SerializedPayload = sessionEvent.SerializedPayload.Replace("storage-emulator", "localhost"),
-                        HappenedAt = sessionEvent.HappenedAt
+                        HappenedAt = sessionEvent.HappenedAt,
                     }));
                     continue;
                 }
@@ -127,23 +130,22 @@ namespace server.Domain
                 {
                     EventType = sessionEvent.EventType,
                     SerializedPayload = sessionEvent.SerializedPayload,
-                    HappenedAt = sessionEvent.HappenedAt
+                    HappenedAt = sessionEvent.HappenedAt,
                 }));
             }
 
-            var withoutVPFromObjectives = MergeVictoryPointsAndScoredObjectives(timelineEvents.Select(kvp => kvp.Value));
+            var withoutVPFromObjectives = this.MergeVictoryPointsAndScoredObjectives(timelineEvents.Select(kvp => kvp.Value));
 
             return withoutVPFromObjectives;
         }
 
-
         private IEnumerable<TimelineEvent> MergeVictoryPointsAndScoredObjectives(IEnumerable<TimelineEvent> timelineEvents)
         {
             var objectiveScoredEvents = timelineEvents.Where(e => e.EventType == nameof(ObjectiveScored));
-            var withoutScoredObjectives = timelineEvents.Where(e => e.EventType != nameof(VictoryPointsUpdated) || !IsVictoryPointFromObjective(e, objectiveScoredEvents));
+            var withoutScoredObjectives = timelineEvents.Where(e => e.EventType != nameof(VictoryPointsUpdated) || !this.IsVictoryPointFromObjective(e, objectiveScoredEvents));
 
             var objectiveDescoredEvents = timelineEvents.Where(e => e.EventType == nameof(ObjectiveDescored));
-            var withoutDescoredObjectives = withoutScoredObjectives.Where(e => e.EventType != nameof(VictoryPointsUpdated) || !IsVictoryPointFromObjective(e, objectiveDescoredEvents));
+            var withoutDescoredObjectives = withoutScoredObjectives.Where(e => e.EventType != nameof(VictoryPointsUpdated) || !this.IsVictoryPointFromObjective(e, objectiveDescoredEvents));
 
             return withoutDescoredObjectives;
         }
@@ -177,7 +179,7 @@ namespace server.Domain
                 var pickPayload = Picked.GetPayload(pick.SerializedPayload);
                 if (!playerPicks.ContainsKey(pickPayload.PlayerName))
                 {
-                    playerPicks[pickPayload.PlayerName] = ("", -1);
+                    playerPicks[pickPayload.PlayerName] = (string.Empty, -1);
                 }
 
                 if (pickPayload.Type == "faction")
@@ -191,7 +193,7 @@ namespace server.Domain
                 }
             }
 
-            var speakerName = GetSpeakerName(timelineEvents);
+            var speakerName = this.GetSpeakerName(timelineEvents);
             var commitDraftIndex = timelineEvents.ToList().FindIndex(e => e.EventType == nameof(CommitDraft));
             var draftSummary = new TimelineEvent
             {
@@ -201,7 +203,7 @@ namespace server.Domain
                 {
                     speaker = speakerName,
                     picks = playerPicks.Select(kvp => new { playerName = kvp.Key, faction = kvp.Value.Item1, tablePosition = kvp.Value.Item2 })
-                })
+                }),
             };
             var timelineEventsWithDraftSummary = new List<TimelineEvent>(timelineEvents);
             timelineEventsWithDraftSummary.Insert(commitDraftIndex + 1, draftSummary);
@@ -225,13 +227,13 @@ namespace server.Domain
                 return Picked.GetPayload(speakerPickedEvent.SerializedPayload).PlayerName;
             }
 
-            return "";
+            return string.Empty;
         }
 
         private IEnumerable<TimelineEvent> Deduplicate(IEnumerable<TimelineEvent> possiblyDuplicatedEvents)
         {
-            var deduplicatedVpScored = DeduplicateVp(possiblyDuplicatedEvents);
-            var deduplicatedObjectives = DeduplicateObjectives(deduplicatedVpScored);
+            var deduplicatedVpScored = this.DeduplicateVp(possiblyDuplicatedEvents);
+            var deduplicatedObjectives = this.DeduplicateObjectives(deduplicatedVpScored);
 
             return deduplicatedObjectives;
         }
@@ -240,7 +242,7 @@ namespace server.Domain
         {
             var deduplicated = new List<TimelineEvent>();
 
-            var faction = "";
+            var faction = string.Empty;
             var factionVPHistory = new Dictionary<string, List<int>>();
 
             foreach (var timelineEvent in possiblyDuplicatedEvents.OrderBy(pde => pde.Order))
@@ -289,8 +291,8 @@ namespace server.Domain
             var deduplicated = new List<TimelineEvent>();
             var typesWeCareAbout = new string[] { nameof(ObjectiveScored), nameof(ObjectiveDescored) };
 
-            var factionJustScored = "";
-            var objectiveJustScored = "";
+            var factionJustScored = string.Empty;
+            var objectiveJustScored = string.Empty;
             foreach (var timelineEvent in possiblyDuplicatedEvents)
             {
                 if (!typesWeCareAbout.Contains(timelineEvent.EventType))
@@ -315,8 +317,8 @@ namespace server.Domain
                     deduplicated.RemoveAt(deduplicated.Count - 1);
                 }
 
-                factionJustScored = "";
-                objectiveJustScored = "";
+                factionJustScored = string.Empty;
+                objectiveJustScored = string.Empty;
             }
 
             return deduplicated;
@@ -324,7 +326,7 @@ namespace server.Domain
 
         private IEnumerable<TimelineEvent> AddSessionSummary(IEnumerable<TimelineEvent> timelineEvents)
         {
-            var targetVP = _orderedEvents.LastOrDefault(e => e.EventType == nameof(MetadataUpdated));
+            var targetVP = this.orderedEvents.LastOrDefault(e => e.EventType == nameof(MetadataUpdated));
 
             var targetVPCount = 10;
             if (targetVP != null)
@@ -333,14 +335,14 @@ namespace server.Domain
                 targetVPCount = targetVPPayload.VpCount;
             }
 
-            var firstToScoreTargetVPCount = _orderedEvents.FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains($"\"points\":{targetVPCount}"));
+            var firstToScoreTargetVPCount = this.orderedEvents.FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains($"\"points\":{targetVPCount}"));
 
             if (firstToScoreTargetVPCount == null)
             {
                 return timelineEvents;
             }
 
-            var victoryPointsEvents = _orderedEvents.Where(e => e.EventType == nameof(VictoryPointsUpdated));
+            var victoryPointsEvents = this.orderedEvents.Where(e => e.EventType == nameof(VictoryPointsUpdated));
             var payloads = victoryPointsEvents.Select(e => VictoryPointsUpdated.GetPayload(e.SerializedPayload));
             var payloadsByFaction = payloads.GroupBy(p => p.Faction);
 
@@ -353,7 +355,7 @@ namespace server.Domain
                 {
                     winner = VictoryPointsUpdated.GetPayload(firstToScoreTargetVPCount.SerializedPayload).Faction,
                     results = payloadsByFaction.Select(pbf => new { faction = pbf.Key, points = pbf.Last().Points })
-                })
+                }),
             });
 
             return withSessionSummary;

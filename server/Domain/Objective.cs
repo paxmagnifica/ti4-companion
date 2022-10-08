@@ -1,23 +1,30 @@
-namespace server.Domain
+//
+
+namespace Server.Domain
 {
     public class Objective : Card
     {
-        public Objective() : base()
+        public Objective()
+            : base()
         {
-            Reward = Reward.VictoryPoint;
+            this.Reward = Reward.VictoryPoint;
         }
 
-        public Objective(string slug, GameVersion gameVersion, int points, bool secret, GamePhase phase) : base(slug, gameVersion)
+        public Objective(string slug, GameVersion gameVersion, int points, bool secret, GamePhase phase)
+            : base(slug, gameVersion)
         {
-            Points = points;
-            Secret = secret;
-            When = phase;
-            Reward = Reward.VictoryPoint;
+            this.Points = points;
+            this.Secret = secret;
+            this.When = phase;
+            this.Reward = Reward.VictoryPoint;
         }
 
         public int Points { get; set; }
+
         public bool Secret { get; set; }
+
         public GamePhase When { get; set; }
+
         public Reward Reward { get; set; }
     }
 }

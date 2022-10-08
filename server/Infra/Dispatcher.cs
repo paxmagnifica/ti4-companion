@@ -1,17 +1,19 @@
-using System;
-using System.Threading.Tasks;
+//
+
 using server.Domain;
 using server.Extensions;
+using System;
+using System.Threading.Tasks;
 
-namespace server.Infra
+namespace Server.Infra
 {
     public class Dispatcher
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceProvider serviceProvider;
 
         public Dispatcher(IServiceProvider serviceProvider)
         {
-            this._serviceProvider = serviceProvider;
+            this.serviceProvider = serviceProvider;
         }
 
         public Task Dispatch(GameEvent gameEvent)
@@ -22,7 +24,7 @@ namespace server.Infra
                 throw new HandlerNotFoundException(gameEvent.EventType.Capitalize());
             }
 
-            var handler = (_serviceProvider.GetService(handlerType) as IHandler);
+            var handler = this.serviceProvider.GetService(handlerType) as IHandler;
             if (handler == null)
             {
                 throw new HandlerNotFoundException(gameEvent.EventType.Capitalize());

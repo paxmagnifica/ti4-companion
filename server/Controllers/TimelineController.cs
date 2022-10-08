@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+//
+
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,40 +8,42 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using server.Domain;
 using server.Persistence;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace server.Controllers
+namespace Server.Controllers
 {
     [ApiController]
     [Route("api/sessions/{sessionId:guid}/[controller]")]
     public class TimelineController : ControllerBase
     {
-        private readonly ILogger<SessionsController> _logger;
-        private readonly IRepository _repository;
-        private readonly IConfiguration _configuration;
-        private readonly ITimeProvider _timeProvider;
-        private readonly SessionContext _sessionContext;
+        private readonly ILogger<SessionsController> logger;
+        private readonly IRepository repository;
+        private readonly IConfiguration configuration;
+        private readonly ITimeProvider timeProvider;
+        private readonly SessionContext sessionContext;
 
         public TimelineController(
             ILogger<SessionsController> logger,
             IRepository repository,
             IConfiguration configuration,
             ITimeProvider timeProvider,
-            SessionContext sessionContext
-            )
+            SessionContext sessionContext)
         {
-            this._logger = logger;
-            this._repository = repository;
-            this._configuration = configuration;
-            this._timeProvider = timeProvider;
-            this._sessionContext = sessionContext;
+            this.logger = logger;
+            this.repository = repository;
+            this.configuration = configuration;
+            this.timeProvider = timeProvider;
+            this.sessionContext = sessionContext;
         }
 
         [HttpPost]
         public async Task<ActionResult> AddEvent([FromRoute] Guid sessionId)
         {
-            var title = HttpContext.Request.Form["title"];
-            var description = HttpContext.Request.Form["description"];
-            var imageFile = HttpContext.Request.Form.Files["image"];
+            var title = this.HttpContext.Request.Form["title"];
+            var description = this.HttpContext.Request.Form["description"];
+            var imageFile = this.HttpContext.Request.Form.Files["image"];
 
             if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(description) && imageFile == null)
             {
@@ -50,7 +51,7 @@ namespace server.Controllers
             }
 
             var eventId = Guid.NewGuid();
-            string fileUri = "";
+            string fileUri = string.Empty;
             if (imageFile != null)
             {
                 if (imageFile.Length > 3000000)
@@ -58,7 +59,7 @@ namespace server.Controllers
                     return new BadRequestResult();
                 }
 
-                var sessionBlobContainer = new BlobContainerClient(_configuration.GetConnectionString("BlobStorage"), sessionId.ToString());
+                var sessionBlobContainer = new BlobContainerClient(this.configuration.GetConnectionString("BlobStorage"), sessionId.ToString());
                 await sessionBlobContainer.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
                 var blobClient = sessionBlobContainer.GetBlobClient($"timeline_event_{eventId}");
@@ -72,17 +73,17 @@ namespace server.Controllers
             {
                 Id = eventId,
                 SessionId = sessionId,
-                HappenedAt = _timeProvider.Now,
+                HappenedAt = this.timeProvider.Now,
                 EventType = GameEvent.TimelineUserEvent,
                 SerializedPayload = JsonConvert.SerializeObject(new
                 {
                     file = fileUri,
-                    title = HttpContext.Request.Form["title"].ToString(),
-                    description = HttpContext.Request.Form["description"].ToString()
+                    title = this.HttpContext.Request.Form["title"].ToString(),
+                    description = this.HttpContext.Request.Form["description"].ToString(),
                 }),
             };
-            await _sessionContext.Events.AddAsync(gameEvent);
-            await _sessionContext.SaveChangesAsync();
+            await this.sessionContext.Events.AddAsync(gameEvent);
+            await this.sessionContext.SaveChangesAsync();
 
             return new OkResult();
         }
@@ -90,7 +91,7 @@ namespace server.Controllers
         [HttpGet]
         public async Task<IEnumerable<TimelineEvent>> Get([FromRoute] Guid sessionId)
         {
-            var sessionFromDb = await _repository.GetByIdWithEvents(sessionId);
+            var sessionFromDb = await this.repository.GetByIdWithEvents(sessionId);
             var timeline = new Timeline(sessionFromDb);
 
             return timeline

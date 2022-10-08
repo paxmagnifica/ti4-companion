@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿//
 
-namespace server.Migrations
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace Server.Migrations
 {
     public partial class Relics : Migration
     {
@@ -11,7 +13,7 @@ namespace server.Migrations
                 columns: table => new
                 {
                     Slug = table.Column<string>(type: "text", nullable: false),
-                    GameVersion = table.Column<int>(type: "integer", nullable: false)
+                    GameVersion = table.Column<int>(type: "integer", nullable: false),
                 },
                 constraints: table =>
                 {

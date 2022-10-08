@@ -1,4 +1,6 @@
-namespace server.Domain
+//
+
+namespace Server.Domain
 {
     public enum AgendaType
     {
@@ -22,20 +24,24 @@ namespace server.Domain
 
     public class Agenda : Card
     {
-        public Agenda() : base()
+        public Agenda()
+            : base()
         {
-            ExcludedFrom = null;
+            this.ExcludedFrom = null;
         }
 
-        public Agenda(string slug, GameVersion gameVersion, AgendaType type, ElectionType election, GameVersion? excludedFrom = null) : base(slug, gameVersion)
+        public Agenda(string slug, GameVersion gameVersion, AgendaType type, ElectionType election, GameVersion? excludedFrom = null)
+            : base(slug, gameVersion)
         {
-            Type = type;
-            Election = election;
-            ExcludedFrom = excludedFrom;
+            this.Type = type;
+            this.Election = election;
+            this.ExcludedFrom = excludedFrom;
         }
 
         public AgendaType Type { get; set; }
+
         public ElectionType Election { get; set; }
+
         public GameVersion? ExcludedFrom { get; set; }
     }
 }

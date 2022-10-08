@@ -1,7 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿//
 
-namespace server.Migrations
+using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+
+namespace Server.Migrations
 {
     public partial class AddTokensDbSet : Migration
     {
@@ -13,7 +15,7 @@ namespace server.Migrations
                 {
                     Value = table.Column<Guid>(type: "uuid", nullable: false),
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Expires = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    Expires = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                 },
                 constraints: table =>
                 {

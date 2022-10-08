@@ -1,36 +1,39 @@
+//
+
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class LawRemoved : IHandler
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
 
         public LawRemoved(IRepository repository)
         {
-            _repository = repository;
-        }
-
-        public async Task Handle(GameEvent gameEvent)
-        {
-            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
-
-            if (session.Events == null)
-            {
-                session.Events = new List<GameEvent>();
-            }
-            session.Events.Add(gameEvent);
-
-            _repository.UpdateSession(session);
-
-            await _repository.SaveChangesAsync();
+            this.repository = repository;
         }
 
         public static LawRemovedPayload GetPayload(GameEvent gameEvent)
         {
             return GetPayload(gameEvent.SerializedPayload);
+        }
+
+        public async Task Handle(GameEvent gameEvent)
+        {
+            var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
+
+            if (session.Events == null)
+            {
+                session.Events = new List<GameEvent>();
+            }
+
+            session.Events.Add(gameEvent);
+
+            this.repository.UpdateSession(session);
+
+            await this.repository.SaveChangesAsync();
         }
 
         public static LawRemovedPayload GetPayload(string serializedPayload)

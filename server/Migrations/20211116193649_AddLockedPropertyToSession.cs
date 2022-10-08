@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿//
 
-namespace server.Migrations
+using Microsoft.EntityFrameworkCore.Migrations;
+
+namespace Server.Migrations
 {
     public partial class AddLockedPropertyToSession : Migration
     {

@@ -1,24 +1,26 @@
+//
+
 using System.Threading.Tasks;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class UnlockSession : IHandler
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
 
         public UnlockSession(IRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         public async Task Handle(GameEvent gameEvent)
         {
-            var session = await _repository.GetById(gameEvent.SessionId);
+            var session = await this.repository.GetById(gameEvent.SessionId);
 
             session.Locked = false;
-            _repository.UpdateSession(session);
+            this.repository.UpdateSession(session);
 
-            await _repository.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
         }
     }
 }

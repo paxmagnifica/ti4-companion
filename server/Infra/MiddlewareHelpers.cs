@@ -1,7 +1,9 @@
-using System.Net.Http;
-using Microsoft.AspNetCore.Http;
+//
 
-namespace server.Infra
+using Microsoft.AspNetCore.Http;
+using System.Net.Http;
+
+namespace Server.Infra
 {
     public static class MiddlewareHelpers
     {
@@ -17,7 +19,7 @@ namespace server.Infra
 
         public static bool IsProtected(HttpContext context)
         {
-            return (context.Items.ContainsKey("Protect") && (bool)context.Items["Protect"]);
+            return context.Items.ContainsKey("Protect") && (bool)context.Items["Protect"];
         }
     }
 }

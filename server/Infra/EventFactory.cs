@@ -1,22 +1,24 @@
-using System;
+//
+
 using server.Domain;
 using server.Extensions;
+using System;
 
-namespace server.Infra
+namespace Server.Infra
 {
     public class EventFactory
     {
-        private readonly ITimeProvider _timeProvider;
+        private readonly ITimeProvider timeProvider;
 
         public EventFactory(ITimeProvider timeProvider)
         {
-            _timeProvider = timeProvider;
+            this.timeProvider = timeProvider;
         }
 
         public GameEvent GetGameEvent(Guid sessionId, EventDto eventDto)
         {
             var gameEvent = new GameEvent();
-            gameEvent.HappenedAt = _timeProvider.Now;
+            gameEvent.HappenedAt = this.timeProvider.Now;
             gameEvent.SessionId = sessionId;
             gameEvent.EventType = eventDto.EventType.Capitalize();
             gameEvent.SerializedPayload = eventDto.SerializedPayload;

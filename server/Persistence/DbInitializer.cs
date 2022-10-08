@@ -1,10 +1,12 @@
+//
+
+using Newtonsoft.Json;
+using server.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using server.Domain;
-using Newtonsoft.Json;
 
-namespace server.Persistence
+namespace Server.Persistence
 {
     public static class DbInitializer
     {
@@ -100,7 +102,8 @@ namespace server.Persistence
 
             if (context.Explorations.FirstOrDefault(e => e.Slug == "demilitarized-zone" && e.GameVersion == GameVersion.PoK) == null)
             {
-                var explorations = new Exploration[] {
+                var explorations = new Exploration[]
+                {
                     new Exploration("demilitarized-zone", GameVersion.PoK, PlanetType.Cultural, 1, 0, 0),
                     new Exploration("dyson-sphere", GameVersion.PoK, PlanetType.Cultural, 1, 1, 2),
                     new Exploration("freelancers", GameVersion.PoK, PlanetType.Cultural, 3, 0, 0),
@@ -138,7 +141,8 @@ namespace server.Persistence
 
             if (context.Relics.FirstOrDefault(r => r.Slug == "dominus-orb" && r.GameVersion == GameVersion.PoK) == null)
             {
-                var relics = new Relic[] {
+                var relics = new Relic[]
+                {
                     new Relic("dominus-orb", GameVersion.PoK),
                     new Relic("maw-of-worlds", GameVersion.PoK),
                     new Relic("scepter-of-emelpar", GameVersion.PoK),
@@ -170,31 +174,36 @@ namespace server.Persistence
                 {
                     Id = sessionId,
                     HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
-                    Events = new List<GameEvent>() {
-                        new GameEvent {
+                    Events = new List<GameEvent>()
+                    {
+                        new GameEvent
+                        {
                             Id = Guid.NewGuid(),
                             SessionId = sessionId,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = GameEvent.GameStarted,
-                            SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload {
+                            SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
+                            {
                                 SetupType = "simple",
                                 Factions = new List<string>() { "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" }
-                            })
+                            }),
                         },
-                        new GameEvent {
+                        new GameEvent
+                        {
                             Id = Guid.NewGuid(),
                             SessionId = sessionId,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = nameof(MetadataUpdated),
-                            SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload {
+                            SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload
+                            {
                               SessionDisplayName = "4 man game",
                               IsTTS = false,
                               IsSplit = false,
                               SessionStart = "2021-09-25",
-                              VpCount= 10,
+                              VpCount = 10,
                               Duration = 9
                             })
-                        }
+                        },
                     },
                     CreatedAt = DateTimeOffset.Now,
                 });
@@ -204,31 +213,36 @@ namespace server.Persistence
                 {
                     Id = sessionId2,
                     HashedPassword = "$2a$06$qJPpl6cRPMYqZo0HGAewo.RkKYRunRSS7SgAqpCV2edoUAlA1AqEK", // 'test'
-                    Events = new List<GameEvent>() {
-                        new GameEvent {
+                    Events = new List<GameEvent>()
+                    {
+                        new GameEvent
+                        {
                             Id = Guid.NewGuid(),
                             SessionId = sessionId2,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = GameEvent.GameStarted,
-                            SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload {
+                            SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
+                            {
                                 SetupType = "simple",
                                 Factions = new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance", "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" }
-                            })
+                            }),
                         },
-                        new GameEvent {
+                        new GameEvent
+                        {
                             Id = Guid.NewGuid(),
                             SessionId = sessionId2,
                             HappenedAt = DateTimeOffset.Now,
                             EventType = nameof(MetadataUpdated),
-                            SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload {
+                            SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload
+                            {
                               SessionDisplayName = "8 man game",
                               IsTTS = false,
                               IsSplit = false,
                               SessionStart = "2021-09-26",
-                              VpCount= 10,
+                              VpCount = 10,
                               Duration = 9
                             })
-                        }
+                        },
                     },
                     CreatedAt = DateTimeOffset.Now,
                 });
