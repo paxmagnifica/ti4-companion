@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace server.Domain
 {
-    public class FactionsShuffled: IHandler
+    public class FactionsShuffled : IHandler
     {
         private readonly IRepository _repository;
 

@@ -91,7 +91,7 @@ namespace server.Migrations
 
             foreach (var agenda in agendas)
             {
-                migrationBuilder.InsertData("Agendas", new string[] { "Slug", "GameVersion", "Type", "Election", "ExcludedFrom" }, new string[] { "text", "integer", "integer", "integer", "integer" }, new object[] { agenda.Slug, (int) agenda.GameVersion, (int) agenda.Type, (int) agenda.Election, (int?) agenda.ExcludedFrom });
+                migrationBuilder.InsertData("Agendas", new string[] { "Slug", "GameVersion", "Type", "Election", "ExcludedFrom" }, new string[] { "text", "integer", "integer", "integer", "integer" }, new object[] { agenda.Slug, (int)agenda.GameVersion, (int)agenda.Type, (int)agenda.Election, (int?)agenda.ExcludedFrom });
             }
         }
 

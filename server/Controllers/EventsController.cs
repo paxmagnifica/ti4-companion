@@ -25,7 +25,7 @@ namespace server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromRoute]Guid sessionId, [FromBody]EventDto eventDto)
+        public async Task<ActionResult> Post([FromRoute] Guid sessionId, [FromBody] EventDto eventDto)
         {
             try
             {

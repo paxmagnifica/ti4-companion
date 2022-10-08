@@ -96,7 +96,8 @@ namespace server.Controllers
         {
             var sessionList = await _sessionContext.SessionLists.FindAsync(listId);
 
-            if (sessionList == null) {
+            if (sessionList == null)
+            {
                 return new NotFoundResult();
             }
 

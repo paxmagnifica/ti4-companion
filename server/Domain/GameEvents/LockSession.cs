@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace server.Domain
 {
-    public class LockSession: IHandler
+    public class LockSession : IHandler
     {
         private readonly IRepository _repository;
 

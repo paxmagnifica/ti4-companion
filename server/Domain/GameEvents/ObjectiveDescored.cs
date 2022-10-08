@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace server.Domain
 {
-    public class ObjectiveDescored: IHandler
+    public class ObjectiveDescored : IHandler
     {
         private readonly IRepository _repository;
 

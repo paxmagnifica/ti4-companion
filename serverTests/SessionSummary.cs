@@ -501,7 +501,7 @@ namespace serverTests
                     SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
                 }
             };
-            var timeline = new Timeline(new Session{ Events = given});
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
             var actual = timeline.AddSessionSummary().GetEvents();
@@ -606,7 +606,7 @@ namespace serverTests
                     SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
                 }
             };
-            var timeline = new Timeline(new Session{ Events = given});
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
             var actual = timeline.AddSessionSummary().GetEvents();

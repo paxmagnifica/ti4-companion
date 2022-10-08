@@ -47,11 +47,13 @@ namespace server.Domain
 
         private void AssurePlayerCanBan(GameEvent gameEvent, IEnumerable<GameEvent> previousBanEvents, DraftOptions options)
         {
-            if (options.Bans != true) {
+            if (options.Bans != true)
+            {
                 throw new BansNotAllowedException();
             }
 
-            if (previousBanEvents.Count() == 0) {
+            if (previousBanEvents.Count() == 0)
+            {
                 return;
             }
 

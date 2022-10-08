@@ -213,13 +213,15 @@ namespace server.Domain
         {
             var speakerSelectedEvent = timelineEvents.LastOrDefault(e => e.EventType == nameof(SpeakerSelected));
 
-            if (speakerSelectedEvent != null) {
+            if (speakerSelectedEvent != null)
+            {
                 return SpeakerSelected.GetPayload(speakerSelectedEvent.SerializedPayload).SpeakerName;
             }
 
             var speakerPickedEvent = timelineEvents.LastOrDefault(e => e.EventType == nameof(Picked) && Picked.GetPayload(e.SerializedPayload).Type == "speaker");
 
-            if (speakerPickedEvent != null) {
+            if (speakerPickedEvent != null)
+            {
                 return Picked.GetPayload(speakerPickedEvent.SerializedPayload).PlayerName;
             }
 
@@ -367,7 +369,8 @@ namespace server.Domain
                 if (timelineEvent.EventType == nameof(ObjectiveScored))
                 {
                     var payload = ObjectiveScored.GetPayload(timelineEvent.SerializedPayload);
-                    if (!points.ContainsKey(payload.Faction)) {
+                    if (!points.ContainsKey(payload.Faction))
+                    {
                         points.Add(payload.Faction, 0);
                     }
 
@@ -378,7 +381,8 @@ namespace server.Domain
                 if (timelineEvent.EventType == nameof(VictoryPointsUpdated))
                 {
                     var payload = VictoryPointsUpdated.GetPayload(timelineEvent.SerializedPayload);
-                    if (!points.ContainsKey(payload.Faction)) {
+                    if (!points.ContainsKey(payload.Faction))
+                    {
                         points.Add(payload.Faction, 0);
                     }
 
