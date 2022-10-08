@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using server.Domain;
-using server.Persistence;
+using Server.Domain;
+using Server.Persistence;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,12 +36,12 @@ namespace Server.Controllers
     {
         public ObjectiveDto(Objective objective)
         {
-            Slug = objective.Slug;
-            GameVersion = objective.GameVersion;
-            Points = objective.Points;
-            Secret = objective.Secret;
-            When = objective.When;
-            Reward = objective.Reward;
+            this.Slug = objective.Slug;
+            this.GameVersion = objective.GameVersion;
+            this.Points = objective.Points;
+            this.Secret = objective.Secret;
+            this.When = objective.When;
+            this.Reward = objective.Reward;
         }
     }
 }

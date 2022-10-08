@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using server.Infra;
+using Server.Infra;
 using System;
 using System.Threading.Tasks;
 

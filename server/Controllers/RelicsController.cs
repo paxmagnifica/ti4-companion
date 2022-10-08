@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using server.Domain;
-using server.Persistence;
+using Server.Domain;
+using Server.Persistence;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,8 +33,8 @@ namespace Server.Controllers
     {
         public RelicDto(Relic relic)
         {
-            Slug = relic.Slug;
-            GameVersion = relic.GameVersion;
+            this.Slug = relic.Slug;
+            this.GameVersion = relic.GameVersion;
         }
     }
 }

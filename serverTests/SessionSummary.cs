@@ -2,7 +2,7 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
-using server.Domain;
+using Server.Domain;
 using System.Collections.Generic;
 
 namespace ServerTests

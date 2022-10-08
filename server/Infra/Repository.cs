@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using server.Domain;
-using server.Persistence;
+using Server.Domain;
+using Server.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;

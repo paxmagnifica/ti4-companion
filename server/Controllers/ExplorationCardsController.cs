@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using server.Domain;
-using server.Persistence;
+using Server.Domain;
+using Server.Persistence;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,13 +33,13 @@ namespace Server.Controllers
     {
         public ExplorationCardDto(Exploration exploration)
         {
-            Slug = exploration.Slug;
-            GameVersion = exploration.GameVersion;
-            PlanetType = exploration.PlanetType;
-            NumberOfCards = exploration.NumberOfCards;
-            Resources = exploration.Resources;
-            Influence = exploration.Influence;
-            TechSkip = exploration.TechSkip;
+            this.Slug = exploration.Slug;
+            this.GameVersion = exploration.GameVersion;
+            this.PlanetType = exploration.PlanetType;
+            this.NumberOfCards = exploration.NumberOfCards;
+            this.Resources = exploration.Resources;
+            this.Influence = exploration.Influence;
+            this.TechSkip = exploration.TechSkip;
         }
     }
 }

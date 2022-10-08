@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using server.Domain.Exceptions;
+using Server.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

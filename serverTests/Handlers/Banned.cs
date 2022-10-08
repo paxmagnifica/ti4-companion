@@ -2,8 +2,8 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using NSubstitute;
 using NUnit.Framework;
-using server.Domain;
-using server.Domain.Exceptions;
+using Server.Domain;
+using Server.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -47,7 +47,7 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var bannedHandler = new server.Domain.Banned(this.Repository, this.TimeProvider);
+            var bannedHandler = new Server.Domain.Banned(this.Repository, this.TimeProvider);
             var given = new GameEvent()
             {
                 SessionId = sessionId,
@@ -87,11 +87,11 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var bannedHandler = new server.Domain.Banned(this.Repository, this.TimeProvider);
+            var bannedHandler = new Server.Domain.Banned(this.Repository, this.TimeProvider);
             var given = new GameEvent()
             {
                 SessionId = sessionId,
-                EventType = nameof(server.Domain.Banned),
+                EventType = nameof(Server.Domain.Banned),
                 SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                 {
                     Bans = new string[] { "faction1" },
@@ -134,7 +134,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Banned),
+                        EventType = nameof(Server.Domain.Banned),
                         SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                         {
                             Bans = new string[] { "faction1" },
@@ -146,11 +146,11 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var bannedHandler = new server.Domain.Banned(this.Repository, this.TimeProvider);
+            var bannedHandler = new Server.Domain.Banned(this.Repository, this.TimeProvider);
             var given = new GameEvent()
             {
                 SessionId = sessionId,
-                EventType = nameof(server.Domain.Banned),
+                EventType = nameof(Server.Domain.Banned),
                 SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                 {
                     Bans = new string[] { "faction1" },
@@ -193,7 +193,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Banned),
+                        EventType = nameof(Server.Domain.Banned),
                         SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                         {
                             Bans = new string[] { "faction1" },
@@ -203,7 +203,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Banned),
+                        EventType = nameof(Server.Domain.Banned),
                         SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                         {
                             Bans = new string[] { "faction2" },
@@ -215,11 +215,11 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var bannedHandler = new server.Domain.Banned(this.Repository, this.TimeProvider);
+            var bannedHandler = new Server.Domain.Banned(this.Repository, this.TimeProvider);
             var given = new GameEvent()
             {
                 SessionId = sessionId,
-                EventType = nameof(server.Domain.Banned),
+                EventType = nameof(Server.Domain.Banned),
                 SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                 {
                     Bans = new string[] { "faction3" },
@@ -262,7 +262,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Banned),
+                        EventType = nameof(Server.Domain.Banned),
                         SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                         {
                             Bans = new string[] { "faction1" },
@@ -272,7 +272,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Banned),
+                        EventType = nameof(Server.Domain.Banned),
                         SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                         {
                             Bans = new string[] { "faction2" },
@@ -282,7 +282,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Banned),
+                        EventType = nameof(Server.Domain.Banned),
                         SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                         {
                             Bans = new string[] { "faction3" },
@@ -294,11 +294,11 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var bannedHandler = new server.Domain.Banned(this.Repository, this.TimeProvider);
+            var bannedHandler = new Server.Domain.Banned(this.Repository, this.TimeProvider);
             var given = new GameEvent()
             {
                 SessionId = sessionId,
-                EventType = nameof(server.Domain.Banned),
+                EventType = nameof(Server.Domain.Banned),
                 SerializedPayload = JsonConvert.SerializeObject(new BannedPayload
                 {
                     Bans = new string[] { "faction3" },

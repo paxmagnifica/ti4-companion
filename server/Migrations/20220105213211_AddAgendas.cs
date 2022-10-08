@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore.Migrations;
-using server.Domain;
+using Server.Domain;
 using System.Collections.Generic;
 
 namespace Server.Migrations

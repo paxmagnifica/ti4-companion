@@ -2,8 +2,8 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using NSubstitute;
 using NUnit.Framework;
-using server.Domain;
-using server.Domain.Exceptions;
+using Server.Domain;
+using Server.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -48,10 +48,10 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var pickedHandler = new server.Domain.Picked(this.Repository);
+            var pickedHandler = new Server.Domain.Picked(this.Repository);
             var given = new GameEvent
             {
-                EventType = nameof(server.Domain.Picked),
+                EventType = nameof(Server.Domain.Picked),
                 SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                 {
                     Pick = "faction1",
@@ -94,10 +94,10 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var pickedHandler = new server.Domain.Picked(this.Repository);
+            var pickedHandler = new Server.Domain.Picked(this.Repository);
             var given = new GameEvent
             {
-                EventType = nameof(server.Domain.Picked),
+                EventType = nameof(Server.Domain.Picked),
                 SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                 {
                     Pick = "faction1",
@@ -140,10 +140,10 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var pickedHandler = new server.Domain.Picked(this.Repository);
+            var pickedHandler = new Server.Domain.Picked(this.Repository);
             var given = new GameEvent
             {
-                EventType = nameof(server.Domain.Picked),
+                EventType = nameof(Server.Domain.Picked),
                 SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                 {
                     Pick = "faction1",
@@ -184,7 +184,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Picked),
+                        EventType = nameof(Server.Domain.Picked),
                         SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                         {
                             Pick = "faction1",
@@ -197,10 +197,10 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var pickedHandler = new server.Domain.Picked(this.Repository);
+            var pickedHandler = new Server.Domain.Picked(this.Repository);
             var given = new GameEvent
             {
-                EventType = nameof(server.Domain.Picked),
+                EventType = nameof(Server.Domain.Picked),
                 SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                 {
                     Pick = "faction1",
@@ -242,7 +242,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Picked),
+                        EventType = nameof(Server.Domain.Picked),
                         SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                         {
                             Pick = "faction1",
@@ -253,7 +253,7 @@ namespace ServerTests.Handlers
                     },
                     new GameEvent
                     {
-                        EventType = nameof(server.Domain.Picked),
+                        EventType = nameof(Server.Domain.Picked),
                         SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                         {
                             Pick = "faction2",
@@ -266,11 +266,11 @@ namespace ServerTests.Handlers
             };
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(session);
 
-            var pickedHandler = new server.Domain.Picked(this.Repository);
+            var pickedHandler = new Server.Domain.Picked(this.Repository);
             var given = new GameEvent()
             {
                 SessionId = sessionId,
-                EventType = nameof(server.Domain.Picked),
+                EventType = nameof(Server.Domain.Picked),
                 SerializedPayload = JsonConvert.SerializeObject(new PickedPayload
                 {
                     Pick = "1",

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using server.Domain;
+using Server.Domain;
 
 namespace Server.Persistence
 {

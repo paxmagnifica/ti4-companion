@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using server.Domain;
+using Server.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +14,16 @@ namespace Server.Controllers
 
         public SessionDto(Session session)
         {
-            Id = session.Id;
-            SetupGameState(session.Events);
-            this.Factions = GetFactions(session.Events);
-            this.Points = GetPoints(session.Events);
-            this.Objectives = GetObjectives(session.Events);
-            this.Map = GetMap(session.Events);
-            CreatedAt = session.CreatedAt;
-            Locked = session.Locked;
+            this.Id = session.Id;
+            this.SetupGameState(session.Events);
+            this.Factions = this.GetFactions(session.Events);
+            this.Points = this.GetPoints(session.Events);
+            this.Objectives = this.GetObjectives(session.Events);
+            this.Map = this.GetMap(session.Events);
+            this.CreatedAt = session.CreatedAt;
+            this.Locked = session.Locked;
             this.Editable = !session.Locked;
-            SetSessionDetails(session.Events);
+            this.SetSessionDetails(session.Events);
             this.Draft = new DraftDto(session);
             this.Players = PlayerDto.GetPlayers(this);
             this.Secured = !string.IsNullOrEmpty(session.HashedPassword);

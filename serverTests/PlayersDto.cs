@@ -2,8 +2,8 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
-using server.Controllers;
-using server.Domain;
+using Server.Controllers;
+using Server.Domain;
 using System.Collections.Generic;
 using System.Linq;
 
