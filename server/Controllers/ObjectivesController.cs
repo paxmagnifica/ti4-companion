@@ -1,32 +1,32 @@
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using server.Domain;
-using server.Persistence;
+using Server.Domain;
+using Server.Persistence;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace server.Controllers
+namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class ObjectivesController : ControllerBase
     {
-        private readonly ILogger<ObjectivesController> _logger;
-        private readonly SessionContext _sessionContext;
-        private readonly ITimeProvider _timeProvider;
+        private readonly ILogger<ObjectivesController> logger;
+        private readonly SessionContext sessionContext;
+        private readonly ITimeProvider timeProvider;
 
         public ObjectivesController(ILogger<ObjectivesController> logger, SessionContext sessionContext, ITimeProvider timeProvider)
         {
-            _logger = logger;
-            _sessionContext = sessionContext;
-            _timeProvider = timeProvider;
+            this.logger = logger;
+            this.sessionContext = sessionContext;
+            this.timeProvider = timeProvider;
         }
 
         [HttpGet]
         public IEnumerable<ObjectiveDto> GetObjectives()
         {
-            var gameVersionInContext = (GameVersion)HttpContext.Items["GameVersion"];
-            var objectivesFromDb = _sessionContext.Objectives.Where(o => o.GameVersion <= gameVersionInContext).OrderBy(o => o.Slug).ToList();
+            var gameVersionInContext = (GameVersion)this.HttpContext.Items["GameVersion"];
+            var objectivesFromDb = this.sessionContext.Objectives.Where(o => o.GameVersion <= gameVersionInContext).OrderBy(o => o.Slug).ToList();
 
             return objectivesFromDb.Select(fromDb => new ObjectiveDto(fromDb));
         }
@@ -36,12 +36,12 @@ namespace server.Controllers
     {
         public ObjectiveDto(Objective objective)
         {
-            Slug = objective.Slug;
-            GameVersion = objective.GameVersion;
-            Points = objective.Points;
-            Secret = objective.Secret;
-            When = objective.When;
-            Reward = objective.Reward;
+            this.Slug = objective.Slug;
+            this.GameVersion = objective.GameVersion;
+            this.Points = objective.Points;
+            this.Secret = objective.Secret;
+            this.When = objective.When;
+            this.Reward = objective.Reward;
         }
     }
 }

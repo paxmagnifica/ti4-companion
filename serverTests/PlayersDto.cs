@@ -1,17 +1,17 @@
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
 using FluentAssertions;
-using server.Controllers;
-using server.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NUnit.Framework;
+using Server.Controllers;
+using Server.Domain;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace serverTests
+namespace ServerTests
 {
     public class PlayersDto
     {
-        JsonSerializerSettings SerializerSettings
+        private JsonSerializerSettings SerializerSettings
         {
             get
             {
@@ -27,7 +27,7 @@ namespace serverTests
             // given
             var session = new SessionDto()
             {
-                Factions = new List<string>() { "F1", "F2", "F3", "F4" }
+                Factions = new List<string>() { "F1", "F2", "F3", "F4" },
             };
             var expected = new[] { new PlayerDto { Faction = "F1" }, new PlayerDto { Faction = "F2" }, new PlayerDto { Faction = "F3" }, new PlayerDto { Faction = "F4" } };
 
@@ -47,20 +47,21 @@ namespace serverTests
                 Factions = new List<string>() { "F1", "F2", "F3", "F4" },
                 Draft = new DraftDto()
                 {
-                    Picks = new PickedPayload[] {
+                    Picks = new PickedPayload[]
+                    {
                         new PickedPayload { Pick = "F1", PlayerName = "P1", Type = "faction" },
                         new PickedPayload { Pick = "F2", PlayerName = "P2", Type = "faction" },
                         new PickedPayload { Pick = "F3", PlayerName = "P3", Type = "faction" },
-                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" }
-                    }
-                }
+                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" },
+                    },
+                },
             };
             var expected = new[]
             {
                 new PlayerDto { Faction = "F1", PlayerName = "P1" },
                 new PlayerDto { Faction = "F2", PlayerName = "P2" },
                 new PlayerDto { Faction = "F3", PlayerName = "P3" },
-                new PlayerDto { Faction = "F4", PlayerName = "P4" }
+                new PlayerDto { Faction = "F4", PlayerName = "P4" },
             };
 
             // when
@@ -77,14 +78,14 @@ namespace serverTests
             var session = new SessionDto()
             {
                 Factions = new List<string>() { "F1", "F2", "F3", "F4" },
-                Colors = new Dictionary<string, string>() { { "F1", "yellow" }, { "F4", "black" } }
+                Colors = new Dictionary<string, string>() { { "F1", "yellow" }, { "F4", "black" } },
             };
             var expected = new[]
             {
                 new PlayerDto { Faction = "F1", Color = "yellow" },
                 new PlayerDto { Faction = "F2" },
                 new PlayerDto { Faction = "F3" },
-                new PlayerDto { Faction = "F4", Color = "black" }
+                new PlayerDto { Faction = "F4", Color = "black" },
             };
 
             // when
@@ -101,14 +102,14 @@ namespace serverTests
             var session = new SessionDto()
             {
                 Factions = new List<string>() { "The_Mentak_Coalition", "F2", "F3", "The_Arborec" },
-                Colors = new Dictionary<string, string>() { { "the_Mentak_Coalition", "yellow" }, { "the_Arborec", "black" } }
+                Colors = new Dictionary<string, string>() { { "the_Mentak_Coalition", "yellow" }, { "the_Arborec", "black" } },
             };
             var expected = new[]
             {
                 new PlayerDto { Faction = "The_Mentak_Coalition", Color = "yellow" },
                 new PlayerDto { Faction = "F2" },
                 new PlayerDto { Faction = "F3" },
-                new PlayerDto { Faction = "The_Arborec", Color = "black" }
+                new PlayerDto { Faction = "The_Arborec", Color = "black" },
             };
 
             // when
@@ -127,21 +128,22 @@ namespace serverTests
                 Factions = new List<string>() { "F1", "F2", "F3", "F4" },
                 Draft = new DraftDto()
                 {
-                    Picks = new PickedPayload[] {
+                    Picks = new PickedPayload[]
+                    {
                         new PickedPayload { Pick = "F1", PlayerName = "P1", Type = "faction" },
                         new PickedPayload { Pick = "F2", PlayerName = "P2", Type = "faction" },
                         new PickedPayload { Pick = "F3", PlayerName = "P3", Type = "faction" },
-                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" }
+                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" },
                     },
                     Speaker = "P3",
-                }
+                },
             };
             var expected = new[]
             {
                 new PlayerDto { Faction = "F1", PlayerName = "P1" },
                 new PlayerDto { Faction = "F2", PlayerName = "P2" },
                 new PlayerDto { Faction = "F3", PlayerName = "P3", Speaker = true },
-                new PlayerDto { Faction = "F4", PlayerName = "P4" }
+                new PlayerDto { Faction = "F4", PlayerName = "P4" },
             };
 
             // when
@@ -160,7 +162,8 @@ namespace serverTests
                 Factions = new List<string>() { "F1", "F2", "F3", "F4" },
                 Draft = new DraftDto()
                 {
-                    Picks = new PickedPayload[] {
+                    Picks = new PickedPayload[]
+                    {
                         new PickedPayload { Pick = "F1", PlayerName = "P1", Type = "faction" },
                         new PickedPayload { Pick = "F2", PlayerName = "P2", Type = "faction" },
                         new PickedPayload { Pick = "F3", PlayerName = "P3", Type = "faction" },
@@ -168,17 +171,17 @@ namespace serverTests
                         new PickedPayload { Pick = "1", PlayerName = "P2", Type = "tablePosition" },
                         new PickedPayload { Pick = "2", PlayerName = "P1", Type = "tablePosition" },
                         new PickedPayload { Pick = "3", PlayerName = "P4", Type = "tablePosition" },
-                        new PickedPayload { Pick = "4", PlayerName = "P3", Type = "tablePosition" }
+                        new PickedPayload { Pick = "4", PlayerName = "P3", Type = "tablePosition" },
                     },
                     Speaker = "P3",
-                }
+                },
             };
             var expected = new[]
             {
                 new PlayerDto { Faction = "F3", PlayerName = "P3", Speaker = true, AtTable = 4 },
                 new PlayerDto { Faction = "F2", PlayerName = "P2", AtTable = 1 },
                 new PlayerDto { Faction = "F1", PlayerName = "P1", AtTable = 2 },
-                new PlayerDto { Faction = "F4", PlayerName = "P4", AtTable = 3 }
+                new PlayerDto { Faction = "F4", PlayerName = "P4", AtTable = 3 },
             };
 
             // when
@@ -202,7 +205,7 @@ namespace serverTests
                 new PlayerDto { Faction = "F1" },
                 new PlayerDto { Faction = "F2" },
                 new PlayerDto { Faction = "F3" },
-                new PlayerDto { Faction = "F4" }
+                new PlayerDto { Faction = "F4" },
             };
 
             // when

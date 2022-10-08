@@ -1,10 +1,10 @@
+using Server.Domain;
 using System;
 using System.Threading.Tasks;
-using server.Domain;
 
-namespace serverTests.Mocks
+namespace ServerTests.Mocks
 {
-    class Repository : IRepository
+    internal class Repository : IRepository
     {
         public Task<Session> GetById(Guid sessionId)
         {

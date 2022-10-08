@@ -1,15 +1,15 @@
-namespace server.Domain
+namespace Server.Domain
 {
     public class Relic : Card
     {
-        public Relic() : base()
+        public Relic()
+            : base()
         {
-
         }
 
-        public Relic(string slug, GameVersion version): base(slug, version)
+        public Relic(string slug, GameVersion version)
+            : base(slug, version)
         {
-
         }
     }
 }

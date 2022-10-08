@@ -1,9 +1,9 @@
+using Newtonsoft.Json;
+using Server.Domain.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using server.Domain.Exceptions;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public enum VictoryPointSource
     {
@@ -18,16 +18,26 @@ namespace server.Domain
 
     public class VictoryPointsUpdated : IHandler
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
 
         public VictoryPointsUpdated(IRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
+        }
+
+        public static VictoryPointsUpdatedPayload GetPayload(GameEvent gameEvent)
+        {
+            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(gameEvent.SerializedPayload);
+        }
+
+        public static VictoryPointsUpdatedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(serializedPayload);
         }
 
         public async Task Handle(GameEvent gameEvent)
         {
-            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
+            var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
             {
@@ -43,27 +53,20 @@ namespace server.Domain
 
             session.Events.Add(gameEvent);
 
-            _repository.UpdateSession(session);
+            this.repository.UpdateSession(session);
 
-            await _repository.SaveChangesAsync();
-        }
-
-        public static VictoryPointsUpdatedPayload GetPayload(GameEvent gameEvent)
-        {
-            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(gameEvent.SerializedPayload);
-        }
-
-        public static VictoryPointsUpdatedPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(serializedPayload);
+            await this.repository.SaveChangesAsync();
         }
     }
 
     public class VictoryPointsUpdatedPayload
     {
         public string Faction { get; set; }
+
         public int Points { get; set; }
+
         public VictoryPointSource Source { get; set; }
+
         public string Context { get; set; }
     }
 }

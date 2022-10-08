@@ -1,0 +1,52 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Server CI
+
+on: [pull_request]
+
+jobs:
+  server_code_check:
+    name: Check server code formatting and build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x']
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Display dotnet version
+        run: dotnet --version
+      - name: Install dependencies
+        run: dotnet restore ./server
+      - name: Check format
+        run: dotnet format ./server/server.csproj --verify-no-changes
+      - name: Build
+        run: dotnet build ./server
+  tests:
+    name: Check tests code formatting, build and run test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x']
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Display dotnet version
+        run: dotnet --version
+      - name: Install dependencies
+        run: dotnet restore ./serverTests
+      - name: Check format
+        run: dotnet format ./serverTests/serverTests.csproj --verify-no-changes
+      - name: Build
+        run: dotnet build ./serverTests
+      - name: Test
+        run: dotnet test ./serverTests

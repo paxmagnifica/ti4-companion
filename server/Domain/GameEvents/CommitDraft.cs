@@ -1,34 +1,35 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class CommitDraft : IHandler
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
 
         public CommitDraft(IRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         public async Task Handle(GameEvent gameEvent)
         {
-            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
+            var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
             {
                 session.Events = new List<GameEvent>();
             }
+
             var factionPicks = session.Events.Where(e => e.EventType == nameof(Picked)).Select(Picked.GetPayload).Where(fp => fp.Type == "faction").Select(fp => fp.Pick);
             gameEvent.SerializedPayload = JsonConvert.SerializeObject(new { factions = factionPicks });
             session.Events.Add(gameEvent);
 
-            _repository.UpdateSession(session);
+            this.repository.UpdateSession(session);
 
-            await _repository.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
         }
 
         internal static CommitDraftPayload GetPayload(GameEvent gameEvent)

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
+using System.Collections.Generic;
 
-namespace server.Migrations
+namespace Server.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -14,7 +14,7 @@ namespace server.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    Factions = table.Column<List<string>>(type: "text[]", nullable: true)
+                    Factions = table.Column<List<string>>(type: "text[]", nullable: true),
                 },
                 constraints: table =>
                 {

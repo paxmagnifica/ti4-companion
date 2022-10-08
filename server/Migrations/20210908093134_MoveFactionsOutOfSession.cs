@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System.Collections.Generic;
 
-namespace server.Migrations
+namespace Server.Migrations
 {
     public partial class MoveFactionsOutOfSession : Migration
     {

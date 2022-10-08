@@ -1,12 +1,12 @@
-using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using server.Persistence;
-using Microsoft.EntityFrameworkCore;
+using Server.Persistence;
+using System;
 
-namespace server
+namespace Server
 {
     public class Program
     {
@@ -18,6 +18,13 @@ namespace server
 
             host.Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
 
         private static void CreateDbIfNotExists(IHost host)
         {
@@ -37,12 +44,5 @@ namespace server
                 }
             }
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
     }
 }

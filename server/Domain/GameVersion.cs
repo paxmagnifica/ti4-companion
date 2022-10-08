@@ -1,4 +1,4 @@
-namespace server.Domain
+namespace Server.Domain
 {
     public enum GameVersion
     {

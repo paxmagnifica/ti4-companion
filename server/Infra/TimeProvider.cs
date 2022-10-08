@@ -1,9 +1,9 @@
+using Server.Domain;
 using System;
-using server.Domain;
 
-namespace server.Infra
+namespace Server.Infra
 {
-    public class TimeProvider: ITimeProvider
+    public class TimeProvider : ITimeProvider
     {
         public DateTimeOffset Now { get => DateTimeOffset.Now; }
     }

@@ -1,15 +1,15 @@
-using System.Collections.Generic;
-using NUnit.Framework;
 using FluentAssertions;
-using server.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NUnit.Framework;
+using Server.Domain;
+using System.Collections.Generic;
 
-namespace serverTests
+namespace ServerTests
 {
     public class SessionSummary
     {
-        JsonSerializerSettings SerializerSettings
+        private JsonSerializerSettings SerializerSettings
         {
             get
             {
@@ -23,73 +23,96 @@ namespace serverTests
         public void ShouldIncludeResultsInSessionSummaryForDefaultVPCount()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                    {
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                    }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
-                    }, SerializerSettings)
+                            Points = 4,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "Sardakk_Norr",
-                            Points = 2
-                    }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Winnu",
-                            Points = 10
-                    }, SerializerSettings)
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
-                }
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}",
+                },
             };
             var timeline = new Timeline(new Session { Events = given });
 
@@ -104,116 +127,154 @@ namespace serverTests
         public void ShouldIncludeSessionSummaryIfLastVictoryPointIsByObjective()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                    {
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(ObjectiveAdded),
-                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveAddedPayload {
-                            Slug = "raise-a-fleet"
-                            }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new ObjectiveAddedPayload
+                    {
+                            Slug = "raise-a-fleet",
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                    }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
-                    }, SerializerSettings)
+                            Points = 4,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "Sardakk_Norr",
-                            Points = 2
-                    }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Winnu",
-                            Points = 9
-                    }, SerializerSettings)
+                            Points = 9,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "Sardakk_Norr",
-                            Points = 3
-                    }, SerializerSettings)
+                            Points = 3,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(ObjectiveScored),
-                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new ObjectiveScoredPayload
+                    {
                             Faction = "The_Winnu",
                             Slug = "raise-a-fleet",
-                            Points = 10
-                            }, SerializerSettings)
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Winnu",
-                            Points = 10
-                    }, SerializerSettings)
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "ObjectiveAdded",
                     SerializedPayload = "{\"slug\":\"raise-a-fleet\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":9,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":9,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 6,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":3,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":3,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 7,
                     EventType = "ObjectiveScored",
                     SerializedPayload = "{\"slug\":\"raise-a-fleet\",\"faction\":\"The_Winnu\",\"points\":10}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 8,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":3},{\"faction\":\"The_Winnu\",\"points\":10}]}"
-                }
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":3},{\"faction\":\"The_Winnu\",\"points\":10}]}",
+                },
             };
             var timeline = new Timeline(new Session { Events = given });
 
@@ -228,85 +289,111 @@ namespace serverTests
         public void ShouldIncludeSessionSummaryForUpdatedVpCount()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                    {
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(MetadataUpdated),
-                    SerializedPayload= JsonConvert.SerializeObject(new MetadataUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload
+                    {
                             SessionDisplayName = "tarnas test session",
                             VpCount = 12,
-                            })
+                    }),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                    }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
-                    }, SerializerSettings)
+                            Points = 4,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "Sardakk_Norr",
-                            Points = 2
-                    }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Winnu",
-                            Points = 12
-                    }, SerializerSettings)
+                            Points = 12,
+                    }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "VpCountChanged",
-                    SerializedPayload = "{\"from\":10,\"to\":12}"
+                    SerializedPayload = "{\"from\":10,\"to\":12}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":12,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":12,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 6,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":12}]}"
-                }
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":12}]}",
+                },
             };
             var timeline = new Timeline(new Session { Events = given });
 
@@ -321,79 +408,104 @@ namespace serverTests
         public void ShouldNotIncludeSessionSummaryIfUpdatedVpCountIsNotReached()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                    {
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(MetadataUpdated),
-                    SerializedPayload= JsonConvert.SerializeObject(new MetadataUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload
+                    {
                             SessionDisplayName = "tarnas test session",
                             VpCount = 12,
-                            })
+                    }),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                    }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
-                    }, SerializerSettings)
+                            Points = 4,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "Sardakk_Norr",
-                            Points = 2
-                    }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Winnu",
-                            Points = 10
-                    }, SerializerSettings)
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "VpCountChanged",
-                    SerializedPayload = "{\"from\":10,\"to\":12}"
+                    SerializedPayload = "{\"from\":10,\"to\":12}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}",
                 },
             };
             var timeline = new Timeline(new Session { Events = given });
@@ -409,99 +521,130 @@ namespace serverTests
         public void ShouldIncludeLastVPValueForEachFaction()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                    {
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                    }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
-                    }, SerializerSettings)
+                            Points = 4,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "Sardakk_Norr",
-                            Points = 2
-                    }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Winnu",
-                            Points = 10
-                    }, SerializerSettings)
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 3
-                    }, SerializerSettings)
+                            Points = 3,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 2
-                    }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 6,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 7,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
-                }
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}",
+                },
             };
-            var timeline = new Timeline(new Session{ Events = given});
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
             var actual = timeline.AddSessionSummary().GetEvents();
@@ -514,99 +657,130 @@ namespace serverTests
         public void ShouldMarkTheFirstPlayerToScoreMaxVPAsWinner()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                    {
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                    }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
-                    }, SerializerSettings)
+                            Points = 4,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "Sardakk_Norr",
-                            Points = 2
-                    }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Winnu",
-                            Points = 10
-                    }, SerializerSettings)
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Nekro_Virus",
-                            Points = 3
-                    }, SerializerSettings)
+                            Points = 3,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 10
-                    }, SerializerSettings)
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":4,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"Sardakk_Norr\",\"points\":2,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Winnu\",\"points\":10,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Nekro_Virus\",\"points\":3,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 6,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 7,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
-                }
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}",
+                },
             };
-            var timeline = new Timeline(new Session{ Events = given});
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
             var actual = timeline.AddSessionSummary().GetEvents();
@@ -619,31 +793,41 @@ namespace serverTests
         public void ShouldNotIncludeSessionSummaryIfNoOneWonYet()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                    {
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                    }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
             };
             var timeline = new Timeline(new Session { Events = given });

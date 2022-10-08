@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace server.Migrations
+namespace Server.Migrations
 {
     public partial class Explorations : Migration
     {
@@ -16,7 +16,7 @@ namespace server.Migrations
                     Resources = table.Column<int>(type: "integer", nullable: false),
                     Influence = table.Column<int>(type: "integer", nullable: false),
                     TechSkip = table.Column<int>(type: "integer", nullable: true),
-                    GameVersion = table.Column<int>(type: "integer", nullable: false)
+                    GameVersion = table.Column<int>(type: "integer", nullable: false),
                 },
                 constraints: table =>
                 {
