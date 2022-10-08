@@ -1,5 +1,8 @@
 using Newtonsoft.Json;
+using Server.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Server.Domain
@@ -50,7 +53,6 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<MetadataUpdatedPayload>(serializedPayload);
         }
 
-        // TODO add tests
         private MetadataUpdatedPayload Sanitize(MetadataUpdatedPayload payload)
         {
             return new MetadataUpdatedPayload
@@ -68,10 +70,43 @@ namespace Server.Domain
 
         private void Validate(MetadataUpdatedPayload payload)
         {
-            // TODO TDD this stuff:
-            // TODO validate format of start and end (if and present)
-            // TODO validate if end >= start (if end present)
-            // TODO validate that VpCount > 10 && VpCount <= 14
+            if (!string.IsNullOrEmpty(payload.SessionStart))
+            {
+                DateTime dt;
+                var isValid = DateTime.TryParseExact(payload.SessionStart, "yyyy-MM-dd", new CultureInfo("en-GB"), DateTimeStyles.None, out dt);
+                if (!isValid)
+                {
+                    throw new MetadataUpdatedPayloadInvalidException("Invalid session start format");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(payload.SessionEnd))
+            {
+                DateTime dt;
+                var isValid = DateTime.TryParseExact(payload.SessionEnd, "yyyy-MM-dd", new CultureInfo("en-GB"), DateTimeStyles.None, out dt);
+                if (!isValid)
+                {
+                    throw new MetadataUpdatedPayloadInvalidException("Invalid session end format");
+                }
+            }
+
+            if (
+                !string.IsNullOrEmpty(payload.SessionStart)
+                && !string.IsNullOrEmpty(payload.SessionEnd)
+                && payload.SessionStart.CompareTo(payload.SessionEnd) > 0)
+            {
+                throw new MetadataUpdatedPayloadInvalidException("End should occur after start");
+            }
+
+            if (payload.VpCount < 10)
+            {
+                throw new MetadataUpdatedPayloadInvalidException("VP count below 10");
+            }
+
+            if (payload.VpCount > 14)
+            {
+                throw new MetadataUpdatedPayloadInvalidException("VP count above 14");
+            }
         }
     }
 
