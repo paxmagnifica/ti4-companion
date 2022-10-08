@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
+using Server.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
-using Server.Domain.Exceptions;
 using System.Globalization;
 using System.Threading.Tasks;
 
