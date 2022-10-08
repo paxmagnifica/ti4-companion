@@ -1,3 +1,4 @@
+//
 
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -54,7 +55,7 @@ namespace ServerTests
                         new PickedPayload { Pick = "F2", PlayerName = "P2", Type = "faction" },
                         new PickedPayload { Pick = "F3", PlayerName = "P3", Type = "faction" },
                         new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" }
-                    }
+                    },
                 },
             };
             var expected = new[]
@@ -134,7 +135,7 @@ namespace ServerTests
                         new PickedPayload { Pick = "F1", PlayerName = "P1", Type = "faction" },
                         new PickedPayload { Pick = "F2", PlayerName = "P2", Type = "faction" },
                         new PickedPayload { Pick = "F3", PlayerName = "P3", Type = "faction" },
-                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" }
+                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" },
                     },
                     Speaker = "P3",
                 },
@@ -172,7 +173,7 @@ namespace ServerTests
                         new PickedPayload { Pick = "1", PlayerName = "P2", Type = "tablePosition" },
                         new PickedPayload { Pick = "2", PlayerName = "P1", Type = "tablePosition" },
                         new PickedPayload { Pick = "3", PlayerName = "P4", Type = "tablePosition" },
-                        new PickedPayload { Pick = "4", PlayerName = "P3", Type = "tablePosition" }
+                        new PickedPayload { Pick = "4", PlayerName = "P3", Type = "tablePosition" },
                     },
                     Speaker = "P3",
                 },

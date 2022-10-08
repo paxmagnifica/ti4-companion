@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -20,6 +19,11 @@ namespace Server.Domain
             return GetPayload(gameEvent.SerializedPayload);
         }
 
+        public static LawRemovedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<LawRemovedPayload>(serializedPayload);
+        }
+
         public async Task Handle(GameEvent gameEvent)
         {
             var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
@@ -34,11 +38,6 @@ namespace Server.Domain
             this.repository.UpdateSession(session);
 
             await this.repository.SaveChangesAsync();
-        }
-
-        public static LawRemovedPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<LawRemovedPayload>(serializedPayload);
         }
     }
 

@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -47,6 +46,11 @@ namespace Server.Domain
             return GetPayload(gameEvent.SerializedPayload);
         }
 
+        internal static MetadataUpdatedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<MetadataUpdatedPayload>(serializedPayload);
+        }
+
         // TODO add tests
         private MetadataUpdatedPayload Sanitize(MetadataUpdatedPayload payload)
         {
@@ -69,11 +73,6 @@ namespace Server.Domain
             // TODO validate format of start and end (if and present)
             // TODO validate if end >= start (if end present)
             // TODO validate that VpCount > 10 && VpCount <= 14
-        }
-
-        internal static MetadataUpdatedPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<MetadataUpdatedPayload>(serializedPayload);
         }
     }
 

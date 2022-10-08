@@ -1,3 +1,5 @@
+//
+
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -31,8 +33,8 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new ObjectiveAddedPayload
                     {
-                            Slug = "raise-a-fleet"
-                            }, this.SerializerSettings),
+                            Slug = "raise-a-fleet",
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -42,8 +44,8 @@ namespace ServerTests
                     {
                             Faction = "The_Universities_of_Jol__Nar",
                             Slug = "raise-a-fleet",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -52,8 +54,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
             };
 
@@ -94,8 +96,8 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new ObjectiveAddedPayload
                     {
-                            Slug = "raise-a-fleet"
-                            }, this.SerializerSettings),
+                            Slug = "raise-a-fleet",
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -104,8 +106,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -115,8 +117,8 @@ namespace ServerTests
                     {
                             Faction = "The_Universities_of_Jol__Nar",
                             Slug = "raise-a-fleet",
-                            Points = 2
-                            }, this.SerializerSettings),
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -125,8 +127,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 2
-                            }, this.SerializerSettings),
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
             };
 

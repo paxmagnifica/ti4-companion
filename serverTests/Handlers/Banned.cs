@@ -1,3 +1,4 @@
+//
 
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -42,7 +43,7 @@ namespace ServerTests.Handlers
                             {
                                 Bans = true,
                             },
-                        })
+                        }),
                     },
                 },
             };

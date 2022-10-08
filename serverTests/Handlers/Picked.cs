@@ -1,3 +1,4 @@
+//
 
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -43,7 +44,7 @@ namespace ServerTests.Handlers
                                 InitialPool = new string[] { "faction1", "faction2", "faction 3" },
                                 Players = new string[] { "player1", "player2" },
                             },
-                        })
+                        }),
                     },
                 },
             };

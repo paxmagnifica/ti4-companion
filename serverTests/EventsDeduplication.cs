@@ -1,3 +1,4 @@
+//
 
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -48,8 +49,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
             };
             var expected = new List<TimelineEvent>()
@@ -84,8 +85,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -94,8 +95,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 0
-                            }, this.SerializerSettings),
+                            Points = 0,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -104,8 +105,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
             };
             var expected = new List<TimelineEvent>()
@@ -114,7 +115,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1,\"source\":0,\"context\":null}",
                 },
             };
 
@@ -140,8 +141,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -150,8 +151,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -160,8 +161,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 0
-                            }, this.SerializerSettings),
+                            Points = 0,
+                    }, this.SerializerSettings),
                 },
             };
             var expected = new List<TimelineEvent>()
@@ -207,8 +208,8 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new ObjectiveAddedPayload
                     {
-                            Slug = "raise-a-fleet"
-                            }, this.SerializerSettings),
+                            Slug = "raise-a-fleet",
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -218,8 +219,8 @@ namespace ServerTests
                     {
                             Faction = "The_Universities_of_Jol__Nar",
                             Slug = "raise-a-fleet",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -228,8 +229,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -240,7 +241,7 @@ namespace ServerTests
                             Faction = "The_Emirates_of_Hacan",
                             Slug = "raise-a-fleet",
                             Points = 1,
-                            }, this.SerializerSettings),
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -249,8 +250,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Emirates_of_Hacan",
-                            Points = 1
-                            }, this.SerializerSettings),
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -261,7 +262,7 @@ namespace ServerTests
                             Faction = "The_Emirates_of_Hacan",
                             Slug = "raise-a-fleet",
                             Points = 0,
-                            }, this.SerializerSettings),
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -270,8 +271,8 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Emirates_of_Hacan",
-                            Points = 0
-                            }, this.SerializerSettings),
+                            Points = 0,
+                    }, this.SerializerSettings),
                 },
             };
 

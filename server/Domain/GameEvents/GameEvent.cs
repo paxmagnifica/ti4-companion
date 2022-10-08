@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using System;
@@ -12,6 +11,8 @@ namespace Server.Domain
     {
         public const string GameStarted = "GameStarted";
 
+        public const string MapAdded = "MapAdded";
+
         public Guid Id { get; set; }
 
         public Guid SessionId { get; set; }
@@ -21,7 +22,6 @@ namespace Server.Domain
         public string EventType { get; set; }
 
         public string SerializedPayload { get; set; }
-        public const string MapAdded = "MapAdded";
         public const string TimelineUserEvent = "TimelineUserEvent";
 
         public static GameEvent GenerateOrderEvent(Guid sessionId, GameStartedPayload payload, int rounds, DateTimeOffset when, bool addForSpeaker)

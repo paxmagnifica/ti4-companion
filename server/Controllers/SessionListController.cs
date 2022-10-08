@@ -1,4 +1,3 @@
-//
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -87,11 +86,6 @@ namespace Server.Controllers
             }));
         }
 
-        public class SessionListIdDto
-        {
-            public string SessionId { get; set; }
-        }
-
         private async Task<string> GenerateUniqueId()
         {
             var generatedAndUnique = false;
@@ -116,6 +110,11 @@ namespace Server.Controllers
             }
 
             return id;
+        }
+
+        public class SessionListIdDto
+        {
+            public string SessionId { get; set; }
         }
     }
 }

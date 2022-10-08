@@ -1,4 +1,3 @@
-//
 
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
@@ -56,7 +55,7 @@ namespace Server.Controllers
                     SessionId = sessionId,
                     HappenedAt = this.timeProvider.Now,
                     EventType = GameEvent.GameStarted,
-                    SerializedPayload = JsonConvert.SerializeObject(payload)
+                    SerializedPayload = JsonConvert.SerializeObject(payload),
                 },
             };
 
@@ -110,11 +109,6 @@ namespace Server.Controllers
             return new OkObjectResult(new { secret = token.Value });
         }
 
-        public class PasswordPayload
-        {
-            public string Password { get; set; }
-        }
-
         // TODO not cool, direct Events and stuff
         [HttpPost("{sessionId}/map")]
         public async Task<ActionResult> UploadMap(Guid sessionId)
@@ -146,6 +140,11 @@ namespace Server.Controllers
             await this.sessionContext.SaveChangesAsync();
 
             return new OkResult();
+        }
+
+        public class PasswordPayload
+        {
+            public string Password { get; set; }
         }
     }
 }

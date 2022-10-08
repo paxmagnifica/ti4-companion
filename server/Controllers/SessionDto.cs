@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using server.Domain;
@@ -173,14 +172,14 @@ namespace Server.Controllers
 
         public Guid Secret { get; set; }
 
+        public bool Editable { get; internal set; }
+
         private void SetupGameState(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
 
             this.Setup = GameStarted.GetPayload(gameStartEvent);
         }
-
-        public bool Editable { get; internal set; }
 
         public bool Finished
         {

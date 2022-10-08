@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using server.Domain.Exceptions;
@@ -118,6 +117,11 @@ namespace Server.Domain
             return GetPayload(gameEvent.SerializedPayload);
         }
 
+        internal static PickedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<PickedPayload>(serializedPayload);
+        }
+
         private void AssurePlayerCanPick(PickedPayload currentPickPayload, IEnumerable<GameEvent> previousPickEvents, DraftOptions gameStartOptions)
         {
             if (currentPickPayload.Type == "tablePosition" && !gameStartOptions.TablePick)
@@ -141,11 +145,6 @@ namespace Server.Domain
         private int GetPickEventsCount(Session session)
         {
             return session.Events.Count(e => e.EventType == nameof(Picked));
-        }
-
-        internal static PickedPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<PickedPayload>(serializedPayload);
         }
     }
 

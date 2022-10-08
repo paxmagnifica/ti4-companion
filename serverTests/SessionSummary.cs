@@ -1,3 +1,4 @@
+//
 
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -32,7 +33,7 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new CommitDraftPayload
                     {
-                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" }
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -42,7 +43,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
+                            Points = 1,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -52,7 +53,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
+                            Points = 4,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -62,7 +63,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "Sardakk_Norr",
-                            Points = 2
+                            Points = 2,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -72,7 +73,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Winnu",
-                            Points = 10
+                            Points = 10,
                     }, this.SerializerSettings),
                 },
             };
@@ -112,7 +113,7 @@ namespace ServerTests
                 {
                     Order = 5,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}",
                 },
             };
             var timeline = new Timeline(new Session { Events = given });
@@ -136,7 +137,7 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new CommitDraftPayload
                     {
-                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" }
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -145,8 +146,8 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new ObjectiveAddedPayload
                     {
-                            Slug = "raise-a-fleet"
-                            }, this.SerializerSettings),
+                            Slug = "raise-a-fleet",
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -155,7 +156,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
+                            Points = 1,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -165,7 +166,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
+                            Points = 4,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -175,7 +176,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "Sardakk_Norr",
-                            Points = 2
+                            Points = 2,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -185,7 +186,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Winnu",
-                            Points = 9
+                            Points = 9,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -195,7 +196,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "Sardakk_Norr",
-                            Points = 3
+                            Points = 3,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -206,8 +207,8 @@ namespace ServerTests
                     {
                             Faction = "The_Winnu",
                             Slug = "raise-a-fleet",
-                            Points = 10
-                            }, this.SerializerSettings),
+                            Points = 10,
+                    }, this.SerializerSettings),
                 },
                 new GameEvent
                 {
@@ -216,7 +217,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Winnu",
-                            Points = 10
+                            Points = 10,
                     }, this.SerializerSettings),
                 },
             };
@@ -274,7 +275,7 @@ namespace ServerTests
                 {
                     Order = 8,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":3},{\"faction\":\"The_Winnu\",\"points\":10}]}"
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":3},{\"faction\":\"The_Winnu\",\"points\":10}]}",
                 },
             };
             var timeline = new Timeline(new Session { Events = given });
@@ -298,7 +299,7 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new CommitDraftPayload
                     {
-                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" }
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -308,7 +309,7 @@ namespace ServerTests
                     {
                             SessionDisplayName = "tarnas test session",
                             VpCount = 12,
-                            }),
+                    }),
                 },
                 new GameEvent
                 {
@@ -317,7 +318,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
+                            Points = 1,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -327,7 +328,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
+                            Points = 4,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -337,7 +338,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "Sardakk_Norr",
-                            Points = 2
+                            Points = 2,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -347,7 +348,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Winnu",
-                            Points = 12
+                            Points = 12,
                     }, this.SerializerSettings),
                 },
             };
@@ -393,7 +394,7 @@ namespace ServerTests
                 {
                     Order = 6,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":12}]}"
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":1},{\"faction\":\"The_Nekro_Virus\",\"points\":4},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":12}]}",
                 },
             };
             var timeline = new Timeline(new Session { Events = given });
@@ -417,7 +418,7 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new CommitDraftPayload
                     {
-                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" }
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -427,7 +428,7 @@ namespace ServerTests
                     {
                             SessionDisplayName = "tarnas test session",
                             VpCount = 12,
-                            }),
+                    }),
                 },
                 new GameEvent
                 {
@@ -436,7 +437,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
+                            Points = 1,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -446,7 +447,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
+                            Points = 4,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -456,7 +457,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "Sardakk_Norr",
-                            Points = 2
+                            Points = 2,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -466,7 +467,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Winnu",
-                            Points = 10
+                            Points = 10,
                     }, this.SerializerSettings),
                 },
             };
@@ -530,7 +531,7 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new CommitDraftPayload
                     {
-                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" }
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -540,7 +541,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
+                            Points = 1,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -550,7 +551,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
+                            Points = 4,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -560,7 +561,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "Sardakk_Norr",
-                            Points = 2
+                            Points = 2,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -570,7 +571,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Winnu",
-                            Points = 10
+                            Points = 10,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -580,7 +581,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 3
+                            Points = 3,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -590,7 +591,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 2
+                            Points = 2,
                     }, this.SerializerSettings),
                 },
             };
@@ -642,7 +643,7 @@ namespace ServerTests
                 {
                     Order = 7,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":2},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}",
                 },
             };
             var timeline = new Timeline(new Session { Events = given });
@@ -666,7 +667,7 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new CommitDraftPayload
                     {
-                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" }
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -676,7 +677,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
+                            Points = 1,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -686,7 +687,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 4
+                            Points = 4,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -696,7 +697,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "Sardakk_Norr",
-                            Points = 2
+                            Points = 2,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -706,7 +707,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Winnu",
-                            Points = 10
+                            Points = 10,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -716,7 +717,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Nekro_Virus",
-                            Points = 3
+                            Points = 3,
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -726,7 +727,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 10
+                            Points = 10,
                     }, this.SerializerSettings),
                 },
             };
@@ -778,7 +779,7 @@ namespace ServerTests
                 {
                     Order = 7,
                     EventType = "SessionSummary",
-                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}"
+                    SerializedPayload = "{\"winner\":\"The_Winnu\",\"results\":[{\"faction\":\"The_Xxcha_Kingdom\",\"points\":10},{\"faction\":\"The_Nekro_Virus\",\"points\":3},{\"faction\":\"Sardakk_Norr\",\"points\":2},{\"faction\":\"The_Winnu\",\"points\":10}]}",
                 },
             };
             var timeline = new Timeline(new Session { Events = given });
@@ -802,7 +803,7 @@ namespace ServerTests
                     SerializedPayload = JsonConvert.SerializeObject(
                         new CommitDraftPayload
                     {
-                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" }
+                        Factions = new string[] { "The_Nekro_Virus", "Sardakk_Norr", "The_Winnu", "The_Xxcha_Kingdom" },
                     }, this.SerializerSettings),
                 },
                 new GameEvent
@@ -812,7 +813,7 @@ namespace ServerTests
                         new VictoryPointsUpdatedPayload
                     {
                             Faction = "The_Xxcha_Kingdom",
-                            Points = 1
+                            Points = 1,
                     }, this.SerializerSettings),
                 },
             };

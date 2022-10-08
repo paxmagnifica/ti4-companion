@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using server.Domain;
@@ -185,7 +184,7 @@ namespace Server.Persistence
                             SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
                             {
                                 SetupType = "simple",
-                                Factions = new List<string>() { "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" }
+                                Factions = new List<string>() { "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" },
                             }),
                         },
                         new GameEvent
@@ -202,7 +201,7 @@ namespace Server.Persistence
                               SessionStart = "2021-09-25",
                               VpCount = 10,
                               Duration = 9
-                            })
+                            }),
                         },
                     },
                     CreatedAt = DateTimeOffset.Now,
@@ -224,7 +223,7 @@ namespace Server.Persistence
                             SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
                             {
                                 SetupType = "simple",
-                                Factions = new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance", "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" }
+                                Factions = new List<string>() { "The_Titans_of_Ul", "The_Clan_of_Saar", "The_Emirates_of_Hacan", "The_Naaz__Rokha_Alliance", "The_Embers_of_Muaat", "The_Naalu_Collective", "The_Universities_of_Jol__Nar", "The_Nomad" },
                             }),
                         },
                         new GameEvent
@@ -241,7 +240,7 @@ namespace Server.Persistence
                               SessionStart = "2021-09-26",
                               VpCount = 10,
                               Duration = 9
-                            })
+                            }),
                         },
                     },
                     CreatedAt = DateTimeOffset.Now,

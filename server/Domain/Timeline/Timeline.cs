@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using System;
@@ -202,7 +201,7 @@ namespace Server.Domain
                 SerializedPayload = JsonConvert.SerializeObject(new
                 {
                     speaker = speakerName,
-                    picks = playerPicks.Select(kvp => new { playerName = kvp.Key, faction = kvp.Value.Item1, tablePosition = kvp.Value.Item2 })
+                    picks = playerPicks.Select(kvp => new { playerName = kvp.Key, faction = kvp.Value.Item1, tablePosition = kvp.Value.Item2 }),
                 }),
             };
             var timelineEventsWithDraftSummary = new List<TimelineEvent>(timelineEvents);
@@ -354,7 +353,7 @@ namespace Server.Domain
                 SerializedPayload = JsonConvert.SerializeObject(new
                 {
                     winner = VictoryPointsUpdated.GetPayload(firstToScoreTargetVPCount.SerializedPayload).Faction,
-                    results = payloadsByFaction.Select(pbf => new { faction = pbf.Key, points = pbf.Last().Points })
+                    results = payloadsByFaction.Select(pbf => new { faction = pbf.Key, points = pbf.Last().Points }),
                 }),
             });
 

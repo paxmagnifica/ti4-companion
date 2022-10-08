@@ -1,4 +1,3 @@
-//
 
 using Newtonsoft.Json;
 using server.Domain.Exceptions;
@@ -32,6 +31,11 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(gameEvent.SerializedPayload);
         }
 
+        public static VictoryPointsUpdatedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(serializedPayload);
+        }
+
         public async Task Handle(GameEvent gameEvent)
         {
             var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
@@ -53,11 +57,6 @@ namespace Server.Domain
             this.repository.UpdateSession(session);
 
             await this.repository.SaveChangesAsync();
-        }
-
-        public static VictoryPointsUpdatedPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<VictoryPointsUpdatedPayload>(serializedPayload);
         }
     }
 
