@@ -1,9 +1,9 @@
-using System;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Server.Domain.Exceptions;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Server.Domain
 {
@@ -79,7 +79,7 @@ namespace Server.Domain
                     throw new MetadataUpdatedPayloadInvalidException("Invalid session start format");
                 }
             }
-            
+
             if (!string.IsNullOrEmpty(payload.SessionEnd))
             {
                 DateTime dt;
@@ -89,19 +89,20 @@ namespace Server.Domain
                     throw new MetadataUpdatedPayloadInvalidException("Invalid session end format");
                 }
             }
-            
+
             if (
-                !string.IsNullOrEmpty(payload.SessionStart) 
-                && !string.IsNullOrEmpty(payload.SessionEnd) 
-                && payload.SessionStart.CompareTo(payload.SessionEnd) > 0
-            )
+                !string.IsNullOrEmpty(payload.SessionStart)
+                && !string.IsNullOrEmpty(payload.SessionEnd)
+                && payload.SessionStart.CompareTo(payload.SessionEnd) > 0)
+            {
                 throw new MetadataUpdatedPayloadInvalidException("End should occur after start");
+            }
 
             if (payload.VpCount < 10)
             {
                 throw new MetadataUpdatedPayloadInvalidException("VP count below 10");
             }
-            
+
             if (payload.VpCount > 14)
             {
                 throw new MetadataUpdatedPayloadInvalidException("VP count above 14");
