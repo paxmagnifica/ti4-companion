@@ -7,7 +7,7 @@ on: [pull_request]
 
 jobs:
   server_code_check:
-    name: Check server formatting
+    name: Check server code formatting and build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,12 +23,12 @@ jobs:
         run: dotnet --version
       - name: Install dependencies
         run: dotnet restore ./server
-      - name: Build
-        run: dotnet build ./server
       - name: Check format
         run: dotnet format ./server/server.csproj --verify-no-changes
+      - name: Build
+        run: dotnet build ./server
   tests:
-    name: Check server formatting
+    name: Check tests code formatting, build and run test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -44,9 +44,9 @@ jobs:
         run: dotnet --version
       - name: Install dependencies
         run: dotnet restore ./serverTests
-      - name: Build
-        run: dotnet build ./serverTests
       - name: Check format
         run: dotnet format ./serverTests/serverTests.csproj --verify-no-changes
+      - name: Build
+        run: dotnet build ./serverTests
       - name: Test
         run: dotnet test ./serverTests
