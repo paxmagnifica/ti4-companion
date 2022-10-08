@@ -1,4 +1,3 @@
-
 using Newtonsoft.Json;
 using server.Domain.Exceptions;
 using System;

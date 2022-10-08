@@ -1,4 +1,3 @@
-
 namespace Server.Domain
 {
     public enum PlanetType

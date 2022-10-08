@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Server.Migrations

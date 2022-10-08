@@ -1,4 +1,3 @@
-
 using Newtonsoft.Json;
 using server.Domain;
 using System;
@@ -200,7 +199,7 @@ namespace Server.Persistence
                               IsSplit = false,
                               SessionStart = "2021-09-25",
                               VpCount = 10,
-                              Duration = 9
+                              Duration = 9,
                             }),
                         },
                     },
@@ -239,7 +238,7 @@ namespace Server.Persistence
                               IsSplit = false,
                               SessionStart = "2021-09-26",
                               VpCount = 10,
-                              Duration = 9
+                              Duration = 9,
                             }),
                         },
                     },

@@ -1,4 +1,3 @@
-
 using server.Domain;
 using server.Extensions;
 using System;

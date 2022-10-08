@@ -1,5 +1,3 @@
-//
-
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -54,7 +52,7 @@ namespace ServerTests
                         new PickedPayload { Pick = "F1", PlayerName = "P1", Type = "faction" },
                         new PickedPayload { Pick = "F2", PlayerName = "P2", Type = "faction" },
                         new PickedPayload { Pick = "F3", PlayerName = "P3", Type = "faction" },
-                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" }
+                        new PickedPayload { Pick = "F4", PlayerName = "P4", Type = "faction" },
                     },
                 },
             };

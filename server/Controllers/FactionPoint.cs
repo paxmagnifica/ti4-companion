@@ -1,4 +1,3 @@
-
 namespace Server.Controllers
 {
     public class FactionPoint

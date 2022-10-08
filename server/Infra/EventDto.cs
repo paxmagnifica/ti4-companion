@@ -1,4 +1,3 @@
-
 namespace Server.Infra
 {
     public class EventDto

@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore.Migrations;
 using server.Domain;
 using System.Collections.Generic;
