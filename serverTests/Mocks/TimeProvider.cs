@@ -1,9 +1,10 @@
-using System;
-using server.Domain;
 
-namespace serverTests.Mocks
+using server.Domain;
+using System;
+
+namespace ServerTests.Mocks
 {
-    class TimeProvider : ITimeProvider
+    internal class TimeProvider : ITimeProvider
     {
         public DateTimeOffset Now => throw new NotImplementedException();
     }

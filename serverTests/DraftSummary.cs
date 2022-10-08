@@ -1,16 +1,17 @@
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
+
 using FluentAssertions;
-using server.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NUnit.Framework;
+using server.Domain;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace serverTests
+namespace ServerTests
 {
     public class DraftSummary
     {
-        JsonSerializerSettings SerializerSettings
+        private JsonSerializerSettings SerializerSettings
         {
             get
             {
@@ -38,66 +39,84 @@ namespace serverTests
         public void ShouldAddDraftSummaryAfterDraftWithOnlyFactionPicksHasBeenCommitted()
         {
             // given
-            var sessionEvents = new List<GameEvent>() {
-                new GameEvent {
+            var sessionEvents = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "The_Nomad",
                         Type = "faction",
                         PlayerIndex = 0,
-                        PlayerName = "Player 1"
-                    }, SerializerSettings)
+                        PlayerName = "Player 1",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "The_VuilRaith_Cabal",
                         Type = "faction",
                         PlayerIndex = 1,
-                        PlayerName = "Player 2"
-                    }, SerializerSettings)
+                        PlayerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(SpeakerSelected),
-                    SerializedPayload = JsonConvert.SerializeObject(new SpeakerSelectedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new SpeakerSelectedPayload
+                        {
                         SpeakerIndex = 3,
-                        SpeakerName = "Player 2"
-                    }, SerializerSettings)
+                        SpeakerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_VuilRaith_Cabal", "The_Nomad"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                        {
+                        Factions = new string[] { "The_VuilRaith_Cabal", "The_Nomad" },
+                        }, this.SerializerSettings),
                 },
             };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"The_Nomad\",\"type\":\"faction\",\"playerIndex\":0,\"playerName\":\"Player 1\"}"
+                    SerializedPayload = "{\"pick\":\"The_Nomad\",\"type\":\"faction\",\"playerIndex\":0,\"playerName\":\"Player 1\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"The_VuilRaith_Cabal\",\"type\":\"faction\",\"playerIndex\":1,\"playerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"pick\":\"The_VuilRaith_Cabal\",\"type\":\"faction\",\"playerIndex\":1,\"playerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "SpeakerSelected",
-                    SerializedPayload = "{\"speakerIndex\":3,\"speakerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"speakerIndex\":3,\"speakerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
                 },
                 new TimelineEvent
                 {
                     Order = 4,
                     EventType = "DraftSummary",
-                    SerializedPayload = "{\"speaker\":\"Player 2\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":-1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":-1}]}"
-                }
+                    SerializedPayload = "{\"speaker\":\"Player 2\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":-1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":-1}]}",
+                },
             };
             var timeline = new Timeline(new Session
             {
@@ -115,94 +134,120 @@ namespace serverTests
         public void ShouldAddDraftSummaryAfterDraftWithTablePositionHasBeenCommitted()
         {
             // given
-            var given = new List<GameEvent>() {
-                 new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "0",
                         Type = "tablePosition",
                         PlayerIndex = 1,
-                        PlayerName = "Player 2"
-                    }, SerializerSettings)
+                        PlayerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "1",
                         Type = "tablePosition",
                         PlayerIndex = 0,
-                        PlayerName = "Player 1"
-                    }, SerializerSettings)
+                        PlayerName = "Player 1",
+                        }, this.SerializerSettings),
                 },
-                 new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "The_Nomad",
                         Type = "faction",
                         PlayerIndex = 0,
-                        PlayerName = "Player 1"
-                    }, SerializerSettings)
+                        PlayerName = "Player 1",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "The_VuilRaith_Cabal",
                         Type = "faction",
                         PlayerIndex = 1,
-                        PlayerName = "Player 2"
-                    }, SerializerSettings)
+                        PlayerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(SpeakerSelected),
-                    SerializedPayload = JsonConvert.SerializeObject(new SpeakerSelectedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new SpeakerSelectedPayload
+                        {
                         SpeakerIndex = 1,
-                        SpeakerName = "Player 2"
-                    }, SerializerSettings)
+                        SpeakerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_VuilRaith_Cabal", "The_Nomad"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                        {
+                        Factions = new string[] { "The_VuilRaith_Cabal", "The_Nomad" },
+                        }, this.SerializerSettings),
                 },
-           };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            };
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"0\",\"type\":\"tablePosition\",\"playerIndex\":1,\"playerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"pick\":\"0\",\"type\":\"tablePosition\",\"playerIndex\":1,\"playerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"1\",\"type\":\"tablePosition\",\"playerIndex\":0,\"playerName\":\"Player 1\"}"
+                    SerializedPayload = "{\"pick\":\"1\",\"type\":\"tablePosition\",\"playerIndex\":0,\"playerName\":\"Player 1\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"The_Nomad\",\"type\":\"faction\",\"playerIndex\":0,\"playerName\":\"Player 1\"}"
+                    SerializedPayload = "{\"pick\":\"The_Nomad\",\"type\":\"faction\",\"playerIndex\":0,\"playerName\":\"Player 1\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"The_VuilRaith_Cabal\",\"type\":\"faction\",\"playerIndex\":1,\"playerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"pick\":\"The_VuilRaith_Cabal\",\"type\":\"faction\",\"playerIndex\":1,\"playerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "SpeakerSelected",
-                    SerializedPayload = "{\"speakerIndex\":1,\"speakerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"speakerIndex\":1,\"speakerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
                 },
                 new TimelineEvent
                 {
                     Order = 6,
                     EventType = "DraftSummary",
-                    SerializedPayload = "{\"speaker\":\"Player 2\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":0}]}"
-                }
+                    SerializedPayload = "{\"speaker\":\"Player 2\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":0}]}",
+                },
             };
             var timeline = new Timeline(new Session { Events = given });
 
@@ -217,106 +262,136 @@ namespace serverTests
         public void ShouldAddDraftSummaryAfterDraftWithTablePositionHasBeenCommittedWithMultipleSpeakerDraws()
         {
             // given
-            var given = new List<GameEvent>() {
-                 new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "0",
                         Type = "tablePosition",
                         PlayerIndex = 1,
-                        PlayerName = "Player 2"
-                    }, SerializerSettings)
+                        PlayerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "1",
                         Type = "tablePosition",
                         PlayerIndex = 0,
-                        PlayerName = "Player 1"
-                    }, SerializerSettings)
+                        PlayerName = "Player 1",
+                        }, this.SerializerSettings),
                 },
-                 new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "The_Nomad",
                         Type = "faction",
                         PlayerIndex = 0,
-                        PlayerName = "Player 1"
-                    }, SerializerSettings)
+                        PlayerName = "Player 1",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(Picked),
-                    SerializedPayload = JsonConvert.SerializeObject(new PickedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new PickedPayload
+                        {
                         Pick = "The_VuilRaith_Cabal",
                         Type = "faction",
                         PlayerIndex = 1,
-                        PlayerName = "Player 2"
-                    }, SerializerSettings)
+                        PlayerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(SpeakerSelected),
-                    SerializedPayload = JsonConvert.SerializeObject(new SpeakerSelectedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new SpeakerSelectedPayload
+                        {
                         SpeakerIndex = 1,
-                        SpeakerName = "Player 2"
-                    }, SerializerSettings)
+                        SpeakerName = "Player 2",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(SpeakerSelected),
-                    SerializedPayload = JsonConvert.SerializeObject(new SpeakerSelectedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new SpeakerSelectedPayload
+                        {
                         SpeakerIndex = 0,
-                        SpeakerName = "Player 1"
-                    }, SerializerSettings)
+                        SpeakerName = "Player 1",
+                        }, this.SerializerSettings),
                 },
-                new GameEvent {
+                 new GameEvent
+                {
                     EventType = nameof(CommitDraft),
-                    SerializedPayload = JsonConvert.SerializeObject(new CommitDraftPayload {
-                        Factions = new string[] {"The_VuilRaith_Cabal", "The_Nomad"}
-                    }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new CommitDraftPayload
+                        {
+                        Factions = new string[] { "The_VuilRaith_Cabal", "The_Nomad" },
+                        }, this.SerializerSettings),
                 },
-           };
-            var expected = new List<TimelineEvent>() {
-                new TimelineEvent {
+            };
+            var expected = new List<TimelineEvent>()
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"0\",\"type\":\"tablePosition\",\"playerIndex\":1,\"playerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"pick\":\"0\",\"type\":\"tablePosition\",\"playerIndex\":1,\"playerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"1\",\"type\":\"tablePosition\",\"playerIndex\":0,\"playerName\":\"Player 1\"}"
+                    SerializedPayload = "{\"pick\":\"1\",\"type\":\"tablePosition\",\"playerIndex\":0,\"playerName\":\"Player 1\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"The_Nomad\",\"type\":\"faction\",\"playerIndex\":0,\"playerName\":\"Player 1\"}"
+                    SerializedPayload = "{\"pick\":\"The_Nomad\",\"type\":\"faction\",\"playerIndex\":0,\"playerName\":\"Player 1\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 3,
                     EventType = "Picked",
-                    SerializedPayload = "{\"pick\":\"The_VuilRaith_Cabal\",\"type\":\"faction\",\"playerIndex\":1,\"playerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"pick\":\"The_VuilRaith_Cabal\",\"type\":\"faction\",\"playerIndex\":1,\"playerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 4,
                     EventType = "SpeakerSelected",
-                    SerializedPayload = "{\"speakerIndex\":1,\"speakerName\":\"Player 2\"}"
+                    SerializedPayload = "{\"speakerIndex\":1,\"speakerName\":\"Player 2\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 5,
                     EventType = "SpeakerSelected",
-                    SerializedPayload = "{\"speakerIndex\":0,\"speakerName\":\"Player 1\"}"
+                    SerializedPayload = "{\"speakerIndex\":0,\"speakerName\":\"Player 1\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 6,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}"
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
                 },
                 new TimelineEvent
                 {
                     Order = 7,
                     EventType = "DraftSummary",
-                    SerializedPayload = "{\"speaker\":\"Player 1\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":0}]}"
-                }
+                    SerializedPayload = "{\"speaker\":\"Player 1\",\"picks\":[{\"playerName\":\"Player 1\",\"faction\":\"The_Nomad\",\"tablePosition\":1},{\"playerName\":\"Player 2\",\"faction\":\"The_VuilRaith_Cabal\",\"tablePosition\":0}]}",
+                },
             };
             var timeline = new Timeline(new Session { Events = given });
 
