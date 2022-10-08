@@ -57,7 +57,8 @@ namespace server.Infra
         public async Task RememberSessionInList(string sessionListId, Session sessionFromDb)
         {
             var sessionList = await _sessionContext.SessionLists.FindAsync(sessionListId);
-            if (sessionList == null) {
+            if (sessionList == null)
+            {
                 // hum?
                 return;
             }
@@ -65,7 +66,8 @@ namespace server.Infra
             await _sessionContext.Entry(sessionFromDb)
                 .Collection(s => s.SessionLists)
                 .LoadAsync();
-            if (!sessionFromDb.SessionLists.Any(sl => sl.Id == sessionListId)) {
+            if (!sessionFromDb.SessionLists.Any(sl => sl.Id == sessionListId))
+            {
                 sessionFromDb.SessionLists.Add(sessionList);
                 _sessionContext.Entry(sessionFromDb).State = EntityState.Modified;
             }

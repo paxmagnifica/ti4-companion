@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace server.Domain
 {
-    public class LawRemoved: IHandler
+    public class LawRemoved : IHandler
     {
         private readonly IRepository _repository;
 

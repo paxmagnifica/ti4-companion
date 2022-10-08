@@ -23,13 +23,15 @@ namespace server.Domain
             }
 
             var sourcePayload = VictoryPointsUpdated.GetPayload(gameEvent);
-            var lastMatchingPoint = session.Events.Where(e => e.EventType == nameof(VictoryPointsUpdated)).OrderByDescending(e => e.HappenedAt).FirstOrDefault(e => {
+            var lastMatchingPoint = session.Events.Where(e => e.EventType == nameof(VictoryPointsUpdated)).OrderByDescending(e => e.HappenedAt).FirstOrDefault(e =>
+            {
                 var pointUpdatePayload = VictoryPointsUpdated.GetPayload(e);
 
                 return pointUpdatePayload.Faction == sourcePayload.Faction && pointUpdatePayload.Points == sourcePayload.Points;
             });
 
-            if (lastMatchingPoint == null) {
+            if (lastMatchingPoint == null)
+            {
                 return;
             }
 

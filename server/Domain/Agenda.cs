@@ -1,11 +1,13 @@
 namespace server.Domain
 {
-    public enum AgendaType {
+    public enum AgendaType
+    {
         Directive,
         Law,
     }
 
-    public enum ElectionType {
+    public enum ElectionType
+    {
         None,
         ScoredSecretObjective,
         Player,

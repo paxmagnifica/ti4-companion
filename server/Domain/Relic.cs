@@ -7,7 +7,7 @@ namespace server.Domain
 
         }
 
-        public Relic(string slug, GameVersion version): base(slug, version)
+        public Relic(string slug, GameVersion version) : base(slug, version)
         {
 
         }

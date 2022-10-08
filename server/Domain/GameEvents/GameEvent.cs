@@ -55,7 +55,8 @@ namespace server.Domain
 
                 return reversedPlayerOrder;
             }).ToList();
-            if (addForSpeaker && payload.Options.SpeakerPick) {
+            if (addForSpeaker && payload.Options.SpeakerPick)
+            {
                 order.Add(-1);
             }
 
