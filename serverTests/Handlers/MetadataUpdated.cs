@@ -1,8 +1,8 @@
 using NSubstitute;
 using NUnit.Framework;
-using System;
 using Server.Domain;
 using Server.Domain.Exceptions;
+using System;
 using System.Threading.Tasks;
 
 namespace ServerTests.Handlers
@@ -34,7 +34,7 @@ namespace ServerTests.Handlers
             await handler.Handle(new GameEvent()
             {
                 SessionId = sessionId,
-                SerializedPayload = "{\"SessionDisplayName\": \"test\",\"VpCount\":11}"
+                SerializedPayload = "{\"SessionDisplayName\": \"test\",\"VpCount\":11}",
             });
 
             // then
@@ -58,7 +58,7 @@ namespace ServerTests.Handlers
             var givenEvent = new GameEvent()
             {
                 SessionId = sessionId,
-                SerializedPayload = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}"
+                SerializedPayload = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             };
 
             // when
@@ -105,7 +105,7 @@ namespace ServerTests.Handlers
             var givenEvent = new GameEvent()
             {
                 SessionId = sessionId,
-                SerializedPayload = givenPayload
+                SerializedPayload = givenPayload,
             };
 
             // when
@@ -143,7 +143,7 @@ namespace ServerTests.Handlers
             var givenEvent = new GameEvent
             {
                 SessionId = sessionId,
-                SerializedPayload = invalidPayload
+                SerializedPayload = invalidPayload,
             };
 
             var session = new Session()
