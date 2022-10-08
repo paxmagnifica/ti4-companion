@@ -25,7 +25,7 @@ namespace serverTests
         {
             // given
             var given = new List<GameEvent>();
-            var timeline = new Timeline(new Session{ Events = given });
+            var timeline = new Timeline(new Session { Events = given });
 
             // when
             var actual = timeline.AddDraftSummary().GetEvents();
