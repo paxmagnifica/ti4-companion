@@ -1,30 +1,31 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class MetadataUpdated : IHandler
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
 
         public MetadataUpdated(IRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         public async Task Handle(GameEvent gameEvent)
         {
             var payload = GetPayload(gameEvent);
-            var sanitizedPayload = Sanitize(payload);
-            Validate(sanitizedPayload);
+            var sanitizedPayload = this.Sanitize(payload);
+            this.Validate(sanitizedPayload);
 
-            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
+            var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
             {
                 session.Events = new List<GameEvent>();
             }
+
             session.Events.Add(new GameEvent
             {
                 Id = gameEvent.Id,
@@ -34,9 +35,19 @@ namespace server.Domain
                 SerializedPayload = JsonConvert.SerializeObject(sanitizedPayload),
             });
 
-            _repository.UpdateSession(session);
+            this.repository.UpdateSession(session);
 
-            await _repository.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
+        }
+
+        internal static MetadataUpdatedPayload GetPayload(GameEvent gameEvent)
+        {
+            return GetPayload(gameEvent.SerializedPayload);
+        }
+
+        internal static MetadataUpdatedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<MetadataUpdatedPayload>(serializedPayload);
         }
 
         // TODO add tests
@@ -62,32 +73,29 @@ namespace server.Domain
             // TODO validate if end >= start (if end present)
             // TODO validate that VpCount > 10 && VpCount <= 14
         }
-
-        internal static MetadataUpdatedPayload GetPayload(GameEvent gameEvent)
-        {
-            return GetPayload(gameEvent.SerializedPayload);
-        }
-
-        internal static MetadataUpdatedPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<MetadataUpdatedPayload>(serializedPayload);
-        }
     }
 
     public class MetadataUpdatedPayload
     {
         public MetadataUpdatedPayload()
         {
-            Colors = new Dictionary<string, string>();
+            this.Colors = new Dictionary<string, string>();
         }
 
         public string SessionDisplayName { get; set; }
+
         public bool IsTTS { get; set; }
+
         public bool IsSplit { get; set; }
+
         public string SessionStart { get; set; }
+
         public string SessionEnd { get; set; }
+
         public decimal Duration { get; set; }
+
         public int VpCount { get; set; }
+
         public Dictionary<string, string> Colors { get; set; }
     }
 }

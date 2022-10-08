@@ -1,25 +1,25 @@
+using Newtonsoft.Json;
+using Server.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using server.Domain.Exceptions;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class Picked : IHandler
     {
-        private readonly IRepository _repository;
+        private readonly IRepository repository;
 
         public Picked(IRepository repository)
         {
-            _repository = repository;
+            this.repository = repository;
         }
 
         public async Task Handle(GameEvent gameEvent)
         {
             int counter = 0;
-            var session = await _repository.GetByIdWithEvents(gameEvent.SessionId);
+            var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
 
             if (session.Events == null)
             {
@@ -32,7 +32,7 @@ namespace server.Domain
             var previousPickEvents = orderedEvents.Where(e => e.EventType == nameof(Picked));
             var pickedPayload = GetPayload(gameEvent);
 
-            AssurePlayerCanPick(pickedPayload, previousPickEvents, gameStartOptions);
+            this.AssurePlayerCanPick(pickedPayload, previousPickEvents, gameStartOptions);
 
             session.Events.Add(gameEvent);
 
@@ -59,13 +59,14 @@ namespace server.Domain
                 {
                     expectedPicksCount = expectedPicksCount * 2;
                 }
+
                 if (gameStartOptions.SpeakerPick)
                 {
                     expectedPicksCount += 1;
                 }
 
                 var speakerPick = session.Events.Where(e => e.EventType == nameof(Picked)).Select(Picked.GetPayload).Where(fp => fp.Type == "speaker").FirstOrDefault();
-                if (GetPickEventsCount(session) + 1 == expectedPicksCount && speakerPick == null)
+                if (this.GetPickEventsCount(session) + 1 == expectedPicksCount && speakerPick == null)
                 {
                     var orderEvent = orderedEvents.LastOrDefault(e => e.EventType == "PlayerOrder");
                     var order = JsonConvert.DeserializeObject<List<int>>(orderEvent.SerializedPayload);
@@ -89,7 +90,7 @@ namespace server.Domain
                     });
                 }
 
-                if (GetPickEventsCount(session) == expectedPicksCount)
+                if (this.GetPickEventsCount(session) == expectedPicksCount)
                 {
                     // WARNING copied from CommitDraft
                     // TODO we should implement proper CQRS and return CommitDraft event from here as a side effect
@@ -99,15 +100,25 @@ namespace server.Domain
                         SessionId = session.Id,
                         HappenedAt = gameEvent.HappenedAt.AddMilliseconds(++counter),
                         EventType = nameof(CommitDraft),
-                        SerializedPayload = JsonConvert.SerializeObject(new { factions = factionPicks })
+                        SerializedPayload = JsonConvert.SerializeObject(new { factions = factionPicks }),
                     };
                     session.Events.Add(commitDraft);
                 }
-
             }
-            _repository.UpdateSession(session);
 
-            await _repository.SaveChangesAsync();
+            this.repository.UpdateSession(session);
+
+            await this.repository.SaveChangesAsync();
+        }
+
+        internal static PickedPayload GetPayload(GameEvent gameEvent)
+        {
+            return GetPayload(gameEvent.SerializedPayload);
+        }
+
+        internal static PickedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<PickedPayload>(serializedPayload);
         }
 
         private void AssurePlayerCanPick(PickedPayload currentPickPayload, IEnumerable<GameEvent> previousPickEvents, DraftOptions gameStartOptions)
@@ -134,22 +145,16 @@ namespace server.Domain
         {
             return session.Events.Count(e => e.EventType == nameof(Picked));
         }
-
-        internal static PickedPayload GetPayload(GameEvent gameEvent)
-        {
-            return GetPayload(gameEvent.SerializedPayload);
-        }
-        internal static PickedPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<PickedPayload>(serializedPayload);
-        }
     }
 
     public class PickedPayload
     {
         public string Pick { get; set; }
+
         public string Type { get; set; } // "faction", "tablePosition"
+
         public int PlayerIndex { get; set; }
+
         public string PlayerName { get; set; }
     }
 }

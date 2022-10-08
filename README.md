@@ -83,3 +83,15 @@ you need imagemagick or something like this (the thing in unix that installs `co
 1. if on different pages, update script to extract from correct pages
 1. if not in the same order as in the script - update the script with names which are lowercase of `FACTION` enum keys in `client/src/gameInfo/factions.js` (so `The_Universities_of_Jol__Nar` becomes `the_universities_of_jol__nar.png`)
 1. run `./extract-images-from-pdf.sh <name_of_the_pdf_file>`
+
+# Contributing
+
+## code conventions
+
+Code conventions are enforced automatically
+
+- for general formatting: `.editorconfig`
+- for frontend: `eslint`
+- for backend: `dotnet format`
+
+Github actions will fail your contribution if you do not comply :)

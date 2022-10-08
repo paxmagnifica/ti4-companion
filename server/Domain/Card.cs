@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace server.Domain
+namespace Server.Domain
 {
     public class Card
     {
@@ -10,12 +10,13 @@ namespace server.Domain
 
         public Card(string slug, GameVersion gameVersion)
         {
-            Slug = slug;
-            GameVersion = gameVersion;
+            this.Slug = slug;
+            this.GameVersion = gameVersion;
         }
 
         [Key]
         public string Slug { get; set; }
+
         public GameVersion GameVersion { get; set; }
     }
 }

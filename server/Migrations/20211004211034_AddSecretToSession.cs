@@ -1,7 +1,7 @@
-﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
-namespace server.Migrations
+namespace Server.Migrations
 {
     public partial class AddSecretToSession : Migration
     {

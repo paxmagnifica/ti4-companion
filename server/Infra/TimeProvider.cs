@@ -1,7 +1,7 @@
+using Server.Domain;
 using System;
-using server.Domain;
 
-namespace server.Infra
+namespace Server.Infra
 {
     public class TimeProvider : ITimeProvider
     {

@@ -1,36 +1,36 @@
+using Microsoft.EntityFrameworkCore;
+using Server.Domain;
+using Server.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using server.Domain;
-using server.Persistence;
 
-namespace server.Infra
+namespace Server.Infra
 {
     public class Repository : IRepository
     {
-        private readonly SessionContext _sessionContext;
+        private readonly SessionContext sessionContext;
 
         public Repository(SessionContext sesionContext)
         {
-            this._sessionContext = sesionContext;
+            this.sessionContext = sesionContext;
         }
 
         public async Task<Session> GetById(Guid sessionId)
         {
-            return await _sessionContext.Sessions.FindAsync(sessionId);
+            return await this.sessionContext.Sessions.FindAsync(sessionId);
         }
 
         public async Task<Session> GetByIdWithEvents(Guid sessionId)
         {
-            var session = await _sessionContext.Sessions.FindAsync(sessionId);
+            var session = await this.sessionContext.Sessions.FindAsync(sessionId);
             if (session == null)
             {
                 return null;
             }
 
-            _sessionContext.Entry(session)
+            this.sessionContext.Entry(session)
                 .Collection(session => session.Events)
                 .Load();
 
@@ -39,37 +39,37 @@ namespace server.Infra
 
         public Task SaveChangesAsync()
         {
-            return _sessionContext.SaveChangesAsync();
+            return this.sessionContext.SaveChangesAsync();
         }
 
         public void UpdateSession(Session session)
         {
-            _sessionContext.Entry(session).State = EntityState.Modified;
+            this.sessionContext.Entry(session).State = EntityState.Modified;
         }
 
         public async Task SaveSessionToListAsync(string sessionListId, Session newSession)
         {
-            var sessionList = await _sessionContext.SessionLists.FindAsync(sessionListId);
+            var sessionList = await this.sessionContext.SessionLists.FindAsync(sessionListId);
             newSession.SessionLists = new List<SessionList>() { sessionList };
-            _sessionContext.Sessions.Add(newSession);
+            this.sessionContext.Sessions.Add(newSession);
         }
 
         public async Task RememberSessionInList(string sessionListId, Session sessionFromDb)
         {
-            var sessionList = await _sessionContext.SessionLists.FindAsync(sessionListId);
+            var sessionList = await this.sessionContext.SessionLists.FindAsync(sessionListId);
             if (sessionList == null)
             {
                 // hum?
                 return;
             }
 
-            await _sessionContext.Entry(sessionFromDb)
+            await this.sessionContext.Entry(sessionFromDb)
                 .Collection(s => s.SessionLists)
                 .LoadAsync();
             if (!sessionFromDb.SessionLists.Any(sl => sl.Id == sessionListId))
             {
                 sessionFromDb.SessionLists.Add(sessionList);
-                _sessionContext.Entry(sessionFromDb).State = EntityState.Modified;
+                this.sessionContext.Entry(sessionFromDb).State = EntityState.Modified;
             }
         }
     }

@@ -1,11 +1,12 @@
 using System;
 
-namespace server.Domain.Exceptions
+namespace Server.Domain.Exceptions
 {
     [Serializable]
     public class SpeakerPickNotAllowedException : Ti4CompanionDomainException
     {
-        public SpeakerPickNotAllowedException() : base("Speaker pick not enabled")
+        public SpeakerPickNotAllowedException()
+            : base("Speaker pick not enabled")
         {
         }
     }

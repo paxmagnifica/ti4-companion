@@ -1,21 +1,21 @@
-using System;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
 
-namespace server
+namespace Server
 {
     public class SessionHub : Hub
     {
         public async Task UnsubscribeFromSession(Guid session)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, session.ToString());
-            await Clients.Caller.SendAsync("UnsubscribedFromSession", session);
+            await this.Groups.RemoveFromGroupAsync(this.Context.ConnectionId, session.ToString());
+            await this.Clients.Caller.SendAsync("UnsubscribedFromSession", session);
         }
 
         public async Task SubscribeToSession(Guid session)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, session.ToString());
-            await Clients.Caller.SendAsync("SubscribedToSession", session);
+            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, session.ToString());
+            await this.Clients.Caller.SendAsync("SubscribedToSession", session);
         }
     }
 }

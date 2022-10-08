@@ -1,27 +1,27 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using server.Infra;
+using Server.Infra;
+using System;
+using System.Threading.Tasks;
 
-namespace server.Controllers
+namespace Server.Controllers
 {
     [ApiController]
     [Route("api/sessions/{sessionId:guid}/[controller]")]
     public class EventsController : ControllerBase
     {
-        private readonly EventFactory _eventFactory;
-        private readonly Dispatcher _dispatcher;
-        private readonly ILogger<EventsController> _logger;
-        private readonly IHubContext<SessionHub> _sessionHub;
+        private readonly EventFactory eventFactory;
+        private readonly Dispatcher dispatcher;
+        private readonly ILogger<EventsController> logger;
+        private readonly IHubContext<SessionHub> sessionHub;
 
         public EventsController(EventFactory eventFactory, Dispatcher dispatch, ILogger<EventsController> logger, IHubContext<SessionHub> sessionHub)
         {
-            _eventFactory = eventFactory;
-            _dispatcher = dispatch;
-            _logger = logger;
-            _sessionHub = sessionHub;
+            this.eventFactory = eventFactory;
+            this.dispatcher = dispatch;
+            this.logger = logger;
+            this.sessionHub = sessionHub;
         }
 
         [HttpPost]
@@ -29,16 +29,16 @@ namespace server.Controllers
         {
             try
             {
-                var gameEvent = _eventFactory.GetGameEvent(sessionId, eventDto);
-                await _dispatcher.Dispatch(gameEvent);
+                var gameEvent = this.eventFactory.GetGameEvent(sessionId, eventDto);
+                await this.dispatcher.Dispatch(gameEvent);
 
-                await _sessionHub.Clients.Group(sessionId.ToString()).SendCoreAsync("SessionEvent", new object[] { gameEvent });
+                await this.sessionHub.Clients.Group(sessionId.ToString()).SendCoreAsync("SessionEvent", new object[] { gameEvent });
 
                 return new OkResult();
             }
             catch (HandlerNotFoundException exception)
             {
-                _logger.LogWarning(exception.Message);
+                this.logger.LogWarning(exception.Message);
                 return new NotFoundResult();
             }
         }

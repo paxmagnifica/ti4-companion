@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 
-namespace server.Domain
+namespace Server.Domain
 {
-    interface IHandler
+    internal interface IHandler
     {
         Task Handle(GameEvent gameEvent);
     }

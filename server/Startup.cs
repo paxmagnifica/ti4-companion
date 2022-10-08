@@ -1,32 +1,32 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using server.Persistence;
-using server.Infra;
-using server.Domain;
-using System;
-using System.Reflection;
-using System.Linq;
-using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Server.Domain;
+using Server.Infra;
+using Server.Persistence;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
-namespace server
+namespace Server
 {
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
 
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
             };
         }
 
@@ -42,7 +42,7 @@ namespace server
                 options.AddPolicy(name: "_localhostCors", builder =>
                 {
                     builder
-                        .WithOrigins(JsonConvert.DeserializeObject<string[]>(Configuration.GetValue<string>("AllowedOrigins")))
+                        .WithOrigins(JsonConvert.DeserializeObject<string[]>(this.Configuration.GetValue<string>("AllowedOrigins")))
                         .AllowAnyHeader()
                         .AllowCredentials();
                 });
@@ -57,7 +57,7 @@ namespace server
             });
 
             services.AddDbContext<SessionContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("SessionContext")));
+                options.UseNpgsql(this.Configuration.GetConnectionString("SessionContext")));
 
             services.AddScoped<EventFactory>();
             services.AddScoped<SessionHub>();
@@ -65,27 +65,14 @@ namespace server
             services.AddScoped<Dispatcher>();
             services.AddScoped<Authorization>();
 
-            AddAllHandlers(services);
-        }
-
-        private void AddAllHandlers(IServiceCollection services)
-        {
-            Type handler = typeof(IHandler);
-            Type[] concreteTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsClass && t.GetInterfaces().Contains(handler))
-                .ToArray();
-            foreach (Type t in concreteTypes)
-            {
-                services.AddScoped(t);
-            }
+            this.AddAllHandlers(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            ILogger<Startup> logger
-        )
+            ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
@@ -111,7 +98,6 @@ namespace server
                 {
                     // WARNING if you're changing this default version, change the default in /client/src/GameComponents/GameVersionPicker.js
                     context.Items.Add("GameVersion", GameVersion.PoK_Codex2);
-
                 }
 
                 await next.Invoke();
@@ -148,11 +134,13 @@ namespace server
                         logger.LogDebug($"adding SessionId item {sessionId}");
                     }
                 }
+
                 await next.Invoke();
             });
             app.UseCors("_localhostCors");
 
             app.UseMiddleware<HeaderAuthorizationMiddleware>();
+
             // TODO fix and reenable
             // app.UseMiddleware<PreventLockedSessionEditMiddleware>();
             app.UseRouting();
@@ -162,6 +150,18 @@ namespace server
                 endpoints.MapControllers();
                 endpoints.MapHub<SessionHub>("/sessionHub");
             });
+        }
+
+        private void AddAllHandlers(IServiceCollection services)
+        {
+            Type handler = typeof(IHandler);
+            Type[] concreteTypes = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.IsClass && t.GetInterfaces().Contains(handler))
+                .ToArray();
+            foreach (Type t in concreteTypes)
+            {
+                services.AddScoped(t);
+            }
         }
     }
 }

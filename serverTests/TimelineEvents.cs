@@ -1,15 +1,15 @@
-using System.Collections.Generic;
-using NUnit.Framework;
 using FluentAssertions;
-using server.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NUnit.Framework;
+using Server.Domain;
+using System.Collections.Generic;
 
-namespace serverTests
+namespace ServerTests
 {
     public class TimelineEvents
     {
-        JsonSerializerSettings SerializerSettings
+        private JsonSerializerSettings SerializerSettings
         {
             get
             {
@@ -23,37 +23,50 @@ namespace serverTests
         public void ShouldIncludeVictoryPointsInObjectiveScoredTimelineEvent()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(ObjectiveAdded),
-                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveAddedPayload {
-                            Slug = "raise-a-fleet"
-                            }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new ObjectiveAddedPayload
+                    {
+                            Slug = "raise-a-fleet",
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(ObjectiveScored),
-                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new ObjectiveScoredPayload
+                    {
                             Faction = "The_Universities_of_Jol__Nar",
                             Slug = "raise-a-fleet",
-                            Points = 1
-                            }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
             };
 
-            var expected = new List<TimelineEvent> {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "ObjectiveAdded",
                     SerializedPayload = "{\"slug\":\"raise-a-fleet\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "ObjectiveScored",
                     SerializedPayload = "{\"slug\":\"raise-a-fleet\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1}",
@@ -73,49 +86,66 @@ namespace serverTests
         public void ShouldIncludeLatestVictoryPointsUpdatedWithObjectiveScored()
         {
             // given
-            var given = new List<GameEvent>() {
-                new GameEvent {
+            var given = new List<GameEvent>()
+            {
+                new GameEvent
+                {
                     EventType = nameof(ObjectiveAdded),
-                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveAddedPayload {
-                            Slug = "raise-a-fleet"
-                            }, SerializerSettings)
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new ObjectiveAddedPayload
+                    {
+                            Slug = "raise-a-fleet",
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 1
-                            }, SerializerSettings)
+                            Points = 1,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(ObjectiveScored),
-                    SerializedPayload = JsonConvert.SerializeObject(new ObjectiveScoredPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new ObjectiveScoredPayload
+                    {
                             Faction = "The_Universities_of_Jol__Nar",
                             Slug = "raise-a-fleet",
-                            Points = 2
-                            }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
-                new GameEvent {
+                new GameEvent
+                {
                     EventType = nameof(VictoryPointsUpdated),
-                    SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload {
+                    SerializedPayload = JsonConvert.SerializeObject(
+                        new VictoryPointsUpdatedPayload
+                    {
                             Faction = "The_Universities_of_Jol__Nar",
-                            Points = 2
-                            }, SerializerSettings)
+                            Points = 2,
+                    }, this.SerializerSettings),
                 },
             };
 
-            var expected = new List<TimelineEvent> {
-                new TimelineEvent {
+            var expected = new List<TimelineEvent>
+            {
+                new TimelineEvent
+                {
                     Order = 0,
                     EventType = "ObjectiveAdded",
                     SerializedPayload = "{\"slug\":\"raise-a-fleet\"}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 1,
                     EventType = "VictoryPointsUpdated",
-                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"source\":0,\"context\":null}"
+                    SerializedPayload = "{\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":1,\"source\":0,\"context\":null}",
                 },
-                new TimelineEvent {
+                new TimelineEvent
+                {
                     Order = 2,
                     EventType = "ObjectiveScored",
                     SerializedPayload = "{\"slug\":\"raise-a-fleet\",\"faction\":\"The_Universities_of_Jol__Nar\",\"points\":2}",

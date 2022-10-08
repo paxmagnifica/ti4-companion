@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace server.Migrations
+namespace Server.Migrations
 {
     public partial class AddedHashedPasswordToSession : Migration
     {

@@ -1,13 +1,13 @@
 using System;
 
-namespace server.Domain.Exceptions
+namespace Server.Domain.Exceptions
 {
     [Serializable]
     public class AlreadyDoneException : Ti4CompanionDomainException
     {
-        public AlreadyDoneException() : base("Not allowed, conflict")
+        public AlreadyDoneException()
+            : base("Not allowed, conflict")
         {
-
         }
     }
 }
