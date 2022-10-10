@@ -4,8 +4,10 @@ import {
   Dialog,
   DialogContent,
   IconButton,
+  Snackbar,
   Tooltip,
 } from '@material-ui/core'
+import MuiAlert from '@material-ui/lab/Alert'
 import { Share } from '@material-ui/icons'
 import QRCode from 'react-qr-code'
 import { makeStyles } from '@material-ui/core/styles'
@@ -25,6 +27,7 @@ function ShareButton({ session }) {
   const { t } = useTranslation()
   const classes = useStyles()
   const [showQr, setShowQr] = useState(false)
+  const [showConfirmationMessage, setShowConfirmationMessage] = useState(false)
 
   const path = useMemo(
     () =>
@@ -35,14 +38,11 @@ function ShareButton({ session }) {
   )
   const fullUrl = useMemo(() => `${window.location.origin}${path}`, [path])
 
-  const copyLink = useCallback(
-    (e) => {
-      navigator.clipboard.writeText(fullUrl)
-      const copyButton = e.target
-      copyButton.innerText = t('share.copied')
-    },
-    [fullUrl, t],
-  )
+  const copyLink = useCallback(() => {
+    navigator.clipboard.writeText(fullUrl)
+    setShowQr(false)
+    setShowConfirmationMessage(true)
+  }, [fullUrl])
 
   return (
     <>
@@ -63,6 +63,23 @@ function ShareButton({ session }) {
           <Trans i18nKey="general.labels.copy" /> <FileCopyIcon />{' '}
         </Button>
       </Dialog>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        autoHideDuration={2000}
+        onClose={() => {
+          setShowConfirmationMessage(false)
+        }}
+        open={showConfirmationMessage}
+      >
+        <MuiAlert
+          onClose={() => {
+            setShowConfirmationMessage(false)
+          }}
+          severity="success"
+        >
+          <Trans i18nKey="share.copied" />
+        </MuiAlert>
+      </Snackbar>
     </>
   )
 }
