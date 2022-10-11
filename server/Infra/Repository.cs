@@ -72,5 +72,17 @@ namespace Server.Infra
                 this.sessionContext.Entry(sessionFromDb).State = EntityState.Modified;
             }
         }
+
+        public async Task DeleteSession(Guid sessionId)
+        {
+            var session = await this.sessionContext.Sessions.FindAsync(sessionId);
+
+            if (session == null)
+            {
+                return;
+            }
+
+            this.sessionContext.Sessions.Remove(session);
+        }
     }
 }

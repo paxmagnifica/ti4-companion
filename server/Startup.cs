@@ -42,6 +42,7 @@ namespace Server
                 options.AddPolicy(name: "_localhostCors", builder =>
                 {
                     builder
+                        .WithMethods("POST", "DELETE", "GET", "PUT")
                         .WithOrigins(JsonConvert.DeserializeObject<string[]>(this.Configuration.GetValue<string>("AllowedOrigins")))
                         .AllowAnyHeader()
                         .AllowCredentials();

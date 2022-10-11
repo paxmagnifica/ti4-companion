@@ -141,6 +141,23 @@ namespace Server.Controllers
             return new OkResult();
         }
 
+        [HttpDelete("{sessionId}")]
+        public async Task<ActionResult> DeleteSession([FromRoute] Guid sessionId)
+        {
+            var sessionFromDb = await this.repository.GetByIdWithEvents(sessionId);
+            if (sessionFromDb == null)
+            {
+                return new NotFoundResult();
+            }
+
+            await this.repository.DeleteSession(sessionId);
+
+            await this.repository.SaveChangesAsync();
+
+            return new OkResult();
+        }
+
+
         public class PasswordPayload
         {
             public string Password { get; set; }

@@ -15,6 +15,8 @@ namespace Server.Domain
 
         void UpdateSession(Session session);
 
+        Task DeleteSession(Guid sessionId);
+
         Task RememberSessionInList(string v, Session sessionFromDb);
     }
 }
