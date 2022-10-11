@@ -21,8 +21,6 @@ import { useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import { useGameVersion, DEFAULT_VERSION } from '../GameComponents'
-import { deleteSession } from './removeSession'
-import Confirmation from '../shared/Confirmation'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -53,13 +51,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // TODO handle drafts
-export function SessionsList({ sessions, listId }) {
+export function SessionsList({ sessions, listId, onDeleteSession }) {
   const classes = useStyles()
   const history = useHistory()
   const { t } = useTranslation()
   const { setGameVersion } = useGameVersion()
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false)
-  const [sesssionToDelete, setSesssionToDelete] = useState(null)
 
   useEffect(() => {
     setGameVersion(DEFAULT_VERSION)
@@ -130,11 +126,10 @@ export function SessionsList({ sessions, listId }) {
               <Button
                 color="secondary"
                 onClick={() => {
-                  setSesssionToDelete({
+                  onDeleteSession({
                     id: session.id,
                     name: session.displayName,
                   })
-                  setConfirmationDialogOpen(true)
                 }}
               >
                 {t('sessionList.delete')}
@@ -146,26 +141,6 @@ export function SessionsList({ sessions, listId }) {
       <em style={{ fontSize: '.85em', float: 'right' }}>
         <Trans i18nKey="sessionList.yourListIdentifier" values={{ listId }} />
       </em>
-      {sesssionToDelete && (
-        <Confirmation
-          cancel={() => {
-            setSesssionToDelete(null)
-            setConfirmationDialogOpen(false)
-          }}
-          confirm={() => {
-            deleteSession(sesssionToDelete.id)
-            setConfirmationDialogOpen(false)
-            setSesssionToDelete(null)
-          }}
-          open={confirmationDialogOpen}
-          title={
-            <Trans
-              i18nKey="sessionList.confirmDelete"
-              values={{ sessionName: sesssionToDelete.name }}
-            />
-          }
-        />
-      )}
     </>
   )
 }
