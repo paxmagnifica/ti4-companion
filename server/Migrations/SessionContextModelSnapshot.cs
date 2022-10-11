@@ -34,7 +34,7 @@ namespace Server.Migrations
                     b.ToTable("SessionSessionList");
                 });
 
-            modelBuilder.Entity("server.Domain.Agenda", b =>
+            modelBuilder.Entity("Server.Domain.Agenda", b =>
                 {
                     b.Property<string>("Slug")
                         .HasColumnType("text");
@@ -56,7 +56,7 @@ namespace Server.Migrations
                     b.ToTable("Agendas");
                 });
 
-            modelBuilder.Entity("server.Domain.Exploration", b =>
+            modelBuilder.Entity("Server.Domain.Exploration", b =>
                 {
                     b.Property<string>("Slug")
                         .HasColumnType("text");
@@ -87,7 +87,7 @@ namespace Server.Migrations
                     b.ToTable("Explorations");
                 });
 
-            modelBuilder.Entity("server.Domain.GameEvent", b =>
+            modelBuilder.Entity("Server.Domain.GameEvent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +112,7 @@ namespace Server.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("server.Domain.Objective", b =>
+            modelBuilder.Entity("Server.Domain.Objective", b =>
                 {
                     b.Property<string>("Slug")
                         .HasColumnType("text");
@@ -140,7 +140,7 @@ namespace Server.Migrations
                     b.ToTable("Objectives");
                 });
 
-            modelBuilder.Entity("server.Domain.Relic", b =>
+            modelBuilder.Entity("Server.Domain.Relic", b =>
                 {
                     b.Property<string>("Slug")
                         .HasColumnType("text");
@@ -156,7 +156,7 @@ namespace Server.Migrations
                     b.ToTable("Relics");
                 });
 
-            modelBuilder.Entity("server.Domain.Session", b =>
+            modelBuilder.Entity("Server.Domain.Session", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,7 +176,7 @@ namespace Server.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("server.Domain.SessionList", b =>
+            modelBuilder.Entity("Server.Domain.SessionList", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -189,7 +189,7 @@ namespace Server.Migrations
                     b.ToTable("SessionLists");
                 });
 
-            modelBuilder.Entity("server.Domain.Token", b =>
+            modelBuilder.Entity("Server.Domain.Token", b =>
                 {
                     b.Property<Guid>("Value")
                         .ValueGeneratedOnAdd()
@@ -208,29 +208,29 @@ namespace Server.Migrations
 
             modelBuilder.Entity("SessionSessionList", b =>
                 {
-                    b.HasOne("server.Domain.SessionList", null)
+                    b.HasOne("Server.Domain.SessionList", null)
                         .WithMany()
                         .HasForeignKey("SessionListsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("server.Domain.Session", null)
+                    b.HasOne("Server.Domain.Session", null)
                         .WithMany()
                         .HasForeignKey("SessionsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("server.Domain.GameEvent", b =>
+            modelBuilder.Entity("Server.Domain.GameEvent", b =>
                 {
-                    b.HasOne("server.Domain.Session", null)
+                    b.HasOne("Server.Domain.Session", null)
                         .WithMany("Events")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("server.Domain.Session", b =>
+            modelBuilder.Entity("Server.Domain.Session", b =>
                 {
                     b.Navigation("Events");
                 });
