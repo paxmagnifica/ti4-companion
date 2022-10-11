@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
+  Button,
   Chip,
   List,
   ListItem,
@@ -20,6 +21,8 @@ import { useHistory, generatePath } from 'react-router-dom'
 import { useTranslation, Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
 import { useGameVersion, DEFAULT_VERSION } from '../GameComponents'
+import { deleteSession } from './removeSession'
+import Confirmation from '../shared/Confirmation'
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -55,6 +58,8 @@ export function SessionsList({ sessions, listId }) {
   const history = useHistory()
   const { t } = useTranslation()
   const { setGameVersion } = useGameVersion()
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false)
+  const [sesssionToDelete, setSesssionToDelete] = useState(null)
 
   useEffect(() => {
     setGameVersion(DEFAULT_VERSION)
@@ -78,19 +83,7 @@ export function SessionsList({ sessions, listId }) {
             : `Drafting in progress...`
 
           return (
-            <ListItem
-              key={session.id}
-              button
-              className={classes.listItem}
-              onClick={() =>
-                history.push(
-                  generatePath(SESSION_VIEW_ROUTES.main, {
-                    sessionId: session.id,
-                    secret: session.editable ? session.secret : undefined,
-                  }),
-                )
-              }
-            >
+            <ListItem key={session.id} button className={classes.listItem}>
               <ListItemIcon>
                 {session.finished ? (
                   <Tooltip placement="top" title={t('sessionList.done')}>
@@ -108,10 +101,20 @@ export function SessionsList({ sessions, listId }) {
                 )}
               </ListItemIcon>
               <ListItemText
+                onClick={() =>
+                  history.push(
+                    generatePath(SESSION_VIEW_ROUTES.main, {
+                      sessionId: session.id,
+                      secret: session.editable ? session.secret : undefined,
+                    }),
+                  )
+                }
                 primary={session.displayName || defaultName}
                 secondary={`${session.start || ''} ${
                   session.displayName
-                    ? t('sessionList.secondaryTitle', { defaultName })
+                    ? t('sessionList.secondaryTitle', {
+                        factionList: defaultName,
+                      })
                     : ''
                 }`}
               />
@@ -124,6 +127,18 @@ export function SessionsList({ sessions, listId }) {
                   />
                 </ListItemIcon>
               )}
+              <Button
+                color="secondary"
+                onClick={() => {
+                  setSesssionToDelete({
+                    id: session.id,
+                    name: session.displayName,
+                  })
+                  setConfirmationDialogOpen(true)
+                }}
+              >
+                {t('sessionList.delete')}
+              </Button>
             </ListItem>
           )
         })}
@@ -131,6 +146,26 @@ export function SessionsList({ sessions, listId }) {
       <em style={{ fontSize: '.85em', float: 'right' }}>
         <Trans i18nKey="sessionList.yourListIdentifier" values={{ listId }} />
       </em>
+      {sesssionToDelete && (
+        <Confirmation
+          cancel={() => {
+            setSesssionToDelete(null)
+            setConfirmationDialogOpen(false)
+          }}
+          confirm={() => {
+            deleteSession(sesssionToDelete.id)
+            setConfirmationDialogOpen(false)
+            setSesssionToDelete(null)
+          }}
+          open={confirmationDialogOpen}
+          title={
+            <Trans
+              i18nKey="sessionList.confirmDelete"
+              values={{ sessionName: sesssionToDelete.name }}
+            />
+          }
+        />
+      )}
     </>
   )
 }
