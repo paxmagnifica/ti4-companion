@@ -6,6 +6,11 @@ namespace ServerTests.Mocks
 {
     internal class Repository : IRepository
     {
+        public Task DeleteSession(Guid sessionId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Session> GetById(Guid sessionId)
         {
             throw new NotImplementedException();

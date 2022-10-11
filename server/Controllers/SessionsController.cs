@@ -157,7 +157,6 @@ namespace Server.Controllers
             return new OkResult();
         }
 
-
         public class PasswordPayload
         {
             public string Password { get; set; }
