@@ -59,7 +59,7 @@ export const TogglePlasticColorsButton = () => {
   const onOff = plasticColorsContext?.hide
     ? t('togglePlastic.nowOff')
     : t('togglePlastic.nowOn')
-  const title = `${t('togglePlastic.title')} (${onOff})`
+  const title = `${t('togglePlastic.tooltip')} (${onOff})`
 
   return (
     <Tooltip placement="bottom" title={title}>
