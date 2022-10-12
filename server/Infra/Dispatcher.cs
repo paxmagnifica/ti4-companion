@@ -16,7 +16,7 @@ namespace Server.Infra
 
         public Task Dispatch(GameEvent gameEvent)
         {
-            var handlerType = Type.GetType($"server.Domain.{gameEvent.EventType.Capitalize()}", false);
+            var handlerType = Type.GetType($"Server.Domain.{gameEvent.EventType.Capitalize()}", false);
             if (handlerType == null)
             {
                 throw new HandlerNotFoundException(gameEvent.EventType.Capitalize());
