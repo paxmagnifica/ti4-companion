@@ -130,7 +130,7 @@ function ImagePicker({ onChange, translations, Icon, previewAboveDropzone }) {
           )}
         </div>
       </Grid>
-      {!previewAboveDropzone && file && ( 
+      {!previewAboveDropzone && file && (
         <Grid
           className={classes.previewContainer}
           container
