@@ -13,8 +13,6 @@ dotnet_diagnostic.SA1633.severity = none
 # disabling "parameter takes multiple lines error
 dotnet_diagnostic.SA1118.severity = none
 # disabling single type per file
-# TODO #290
-dotnet_diagnostic.SA1402.severity = none
 
 [*.js]
 indent_size = 2
