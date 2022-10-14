@@ -16,7 +16,7 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SessionsController : ControllerBase
+    public partial class SessionsController : ControllerBase
     {
         private readonly ILogger<SessionsController> logger;
         private readonly SessionContext sessionContext;
@@ -139,11 +139,6 @@ namespace Server.Controllers
             await this.sessionContext.SaveChangesAsync();
 
             return new OkResult();
-        }
-
-        public class PasswordPayload
-        {
-            public string Password { get; set; }
         }
     }
 }

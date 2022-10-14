@@ -34,9 +34,4 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<FactionsShuffledPayload>(gameEvent.SerializedPayload);
         }
     }
-
-    internal class FactionsShuffledPayload
-    {
-        public List<string> Factions { get; set; }
-    }
 }

@@ -109,28 +109,4 @@ namespace Server.Domain
             }
         }
     }
-
-    public class MetadataUpdatedPayload
-    {
-        public MetadataUpdatedPayload()
-        {
-            this.Colors = new Dictionary<string, string>();
-        }
-
-        public string SessionDisplayName { get; set; }
-
-        public bool IsTTS { get; set; }
-
-        public bool IsSplit { get; set; }
-
-        public string SessionStart { get; set; }
-
-        public string SessionEnd { get; set; }
-
-        public decimal Duration { get; set; }
-
-        public int VpCount { get; set; }
-
-        public Dictionary<string, string> Colors { get; set; }
-    }
 }
