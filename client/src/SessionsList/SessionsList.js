@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   listItem: {
+    display: 'flex',
+    gap: '1rem',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'start',
@@ -96,6 +98,15 @@ export function SessionsList({ sessions, listId, onDeleteSession }) {
                   </Tooltip>
                 )}
               </ListItemIcon>
+              {session.editable && !session.locked && (
+                <ListItemIcon>
+                  <Chip
+                    color="secondary"
+                    icon={<EditOutlined />}
+                    label={t('sessionList.edit')}
+                  />
+                </ListItemIcon>
+              )}
               <ListItemText
                 onClick={() =>
                   history.push(
@@ -114,15 +125,6 @@ export function SessionsList({ sessions, listId, onDeleteSession }) {
                     : ''
                 }`}
               />
-              {session.editable && !session.locked && (
-                <ListItemIcon>
-                  <Chip
-                    color="secondary"
-                    icon={<EditOutlined />}
-                    label={t('sessionList.edit')}
-                  />
-                </ListItemIcon>
-              )}
               <Button
                 color="secondary"
                 onClick={() => {
