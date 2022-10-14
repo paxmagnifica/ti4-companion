@@ -96,7 +96,7 @@ function ImagePicker({ onChange, translations, Icon, previewAboveDropzone }) {
           justifyContent="center"
         >
           <img
-            alt={t('sessionMap.map')}
+            alt={t('sessionMap.galaxy')}
             className={classes.mapPreview}
             src={previewUrl}
           />
@@ -130,7 +130,7 @@ function ImagePicker({ onChange, translations, Icon, previewAboveDropzone }) {
           )}
         </div>
       </Grid>
-      {!previewAboveDropzone && file && (
+      {!previewAboveDropzone && file && ( 
         <Grid
           className={classes.previewContainer}
           container
@@ -138,7 +138,7 @@ function ImagePicker({ onChange, translations, Icon, previewAboveDropzone }) {
           justifyContent="center"
         >
           <img
-            alt={t('sessionMap.map')}
+            alt={t('sessionMap.galaxy')}
             className={classes.mapPreview}
             src={previewUrl}
           />

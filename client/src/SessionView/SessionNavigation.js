@@ -129,7 +129,7 @@ function SessionNavigation() {
               <ListItemIcon>
                 <MapIcon />
               </ListItemIcon>
-              <ListItemText primary={t('sessionView.nav.map')} />
+              <ListItemText primary={t('sessionView.nav.galaxy')} />
             </ListItem>
             <ListItem button onClick={() => goAndCloseDrawer(VIEW.details)}>
               <ListItemIcon>
@@ -163,8 +163,8 @@ function SessionNavigation() {
       />
       <Tab
         icon={<MapIcon />}
-        label={t('sessionView.nav.map')}
-        title={t('sessionView.nav.map')}
+        label={t('sessionView.nav.galaxy')}
+        title={t('sessionView.nav.galaxy')}
         value={VIEW.map}
       />
       <Tab
