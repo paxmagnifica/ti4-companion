@@ -34,9 +34,4 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<ObjectiveAddedPayload>(gameEvent.SerializedPayload);
         }
     }
-
-    public class ObjectiveAddedPayload
-    {
-        public string Slug { get; set; }
-    }
 }
