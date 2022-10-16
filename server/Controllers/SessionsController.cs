@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Server.Domain;
 using Server.Infra;
-using Server.Controllers;
 using Server.Persistence;
 using System;
 using System.Collections.Generic;
