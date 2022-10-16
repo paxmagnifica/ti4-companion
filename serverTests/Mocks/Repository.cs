@@ -36,6 +36,11 @@ namespace ServerTests.Mocks
             throw new NotImplementedException();
         }
 
+        public Task<bool> SessionExists(Guid sessionId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateSession(Session session)
         {
             throw new NotImplementedException();

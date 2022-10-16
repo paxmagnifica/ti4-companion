@@ -144,8 +144,9 @@ namespace Server.Controllers
         [HttpDelete("{sessionId}")]
         public async Task<ActionResult> DeleteSession([FromRoute] Guid sessionId)
         {
-            var sessionFromDb = await this.repository.GetByIdWithEvents(sessionId);
-            if (sessionFromDb == null)
+            var sessionExists = await this.repository.SessionExists(sessionId);
+
+            if (!sessionExists)
             {
                 return new NotFoundResult();
             }

@@ -18,5 +18,7 @@ namespace Server.Domain
         Task DeleteSession(Guid sessionId);
 
         Task RememberSessionInList(string v, Session sessionFromDb);
+
+        Task <bool> SessionExists(Guid sessionId);
     }
 }

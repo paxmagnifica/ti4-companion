@@ -84,5 +84,12 @@ namespace Server.Infra
 
             this.sessionContext.Sessions.Remove(session);
         }
+
+        public async Task<bool> SessionExists(Guid sessionId)
+        {
+            var sessionExits = await this.sessionContext.Sessions.AnyAsync(x => x.Id == sessionId);
+
+            return sessionExits;
+        }
     }
 }
