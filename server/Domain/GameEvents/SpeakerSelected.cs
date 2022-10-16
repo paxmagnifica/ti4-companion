@@ -39,11 +39,4 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<SpeakerSelectedPayload>(serializedPayload);
         }
     }
-
-    public class SpeakerSelectedPayload
-    {
-        public int SpeakerIndex { get; set; }
-
-        public string SpeakerName { get; set; }
-    }
 }

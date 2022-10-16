@@ -25,7 +25,11 @@ export function Map({ editable, session, sessionService }) {
   if (map) {
     return (
       <Grid container justifyContent="center">
-        <img alt={t('sessionMap.map')} src={map} style={{ maxWidth: '86vw' }} />
+        <img
+          alt={t('sessionMap.galaxy')}
+          src={map}
+          style={{ maxWidth: '86vw' }}
+        />
       </Grid>
     )
   }

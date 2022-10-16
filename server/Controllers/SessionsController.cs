@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Server.Domain;
 using Server.Infra;
+using Server.Controllers;
 using Server.Persistence;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SessionsController : ControllerBase
+    public partial class SessionsController : ControllerBase
     {
         private readonly ILogger<SessionsController> logger;
         private readonly SessionContext sessionContext;
@@ -155,11 +156,6 @@ namespace Server.Controllers
             await this.repository.SaveChangesAsync();
 
             return new OkResult();
-        }
-
-        public class PasswordPayload
-        {
-            public string Password { get; set; }
         }
     }
 }

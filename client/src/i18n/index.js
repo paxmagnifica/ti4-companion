@@ -219,7 +219,7 @@ export const factory = (options = { debug: true }) =>
               locked: 'Locked for editing',
               nav: {
                 overview: 'Overview',
-                map: 'Map',
+                galaxy: 'Galaxy',
                 details: 'Details',
                 timeline: 'Timeline',
               },
@@ -231,14 +231,14 @@ export const factory = (options = { debug: true }) =>
               },
             },
             sessionMap: {
-              map: 'TI4 map',
-              none: 'no map has been uploaded yet',
-              changeFile: 'Change the map file',
-              dropHere: 'Drop your map here...',
+              galaxy: 'TI4 Galaxy',
+              none: 'no galaxy has been uploaded yet',
+              changeFile: 'Change the galaxy file',
+              dropHere: 'Drop your galaxy here...',
               dragHere:
-                "Drag 'n' drop your map file here, or click to select the map file",
+                "Drag 'n' drop your galaxy file here, or click to select the galaxy file",
               sizeHint:
-                'Keep in mind that maps smaller than 800x800px are going to be small and unreadable',
+                'Keep in mind that galaxies smaller than 800x800px are going to be small and unreadable',
             },
             sessionDetails: {
               name: 'Your session name',
@@ -262,7 +262,7 @@ export const factory = (options = { debug: true }) =>
               events: {
                 GameStarted: 'Game created',
                 VpCountChanged: 'VP count changed',
-                MapAdded: 'Map added',
+                MapAdded: 'Galaxy added',
                 ObjectiveScored: 'Objective scored',
                 ObjectiveAdded: 'Objective revealed',
                 TimelineUserEvent: 'User added event',
@@ -285,8 +285,8 @@ export const factory = (options = { debug: true }) =>
               draftSummary: {
                 title: 'Draft finished',
                 speaker: 'Speaker: {{speaker}}',
-                toggleMap: 'show map',
-                map: 'map',
+                toggleGalaxy: 'Show galaxy',
+                galaxy: 'Galaxy',
               },
               sessionSummary: {
                 title: 'Game finished!',
@@ -443,7 +443,7 @@ export const factory = (options = { debug: true }) =>
             sessionView: {
               nav: {
                 overview: 'Podsumowanie',
-                map: 'Mapa',
+                galaxy: 'Galaktyka',
                 details: 'Szczegóły',
               },
               overview: {
@@ -453,13 +453,13 @@ export const factory = (options = { debug: true }) =>
               },
             },
             sessionMap: {
-              map: 'mapa TI4',
-              none: 'mapa nie została dodana',
-              changeFile: 'Zmień plik mapy',
-              dropHere: 'Przeciągnij mapę tutaj...',
+              galaxy: 'Galaktyka TI4',
+              none: 'Galaktyka nie została dodana',
+              changeFile: 'Zmień plik galaktyki',
+              dropHere: 'Przeciągnij galaktykę tutaj...',
               dragHere: 'Przeciągnij i upuść, lub kliknij by wybrać plik',
               sizeHint:
-                'Miej na uwadze, że mapy mniejsze niż 800x800px mogą być nieczytelne',
+                'Miej na uwadze, że galaktyki mniejsze niż 800x800px mogą być nieczytelne',
               preview: 'podgląd',
             },
             share: {

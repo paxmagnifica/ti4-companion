@@ -58,15 +58,4 @@ namespace Server.Domain
             await this.repository.SaveChangesAsync();
         }
     }
-
-    public class VictoryPointsUpdatedPayload
-    {
-        public string Faction { get; set; }
-
-        public int Points { get; set; }
-
-        public VictoryPointSource Source { get; set; }
-
-        public string Context { get; set; }
-    }
 }
