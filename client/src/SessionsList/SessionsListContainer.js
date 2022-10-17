@@ -26,7 +26,9 @@ export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
     })
   }, [listIdentifier, setListIdentifier])
 
-  const { sessions, queryInfo } = useSessionsList({ listId: listIdentifier })
+  const { sessions, queryInfo, invalidateSessions } = useSessionsList({
+    listId: listIdentifier,
+  })
 
   if (loading || !queryInfo.isFetched) {
     return <CircularProgress />
@@ -52,8 +54,7 @@ export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
             deleteSession(sesssionToDelete.id)
             setConfirmationDialogOpen(false)
             setSesssionToDelete(null)
-            // TODO replace this hacka-hacka reload with something better
-            window.location.reload()
+            invalidateSessions()
           }}
           open={confirmationDialogOpen}
           title={
