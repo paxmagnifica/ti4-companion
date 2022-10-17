@@ -3,6 +3,10 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
+## 2022-10-17
+- [feat] added possibility to note Emphidia, Shard of the Throne, and an Agenda as sources of Victory Points
+- [feat] sessions on Session List are now deletable
+
 ## 2022-10-06
 - [feat] point deltas (+1 / +2 / -1) are now shown on Timeline and in the Victory Point Source helper: <a href="https://user-images.githubusercontent.com/9142942/194423603-5cd115a8-3035-429a-813f-01d312b72fd8.png" target="blank"><img src="https://user-images.githubusercontent.com/9142942/194423603-5cd115a8-3035-429a-813f-01d312b72fd8.png" alt="timeline deltas" height="400px"/></a><a href="https://user-images.githubusercontent.com/9142942/194423642-b65bae6d-7871-46a3-8b08-829478b3731e.png" target="_blank"><img src="https://user-images.githubusercontent.com/9142942/194423642-b65bae6d-7871-46a3-8b08-829478b3731e.png" alt="victory point source deltas" height="400px"/></a>
 - [fix] page title now shows the same session description as session overview

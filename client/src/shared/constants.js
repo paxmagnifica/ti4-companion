@@ -8,11 +8,12 @@ export const SESSION_VIEW_ROUTES = {
 export const VP_SOURCE = {
   other: 'other',
   objective: 'objective',
-  custodian: 'custodian', // TODO
+  custodian: 'custodian',
   support: 'support',
   emphidia: 'emphidia',
   shard: 'shard',
   mecatol: 'mecatol',
+  agenda: 'agenda',
 
   fromBackendToFrontend: (src) => Object.values(VP_SOURCE)[src],
   fromFrontendToBackend: (source) =>
