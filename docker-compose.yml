@@ -31,8 +31,6 @@ services:
       - storage-emulator
     volumes:
       - "./server:/source"
-      - ".editorconfig:/source/.editorconfig"
-      - "./stylecop.json:/source/stylecop.json"
   postgres:
     image: postgres
     environment:

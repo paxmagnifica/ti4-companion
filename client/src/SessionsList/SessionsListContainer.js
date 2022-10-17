@@ -50,8 +50,8 @@ export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
             setSesssionToDelete(null)
             setConfirmationDialogOpen(false)
           }}
-          confirm={() => {
-            deleteSession(sesssionToDelete.id)
+          confirm={async () => {
+            await deleteSession(sesssionToDelete.id)
             setConfirmationDialogOpen(false)
             setSesssionToDelete(null)
             invalidateSessions()
