@@ -14,8 +14,8 @@ export const useSessionsList = ({ listId }) => {
   const queryClient = useQueryClient()
 
   const invalidateSessions = useCallback(() => {
-    queryClient.invalidateQueries()
-  }, [queryClient])
+    queryClient.invalidateQueries(sessionListKeys.list(listId))
+  }, [queryClient, listId])
 
   const { data, ...queryInfo } = useQuery(
     sessionListKeys.list(listId),
