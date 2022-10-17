@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
+  Button,
   Chip,
   List,
   ListItem,
@@ -39,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   listItem: {
+    display: 'flex',
+    gap: '1rem',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'start',
@@ -50,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // TODO handle drafts
-export function SessionsList({ sessions, listId }) {
+export function SessionsList({ sessions, listId, onDeleteSession }) {
   const classes = useStyles()
   const history = useHistory()
   const { t } = useTranslation()
@@ -78,19 +81,7 @@ export function SessionsList({ sessions, listId }) {
             : `Drafting in progress...`
 
           return (
-            <ListItem
-              key={session.id}
-              button
-              className={classes.listItem}
-              onClick={() =>
-                history.push(
-                  generatePath(SESSION_VIEW_ROUTES.main, {
-                    sessionId: session.id,
-                    secret: session.editable ? session.secret : undefined,
-                  }),
-                )
-              }
-            >
+            <ListItem key={session.id} button className={classes.listItem}>
               <ListItemIcon>
                 {session.finished ? (
                   <Tooltip placement="top" title={t('sessionList.done')}>
@@ -107,14 +98,6 @@ export function SessionsList({ sessions, listId }) {
                   </Tooltip>
                 )}
               </ListItemIcon>
-              <ListItemText
-                primary={session.displayName || defaultName}
-                secondary={`${session.start || ''} ${
-                  session.displayName
-                    ? t('sessionList.secondaryTitle', { defaultName })
-                    : ''
-                }`}
-              />
               {session.editable && !session.locked && (
                 <ListItemIcon>
                   <Chip
@@ -124,6 +107,35 @@ export function SessionsList({ sessions, listId }) {
                   />
                 </ListItemIcon>
               )}
+              <ListItemText
+                onClick={() =>
+                  history.push(
+                    generatePath(SESSION_VIEW_ROUTES.main, {
+                      sessionId: session.id,
+                      secret: session.editable ? session.secret : undefined,
+                    }),
+                  )
+                }
+                primary={session.displayName || defaultName}
+                secondary={`${session.start || ''} ${
+                  session.displayName
+                    ? t('sessionList.secondaryTitle', {
+                        factionList: defaultName,
+                      })
+                    : ''
+                }`}
+              />
+              <Button
+                color="secondary"
+                onClick={() => {
+                  onDeleteSession({
+                    id: session.id,
+                    name: session.displayName,
+                  })
+                }}
+              >
+                {t('sessionList.delete')}
+              </Button>
             </ListItem>
           )
         })}

@@ -140,5 +140,22 @@ namespace Server.Controllers
 
             return new OkResult();
         }
+
+        [HttpDelete("{sessionId}")]
+        public async Task<ActionResult> DeleteSession([FromRoute] Guid sessionId)
+        {
+            var sessionExists = await this.repository.SessionExists(sessionId);
+
+            if (!sessionExists)
+            {
+                return new NotFoundResult();
+            }
+
+            await this.repository.DeleteSession(sessionId);
+
+            await this.repository.SaveChangesAsync();
+
+            return new OkResult();
+        }
     }
 }

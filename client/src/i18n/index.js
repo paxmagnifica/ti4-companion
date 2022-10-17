@@ -342,11 +342,14 @@ export const factory = (options = { debug: true }) =>
               inProgress: 'In progress',
               locked: 'Locked for edit',
               edit: 'Edit',
+              delete: 'Delete',
               secondaryTitle: '(factions: {{factionList}})',
               cta: {
                 draft: 'Draft factions',
                 set: 'Record a session',
               },
+              confirmDelete:
+                'Are you sure you want to delete "{{sessionName}}" session?',
             },
             kb: {
               title: 'Knowledge base',
@@ -495,6 +498,9 @@ export const factory = (options = { debug: true }) =>
             sessionList: {
               title: 'Twoje zapamiętane sesje',
               secondaryTitle: '(rasy: {{factionList}})',
+              delete: 'Usuń',
+              confirmDelete:
+                'Czy na pewno chcesz usunąć sesję {{sessionName}}?',
             },
             kb: {
               title: 'Baza wiedzy',
