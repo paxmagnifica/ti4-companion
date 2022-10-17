@@ -15,6 +15,15 @@ import { Toggle, Show } from './Toggle'
 
 const pointsHistoryEvents = ['VictoryPointsUpdated', 'ObjectiveScored']
 const objectivesWithControls = [VP_SOURCE.objective, VP_SOURCE.support]
+const pickableSources = [
+  VP_SOURCE.objective,
+  VP_SOURCE.custodian,
+  VP_SOURCE.support,
+  VP_SOURCE.emphidia,
+  VP_SOURCE.shard,
+  VP_SOURCE.mecatol,
+  VP_SOURCE.agenda,
+]
 
 export function PointsHistory({
   editable,
@@ -106,99 +115,21 @@ export function PointsHistory({
                   maxWidth: '30vw',
                 }}
               >
-                <Button
-                  color={
-                    source === VP_SOURCE.custodian ? 'secondary' : 'default'
-                  }
-                  disabled={!editable || isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.custodian,
-                    })
-                  }
-                  variant="outlined"
-                >
-                  Custodian
-                </Button>
-                <Button
-                  color={
-                    source === VP_SOURCE.objective ? 'secondary' : 'default'
-                  }
-                  disabled={!editable || isPublic}
-                  onClick={
-                    isPublic
-                      ? () => null
-                      : () =>
-                          addSource({
-                            faction,
-                            points,
-                            source: VP_SOURCE.objective,
-                          })
-                  }
-                  variant="outlined"
-                >
-                  Objective
-                </Button>
-                <Button
-                  color={source === VP_SOURCE.mecatol ? 'secondary' : 'default'}
-                  disabled={!editable || isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.mecatol,
-                    })
-                  }
-                  variant="outlined"
-                >
-                  Mecatol
-                </Button>
-                <Button
-                  color={source === VP_SOURCE.support ? 'secondary' : 'default'}
-                  disabled={!editable || isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.support,
-                    })
-                  }
-                  variant="outlined"
-                >
-                  SFT
-                </Button>
-                <Button
-                  color={
-                    source === VP_SOURCE.emphidia ? 'secondary' : 'default'
-                  }
-                  disabled={!editable || isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.emphidia,
-                    })
-                  }
-                  variant="outlined"
-                >
-                  Crown of Emphidia
-                </Button>
-                <Button
-                  color={source === VP_SOURCE.shard ? 'secondary' : 'default'}
-                  disabled={!editable || isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.shard,
-                    })
-                  }
-                  variant="outlined"
-                >
-                  Shard of The Throne
-                </Button>
+                {pickableSources.map((vpSource) => (
+                  <Button
+                    key={`vpSource_${vpSource}`}
+                    color={source === vpSource ? 'secondary' : 'default'}
+                    disabled={!editable}
+                    onClick={() =>
+                      addSource({ faction, points, source: vpSource })
+                    }
+                    variant="outlined"
+                  >
+                    <Trans
+                      i18nKey={`sessionView.pointsHistory.sources.${vpSource}`}
+                    />
+                  </Button>
+                ))}
               </div>
             </ListItem>
             <Show

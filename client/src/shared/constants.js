@@ -13,6 +13,7 @@ export const VP_SOURCE = {
   emphidia: 'emphidia',
   shard: 'shard',
   mecatol: 'mecatol',
+  agenda: 'agenda',
 
   fromBackendToFrontend: (src) => Object.values(VP_SOURCE)[src],
   fromFrontendToBackend: (source) =>

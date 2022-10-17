@@ -14,6 +14,7 @@ namespace Server.Domain
         Emphidia,
         ShardOfTheThrone,
         Mecatol,
+        Agenda,
     }
 
     public class VictoryPointsUpdated : IHandler
