@@ -27,7 +27,7 @@ export function PointsSourceHelper({ editable, factions }) {
         anchor="left"
         onClose={closeDrawer}
         open={open}
-        style={{ maxWidth: '100vw' }}
+        style={{ maxWidth: '100%' }}
       >
         <Button
           onClick={closeDrawer}
@@ -35,7 +35,7 @@ export function PointsSourceHelper({ editable, factions }) {
             position: 'sticky',
             top: 0,
             zIndex: 999999,
-            maxWidth: '100vw',
+            maxWidth: '100%',
           }}
           variant="contained"
         >

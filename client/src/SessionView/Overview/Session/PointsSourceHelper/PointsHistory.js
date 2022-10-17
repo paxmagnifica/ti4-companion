@@ -1,12 +1,5 @@
 import { Fragment, useMemo } from 'react'
-import {
-  Grid,
-  Button,
-  ButtonGroup,
-  List,
-  ListItem,
-  ListItemIcon,
-} from '@material-ui/core'
+import { Grid, Button, List, ListItem, ListItemIcon } from '@material-ui/core'
 
 import { Trans } from '../../../../i18n'
 import { useObjectives } from '../../../../GameComponents'
@@ -105,12 +98,19 @@ export function PointsHistory({
               </div>
             </ListItem>
             <ListItem>
-              <ButtonGroup disabled={!editable}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gridGap: '0.5em',
+                  maxWidth: '30vw',
+                }}
+              >
                 <Button
                   color={
                     source === VP_SOURCE.custodian ? 'secondary' : 'default'
                   }
-                  disabled={isPublic}
+                  disabled={!editable || isPublic}
                   onClick={() =>
                     addSource({
                       faction,
@@ -118,6 +118,7 @@ export function PointsHistory({
                       source: VP_SOURCE.custodian,
                     })
                   }
+                  variant="outlined"
                 >
                   Custodian
                 </Button>
@@ -125,6 +126,7 @@ export function PointsHistory({
                   color={
                     source === VP_SOURCE.objective ? 'secondary' : 'default'
                   }
+                  disabled={!editable || isPublic}
                   onClick={
                     isPublic
                       ? () => null
@@ -135,12 +137,13 @@ export function PointsHistory({
                             source: VP_SOURCE.objective,
                           })
                   }
+                  variant="outlined"
                 >
                   Objective
                 </Button>
                 <Button
                   color={source === VP_SOURCE.mecatol ? 'secondary' : 'default'}
-                  disabled={isPublic}
+                  disabled={!editable || isPublic}
                   onClick={() =>
                     addSource({
                       faction,
@@ -148,12 +151,13 @@ export function PointsHistory({
                       source: VP_SOURCE.mecatol,
                     })
                   }
+                  variant="outlined"
                 >
                   Mecatol
                 </Button>
                 <Button
                   color={source === VP_SOURCE.support ? 'secondary' : 'default'}
-                  disabled={isPublic}
+                  disabled={!editable || isPublic}
                   onClick={() =>
                     addSource({
                       faction,
@@ -161,10 +165,41 @@ export function PointsHistory({
                       source: VP_SOURCE.support,
                     })
                   }
+                  variant="outlined"
                 >
                   SFT
                 </Button>
-              </ButtonGroup>
+                <Button
+                  color={
+                    source === VP_SOURCE.emphidia ? 'secondary' : 'default'
+                  }
+                  disabled={!editable || isPublic}
+                  onClick={() =>
+                    addSource({
+                      faction,
+                      points,
+                      source: VP_SOURCE.emphidia,
+                    })
+                  }
+                  variant="outlined"
+                >
+                  Crown of Emphidia
+                </Button>
+                <Button
+                  color={source === VP_SOURCE.shard ? 'secondary' : 'default'}
+                  disabled={!editable || isPublic}
+                  onClick={() =>
+                    addSource({
+                      faction,
+                      points,
+                      source: VP_SOURCE.shard,
+                    })
+                  }
+                  variant="outlined"
+                >
+                  Shard of The Throne
+                </Button>
+              </div>
             </ListItem>
             <Show
               defaultVisibility={!isPublic}
