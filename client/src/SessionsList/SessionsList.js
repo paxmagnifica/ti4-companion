@@ -125,17 +125,19 @@ export function SessionsList({ sessions, listId, onDeleteSession }) {
                     : ''
                 }`}
               />
-              <Button
-                color="secondary"
-                onClick={() => {
-                  onDeleteSession({
-                    id: session.id,
-                    name: session.displayName,
-                  })
-                }}
-              >
-                {t('sessionList.delete')}
-              </Button>
+              {window.showDelete && (
+                <Button
+                  color="secondary"
+                  onClick={() => {
+                    onDeleteSession({
+                      id: session.id,
+                      name: session.displayName,
+                    })
+                  }}
+                >
+                  {t('sessionList.delete')}
+                </Button>
+              )}
             </ListItem>
           )
         })}
