@@ -2,12 +2,12 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
+import { useParams } from 'react-router-dom'
 import { useTranslation } from '../i18n'
 
 import { usePlasticColors } from './plasticColors'
 import { FactionImage } from './FactionImage'
 import { useSession } from '../SessionView/queries'
-import { useParams } from 'react-router-dom'
 
 const useFlagStyles = makeStyles({
   root: {
@@ -61,7 +61,9 @@ function FactionFlag(
     sessionId
   })
 
-  const playerName = session.players.find(player => player.faction === factionKey)?.playerName
+  const playerName = session.players.find(
+    (player) => player.faction === factionKey,
+  )?.playerName
 
   return (
     <div
@@ -73,9 +75,7 @@ function FactionFlag(
         className={classes.factionImage}
         factionKey={factionKey}
         title={`${t(`factions.${factionKey}.name`)} ${
-          playerName
-            ? `(${playerName})`
-            : ''
+          playerName ? `(${playerName})` : ''
         } ${
           plasticColor
             ? `(${t(`general.labels.colors.${plasticColor.color}`)})`
