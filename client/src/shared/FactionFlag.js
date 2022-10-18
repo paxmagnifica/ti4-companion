@@ -41,7 +41,7 @@ function FactionFlag(
     width,
     height,
     className,
-    borderWidth
+    borderWidth,
   },
   ref,
 ) {
@@ -58,7 +58,7 @@ function FactionFlag(
   })
   const { sessionId } = useParams()
   const { session } = useSession({
-    sessionId
+    sessionId,
   })
 
   const playerName = session.players.find(
@@ -79,7 +79,7 @@ function FactionFlag(
         } ${
           plasticColor
             ? `(${t(`general.labels.colors.${plasticColor.color}`)})`
-            : '' 
+            : ''
         }`}
       />
     </div>
