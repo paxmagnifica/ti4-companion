@@ -119,7 +119,7 @@ export function SetFactions() {
         aria-label="add"
         className={classes.fab}
         color="secondary"
-        disabled={!selectedFactions.length}
+        disabled={selectedFactions.length < 4 || selectedFactions.length > 8}
         onClick={openPasswordProtectionDialog}
       >
         <Check />
