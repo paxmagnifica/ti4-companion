@@ -2,12 +2,10 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
-import { useParams } from 'react-router-dom'
 import { useTranslation } from '../i18n'
 
 import { usePlasticColors } from './plasticColors'
 import { FactionImage } from './FactionImage'
-import { useSession } from '../SessionView/queries'
 
 const useFlagStyles = makeStyles({
   root: {
@@ -42,6 +40,7 @@ function FactionFlag(
     height,
     className,
     borderWidth,
+    playerName,
   },
   ref,
 ) {
@@ -56,14 +55,6 @@ function FactionFlag(
     disabled,
     plasticColor: plasticColor?.hex,
   })
-  const { sessionId } = useParams()
-  const { session } = useSession({
-    sessionId,
-  })
-
-  const playerName = session.players.find(
-    (player) => player.faction === factionKey,
-  )?.playerName
 
   return (
     <div

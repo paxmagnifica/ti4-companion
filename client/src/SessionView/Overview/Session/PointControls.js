@@ -3,7 +3,7 @@ import { Typography, Button, Grid } from '@material-ui/core'
 
 import { useObjectives } from '../../../GameComponents'
 import { useTranslation, Trans } from '../../../i18n'
-import FactionFlag from '../../../shared/FactionFlag'
+import PlayerFlag from '../../PlayerFlag'
 
 export function PointControls({
   editable,
@@ -86,7 +86,7 @@ export function PointControls({
                       +1
                     </Button>
                   </div>
-                  <FactionFlag
+                  <PlayerFlag
                     borderWidth="0.45em"
                     disabled={!editable}
                     factionKey={faction}

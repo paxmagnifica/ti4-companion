@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 
 import { Trans, useTranslation } from '../../i18n'
-import FactionFlag from '../../shared/FactionFlag'
+import PlayerFlag from '../PlayerFlag'
 
 import { MapPreview } from './MapPreview'
 
@@ -62,7 +62,7 @@ export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
                 </em>
               </TableCell>
               <TableCell>
-                <FactionFlag
+                <PlayerFlag
                   disabled
                   factionKey={pick.faction}
                   height="3em"

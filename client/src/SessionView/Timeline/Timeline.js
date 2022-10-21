@@ -33,7 +33,7 @@ import { Trans, useTranslation } from '../../i18n'
 import tradeGoods from '../../assets/tradegoods.png'
 import config from '../../config'
 import Objective from '../../shared/Objective'
-import FactionFlag from '../../shared/FactionFlag'
+import PlayerFlag from '../PlayerFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
 import ScrollToBottom from '../../shared/ScrollToBottom'
 import Relic from '../../shared/Relic'
@@ -172,7 +172,7 @@ function GameStarted({ payload, happenedAt, eventType }) {
         )}
         {(payload.Factions || []).map((faction) => (
           <Box key={faction} style={{ display: 'inline-block' }}>
-            <FactionFlag
+            <PlayerFlag
               disabled
               factionKey={faction}
               height="3em"
@@ -334,7 +334,7 @@ function ObjectiveScored({ payload, happenedAt, eventType, fromPoints }) {
           style={{ margin: '3px 0' }}
           title={t(`sessionTimeline.events.${eventType}`)}
         >
-          <FactionFlag
+          <PlayerFlag
             disabled
             factionKey={payload.faction}
             height="2.5em"
@@ -370,7 +370,7 @@ function RelicEvent({ payload, happenedAt, eventType }) {
           style={{ margin: '3px 0' }}
           title={t(`sessionTimeline.events.${eventType}`)}
         >
-          <FactionFlag
+          <PlayerFlag
             disabled
             factionKey={payload.faction}
             height="2.5em"
@@ -421,7 +421,7 @@ function VictoryPointsUpdated({ eventType, fromPoints, payload, happenedAt }) {
           style={{ margin: '3px 0' }}
           title={t(`sessionTimeline.events.${eventType}`)}
         >
-          <FactionFlag
+          <PlayerFlag
             disabled
             factionKey={payload.faction}
             height="2.5em"
@@ -570,7 +570,7 @@ function Banned({ eventType, payload, happenedAt }) {
         </Typography>
         {payload.bans.map((factionKey) => (
           <Box key={factionKey} style={{ display: 'inline-block' }}>
-            <FactionFlag
+            <PlayerFlag
               className={classes.banned}
               disabled
               factionKey={factionKey}
@@ -613,7 +613,7 @@ function Picked({ eventType, payload, happenedAt }) {
         </Typography>
         {payload.type === 'faction' && (
           <Box key={payload.pick} style={{ display: 'inline-block' }}>
-            <FactionFlag
+            <PlayerFlag
               disabled
               factionKey={payload.pick}
               height="3em"
@@ -753,7 +753,7 @@ function SessionSummary({ eventType, payload, happenedAt, session }) {
           <List>
             <ListItem>
               <ListItemIcon className={classes.resultListIcon}>
-                <FactionFlag
+                <PlayerFlag
                   disabled
                   factionKey={payload.winner}
                   height="3em"
@@ -771,7 +771,7 @@ function SessionSummary({ eventType, payload, happenedAt, session }) {
             {results.slice(1).map((result) => (
               <ListItem key={result.faction}>
                 <ListItemIcon className={classes.resultListIcon}>
-                  <FactionFlag
+                  <PlayerFlag
                     disabled
                     factionKey={result.faction}
                     height="3em"
