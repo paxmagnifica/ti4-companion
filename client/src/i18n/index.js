@@ -9,6 +9,7 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 
 // SPECIFICALLY importing from ../GameComponenets/useGameVersion to avoid circular dependency with ../GameComponenets
 import { useGameVersion } from '../GameComponents/useGameVersion'
+import { VP_SOURCE } from '../shared/constants'
 
 import objectivesI18n from './objectives'
 import explorationI18n from './explorationCards'
@@ -209,6 +210,16 @@ export const factory = (options = { debug: true }) =>
               pointsHistory: {
                 empty:
                   'When you add points to anyone, you can assign its source here',
+                sources: {
+                  [VP_SOURCE.other]: 'Other',
+                  [VP_SOURCE.objective]: 'Objective',
+                  [VP_SOURCE.custodian]: 'Custodian',
+                  [VP_SOURCE.support]: 'SFT',
+                  [VP_SOURCE.emphidia]: 'Crown of emphidia',
+                  [VP_SOURCE.shard]: 'Shard of the Throne',
+                  [VP_SOURCE.mecatol]: 'Mecatol',
+                  [VP_SOURCE.agenda]: 'Agenda',
+                },
               },
               r1Speaker: 'R1 speaker',
               factionNutshell: {
@@ -295,14 +306,14 @@ export const factory = (options = { debug: true }) =>
               },
               vpCountChanged: '{{from}} -> {{to}}',
               vpSource: {
-                custodian: 'First to control Mecatol Rex',
-                mecatol: 'Controlled Rex on Imperial primary',
-                support: 'Support for the Throne promissory note received',
-                shard: 'Shard of the Throne',
-                shardCaption: {
-                  gained: 'Gained point',
-                  lost: 'Lost point',
-                },
+                [VP_SOURCE.objective]: 'Objective',
+                [VP_SOURCE.custodian]: 'First to control Mecatol Rex',
+                [VP_SOURCE.support]: 'Support for the Throne promissory note',
+                [VP_SOURCE.emphidia]:
+                  'Found the Crown of Emphidia while controlling the Tomb of Emphidia',
+                [VP_SOURCE.shard]: 'Shard of the Throne changed hands',
+                [VP_SOURCE.mecatol]: 'Controlled Rex on Imperial primary',
+                [VP_SOURCE.agenda]: 'Gained point in politics phase',
               },
               changeFile: 'Change the image',
               dropHere: 'Drop your image here...',
@@ -342,11 +353,14 @@ export const factory = (options = { debug: true }) =>
               inProgress: 'In progress',
               locked: 'Locked for edit',
               edit: 'Edit',
+              delete: 'Delete',
               secondaryTitle: '(factions: {{factionList}})',
               cta: {
                 draft: 'Draft factions',
                 set: 'Record a session',
               },
+              confirmDelete:
+                'Are you sure you want to delete "{{sessionName}}" session?',
             },
             kb: {
               title: 'Knowledge base',
@@ -495,6 +509,9 @@ export const factory = (options = { debug: true }) =>
             sessionList: {
               title: 'Twoje zapamiętane sesje',
               secondaryTitle: '(rasy: {{factionList}})',
+              delete: 'Usuń',
+              confirmDelete:
+                'Czy na pewno chcesz usunąć sesję {{sessionName}}?',
             },
             kb: {
               title: 'Baza wiedzy',

@@ -37,9 +37,4 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<CommitDraftPayload>(gameEvent.SerializedPayload);
         }
     }
-
-    public class CommitDraftPayload
-    {
-        public string[] Factions { get; set; }
-    }
 }

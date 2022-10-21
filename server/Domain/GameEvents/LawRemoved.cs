@@ -39,9 +39,4 @@ namespace Server.Domain
             await this.repository.SaveChangesAsync();
         }
     }
-
-    public class LawRemovedPayload
-    {
-        public string Slug { get; set; }
-    }
 }

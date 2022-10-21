@@ -16,7 +16,7 @@ namespace Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SessionsController : ControllerBase
+    public partial class SessionsController : ControllerBase
     {
         private readonly ILogger<SessionsController> logger;
         private readonly SessionContext sessionContext;
@@ -141,9 +141,21 @@ namespace Server.Controllers
             return new OkResult();
         }
 
-        public class PasswordPayload
+        [HttpDelete("{sessionId}")]
+        public async Task<ActionResult> DeleteSession([FromRoute] Guid sessionId)
         {
-            public string Password { get; set; }
+            var sessionExists = await this.repository.SessionExists(sessionId);
+
+            if (!sessionExists)
+            {
+                return new NotFoundResult();
+            }
+
+            await this.repository.DeleteSession(sessionId);
+
+            await this.repository.SaveChangesAsync();
+
+            return new OkResult();
         }
     }
 }

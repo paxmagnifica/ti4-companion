@@ -39,13 +39,4 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<ObjectiveScoredPayload>(serializedPayload);
         }
     }
-
-    public class ObjectiveScoredPayload
-    {
-        public string Slug { get; set; }
-
-        public string Faction { get; set; }
-
-        public int Points { get; set; }
-    }
 }

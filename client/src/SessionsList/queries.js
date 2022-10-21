@@ -1,4 +1,5 @@
-import { useQuery } from 'react-query'
+import { useCallback } from 'react'
+import { useQuery, useQueryClient } from 'react-query'
 
 import CONFIG from '../config'
 import { handleErrors } from '../shared/errorHandling'
@@ -10,6 +11,11 @@ export const sessionListKeys = {
 
 export const useSessionsList = ({ listId }) => {
   const { fetch } = useFetch()
+  const queryClient = useQueryClient()
+
+  const invalidateSessions = useCallback(() => {
+    queryClient.invalidateQueries(sessionListKeys.list(listId))
+  }, [queryClient, listId])
 
   const { data, ...queryInfo } = useQuery(
     sessionListKeys.list(listId),
@@ -38,5 +44,6 @@ export const useSessionsList = ({ listId }) => {
   return {
     sessions: data,
     queryInfo,
+    invalidateSessions,
   }
 }

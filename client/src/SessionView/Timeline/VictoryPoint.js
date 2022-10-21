@@ -80,14 +80,10 @@ export function VictoryPoint({ source, context }) {
         </div>
       )}
       {source === VP_SOURCE.shard && (
-        <>
-          <Typography variant="h6">
-            <Trans
-              i18nKey={`sessionTimeline.vpSource.shardCaption.${context}`}
-            />
-          </Typography>
-          <Relic slug="shard-of-the-throne" small={small} />
-        </>
+        <Relic slug="shard-of-the-throne" small={small} />
+      )}
+      {source === VP_SOURCE.emphidia && (
+        <Relic slug="the-crown-of-emphidia" small={small} />
       )}
       <Typography variant="caption">{readable}</Typography>
       <Context context={context} source={source} />

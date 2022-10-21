@@ -34,9 +34,4 @@ namespace Server.Domain
             return JsonConvert.DeserializeObject<ObjectiveDeletedPayload>(gameEvent.SerializedPayload);
         }
     }
-
-    internal class ObjectiveDeletedPayload
-    {
-        public string Slug { get; set; }
-    }
 }

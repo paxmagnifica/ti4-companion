@@ -1,12 +1,5 @@
 import { Fragment, useMemo } from 'react'
-import {
-  Grid,
-  Button,
-  ButtonGroup,
-  List,
-  ListItem,
-  ListItemIcon,
-} from '@material-ui/core'
+import { Grid, Button, List, ListItem, ListItemIcon } from '@material-ui/core'
 
 import { Trans } from '../../../../i18n'
 import { useObjectives } from '../../../../GameComponents'
@@ -22,6 +15,15 @@ import { Toggle, Show } from './Toggle'
 
 const pointsHistoryEvents = ['VictoryPointsUpdated', 'ObjectiveScored']
 const objectivesWithControls = [VP_SOURCE.objective, VP_SOURCE.support]
+const pickableSources = [
+  VP_SOURCE.objective,
+  VP_SOURCE.custodian,
+  VP_SOURCE.support,
+  VP_SOURCE.emphidia,
+  VP_SOURCE.shard,
+  VP_SOURCE.mecatol,
+  VP_SOURCE.agenda,
+]
 
 export function PointsHistory({
   editable,
@@ -105,66 +107,30 @@ export function PointsHistory({
               </div>
             </ListItem>
             <ListItem>
-              <ButtonGroup disabled={!editable}>
-                <Button
-                  color={
-                    source === VP_SOURCE.custodian ? 'secondary' : 'default'
-                  }
-                  disabled={isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.custodian,
-                    })
-                  }
-                >
-                  Custodian
-                </Button>
-                <Button
-                  color={
-                    source === VP_SOURCE.objective ? 'secondary' : 'default'
-                  }
-                  onClick={
-                    isPublic
-                      ? () => null
-                      : () =>
-                          addSource({
-                            faction,
-                            points,
-                            source: VP_SOURCE.objective,
-                          })
-                  }
-                >
-                  Objective
-                </Button>
-                <Button
-                  color={source === VP_SOURCE.mecatol ? 'secondary' : 'default'}
-                  disabled={isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.mecatol,
-                    })
-                  }
-                >
-                  Mecatol
-                </Button>
-                <Button
-                  color={source === VP_SOURCE.support ? 'secondary' : 'default'}
-                  disabled={isPublic}
-                  onClick={() =>
-                    addSource({
-                      faction,
-                      points,
-                      source: VP_SOURCE.support,
-                    })
-                  }
-                >
-                  SFT
-                </Button>
-              </ButtonGroup>
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gridGap: '0.5em',
+                  maxWidth: '30vw',
+                }}
+              >
+                {pickableSources.map((vpSource) => (
+                  <Button
+                    key={`vpSource_${vpSource}`}
+                    color={source === vpSource ? 'secondary' : 'default'}
+                    disabled={!editable}
+                    onClick={() =>
+                      addSource({ faction, points, source: vpSource })
+                    }
+                    variant="outlined"
+                  >
+                    <Trans
+                      i18nKey={`sessionView.pointsHistory.sources.${vpSource}`}
+                    />
+                  </Button>
+                ))}
+              </div>
             </ListItem>
             <Show
               defaultVisibility={!isPublic}

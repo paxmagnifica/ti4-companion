@@ -8,7 +8,7 @@ export function PointsWithDelta({ from, to }) {
   return (
     <Typography variant="h5">
       {delta > 0 ? '+' : '-'}
-      <Trans i18nKey="vpCount" values={{ points: delta }} />{' '}
+      <Trans i18nKey="vpCount" values={{ points: Math.abs(delta) }} />{' '}
       <em style={{ fontSize: '0.7em', opacity: 0.8 }}>
         (<Trans i18nKey="vpCount" values={{ points: to }} />)
       </em>
