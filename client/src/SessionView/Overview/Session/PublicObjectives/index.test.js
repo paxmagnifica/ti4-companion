@@ -7,15 +7,10 @@ import PublicObjectives from './index'
 
 const sessionId = '6fd5c725-30cd-4320-8889-c2f6427ba365'
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ sessionId }),
-}))
-
 let mockSessionObject = null
 
-jest.mock('../../../queries', () => ({
-  useSession: () => ({ session: mockSessionObject }),
+jest.mock('../../../useSessionContext', () => ({
+  useSessionContext: () => mockSessionObject,
 }))
 
 test('should add one point to faction when stage one objective is scored', async () => {
