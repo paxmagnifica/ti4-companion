@@ -15,7 +15,6 @@ function PlayerFlag(
   },
   ref,
 ) {
-
   const { players } = useSessionContext()
 
   const playerName = players.find(
