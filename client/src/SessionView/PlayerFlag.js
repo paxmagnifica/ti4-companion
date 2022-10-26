@@ -1,7 +1,6 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import FactionFlag from '../shared/FactionFlag'
-import { useSession } from './queries'
+import { useSessionContext } from './useSessionContext'
 
 function PlayerFlag(
   {
@@ -16,12 +15,10 @@ function PlayerFlag(
   },
   ref,
 ) {
-  const { sessionId } = useParams()
-  const { session } = useSession({
-    sessionId,
-  })
+  
+  const { players } = useSessionContext()
 
-  const playerName = session.players.find(
+  const playerName = players.find(
     (player) => player.faction === factionKey,
   )?.playerName
 
