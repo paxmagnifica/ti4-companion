@@ -40,6 +40,7 @@ function FactionFlag(
     height,
     className,
     borderWidth,
+    playerName,
   },
   ref,
 ) {
@@ -65,6 +66,8 @@ function FactionFlag(
         className={classes.factionImage}
         factionKey={factionKey}
         title={`${t(`factions.${factionKey}.name`)} ${
+          playerName ? `(${playerName})` : ''
+        } ${
           plasticColor
             ? `(${t(`general.labels.colors.${plasticColor.color}`)})`
             : ''

@@ -4,7 +4,7 @@ import { Grid, Button, List, ListItem, ListItemIcon } from '@material-ui/core'
 import { Trans } from '../../../../i18n'
 import { useObjectives } from '../../../../GameComponents'
 import { useSessionContext } from '../../../useSessionContext'
-import FactionFlag from '../../../../shared/FactionFlag'
+import PlayerFlag from '../../../PlayerFlag'
 import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
 import Objective from '../../../../shared/Objective'
 import { VP_SOURCE } from '../../../../shared/constants'
@@ -85,7 +85,7 @@ export function PointsHistory({
           <Fragment key={`${faction}->${points}`}>
             <ListItem>
               <ListItemIcon>
-                <FactionFlag
+                <PlayerFlag
                   disabled
                   factionKey={faction}
                   height="2em"
@@ -165,7 +165,7 @@ export function PointsHistory({
               {source === VP_SOURCE.support && (
                 <ListItem>
                   {factions.map((factionKey) => (
-                    <FactionFlag
+                    <PlayerFlag
                       key={factionKey}
                       disabled={!editable || faction === factionKey}
                       factionKey={factionKey}

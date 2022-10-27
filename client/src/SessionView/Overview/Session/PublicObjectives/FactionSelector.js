@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Grid } from '@material-ui/core'
 
-import FactionFlag from '../../../../shared/FactionFlag'
+import PlayerFlag from '../../../PlayerFlag'
 
 function FactionSelector({ disabled, factions, value, onChange, size }) {
   const clicked = useCallback(
@@ -20,7 +20,7 @@ function FactionSelector({ disabled, factions, value, onChange, size }) {
   return (
     <Grid container direction="column">
       {factions.map((factionKey) => (
-        <FactionFlag
+        <PlayerFlag
           key={factionKey}
           disabled={disabled}
           factionKey={factionKey}

@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core'
 
 import { Trans, useTranslation } from '../../i18n'
 import useSmallViewport from '../../shared/useSmallViewport'
-import FactionFlag from '../../shared/FactionFlag'
+import PlayerFlag from '../PlayerFlag'
 import Relic from '../../shared/Relic'
 import custodian from '../../assets/guac-mecatol.png'
 import { VP_SOURCE } from '../../shared/constants'
@@ -21,7 +21,7 @@ function Context({ source, context }) {
             <br />
             <Typography variant="caption">
               <Trans i18nKey="general.from" />
-              <FactionFlag
+              <PlayerFlag
                 disabled
                 factionKey={context}
                 height="3em"

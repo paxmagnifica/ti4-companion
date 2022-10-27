@@ -1,7 +1,7 @@
 import { useDrag, useDrop } from 'react-dnd'
 import { Grid } from '@material-ui/core'
 
-import FactionFlag from '../../../../shared/FactionFlag'
+import PlayerFlag from '../../../PlayerFlag'
 
 const DRAGGABLE = {
   FLAG: 'flag',
@@ -27,7 +27,7 @@ export function DraggableFlag({ editable, factionKey, updatePoints, onClick }) {
   )
 
   return (
-    <FactionFlag
+    <PlayerFlag
       ref={drag}
       disabled={!editable}
       factionKey={factionKey}
