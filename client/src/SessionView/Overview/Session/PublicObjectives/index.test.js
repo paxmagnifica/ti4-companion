@@ -10,7 +10,9 @@ const sessionId = '6fd5c725-30cd-4320-8889-c2f6427ba365'
 let mockSessionObject = null
 
 jest.mock('../../../useSessionContext', () => ({
-  useSessionContext: () => mockSessionObject,
+  useSessionContext: () => ({
+    session: mockSessionObject,
+  }),
 }))
 
 test('should add one point to faction when stage one objective is scored', async () => {

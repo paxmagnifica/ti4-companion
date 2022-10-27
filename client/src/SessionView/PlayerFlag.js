@@ -15,7 +15,9 @@ function PlayerFlag(
   },
   ref,
 ) {
-  const { players } = useSessionContext()
+  const {
+    session: { players },
+  } = useSessionContext()
 
   const playerName = players.find(
     (player) => player.faction === factionKey,
