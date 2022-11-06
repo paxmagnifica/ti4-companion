@@ -142,7 +142,7 @@ function App() {
                       <SessionSetup />
                     </Route>
                     <Route path="/:sessionId/:secret?">
-                      <SessionView />
+                      <SessionView setChatVisibility={setChatVisible} />
                     </Route>
                     <Route path="/">
                       <CallsToAction />

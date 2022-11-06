@@ -4,7 +4,7 @@ import { SessionContainer } from './SessionContainer'
 import { useSessionContext } from './useSessionContext'
 import { SessionView } from './SessionView'
 
-function Thing() {
+function Thing({ setChatVisibility }) {
   const history = useHistory()
   const { setSecret, sessionService, editable, session, updateFactionPoints } =
     useSessionContext()
@@ -28,13 +28,14 @@ function Thing() {
       editable={editable}
       session={session}
       sessionService={sessionService}
+      setChatVisibility={setChatVisibility}
       updateFactionPoints={updateFactionPoints}
     />
   )
 }
 
-export default () => (
+export default (props) => (
   <SessionContainer>
-    <Thing />
+    <Thing {...props} />
   </SessionContainer>
 )

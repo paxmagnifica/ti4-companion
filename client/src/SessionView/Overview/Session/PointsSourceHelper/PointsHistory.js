@@ -9,7 +9,11 @@ import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
 import Objective from '../../../../shared/Objective'
 import { VP_SOURCE } from '../../../../shared/constants'
 import { PointsWithDelta } from '../../../../shared'
-import { useTimelineEvents, useAddPointSourceMutation } from '../../../queries'
+import {
+  useTimelineEvents,
+  useAddPointSourceMutation,
+  ORDER,
+} from '../../../queries'
 
 import { Toggle, Show } from './Toggle'
 
@@ -36,6 +40,7 @@ export function PointsHistory({
   } = useSessionContext()
   const { timeline } = useTimelineEvents({
     sessionId,
+    order: ORDER.DESC,
   })
   const { objectives } = useObjectives()
   const availableObjectives = useMemo(

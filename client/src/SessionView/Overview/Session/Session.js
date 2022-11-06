@@ -43,7 +43,12 @@ const useStyles = makeStyles({
   },
 })
 
-export function Session({ editable, session, updateFactionPoints }) {
+export function Session({
+  editable,
+  session,
+  updateFactionPoints,
+  setChatVisibility,
+}) {
   const classes = useStyles()
   const { fullscreen } = useFullscreen()
 
@@ -109,6 +114,7 @@ export function Session({ editable, session, updateFactionPoints }) {
             <PointsSourceHelper
               editable={editable}
               factions={session.factions}
+              setChatVisibility={setChatVisibility}
             />
           )}
           {!session.locked && (

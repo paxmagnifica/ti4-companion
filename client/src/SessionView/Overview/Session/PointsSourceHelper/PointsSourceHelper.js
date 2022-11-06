@@ -6,10 +6,16 @@ import { Trans } from '../../../../i18n'
 
 import { PointsHistory } from './PointsHistory'
 
-export function PointsSourceHelper({ editable, factions }) {
+export function PointsSourceHelper({ editable, factions, setChatVisibility }) {
   const [open, setOpen] = useState(false)
-  const closeDrawer = useCallback(() => setOpen(false), [])
-  const openDrawer = useCallback(() => setOpen(true), [])
+  const closeDrawer = useCallback(() => {
+    setOpen(false)
+    setChatVisibility(true)
+  }, [setChatVisibility])
+  const openDrawer = useCallback(() => {
+    setOpen(true)
+    setChatVisibility(false)
+  }, [setChatVisibility])
   const [visibilityState, setVisibilityState] = useState({})
   const toggleVisibility = (happenedAt, visible) =>
     setVisibilityState((s) => ({ ...s, [happenedAt]: visible }))
@@ -29,11 +35,17 @@ export function PointsSourceHelper({ editable, factions }) {
         open={open}
         style={{ maxWidth: '100%' }}
       >
+        <PointsHistory
+          editable={editable}
+          factions={factions}
+          toggleVisibility={toggleVisibility}
+          visibilityState={visibilityState}
+        />
         <Button
           onClick={closeDrawer}
           style={{
             position: 'sticky',
-            top: 0,
+            bottom: 0,
             zIndex: 999999,
             maxWidth: '100%',
           }}
@@ -41,12 +53,6 @@ export function PointsSourceHelper({ editable, factions }) {
         >
           Close
         </Button>
-        <PointsHistory
-          editable={editable}
-          factions={factions}
-          toggleVisibility={toggleVisibility}
-          visibilityState={visibilityState}
-        />
       </Drawer>
     </>
   )
