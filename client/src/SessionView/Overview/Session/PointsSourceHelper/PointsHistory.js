@@ -3,21 +3,14 @@ import { Grid, Button, List, ListItem, ListItemIcon } from '@material-ui/core'
 
 import { Trans } from '../../../../i18n'
 import { useObjectives } from '../../../../GameComponents'
-import { useSessionContext } from '../../../useSessionContext'
 import PlayerFlag from '../../../PlayerFlag'
 import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
 import Objective from '../../../../shared/Objective'
 import { VP_SOURCE } from '../../../../shared/constants'
 import { PointsWithDelta } from '../../../../shared'
-import {
-  useTimelineEvents,
-  useAddPointSourceMutation,
-  ORDER,
-} from '../../../queries'
 
 import { Toggle, Show } from './Toggle'
 
-const pointsHistoryEvents = ['VictoryPointsUpdated', 'ObjectiveScored']
 const objectivesWithControls = [VP_SOURCE.objective, VP_SOURCE.support]
 const pickableSources = [
   VP_SOURCE.objective,
@@ -30,18 +23,13 @@ const pickableSources = [
 ]
 
 export function PointsHistory({
+  addSource,
   editable,
   factions,
-  visibilityState,
+  pointsHistory,
   toggleVisibility,
+  visibilityState,
 }) {
-  const {
-    session: { id: sessionId },
-  } = useSessionContext()
-  const { timeline } = useTimelineEvents({
-    sessionId,
-    order: ORDER.DESC,
-  })
   const { objectives } = useObjectives()
   const availableObjectives = useMemo(
     () => Object.values(objectives),
@@ -52,31 +40,14 @@ export function PointsHistory({
     [availableObjectives],
   )
 
-  const pointsHistory = useMemo(
-    () =>
-      timeline
-        .filter(({ eventType }) => pointsHistoryEvents.includes(eventType))
-        .map(({ happenedAt, payload, fromPoints, eventType }) => ({
-          happenedAt,
-          fromPoints,
-          context: payload.slug, // public objectives have slug instead of context
-          ...payload,
-          source:
-            VP_SOURCE.fromBackendToFrontend(payload.source) ||
-            (eventType === 'ObjectiveScored' && VP_SOURCE.objective),
-          isPublic: eventType === 'ObjectiveScored',
-        })),
-    [timeline],
-  )
-  const { mutate: addSource } = useAddPointSourceMutation({ sessionId })
-
   return (
-    <List>
-      {!pointsHistory.length && (
-        <p style={{ margin: '1em' }}>
-          <Trans i18nKey="sessionView.pointsHistory.empty" />
-        </p>
-      )}
+    <List
+      style={{
+        overflowY: 'auto',
+        boxShadow: 'inset 0px -12px 9px -14px rgba(255, 255, 255, 1)',
+        flexGrow: 1,
+      }}
+    >
       {pointsHistory.map(
         ({
           happenedAt,

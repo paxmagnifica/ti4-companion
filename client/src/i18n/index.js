@@ -7,7 +7,7 @@ import {
 } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-// SPECIFICALLY importing from ../GameComponenets/useGameVersion to avoid circular dependency with ../GameComponenets
+// SPECIFICALLY importing from ../GameComponents/useGameVersion to avoid circular dependency with ../GameComponents
 import { useGameVersion } from '../GameComponents/useGameVersion'
 import { VP_SOURCE } from '../shared/constants'
 
@@ -210,6 +210,7 @@ export const factory = (options = { debug: true }) =>
               pointsHistory: {
                 empty:
                   'When you add points to anyone, you can assign its source here',
+                emptyWithFilter: 'Nothing for selected faction',
                 sources: {
                   [VP_SOURCE.other]: 'Other',
                   [VP_SOURCE.objective]: 'Objective',

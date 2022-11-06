@@ -113,6 +113,7 @@ export function Session({
           {!session.locked && (
             <PointsSourceHelper
               editable={editable}
+              sessionId={session.id}
               factions={session.factions}
               setChatVisibility={setChatVisibility}
             />
