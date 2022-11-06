@@ -32,6 +32,7 @@ export function SessionView({
   editable,
   session,
   updateFactionPoints,
+  setChatVisibility,
 }) {
   const classes = useStyles()
   const { t } = useTranslation()
@@ -124,6 +125,7 @@ export function SessionView({
             session={session}
             sessionService={sessionService}
             updateFactionPoints={updateFactionPoints}
+            setChatVisibility={setChatVisibility}
           />
         </Route>
       </Switch>

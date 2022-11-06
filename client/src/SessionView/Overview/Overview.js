@@ -7,6 +7,7 @@ export function Overview({
   session,
   updateFactionPoints,
   sessionService,
+  setChatVisibility,
 }) {
   return session.isDraft ? (
     <Drafting
@@ -18,6 +19,7 @@ export function Overview({
     <Session
       editable={editable}
       session={session}
+      setChatVisibility={setChatVisibility}
       updateFactionPoints={updateFactionPoints}
     />
   )

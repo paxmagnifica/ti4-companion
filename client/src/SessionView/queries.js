@@ -5,6 +5,11 @@ import { handleErrors } from '../shared/errorHandling'
 import { useFetch } from '../useFetch'
 import { VP_SOURCE } from '../shared/constants'
 
+export const ORDER = {
+  ASC: 'asc',
+  DESC: 'desc',
+}
+
 export const queryKeys = {
   session: (sessionId) => ['session', sessionId, 'data'],
   timeline: (sessionId) => ['session', sessionId, 'timeline'],
@@ -48,7 +53,7 @@ const parsePayload = (serializedPayload) => {
   }
 }
 
-export const useTimelineEvents = ({ sessionId }) => {
+export const useTimelineEvents = ({ sessionId, order = ORDER.ASC }) => {
   const { fetch } = useFetch()
 
   const { data, ...queryInfo } = useQuery(
@@ -65,7 +70,9 @@ export const useTimelineEvents = ({ sessionId }) => {
           ...timelineEvent,
           payload: parsePayload(timelineEvent.serializedPayload),
         }))
-        .sort(({ order: orderA }, { order: orderB }) => orderA - orderB)
+        .sort(({ order: orderA }, { order: orderB }) =>
+          order === ORDER.ASC ? orderA - orderB : orderB - orderA,
+        )
     },
     {
       placeholderData: [],
