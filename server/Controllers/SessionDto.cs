@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using Server.Domain;
 using System;
 using System.Collections.Generic;
@@ -209,7 +208,6 @@ namespace Server.Controllers
                 .OrderBy(ge => ge.HappenedAt);
             foreach (var gameEvent in victoryPointEvents)
             {
-                // TODO isn't this hacky and ugly? :(
                 var payload = VictoryPointsUpdated.GetPayload(gameEvent);
                 points[payload.Faction] = payload.Points;
             }

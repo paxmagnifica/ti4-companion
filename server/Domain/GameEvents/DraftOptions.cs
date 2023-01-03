@@ -12,6 +12,8 @@ namespace Server.Domain
 
         public string[] Players { get; set; }
 
+        public string[] MapPositionNames { get; set; }
+
         public int PlayerCount
         {
             get { return this.Players.Length; }

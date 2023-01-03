@@ -47,6 +47,14 @@ export function DraftSetup() {
     'Player 5',
     'Player 6',
   ])
+  const [mapPositionNames, setMapPositionNames] = useState([
+    'P1',
+    'P2',
+    'P3',
+    'P4',
+    'P5',
+    'P6',
+  ])
 
   const [bans, setBans] = useState(true)
   const toggleBans = useCallback(() => setBans((b) => !b), [])
@@ -82,6 +90,7 @@ export function DraftSetup() {
         options: {
           initialPool: factionsList,
           players,
+          mapPositionNames,
           bans,
           banRounds,
           bansPerRound,
@@ -97,6 +106,7 @@ export function DraftSetup() {
       )
     },
     [
+      mapPositionNames,
       factionsList,
       players,
       sessionService,
@@ -141,6 +151,16 @@ export function DraftSetup() {
     ])
   }, [])
 
+  const handleMapPositionNameChange = useCallback((mapPositionIndex, event) => {
+    const { value } = event.currentTarget
+
+    setMapPositionNames((p) => [
+      ...p.slice(0, mapPositionIndex),
+      value,
+      ...p.slice(mapPositionIndex + 1),
+    ])
+  }, [])
+
   return (
     <>
       <GameVersionPicker onChange={setGameVersion} value={gameVersion} />
@@ -171,6 +191,7 @@ export function DraftSetup() {
           style={{ width: '100%' }}
         />
       </FormGroup>
+      <Typography>Player names</Typography>
       <FormGroup className={classes.row} row>
         {[...Array(playerCount).keys()].map((indice) => (
           <TextField
@@ -179,6 +200,19 @@ export function DraftSetup() {
             label={`Player ${indice + 1}`}
             onChange={(e) => handlePlayerChange(indice, e)}
             value={players[indice] || ''}
+            variant="filled"
+          />
+        ))}
+      </FormGroup>
+      <Typography>Map positions</Typography>
+      <FormGroup className={classes.row} row>
+        {[...Array(playerCount).keys()].map((indice) => (
+          <TextField
+            key={`mapPosition${indice}`}
+            color="secondary"
+            label={`Map position ${indice + 1}`}
+            onChange={(e) => handleMapPositionNameChange(indice, e)}
+            value={mapPositionNames[indice] || ''}
             variant="filled"
           />
         ))}
