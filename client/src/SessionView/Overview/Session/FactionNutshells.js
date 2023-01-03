@@ -14,7 +14,9 @@ import { LocalLibrary, PhotoLibrary, Info } from '@material-ui/icons'
 
 import { useTranslation, Trans } from '../../../i18n'
 import { SESSION_VIEW_ROUTES } from '../../../shared/constants'
+import { getMapPositionName } from '../../../shared'
 import { useFactionData } from '../../../GameComponents'
+import { useSessionContext } from '../../useSessionContext'
 
 import { FactionNutshell } from '../FactionNutshell'
 import { DraftSummaryDialog } from '../DraftSummaryDialog'
@@ -29,6 +31,9 @@ function FactionNutshells({
   const { t } = useTranslation()
   const { getData: getFactionData } = useFactionData()
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
+  const {
+    session: { draft },
+  } = useSessionContext()
 
   const [draftSummaryDialogOpen, setDraftSummaryDialogOpen] = useState(false)
 
@@ -51,7 +56,9 @@ function FactionNutshells({
             (
             <Trans
               i18nKey="sessionView.factionNutshell.tablePosition"
-              values={{ position: atTable + 1 }}
+              values={{
+                position: getMapPositionName({ draft, position: atTable }),
+              }}
             />
             )
           </em>
