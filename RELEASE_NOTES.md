@@ -3,6 +3,9 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
+## 2023-01-04
+- [feat] added possibility to customize names of map positions on draft
+
 ## 2022-11-06
 - [feat] improved point source helpers: showing points in descending order
 - [feat] improved point source helpers: added filter to show only points by specific faction/player<a href="https://user-images.githubusercontent.com/9142942/200198826-ac9092d3-67fc-4def-8a3a-1c9d34405269.png" target="blank"><img src="https://user-images.githubusercontent.com/9142942/200198826-ac9092d3-67fc-4def-8a3a-1c9d34405269.png" alt="timeline deltas" height="400px"/></a><a href="https://user-images.githubusercontent.com/9142942/200198831-e857c1ab-b001-43e9-b0ca-4945e4cfb696.png" target="blank"><img src="https://user-images.githubusercontent.com/9142942/200198831-e857c1ab-b001-43e9-b0ca-4945e4cfb696.png" alt="timeline deltas" height="400px"/></a>
