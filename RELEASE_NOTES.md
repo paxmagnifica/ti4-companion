@@ -3,7 +3,7 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
-## 2023-01-04
+## 2023-01-03
 - [feat] added possibility to customize names of map positions on draft
 
 ## 2022-11-06

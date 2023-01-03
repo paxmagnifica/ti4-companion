@@ -167,7 +167,7 @@ namespace ServerTests
                         },
                     }),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -179,7 +179,7 @@ namespace ServerTests
                         PlayerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -191,7 +191,7 @@ namespace ServerTests
                         PlayerName = "Player 1",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -203,7 +203,7 @@ namespace ServerTests
                         PlayerName = "Player 1",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -215,7 +215,7 @@ namespace ServerTests
                         PlayerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(SpeakerSelected),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -225,7 +225,7 @@ namespace ServerTests
                         SpeakerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(CommitDraft),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -315,7 +315,7 @@ namespace ServerTests
                         },
                     }),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -327,7 +327,7 @@ namespace ServerTests
                         PlayerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -339,7 +339,7 @@ namespace ServerTests
                         PlayerName = "Player 1",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -351,7 +351,7 @@ namespace ServerTests
                         PlayerName = "Player 1",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -363,7 +363,7 @@ namespace ServerTests
                         PlayerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(SpeakerSelected),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -373,7 +373,7 @@ namespace ServerTests
                         SpeakerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(CommitDraft),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -462,7 +462,7 @@ namespace ServerTests
                         },
                     }),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -474,7 +474,7 @@ namespace ServerTests
                         PlayerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -486,7 +486,7 @@ namespace ServerTests
                         PlayerName = "Player 1",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -498,7 +498,7 @@ namespace ServerTests
                         PlayerName = "Player 1",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(Picked),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -510,7 +510,7 @@ namespace ServerTests
                         PlayerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(SpeakerSelected),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -520,7 +520,7 @@ namespace ServerTests
                         SpeakerName = "Player 2",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(SpeakerSelected),
                     SerializedPayload = JsonConvert.SerializeObject(
@@ -530,7 +530,7 @@ namespace ServerTests
                         SpeakerName = "Player 1",
                         }, this.SerializerSettings),
                 },
-                 new GameEvent
+                new GameEvent
                 {
                     EventType = nameof(CommitDraft),
                     SerializedPayload = JsonConvert.SerializeObject(
