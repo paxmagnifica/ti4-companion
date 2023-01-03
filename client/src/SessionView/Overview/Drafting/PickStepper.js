@@ -2,6 +2,7 @@ import { Map as MapIcon } from '@material-ui/icons'
 
 import speakerFront from '../../../assets/speaker-front.png'
 import { FactionImage } from '../../../shared/FactionImage'
+import { getMapPositionName } from '../../../shared'
 import { useTranslation } from '../../../i18n'
 import { PlayerOrderStepper } from './PlayerOrderStepper'
 
@@ -28,7 +29,7 @@ export function PickStepper({ draft }) {
       default:
         return (
           <>
-            <MapIcon /> {`P${Number(pick) + 1}`}
+            <MapIcon /> {getMapPositionName({ draft, position: pick })}
           </>
         )
     }

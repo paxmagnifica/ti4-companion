@@ -11,6 +11,7 @@ import speakerBack from '../../../assets/speaker-back.png'
 import { useTranslation } from '../../../i18n'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { FactionImage } from '../../../shared/FactionImage'
+import { getMapPositionName } from '../../../shared'
 import { MapPreview } from '../../components'
 import { EditPrompt } from '../../Edit'
 import { SessionNutshell } from '../SessionNutshell'
@@ -22,14 +23,6 @@ import { PlayerOrderStepper } from './PlayerOrderStepper'
 import { PickStepper } from './PickStepper'
 import { SpeakerIndicator } from './SpeakerIndicator'
 import { PHASE } from './shared'
-
-function getMapPositionName({ draft, position }) {
-  const positionName = draft?.mapPositionNames?.length
-    ? draft.mapPositionNames[position]
-    : `P${position + 1} on map`
-
-  return positionName
-}
 
 function Speaker({ disabled, draft, session, sessionService }) {
   const { setError } = useDomainErrors()
