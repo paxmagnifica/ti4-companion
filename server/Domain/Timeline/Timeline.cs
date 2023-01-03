@@ -168,6 +168,8 @@ namespace Server.Domain
             {
                 return timelineEvents;
             }
+            var gameStartedEvent = timelineEvents.FirstOrDefault(e => e.EventType == nameof(GameStarted));
+            var draftOptions = gameStartedEvent == null ? null : GameStarted.GetPayload(gameStartedEvent.SerializedPayload).Options;
 
             var picks = timelineEvents.Where(e => e.EventType == nameof(Picked)).OrderBy(e => Picked.GetPayload(e.SerializedPayload).PlayerIndex);
             var playerPicks = new Dictionary<string, (string, int)>();
@@ -200,7 +202,17 @@ namespace Server.Domain
                 SerializedPayload = JsonConvert.SerializeObject(new
                 {
                     speaker = speakerName,
-                    picks = playerPicks.Select(kvp => new { playerName = kvp.Key, faction = kvp.Value.Item1, tablePosition = kvp.Value.Item2 }),
+                    picks = playerPicks.Select(kvp => {
+                        var tablePositionName = draftOptions?.MapPositionNames.Length > 0
+                            ? draftOptions?.MapPositionNames[kvp.Value.Item2]
+                            : kvp.Value.Item2.ToString();
+
+                        return new {
+                            playerName = kvp.Key,
+                            faction = kvp.Value.Item1,
+                            tablePosition = tablePositionName
+                        };
+                    }),
                 }),
             };
             var timelineEventsWithDraftSummary = new List<TimelineEvent>(timelineEvents);

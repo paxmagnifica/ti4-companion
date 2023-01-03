@@ -6,6 +6,7 @@ namespace Server.Domain
         {
             this.InitialPool = new string[0];
             this.Players = new string[0];
+            this.MapPositionNames = new string[0];
         }
 
         public string[] InitialPool { get; set; }

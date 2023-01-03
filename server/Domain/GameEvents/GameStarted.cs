@@ -14,5 +14,10 @@ namespace Server.Domain
         {
             return JsonConvert.DeserializeObject<GameStartedPayload>(gameEvent.SerializedPayload);
         }
+
+        internal static GameStartedPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<GameStartedPayload>(serializedPayload);
+        }
     }
 }
