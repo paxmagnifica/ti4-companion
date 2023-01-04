@@ -224,7 +224,7 @@ export const factory = (options = { debug: true }) =>
               },
               r1Speaker: 'R1 speaker',
               factionNutshell: {
-                tablePosition: 'at table: P{{position}}',
+                tablePosition: 'at table: {{position}}',
                 draftDetails: 'draft details',
               },
               lock: 'Prevent further editing',

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Grid, Box, Button, Typography } from '@material-ui/core'
-import { PanTool as PickedIcon, Map as MapIcon } from '@material-ui/icons'
+import { PanTool as PickedIcon } from '@material-ui/icons'
 import Alert from '@material-ui/lab/Alert'
 import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
@@ -11,6 +11,7 @@ import speakerBack from '../../../assets/speaker-back.png'
 import { useTranslation } from '../../../i18n'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { FactionImage } from '../../../shared/FactionImage'
+import { getMapPositionName } from '../../../shared'
 import { MapPreview } from '../../components'
 import { EditPrompt } from '../../Edit'
 import { SessionNutshell } from '../SessionNutshell'
@@ -19,6 +20,7 @@ import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
 import { PhaseStepper } from './PhaseStepper'
 import { PlayerOrderStepper } from './PlayerOrderStepper'
+import { PickStepper } from './PickStepper'
 import { SpeakerIndicator } from './SpeakerIndicator'
 import { PHASE } from './shared'
 
@@ -171,9 +173,11 @@ function TablePositionPick({
                 onClick={() => handleSelectedPosition(tablePositionIndex)}
                 variant="contained"
               >
-                {`P${tablePositionIndex + 1}`} on map
+                <Typography>
+                  {getMapPositionName({ draft, position: tablePositionIndex })}
+                </Typography>
                 {picked && (
-                  <Typography variant="caption">
+                  <Typography style={{ marginLeft: '0.3em' }} variant="caption">
                     picked by {picked.playerName}
                   </Typography>
                 )}
@@ -365,47 +369,6 @@ function BanStepper({ draft, setup }) {
       activePlayer={draft.activePlayerIndex}
       history={history}
       order={draft.order.map((playerIndex) => draft.players[playerIndex])}
-      title={t(`drafting.speakerOrder.${draft.phase}.title`)}
-    />
-  )
-}
-
-function PickStepper({ draft }) {
-  const { t } = useTranslation()
-
-  const history = draft.picks.map(({ type, pick }) => {
-    switch (type) {
-      case 'faction':
-        return (
-          <FactionImage
-            factionKey={pick}
-            style={{ width: 'auto', height: '100%' }}
-          />
-        )
-      case 'speaker':
-        return (
-          <img
-            src={speakerFront}
-            style={{ height: 'auto', width: '100%' }}
-            alt="speaker"
-          />
-        )
-      default:
-        return (
-          <>
-            <MapIcon /> {`P${Number(pick) + 1}`}
-          </>
-        )
-    }
-  })
-
-  return (
-    <PlayerOrderStepper
-      activePlayer={draft.activePlayerIndex}
-      history={history}
-      order={draft.order.map(
-        (playerIndex) => draft.players[playerIndex] || 'TBD',
-      )}
       title={t(`drafting.speakerOrder.${draft.phase}.title`)}
     />
   )

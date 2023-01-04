@@ -71,7 +71,7 @@ export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
                 />
               </TableCell>
               {withTablePositions && (
-                <TableCell>P{pick.tablePosition + 1}</TableCell>
+                <TableCell>{pick.tablePosition}</TableCell>
               )}
             </TableRow>
           ))}
