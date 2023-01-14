@@ -185,7 +185,6 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
           width: '50vw',
           marginLeft: '50%',
           transform: 'translateX(-50%)',
-          zIndex: 9001,
           height: '6vh',
         }}
         variant="contained"
