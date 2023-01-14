@@ -19,9 +19,19 @@ export function LetsFight() {
   }, [setChatVisible])
 
   return (
-    <div style={{ marginTop: '-1.5em' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gridRowGap: '1em',
+        marginBottom: '3em',
+      }}
+    >
       <DiceRoller
-        onCleared={() => setPlayer1Rolled(false)}
+        onCleared={() => {
+          setPlayer1Rolled(false)
+          setShowOpponentRoller(false)
+        }}
         onRolled={() => setPlayer1Rolled(true)}
       />
       {player1Rolled && (
@@ -46,10 +56,9 @@ export function LetsFight() {
           />
         </Button>
       )}
-      <DiceRoller
-        hide={!showOpponentRoller}
-        onCleared={() => setShowOpponentRoller(false)}
-      />
+      {showOpponentRoller && (
+        <DiceRoller onCleared={() => setShowOpponentRoller(false)} />
+      )}
     </div>
   )
 }
