@@ -4,7 +4,7 @@ You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
 ## 2023-01-14
-- [feat] added [/lets-fight](https://ti4companion.paxmagnifica.com/) tool for simplifying dice rolling and hit counting in TI battles
+- [feat] added [/lets-fight](https://ti4companion.paxmagnifica.com/lets-fight) tool for simplifying dice rolling and hit counting in TI battles
 
 ## 2023-01-03
 - [feat] added possibility to customize names of map positions on draft
