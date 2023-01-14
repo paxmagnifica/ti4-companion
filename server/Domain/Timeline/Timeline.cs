@@ -205,8 +205,8 @@ namespace Server.Domain
                     speaker = speakerName,
                     picks = playerPicks.Select(kvp =>
                     {
-                        var tablePositionName = draftOptions?.MapPositionNames.Length > 0
-                            ? draftOptions?.MapPositionNames[kvp.Value.Item2]
+                        var tablePositionName = draftOptions?.MapPositions.Length > 0
+                            ? draftOptions?.MapPositions[kvp.Value.Item2].Name
                             : kvp.Value.Item2.ToString();
 
                         return new

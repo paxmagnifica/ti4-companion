@@ -1,2 +1,3 @@
 export { PointsWithDelta } from './PointsWithDelta'
-export { getMapPositionName } from './getMapPositionName'
+export { getMapPositionName, getMapPositionColor } from './mapPosition'
+export { ColorBox } from './ColorBox'

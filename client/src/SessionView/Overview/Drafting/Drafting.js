@@ -11,7 +11,11 @@ import speakerBack from '../../../assets/speaker-back.png'
 import { useTranslation } from '../../../i18n'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { FactionImage } from '../../../shared/FactionImage'
-import { getMapPositionName } from '../../../shared'
+import {
+  ColorBox,
+  getMapPositionName,
+  getMapPositionColor,
+} from '../../../shared'
 import { MapPreview } from '../../components'
 import { EditPrompt } from '../../Edit'
 import { SessionNutshell } from '../SessionNutshell'
@@ -173,8 +177,20 @@ function TablePositionPick({
                 onClick={() => handleSelectedPosition(tablePositionIndex)}
                 variant="contained"
               >
-                <Typography>
+                <Typography
+                  style={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    gridColumnGap: '0.3em',
+                  }}
+                >
                   {getMapPositionName({ draft, position: tablePositionIndex })}
+                  <ColorBox
+                    color={getMapPositionColor({
+                      draft,
+                      position: tablePositionIndex,
+                    })}
+                  />
                 </Typography>
                 {picked && (
                   <Typography style={{ marginLeft: '0.3em' }} variant="caption">

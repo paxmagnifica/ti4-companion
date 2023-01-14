@@ -15,6 +15,7 @@ import {
 
 import { Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
+import { ColorPicker } from '../shared/ColorPicker'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
 import { GameVersionPicker, useFactionsList } from '../GameComponents'
@@ -47,13 +48,13 @@ export function DraftSetup() {
     'Player 5',
     'Player 6',
   ])
-  const [mapPositionNames, setMapPositionNames] = useState([
-    'P1',
-    'P2',
-    'P3',
-    'P4',
-    'P5',
-    'P6',
+  const [mapPositions, setMapPositions] = useState([
+    { name: 'P1', color: null },
+    { name: 'P2', color: null },
+    { name: 'P3', color: null },
+    { name: 'P4', color: null },
+    { name: 'P5', color: null },
+    { name: 'P6', color: null },
   ])
 
   const [bans, setBans] = useState(true)
@@ -90,7 +91,7 @@ export function DraftSetup() {
         options: {
           initialPool: factionsList,
           players,
-          mapPositionNames,
+          mapPositions,
           bans,
           banRounds,
           bansPerRound,
@@ -106,7 +107,7 @@ export function DraftSetup() {
       )
     },
     [
-      mapPositionNames,
+      mapPositions,
       factionsList,
       players,
       sessionService,
@@ -154,12 +155,35 @@ export function DraftSetup() {
   const handleMapPositionNameChange = useCallback((mapPositionIndex, event) => {
     const { value } = event.currentTarget
 
-    setMapPositionNames((p) => [
+    setMapPositions((p) => [
       ...p.slice(0, mapPositionIndex),
-      value,
+      { ...p[mapPositionIndex], name: value },
       ...p.slice(mapPositionIndex + 1),
     ])
   }, [])
+
+  const handleMapPositionColorChange = useCallback(
+    (mapPositionIndex, color) => {
+      setMapPositions((p) => [
+        ...p
+          .slice(0, mapPositionIndex)
+          .map((oldMapPosition) =>
+            oldMapPosition.color === color
+              ? { name: oldMapPosition.name, color: null }
+              : oldMapPosition,
+          ),
+        { ...p[mapPositionIndex], color },
+        ...p
+          .slice(mapPositionIndex + 1)
+          .map((oldMapPosition) =>
+            oldMapPosition.color === color
+              ? { name: oldMapPosition.name, color: null }
+              : oldMapPosition,
+          ),
+      ])
+    },
+    [],
+  )
 
   return (
     <>
@@ -206,15 +230,22 @@ export function DraftSetup() {
       </FormGroup>
       <Typography>Map positions</Typography>
       <FormGroup className={classes.row} row>
-        {[...Array(playerCount).keys()].map((indice) => (
-          <TextField
-            key={`mapPosition${indice}`}
-            color="secondary"
-            label={`Map position ${indice + 1}`}
-            onChange={(e) => handleMapPositionNameChange(indice, e)}
-            value={mapPositionNames[indice] || ''}
-            variant="filled"
-          />
+        {mapPositions.map(({ name, color }, indice) => (
+          <>
+            <TextField
+              // eslint-disable-next-line
+              key={`mapPosition${indice}`}
+              color="secondary"
+              label={`Map position P${indice + 1}`}
+              onChange={(e) => handleMapPositionNameChange(indice, e)}
+              value={name || ''}
+              variant="filled"
+            />
+            <ColorPicker
+              color={color}
+              onChange={(c) => handleMapPositionColorChange(indice, c)}
+            />
+          </>
         ))}
       </FormGroup>
       <FormGroup className={classes.row} row>
