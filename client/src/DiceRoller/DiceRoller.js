@@ -166,22 +166,23 @@ export function DiceRoller() {
           ) : null,
         )}
       </div>
-      {readyToRoll && (
-        <Button
-          color="secondary"
-          onClick={roll}
-          style={{
-            width: '50vw',
-            marginLeft: '50%',
-            transform: 'translate(-50%)',
-            zIndex: 9001,
-            height: '6vh',
-          }}
-          variant="contained"
-        >
-          <Trans i18nKey={rolled ? 'diceRoller.clear' : 'diceRoller.roll'} />
-        </Button>
-      )}
+      <Button
+        color="secondary"
+        disabled={!readyToRoll}
+        onClick={roll}
+        style={{
+          position: 'fixed',
+          bottom: '1vh',
+          width: '50vw',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 9001,
+          height: '6vh',
+        }}
+        variant="contained"
+      >
+        <Trans i18nKey={rolled ? 'diceRoller.clear' : 'diceRoller.roll'} />
+      </Button>
     </>
   )
 }
