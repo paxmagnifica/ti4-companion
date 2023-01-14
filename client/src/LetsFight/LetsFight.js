@@ -1,17 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
+
 import { Trans } from '../i18n'
+import { useChat } from '../Chat'
 
 import { DiceRoller } from './DiceRoller'
 
 export function LetsFight() {
+  const { setChatVisible } = useChat()
+
   const [player1Rolled, setPlayer1Rolled] = useState(false)
   const [showOpponentRoller, setShowOpponentRoller] = useState(false)
 
+  useEffect(() => {
+    setChatVisible(false)
+
+    return () => setChatVisible(true)
+  }, [setChatVisible])
+
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gridRowGap: '1em',
+        marginBottom: '3em',
+      }}
+    >
       <DiceRoller
-        onCleared={() => setPlayer1Rolled(false)}
+        onCleared={() => {
+          setPlayer1Rolled(false)
+          setShowOpponentRoller(false)
+        }}
         onRolled={() => setPlayer1Rolled(true)}
       />
       {player1Rolled && (
@@ -36,10 +56,9 @@ export function LetsFight() {
           />
         </Button>
       )}
-      <DiceRoller
-        hide={!showOpponentRoller}
-        onCleared={() => setShowOpponentRoller(false)}
-      />
-    </>
+      {showOpponentRoller && (
+        <DiceRoller onCleared={() => setShowOpponentRoller(false)} />
+      )}
+    </div>
   )
 }

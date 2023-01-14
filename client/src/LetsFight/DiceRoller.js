@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import { Button } from '@material-ui/core'
-import ExposureNeg1Icon from '@material-ui/icons/ExposureNeg1'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 import { useTranslation, Trans } from '../i18n'
 import Dreadnought from '../assets/units/unit_dreadnought.png'
@@ -34,14 +34,12 @@ const ALL_UNITS = [
 
 const rollDice = (sides = 10) => Math.floor(Math.random() * sides) + 1
 
-export function DiceRoller({ onRolled, onCleared, hide }) {
+export function DiceRoller({ onRolled, onCleared }) {
   const [diceCounts, setDiceCounts] = useState(Array(ALL_UNITS.length).fill(0))
   const [rolls, setRolls] = useState([])
+  const [highlights, setHighlights] = useState([])
   const rolled = rolls.some((x) => x.length > 0)
   const readyToRoll = diceCounts.some((dice) => dice > 0)
-  const { t } = useTranslation()
-
-  const allUnitsNames = ALL_UNITS.map((_, index) => t(`kb.units.${index}`))
 
   const addDice = (index) =>
     setDiceCounts((currentCounts) => {
@@ -59,28 +57,16 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
       return copy
     })
 
-  const [highlights, setHighlights] = useState([])
-  const setHighlightsFor = (index, setter) => {
-    setHighlights((highlighted) => {
-      const copy = [...highlighted]
-      copy[index] = setter(copy[index] || [])
-
-      return copy
-    })
+  const clear = () => {
+    setRolls([])
+    setDiceCounts(Array(ALL_UNITS.length).fill(0))
+    setHighlights([])
+    if (onCleared) {
+      onCleared()
+    }
   }
 
-  const rollOrClear = () => {
-    if (rolled) {
-      setRolls([])
-      setDiceCounts(Array(ALL_UNITS.length).fill(0))
-      setHighlights([])
-      if (onCleared) {
-        onCleared()
-      }
-
-      return
-    }
-
+  const roll = () => {
     const newRolls = diceCounts.map((count) =>
       count > 0 ? [...Array(count)].map(rollDice) : [],
     )
@@ -91,46 +77,136 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
     }
   }
 
-  if (hide) {
-    return null
+  return (
+    <>
+      {!rolled && (
+        <>
+          <DiceCountSelector
+            addDice={addDice}
+            diceCounts={diceCounts}
+            removeDice={removeDice}
+          />
+          <Button
+            color="secondary"
+            disabled={!readyToRoll}
+            onClick={roll}
+            style={{
+              marginTop: '2em',
+              width: '50%',
+              marginLeft: '25%',
+              height: '6vh',
+            }}
+            variant="contained"
+          >
+            <Trans i18nKey="letsFight.roll" />
+          </Button>
+        </>
+      )}
+      {rolled && (
+        <>
+          <RollsList
+            diceCounts={diceCounts}
+            highlights={highlights}
+            rolls={rolls}
+            setHighlights={setHighlights}
+          />
+          <Button
+            color="secondary"
+            disabled={!readyToRoll}
+            onClick={clear}
+            style={{
+              marginTop: '2em',
+              width: '50%',
+              marginLeft: '25%',
+              height: '6vh',
+            }}
+            variant="contained"
+          >
+            <Trans i18nKey="letsFight.clear" />
+          </Button>
+        </>
+      )}
+    </>
+  )
+}
+
+function DiceCountSelector({ addDice, removeDice, diceCounts }) {
+  const { t } = useTranslation()
+
+  const allUnitsNames = ALL_UNITS.map((_, index) => t(`kb.units.${index}`))
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gridRowGap: '1.5em' }}>
+      {ALL_UNITS.map((unitSrc, index) => (
+        <div
+          key={unitSrc}
+          style={{
+            display: 'flex',
+            gridColumnGap: '0.5em',
+            alignItems: 'center',
+            width: '50%',
+          }}
+        >
+          <IconButton
+            onClick={() => addDice(index)}
+            style={{ margin: 0, padding: '0.2vh' }}
+          >
+            <img
+              alt={allUnitsNames[index]}
+              src={unitSrc}
+              style={{ maxHeight: '6.8vh' }}
+            />
+          </IconButton>
+          <div style={{ fontSize: '1.2em' }}>{diceCounts[index]}</div>
+          {diceCounts[index] > 0 && (
+            <IconButton
+              color="secondary"
+              onClick={() => removeDice(index)}
+              variant="contained"
+            >
+              <KeyboardArrowDownIcon />
+            </IconButton>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function RollsList({ diceCounts, rolls, highlights, setHighlights }) {
+  const setHighlightsFor = (index, setter) => {
+    setHighlights((highlighted) => {
+      const copy = [...highlighted]
+      copy[index] = setter(copy[index] || [])
+
+      return copy
+    })
   }
+
+  const { t } = useTranslation()
+
+  const allUnitsNames = ALL_UNITS.map((_, index) => t(`kb.units.${index}`))
 
   return (
     <>
-      <div style={{ marginBottom: '1em' }}>
-        {ALL_UNITS.map((unitSrc, index) =>
-          !rolled || diceCounts[index] > 0 ? (
-            <div
-              key={unitSrc}
-              style={{
-                display: 'flex',
-                gridColumnGap: '0.5em',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-              }}
-            >
-              <IconButton
-                onClick={() => addDice(index)}
-                style={{ margin: 0, padding: '0.2vh' }}
-              >
-                <img
-                  alt={allUnitsNames[index]}
-                  src={unitSrc}
-                  style={{ maxHeight: '7vh' }}
-                />
-              </IconButton>
-              {!rolled && (
-                <div style={{ fontSize: '1.2em' }}>{diceCounts[index]}</div>
-              )}
-              {!rolled && diceCounts[index] > 0 && (
-                <IconButton
-                  color="secondary"
-                  onClick={() => removeDice(index)}
-                  variant="contained"
-                >
-                  <ExposureNeg1Icon />
-                </IconButton>
-              )}
+      {ALL_UNITS.map((unitSrc, index) =>
+        diceCounts[index] > 0 ? (
+          <div
+            key={unitSrc}
+            style={{
+              display: 'flex',
+              gridColumnGap: '0.5em',
+              alignItems: 'center',
+            }}
+          >
+            <IconButton style={{ margin: 0, padding: '0.2vh' }}>
+              <img
+                alt={allUnitsNames[index]}
+                src={unitSrc}
+                style={{ maxHeight: '6.8vh' }}
+              />
+            </IconButton>
+            <div>
               {rolls[index]?.length > 0 && (
                 <Rolls
                   highlights={highlights[index] || []}
@@ -139,37 +215,20 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
                 />
               )}
             </div>
-          ) : null,
-        )}
-      </div>
-      {rolled && (
-        <div
-          style={{
-            textAlign: 'center',
-            marginBottom: '2em',
-            fontSize: '1.3em',
-          }}
-        >
-          <Trans
-            i18nKey="letsFight.hits"
-            values={{ hits: highlights.flat().filter((h) => h).length }}
-          />
-        </div>
+          </div>
+        ) : null,
       )}
-      <Button
-        color="secondary"
-        disabled={!readyToRoll}
-        onClick={rollOrClear}
+      <div
         style={{
-          marginBottom: '1em',
-          width: '50%',
-          marginLeft: '25%',
-          height: '6vh',
+          textAlign: 'center',
+          fontSize: '1.3em',
         }}
-        variant="contained"
       >
-        <Trans i18nKey={rolled ? 'letsFight.clear' : 'letsFight.roll'} />
-      </Button>
+        <Trans
+          i18nKey="letsFight.hits"
+          values={{ hits: highlights.flat().filter((h) => h).length }}
+        />
+      </div>
     </>
   )
 }
