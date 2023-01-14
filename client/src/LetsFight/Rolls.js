@@ -38,7 +38,15 @@ export function Rolls({ rolls, highlights, setHighlights }) {
                   return cp
                 }
 
-                cp.splice(0, index + 1, ...Array(index + 1).fill(true))
+                const lastResultOfTheSameValue = rolls.findLastIndex(
+                  (r) => r === rolls[index],
+                )
+
+                cp.splice(
+                  0,
+                  lastResultOfTheSameValue + 1,
+                  ...Array(lastResultOfTheSameValue + 1).fill(true),
+                )
 
                 return cp
               })
