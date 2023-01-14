@@ -1,1 +1,0 @@
-export { DiceRoller } from './DiceRoller'

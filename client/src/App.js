@@ -38,7 +38,7 @@ import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
 import { PanicPage } from './PanicPage'
 import { GameVersionProvider } from './GameComponents'
-import { DiceRoller } from './DiceRoller'
+import { LetsFight } from './LetsFight'
 
 i18nFactory()
 
@@ -140,7 +140,7 @@ function App() {
                 <Box m={2}>
                   <Switch>
                     <Route path="/lets-fight">
-                      <DiceRoller />
+                      <LetsFight />
                     </Route>
                     <Route path="/new">
                       <SessionSetup />

@@ -429,6 +429,8 @@ export const factory = (options = { debug: true }) =>
             diceRoller: {
               roll: 'roll',
               clear: 'clear',
+              hideOpponentRoller: 'hide opponent roller',
+              showOpponentRoller: 'roll for opponent',
             },
           },
         },

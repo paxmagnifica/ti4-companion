@@ -85,7 +85,7 @@ function Rolls({ rolls }) {
   )
 }
 
-export function DiceRoller() {
+export function DiceRoller({ onRolled, onCleared, hide }) {
   const [diceCounts, setDiceCounts] = useState(Array(ALL_UNITS.length).fill(0))
   const [rolls, setRolls] = useState([])
   const rolled = rolls.some((x) => x.length > 0)
@@ -110,10 +110,13 @@ export function DiceRoller() {
       return copy
     })
 
-  const roll = () => {
+  const rollOrClear = () => {
     if (rolled) {
       setRolls([])
       setDiceCounts(Array(ALL_UNITS.length).fill(0))
+      if (onCleared) {
+        onCleared()
+      }
 
       return
     }
@@ -123,11 +126,18 @@ export function DiceRoller() {
     )
 
     setRolls(newRolls)
+    if (onRolled) {
+      onRolled()
+    }
+  }
+
+  if (hide) {
+    return null
   }
 
   return (
     <>
-      <div style={{ paddingBottom: '2em' }}>
+      <div style={{ marginBottom: '1em' }}>
         {ALL_UNITS.map((unitSrc, index) =>
           !rolled || diceCounts[index] > 0 ? (
             <div
@@ -169,12 +179,11 @@ export function DiceRoller() {
       <Button
         color="secondary"
         disabled={!readyToRoll}
-        onClick={roll}
+        onClick={rollOrClear}
         style={{
-          position: 'fixed',
-          bottom: '1vh',
+          marginBottom: '1em',
           width: '50vw',
-          left: '50%',
+          marginLeft: '50%',
           transform: 'translateX(-50%)',
           zIndex: 9001,
           height: '6vh',
