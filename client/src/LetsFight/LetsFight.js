@@ -1,12 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
+
 import { Trans } from '../i18n'
+import { useChat } from '../Chat'
 
 import { DiceRoller } from './DiceRoller'
 
 export function LetsFight() {
+  const { setChatVisible } = useChat()
+
   const [player1Rolled, setPlayer1Rolled] = useState(false)
   const [showOpponentRoller, setShowOpponentRoller] = useState(false)
+
+  useEffect(() => {
+    setChatVisible(false)
+
+    return () => setChatVisible(true)
+  }, [setChatVisible])
 
   return (
     <>
