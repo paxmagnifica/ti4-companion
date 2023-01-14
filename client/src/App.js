@@ -135,7 +135,6 @@ function App() {
                 [classes.fullWidth]: fullscreen,
               })}
             >
-              <KnowledgeBase />
               <PanicPage>
                 <Box m={2}>
                   <Switch>
@@ -143,12 +142,15 @@ function App() {
                       <LetsFight />
                     </Route>
                     <Route path="/new">
+                      <KnowledgeBase />
                       <SessionSetup />
                     </Route>
                     <Route path="/:sessionId/:secret?">
+                      <KnowledgeBase />
                       <SessionView setChatVisibility={setChatVisible} />
                     </Route>
                     <Route path="/">
+                      <KnowledgeBase />
                       <CallsToAction />
                       <SessionsListContainer
                         listIdentifier={listIdentifier}
