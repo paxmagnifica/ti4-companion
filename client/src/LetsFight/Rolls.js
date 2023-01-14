@@ -8,9 +8,9 @@ function RollResult({ value, highlighted, onClick }) {
           backgroundColor: 'white',
           color: 'black',
           border: highlighted ? '3px solid yellow' : '3px solid black',
-          height: '4.5vh',
-          width: '4.5vh',
-          borderRadius: '3px',
+          height: '4.4vh',
+          width: '4.4vh',
+          borderRadius: '5px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -25,7 +25,6 @@ function RollResult({ value, highlighted, onClick }) {
 export function Rolls({ rolls, highlights, setHighlights }) {
   return (
     <>
-      <div>{highlights.filter((a) => a).length}</div>
       {rolls
         .sort((a, b) => b - a)
         .map((result, index) => (

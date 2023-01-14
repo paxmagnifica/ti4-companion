@@ -19,7 +19,7 @@ export function LetsFight() {
   }, [setChatVisible])
 
   return (
-    <>
+    <div style={{ marginTop: '-1.5em' }}>
       <DiceRoller
         onCleared={() => setPlayer1Rolled(false)}
         onRolled={() => setPlayer1Rolled(true)}
@@ -50,6 +50,6 @@ export function LetsFight() {
         hide={!showOpponentRoller}
         onCleared={() => setShowOpponentRoller(false)}
       />
-    </>
+    </div>
   )
 }

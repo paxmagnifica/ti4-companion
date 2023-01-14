@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import IconButton from '@material-ui/core/IconButton'
 import { Button } from '@material-ui/core'
-import ExposureNeg1Icon from '@material-ui/icons/ExposureNeg1'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 import { useTranslation, Trans } from '../i18n'
 import Dreadnought from '../assets/units/unit_dreadnought.png'
@@ -105,7 +105,6 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
               style={{
                 display: 'flex',
                 gridColumnGap: '0.5em',
-                flexWrap: 'wrap',
                 alignItems: 'center',
               }}
             >
@@ -116,7 +115,7 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
                 <img
                   alt={allUnitsNames[index]}
                   src={unitSrc}
-                  style={{ maxHeight: '7vh' }}
+                  style={{ maxHeight: '6.8vh' }}
                 />
               </IconButton>
               {!rolled && (
@@ -128,16 +127,18 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
                   onClick={() => removeDice(index)}
                   variant="contained"
                 >
-                  <ExposureNeg1Icon />
+                  <KeyboardArrowDownIcon />
                 </IconButton>
               )}
-              {rolls[index]?.length > 0 && (
-                <Rolls
-                  highlights={highlights[index] || []}
-                  rolls={rolls[index]}
-                  setHighlights={(setter) => setHighlightsFor(index, setter)}
-                />
-              )}
+              <div>
+                {rolls[index]?.length > 0 && (
+                  <Rolls
+                    highlights={highlights[index] || []}
+                    rolls={rolls[index]}
+                    setHighlights={(setter) => setHighlightsFor(index, setter)}
+                  />
+                )}
+              </div>
             </div>
           ) : null,
         )}
