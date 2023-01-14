@@ -30,8 +30,8 @@ export function LetsFight() {
           <Trans
             i18nKey={
               showOpponentRoller
-                ? 'diceRoller.hideOpponentRoller'
-                : 'diceRoller.showOpponentRoller'
+                ? 'letsFight.hideOpponentRoller'
+                : 'letsFight.showOpponentRoller'
             }
           />
         </Button>

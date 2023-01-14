@@ -4,7 +4,6 @@ import { Button } from '@material-ui/core'
 import ExposureNeg1Icon from '@material-ui/icons/ExposureNeg1'
 
 import { useTranslation, Trans } from '../i18n'
-
 import Dreadnought from '../assets/units/unit_dreadnought.png'
 import Cruiser from '../assets/units/unit_cruiser.png'
 import Destroyer from '../assets/units/unit_destroyer.png'
@@ -16,6 +15,8 @@ import Mech from '../assets/units/unit_mech.png'
 import PDS from '../assets/units/unit_pds.png'
 import Transporter from '../assets/units/unit_transporter.png'
 import Warsun from '../assets/units/unit_warsun.png'
+
+import { Rolls } from './Rolls'
 
 const ALL_UNITS = [
   Transporter,
@@ -32,58 +33,6 @@ const ALL_UNITS = [
 ]
 
 const rollDice = (sides = 10) => Math.floor(Math.random() * sides) + 1
-
-function RollResult({ value, highlighted, onClick }) {
-  return (
-    <IconButton onClick={onClick} style={{ margin: 0, padding: '0.2vh' }}>
-      <div
-        style={{
-          backgroundColor: 'white',
-          color: 'black',
-          border: highlighted ? '3px solid yellow' : '3px solid black',
-          height: '4.5vh',
-          width: '4.5vh',
-          borderRadius: '3px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {value}
-      </div>
-    </IconButton>
-  )
-}
-
-function Rolls({ rolls }) {
-  const [highlights, setHighlights] = useState([])
-
-  return (
-    <>
-      <div>{highlights.filter((a) => a).length}</div>
-      {rolls
-        .sort((a, b) => b - a)
-        .map((result, index) => (
-          <RollResult
-            highlighted={highlights[index]}
-            onClick={() =>
-              setHighlights((highlighted) => {
-                const cp = Array(rolls).fill(false)
-                if (index === 0 && highlighted[0] && !highlighted[1]) {
-                  return cp
-                }
-
-                cp.splice(0, index + 1, ...Array(index + 1).fill(true))
-
-                return cp
-              })
-            }
-            value={result}
-          />
-        ))}
-    </>
-  )
-}
 
 export function DiceRoller({ onRolled, onCleared, hide }) {
   const [diceCounts, setDiceCounts] = useState(Array(ALL_UNITS.length).fill(0))
@@ -110,10 +59,21 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
       return copy
     })
 
+  const [highlights, setHighlights] = useState([])
+  const setHighlightsFor = (index, setter) => {
+    setHighlights((highlighted) => {
+      const copy = [...highlighted]
+      copy[index] = setter(copy[index] || [])
+
+      return copy
+    })
+  }
+
   const rollOrClear = () => {
     if (rolled) {
       setRolls([])
       setDiceCounts(Array(ALL_UNITS.length).fill(0))
+      setHighlights([])
       if (onCleared) {
         onCleared()
       }
@@ -171,11 +131,31 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
                   <ExposureNeg1Icon />
                 </IconButton>
               )}
-              {rolls[index]?.length > 0 && <Rolls rolls={rolls[index]} />}
+              {rolls[index]?.length > 0 && (
+                <Rolls
+                  highlights={highlights[index] || []}
+                  rolls={rolls[index]}
+                  setHighlights={(setter) => setHighlightsFor(index, setter)}
+                />
+              )}
             </div>
           ) : null,
         )}
       </div>
+      {rolled && (
+        <div
+          style={{
+            textAlign: 'center',
+            marginBottom: '2em',
+            fontSize: '1.3em',
+          }}
+        >
+          <Trans
+            i18nKey="letsFight.hits"
+            values={{ hits: highlights.flat().filter((h) => h).length }}
+          />
+        </div>
+      )}
       <Button
         color="secondary"
         disabled={!readyToRoll}
@@ -189,7 +169,7 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
         }}
         variant="contained"
       >
-        <Trans i18nKey={rolled ? 'diceRoller.clear' : 'diceRoller.roll'} />
+        <Trans i18nKey={rolled ? 'letsFight.clear' : 'letsFight.roll'} />
       </Button>
     </>
   )

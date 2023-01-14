@@ -426,11 +426,12 @@ export const factory = (options = { debug: true }) =>
               or: 'or you can',
               submitAnIssue: 'submit an issue on github',
             },
-            diceRoller: {
+            letsFight: {
               roll: 'roll',
               clear: 'clear',
               hideOpponentRoller: 'hide opponent roller',
               showOpponentRoller: 'roll for opponent',
+              hits: 'Hits: <strong>{{hits}}</strong>',
             },
           },
         },
