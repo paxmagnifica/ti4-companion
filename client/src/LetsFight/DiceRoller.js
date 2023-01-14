@@ -162,9 +162,8 @@ export function DiceRoller({ onRolled, onCleared, hide }) {
         onClick={rollOrClear}
         style={{
           marginBottom: '1em',
-          width: '50vw',
-          marginLeft: '50%',
-          transform: 'translateX(-50%)',
+          width: '50%',
+          marginLeft: '25%',
           height: '6vh',
         }}
         variant="contained"
