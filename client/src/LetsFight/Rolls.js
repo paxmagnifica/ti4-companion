@@ -14,6 +14,7 @@ function RollResult({ value, highlighted, onClick }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          zIndex: 9001,
         }}
       >
         {value}
@@ -32,8 +33,26 @@ export function Rolls({ rolls, highlights, setHighlights }) {
             highlighted={highlights[index]}
             onClick={() =>
               setHighlights((highlighted) => {
-                const cp = Array(rolls).fill(false)
+                const cp = [...highlighted]
                 if (index === 0 && highlighted[0] && !highlighted[1]) {
+                  return Array(cp.length).fill(false)
+                }
+
+                const isHighlighted = highlighted[index]
+
+                if (isHighlighted) {
+                  const firstResultOfTheSameValueIndex = rolls.findIndex(
+                    (r) => r === rolls[index],
+                  )
+
+                  cp.splice(
+                    firstResultOfTheSameValueIndex,
+                    highlighted.length - firstResultOfTheSameValueIndex,
+                    ...Array(
+                      highlighted.length - firstResultOfTheSameValueIndex,
+                    ).fill(false),
+                  )
+
                   return cp
                 }
 
