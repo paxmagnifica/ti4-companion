@@ -71,6 +71,11 @@ namespace Server.Domain
             {
                 throw new AlreadyDoneException();
             }
+
+            if (previousSamePlayerBans.Count() >= options.BanRounds)
+            {
+                throw new AlreadyDoneException();
+            }
         }
     }
 }
