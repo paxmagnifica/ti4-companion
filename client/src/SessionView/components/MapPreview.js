@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   bigDraftSummaryMap: {
     maxWidth: '87vw',
   },
-  draftSummaryMap: {
+  draftSummaryGalaxy: {
     maxWidth: '47vw',
   },
   mapContainer: {
@@ -39,7 +39,7 @@ export function MapPreview({ map, variant }) {
         startIcon={<MapIcon />}
         variant={variant}
       >
-        {map && <Trans i18nKey="sessionTimeline.draftSummary.toggleMap" />}
+        {map && <Trans i18nKey="sessionTimeline.draftSummary.toggleGalaxy" />}
         {!map && <Trans i18nKey="sessionMap.none" />}
       </Button>
       {map && (
@@ -53,8 +53,8 @@ export function MapPreview({ map, variant }) {
           >
             <Grid item>
               <img
-                alt={t('sessionTimeline.draftSummary.map')}
-                className={clsx(classes.draftSummaryMap, {
+                alt={t('sessionTimeline.draftSummary.galaxy')}
+                className={clsx(classes.draftSummaryGalaxy, {
                   [classes.bigDraftSummaryMap]: small,
                 })}
                 src={map}
