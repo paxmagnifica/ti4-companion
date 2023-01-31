@@ -65,7 +65,9 @@ namespace Server.Domain
             var bannedEventPayload = GetPayload(gameEvent);
             var previousSamePlayerBans = previousBanEvents.Select(pbe => GetPayload(pbe)).Where(pbe => pbe.PlayerName == bannedEventPayload.PlayerName);
 
-            if (previousSamePlayerBans.Count() >= options.BanRounds)
+            var currentBanRound = System.Math.Round(previousBanEvents.Count() / (double)options.BansPerRound);
+
+            if (previousSamePlayerBans.Count() >= currentBanRound)
             {
                 throw new AlreadyDoneException();
             }
