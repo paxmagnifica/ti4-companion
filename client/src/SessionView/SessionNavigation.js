@@ -19,12 +19,14 @@ import {
 } from '@material-ui/icons'
 import { useTheme, makeStyles } from '@material-ui/core/styles'
 import { useHistory, useRouteMatch, generatePath } from 'react-router-dom'
+import SportsKabaddiIcon from '@material-ui/icons/SportsKabaddi'
 
 import { useTranslation } from '../i18n'
 import { SupportMenuListItem } from '../Support'
 import { Tab, Tabs } from '../components/navigation'
 import useSmallViewport from '../shared/useSmallViewport'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
+import { ListItemLink } from '../shared/ListItemLink'
 
 const VIEW = {
   overview: 0,
@@ -143,6 +145,11 @@ function SessionNavigation() {
               </ListItemIcon>
               <ListItemText primary={t('sessionView.nav.timeline')} />
             </ListItem>
+            <ListItemLink
+              icon={<SportsKabaddiIcon />}
+              primary="Let's fight!"
+              to="/lets-fight"
+            />
             <SupportMenuListItem />
           </List>
         </Drawer>

@@ -38,6 +38,7 @@ import { useChat } from './Chat'
 import { FetchProvider } from './useFetch'
 import { PanicPage } from './PanicPage'
 import { GameVersionProvider } from './GameComponents'
+import { LetsFight } from './LetsFight'
 
 i18nFactory()
 
@@ -134,17 +135,22 @@ function App() {
                 [classes.fullWidth]: fullscreen,
               })}
             >
-              <KnowledgeBase />
               <PanicPage>
                 <Box m={2}>
                   <Switch>
+                    <Route path="/lets-fight">
+                      <LetsFight />
+                    </Route>
                     <Route path="/new">
+                      <KnowledgeBase />
                       <SessionSetup />
                     </Route>
                     <Route path="/:sessionId/:secret?">
+                      <KnowledgeBase />
                       <SessionView setChatVisibility={setChatVisible} />
                     </Route>
                     <Route path="/">
+                      <KnowledgeBase />
                       <CallsToAction />
                       <SessionsListContainer
                         listIdentifier={listIdentifier}
