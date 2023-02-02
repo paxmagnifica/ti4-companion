@@ -15,7 +15,7 @@ import {
 
 import { Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
-import { ColorPicker } from '../shared/ColorPicker'
+import { MapPositions } from '../shared/MapPositions'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
 import { GameVersionPicker, useFactionsList } from '../GameComponents'
@@ -152,39 +152,6 @@ export function DraftSetup() {
     ])
   }, [])
 
-  const handleMapPositionNameChange = useCallback((mapPositionIndex, event) => {
-    const { value } = event.currentTarget
-
-    setMapPositions((p) => [
-      ...p.slice(0, mapPositionIndex),
-      { ...p[mapPositionIndex], name: value },
-      ...p.slice(mapPositionIndex + 1),
-    ])
-  }, [])
-
-  const handleMapPositionColorChange = useCallback(
-    (mapPositionIndex, color) => {
-      setMapPositions((p) => [
-        ...p
-          .slice(0, mapPositionIndex)
-          .map((oldMapPosition) =>
-            oldMapPosition.color === color
-              ? { name: oldMapPosition.name, color: null }
-              : oldMapPosition,
-          ),
-        { ...p[mapPositionIndex], color },
-        ...p
-          .slice(mapPositionIndex + 1)
-          .map((oldMapPosition) =>
-            oldMapPosition.color === color
-              ? { name: oldMapPosition.name, color: null }
-              : oldMapPosition,
-          ),
-      ])
-    },
-    [],
-  )
-
   return (
     <>
       <GameVersionPicker onChange={setGameVersion} value={gameVersion} />
@@ -230,23 +197,7 @@ export function DraftSetup() {
       </FormGroup>
       <Typography>Map positions</Typography>
       <FormGroup className={classes.row} row>
-        {mapPositions.map(({ name, color }, indice) => (
-          <>
-            <TextField
-              // eslint-disable-next-line
-              key={`mapPosition${indice}`}
-              color="secondary"
-              label={`Map position P${indice + 1}`}
-              onChange={(e) => handleMapPositionNameChange(indice, e)}
-              value={name || ''}
-              variant="filled"
-            />
-            <ColorPicker
-              color={color}
-              onChange={(c) => handleMapPositionColorChange(indice, c)}
-            />
-          </>
-        ))}
+        <MapPositions value={mapPositions} onChange={newPositions => setMapPositions(newPositions)} />
       </FormGroup>
       <FormGroup className={classes.row} row>
         <FormControlLabel
