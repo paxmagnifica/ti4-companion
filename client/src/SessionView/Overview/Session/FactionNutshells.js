@@ -67,7 +67,7 @@ function FactionNutshells({
                 mapPositions: session.mapPositions,
                 position: atTable,
               })}
-              style={{ marginLeft: '0.4em', marginBottom: '-0.1em' }}
+              inline
             />
             )
           </em>
