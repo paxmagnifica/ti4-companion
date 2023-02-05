@@ -58,7 +58,7 @@ namespace ServerTests.Handlers
             var givenEvent = new GameEvent()
             {
                 SessionId = sessionId,
-                SerializedPayload = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
+                SerializedPayload = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{},\"MapPositions\":[]}",
             };
 
             // when
@@ -76,19 +76,19 @@ namespace ServerTests.Handlers
         [TestCase(
             "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldRewriteFieldsWhenAllGiven",
-            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}")]
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{},\"MapPositions\":[]}")]
         [TestCase(
             "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldSetEmptySessionEndWhenThisIsNotSplitSession",
-            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}")]
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":false,\"SessionStart\":null,\"SessionEnd\":\"\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{},\"MapPositions\":[]}")]
         [TestCase(
             "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldUseGivenSessionEndWhenSplitSessionGiven",
-            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}")]
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{},\"MapPositions\":[]}")]
         [TestCase(
             "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}",
             TestName = "ShouldReturnGivenVpCountWhenPositiveVpCountGiven",
-            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{}}")]
+            ExpectedResult = "{\"SessionDisplayName\":\"test\",\"IsTTS\":false,\"IsSplit\":true,\"SessionStart\":null,\"SessionEnd\":\"2022-12-06\",\"Duration\":0.0,\"VpCount\":11,\"Colors\":{},\"MapPositions\":[]}")]
         public async Task<string> ShouldSanitizeReceivedGameEventBeforeAddingToEventsCollection(string givenPayload)
         {
             // given
