@@ -26,6 +26,7 @@ namespace Server.Controllers
             this.Draft = new DraftDto(session);
             this.Players = PlayerDto.GetPlayers(this);
             this.Secured = !string.IsNullOrEmpty(session.HashedPassword);
+            this.MapPositions = new List<MapPosition>(this.Setup?.Options?.MapPositions ?? new MapPosition[0]);
 
             this.Setup.Password = null;
         }
@@ -72,6 +73,8 @@ namespace Server.Controllers
         public IEnumerable<PlayerDto> Players { get; internal set; }
 
         public string Map { get; internal set; }
+
+        public List<MapPosition> MapPositions { get; internal set; }
 
         public List<ScorableObjectiveDto> Objectives { get; internal set; }
 

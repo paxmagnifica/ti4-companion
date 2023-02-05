@@ -261,6 +261,7 @@ export const factory = (options = { debug: true }) =>
               duration: 'How long did you play? (roughly)',
               durationUnit: 'hours',
               detailsSavedCorrectly: 'Details saved correctly',
+              mapPositions: 'Map positions',
               colorsPicker: {
                 sectionTitle: 'Assign plastic colors to factions',
               },

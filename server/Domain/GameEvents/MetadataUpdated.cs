@@ -65,6 +65,7 @@ namespace Server.Domain
                 Duration = payload.Duration,
                 VpCount = payload.VpCount > 0 ? payload.VpCount : 10,
                 Colors = payload.Colors,
+                MapPositions = payload.MapPositions,
             };
         }
 

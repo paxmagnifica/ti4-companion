@@ -43,7 +43,7 @@ export function MapPositions({ value, onChange }) {
   return (
     <>
       {value.map(({ name, color }, indice) => (
-        <>
+        <div style={{ display: 'flex' }}>
           <TextField
             // eslint-disable-next-line
             key={`mapPosition${indice}`}
@@ -56,8 +56,9 @@ export function MapPositions({ value, onChange }) {
           <ColorPicker
             color={color}
             onChange={(c) => handleMapPositionColorChange(indice, c)}
+            style={{ marginLeft: '0.3em' }}
           />
-        </>
+        </div>
       ))}
     </>
   )

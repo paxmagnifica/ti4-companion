@@ -20,6 +20,7 @@ import MuiAlert from '@material-ui/lab/Alert'
 import { Trans, useTranslation } from '../../i18n'
 import { ComboDispatchContext } from '../../state'
 import Confirmation from '../../shared/Confirmation'
+import { MapPositions } from '../../shared/MapPositions'
 import { GameVersionPicker } from '../../GameComponents'
 
 import { ColorsPicker } from './ColorsPicker'
@@ -79,6 +80,7 @@ function DetailsForm({ disabled, session }) {
       },
     [],
   )
+  const [mapPositions, setMapPositions] = useState(session.mapPositions)
 
   const handleSave = useCallback(async () => {
     const payload = {
@@ -91,6 +93,7 @@ function DetailsForm({ disabled, session }) {
       duration: Number(duration),
       vpCount,
       colors,
+      mapPositions,
     }
 
     try {
@@ -101,6 +104,7 @@ function DetailsForm({ disabled, session }) {
       // empty catch
     }
   }, [
+    mapPositions,
     colors,
     vpCount,
     session,
@@ -246,6 +250,25 @@ function DetailsForm({ disabled, session }) {
                   onChange={setColors}
                   players={session.players}
                 />
+              )}
+              {!session.isDraft && (
+                <>
+                  <Grid item xs={12}>
+                    <Typography>
+                      <Trans i18nKey="sessionDetails.mapPositions" />
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    style={{ display: 'flex', gridColumnGap: '1em' }}
+                    xs={12}
+                  >
+                    <MapPositions
+                      onChange={(newPositions) => setMapPositions(newPositions)}
+                      value={mapPositions}
+                    />
+                  </Grid>
+                </>
               )}
               <Grid container item justifyContent="flex-end" xs={12}>
                 {!disabled && (

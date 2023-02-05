@@ -16,6 +16,7 @@ export function ColorBox({ color, onClick, size = '1em', style, ...rest }) {
         borderRadius: '2px',
         border: '1px solid rgba(255, 255, 255, 0.5)',
         cursor: 'pointer',
+        flexShrink: 0,
         ...style,
       }}
       title={colorNames[color]}

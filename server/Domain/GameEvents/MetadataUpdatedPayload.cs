@@ -26,6 +26,8 @@ namespace Server.Domain
 
         public Dictionary<string, string> Colors { get; set; }
 
+        public List<MapPosition> MapPositions { get; set; }
+
         public override bool Equals(object obj)
         {
             return obj is MetadataUpdatedPayload payload &&

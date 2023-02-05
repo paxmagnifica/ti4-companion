@@ -6,7 +6,7 @@ import { colors as plasticColors, colorNames } from './plasticColors'
 
 import { ColorBox } from './ColorBox'
 
-export function ColorPicker({ color, onChange, size = '2em' }) {
+export function ColorPicker({ color, onChange, size = '2em', style }) {
   const displayedColor = color ?? 'rgba(255, 255, 255, 0.2)'
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -15,7 +15,10 @@ export function ColorPicker({ color, onChange, size = '2em' }) {
   }
 
   const handlePickColor = (plasticColor) => {
-    onChange(plasticColor)
+    if (Object.values(plasticColors).includes(plasticColor)) {
+      onChange(plasticColor)
+    }
+
     setAnchorEl(null)
   }
 
@@ -25,6 +28,7 @@ export function ColorPicker({ color, onChange, size = '2em' }) {
         color={displayedColor}
         onClick={handleOpenPicker}
         size={size}
+        style={style}
         title={color ? colorNames[color] : 'No color selected'}
       />
       <Menu

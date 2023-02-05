@@ -84,7 +84,7 @@ export function DraftSetup() {
   const sessionService = useMemo(() => sessionFactory({ fetch }), [fetch])
   const startDraft = useCallback(
     async ({ password }) => {
-      const session = await sessionService.createSession({
+      const payload = {
         gameVersion,
         password,
         setupType: 'draft',
@@ -98,7 +98,9 @@ export function DraftSetup() {
           tablePick,
           speakerPick,
         },
-      })
+      }
+      console.log({ payload })
+      const session = await sessionService.createSession(payload)
       history.push(
         generatePath(SESSION_VIEW_ROUTES.main, {
           sessionId: session.id,
@@ -197,7 +199,10 @@ export function DraftSetup() {
       </FormGroup>
       <Typography>Map positions</Typography>
       <FormGroup className={classes.row} row>
-        <MapPositions value={mapPositions} onChange={newPositions => setMapPositions(newPositions)} />
+        <MapPositions
+          onChange={(newPositions) => setMapPositions(newPositions)}
+          value={mapPositions}
+        />
       </FormGroup>
       <FormGroup className={classes.row} row>
         <FormControlLabel
