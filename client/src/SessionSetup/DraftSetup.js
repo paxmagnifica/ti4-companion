@@ -84,7 +84,7 @@ export function DraftSetup() {
   const sessionService = useMemo(() => sessionFactory({ fetch }), [fetch])
   const startDraft = useCallback(
     async ({ password }) => {
-      const payload = {
+      const session = await sessionService.createSession({
         gameVersion,
         password,
         setupType: 'draft',
@@ -98,9 +98,7 @@ export function DraftSetup() {
           tablePick,
           speakerPick,
         },
-      }
-      console.log({ payload })
-      const session = await sessionService.createSession(payload)
+      })
       history.push(
         generatePath(SESSION_VIEW_ROUTES.main, {
           sessionId: session.id,
@@ -141,8 +139,20 @@ export function DraftSetup() {
 
       setPlayerCount(newValue)
       setPlayers(newPlayers)
+
+      const newMapPositions =
+        diff < 0
+          ? mapPositions.slice(0, diff)
+          : [...Array(newValue).keys()].map(
+              (playerIndex) =>
+                mapPositions[playerIndex] || {
+                  name: `P${playerIndex + 1}`,
+                  color: null,
+                },
+            )
+      setMapPositions(newMapPositions)
     },
-    [playerCount, players],
+    [playerCount, players, mapPositions],
   )
   const handlePlayerChange = useCallback((playerIndex, event) => {
     const { value } = event.currentTarget
