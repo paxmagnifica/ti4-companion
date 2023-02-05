@@ -621,7 +621,7 @@ namespace ServerTests
                         {
                             InitialPool = new string[] { "The_VuilRaith_Cabal", "The_Nomad" },
                             Players = new string[] { "Player 1", "Player 2" },
-                            MapPositions = new MapPosition[] { new MapPosition { Name = "NamedMapPosition1" }, new MapPosition { Name = "NamedMapPosition2"}},
+                            MapPositions = new MapPosition[] { new MapPosition { Name = "NamedMapPosition1" }, new MapPosition { Name = "NamedMapPosition2" } },
                             TablePick = true,
                         },
                     }),
@@ -785,7 +785,7 @@ namespace ServerTests
                         {
                             InitialPool = new string[] { "The_VuilRaith_Cabal", "The_Nomad" },
                             Players = new string[] { "Player 1", "Player 2" },
-                            MapPositions = new MapPosition[] { new MapPosition { Name = "NamedMapPosition1", Color = "Color1" }, new MapPosition { Name = "NamedMapPosition2", Color = "Color2" }},
+                            MapPositions = new MapPosition[] { new MapPosition { Name = "NamedMapPosition1", Color = "Color1" }, new MapPosition { Name = "NamedMapPosition2", Color = "Color2" } },
                             TablePick = true,
                         },
                     }),

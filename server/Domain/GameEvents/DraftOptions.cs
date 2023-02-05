@@ -32,11 +32,4 @@ namespace Server.Domain
 
         public int AllBansCount { get => this.PlayerCount * this.BansPerRound * this.BanRounds; }
     }
-
-    public class MapPosition
-    {
-        public string Name { get; set; }
-
-        public string Color { get; set; }
-    }
 }

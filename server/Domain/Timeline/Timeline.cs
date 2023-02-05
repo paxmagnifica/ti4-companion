@@ -217,9 +217,10 @@ namespace Server.Domain
                         {
                             playerName = kvp.Key,
                             faction = kvp.Value.Item1,
-                            tablePosition = new {
+                            tablePosition = new
+                            {
                                 name = tablePositionName,
-                                color = tablePositionColor
+                                color = tablePositionColor,
                             },
                         };
                     }),

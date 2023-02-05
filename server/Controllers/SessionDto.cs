@@ -33,15 +33,6 @@ namespace Server.Controllers
 
         public DraftDto Draft { get; set; }
 
-        private List<MapPosition> GetMapPositions(List<GameEvent> events)
-        {
-            var initialMapPositions = new List<MapPosition>(this.Setup?.Options?.MapPositions ?? new MapPosition[0]);
-
-            var mapPositionsFromUpdatedMetadata = this.GetLatestMetadataEventPayload(events)?.MapPositions;
-
-            return mapPositionsFromUpdatedMetadata ?? initialMapPositions;
-        }
-
         public bool Secured { get; set; }
 
         public bool IsDraft
@@ -90,6 +81,15 @@ namespace Server.Controllers
         public List<string> Factions { get; set; }
 
         public List<FactionPoint> Points { get; internal set; }
+
+        private List<MapPosition> GetMapPositions(List<GameEvent> events)
+        {
+            var initialMapPositions = new List<MapPosition>(this.Setup?.Options?.MapPositions ?? new MapPosition[0]);
+
+            var mapPositionsFromUpdatedMetadata = this.GetLatestMetadataEventPayload(events)?.MapPositions;
+
+            return mapPositionsFromUpdatedMetadata ?? initialMapPositions;
+        }
 
         private void SetupGameState(List<GameEvent> events)
         {
