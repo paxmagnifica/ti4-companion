@@ -14,7 +14,8 @@ import { LocalLibrary, PhotoLibrary, Info } from '@material-ui/icons'
 
 import { useTranslation, Trans } from '../../../i18n'
 import { SESSION_VIEW_ROUTES } from '../../../shared/constants'
-import { getMapPositionName } from '../../../shared'
+import { ColorBox } from '../../../shared/ColorBox'
+import { getMapPositionName, getMapPositionColor } from '../../../shared'
 import { useFactionData } from '../../../GameComponents'
 import { useSessionContext } from '../../useSessionContext'
 
@@ -59,6 +60,10 @@ function FactionNutshells({
               values={{
                 position: getMapPositionName({ draft, position: atTable }),
               }}
+            />
+            <ColorBox
+              color={getMapPositionColor({ draft, position: atTable })}
+              style={{ marginLeft: '0.4em', marginBottom: '-0.1em' }}
             />
             )
           </em>
