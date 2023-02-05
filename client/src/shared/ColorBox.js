@@ -3,6 +3,7 @@ import { colorNames } from './plasticColors'
 export function ColorBox({
   color,
   inline,
+  disabled,
   onClick,
   size = '1em',
   style,
@@ -19,7 +20,7 @@ export function ColorBox({
     backgroundColor: color,
     borderRadius: '2px',
     border: '1px solid rgba(255, 255, 255, 0.5)',
-    cursor: inline ? 'default' : 'pointer',
+    cursor: inline || disabled ? 'default' : 'pointer',
     flexShrink: 0,
   }
 

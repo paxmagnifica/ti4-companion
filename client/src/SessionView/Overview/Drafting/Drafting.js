@@ -194,6 +194,7 @@ function TablePositionPick({
                       mapPositions: session.mapPositions,
                       position: tablePositionIndex,
                     })}
+                    disabled
                   />
                 </Typography>
                 {picked && (
