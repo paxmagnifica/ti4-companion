@@ -347,7 +347,7 @@ function Pick({
               ({ type, playerIndex }) =>
                 type === 'tablePosition' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           draft={draft}
@@ -533,7 +533,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           initialPool={draft.initialPool}
@@ -553,7 +553,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           initialPool={draft.initialPool.filter(
