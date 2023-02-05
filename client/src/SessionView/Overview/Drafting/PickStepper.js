@@ -29,7 +29,11 @@ export function PickStepper({ draft }) {
       default:
         return (
           <>
-            <MapIcon /> {getMapPositionName({ draft, position: pick })}
+            <MapIcon />{' '}
+            {getMapPositionName({
+              mapPositions: draft.mapPositions,
+              position: pick,
+            })}
           </>
         )
     }

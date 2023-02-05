@@ -32,9 +32,7 @@ function FactionNutshells({
   const { t } = useTranslation()
   const { getData: getFactionData } = useFactionData()
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
-  const {
-    session: { draft },
-  } = useSessionContext()
+  const { session } = useSessionContext()
 
   const [draftSummaryDialogOpen, setDraftSummaryDialogOpen] = useState(false)
 
@@ -58,11 +56,17 @@ function FactionNutshells({
             <Trans
               i18nKey="sessionView.factionNutshell.tablePosition"
               values={{
-                position: getMapPositionName({ draft, position: atTable }),
+                position: getMapPositionName({
+                  mapPositions: session.mapPositions,
+                  position: atTable,
+                }),
               }}
             />
             <ColorBox
-              color={getMapPositionColor({ draft, position: atTable })}
+              color={getMapPositionColor({
+                mapPositions: session.mapPositions,
+                position: atTable,
+              })}
               style={{ marginLeft: '0.4em', marginBottom: '-0.1em' }}
             />
             )

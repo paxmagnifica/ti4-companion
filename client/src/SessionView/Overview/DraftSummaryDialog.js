@@ -15,11 +15,11 @@ export function DraftSummaryDialog({ open, set }) {
       session.players.map((player) => ({
         ...player,
         tablePosition: getMapPositionName({
-          draft: session.draft,
+          mapPositions: session.mapPositions,
           position: player.atTable,
         }),
       })),
-    [session.players, session.draft],
+    [session.players, session.mapPositions],
   )
 
   return (

@@ -140,6 +140,7 @@ function TablePositionPick({
   disabled,
   pick,
   draft,
+  session,
   selectedPosition,
   handleSelectedPosition,
 }) {
@@ -184,10 +185,13 @@ function TablePositionPick({
                     gridColumnGap: '0.3em',
                   }}
                 >
-                  {getMapPositionName({ draft, position: tablePositionIndex })}
+                  {getMapPositionName({
+                    mapPositions: session.mapPositions,
+                    position: tablePositionIndex,
+                  })}
                   <ColorBox
                     color={getMapPositionColor({
-                      draft,
+                      mapPositions: session.mapPositions,
                       position: tablePositionIndex,
                     })}
                   />
@@ -342,7 +346,7 @@ function Pick({
               ({ type, playerIndex }) =>
                 type === 'tablePosition' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                  Number(playerIndex),
+                Number(playerIndex),
             )
           }
           draft={draft}
@@ -516,7 +520,7 @@ export function Drafting({ editable, session, sessionService }) {
       </Box>
       {draft.phase === PHASE.speaker && <Typography>picks:</Typography>}
       {session.setup.options.tablePick && draft.phase === PHASE.speaker && (
-        <TablePositionPick disabled draft={draft} />
+        <TablePositionPick disabled draft={draft} session={session} />
       )}
       {draft.phase === PHASE.bans && (
         <DraftPool
@@ -528,7 +532,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                  Number(playerIndex),
+                Number(playerIndex),
             )
           }
           initialPool={draft.initialPool}
@@ -548,7 +552,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                  Number(playerIndex),
+                Number(playerIndex),
             )
           }
           initialPool={draft.initialPool.filter(
