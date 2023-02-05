@@ -2,7 +2,8 @@ import { Map as MapIcon } from '@material-ui/icons'
 
 import speakerFront from '../../../assets/speaker-front.png'
 import { FactionImage } from '../../../shared/FactionImage'
-import { getMapPositionName } from '../../../shared'
+import { getMapPositionName, getMapPositionColor } from '../../../shared'
+import { ColorBox } from '../../../shared/ColorBox'
 import { useTranslation } from '../../../i18n'
 import { PlayerOrderStepper } from './PlayerOrderStepper'
 
@@ -34,6 +35,13 @@ export function PickStepper({ draft }) {
               mapPositions: draft.mapPositions,
               position: pick,
             })}
+            <ColorBox
+              color={getMapPositionColor({
+                mapPositions: draft.mapPositions,
+                position: pick,
+              })}
+              inline
+            />
           </>
         )
     }
