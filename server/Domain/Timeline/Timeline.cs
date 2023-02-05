@@ -209,11 +209,18 @@ namespace Server.Domain
                             ? draftOptions?.MapPositions[kvp.Value.Item2].Name
                             : kvp.Value.Item2.ToString();
 
+                        var tablePositionColor = draftOptions?.MapPositions.Length > 0
+                            ? draftOptions?.MapPositions[kvp.Value.Item2].Color
+                            : null;
+
                         return new
                         {
                             playerName = kvp.Key,
                             faction = kvp.Value.Item1,
-                            tablePosition = tablePositionName,
+                            tablePosition = new {
+                                name = tablePositionName,
+                                color = tablePositionColor
+                            },
                         };
                     }),
                 }),

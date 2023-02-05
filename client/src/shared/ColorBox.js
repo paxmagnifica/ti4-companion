@@ -19,7 +19,7 @@ export function ColorBox({
     backgroundColor: color,
     borderRadius: '2px',
     border: '1px solid rgba(255, 255, 255, 0.5)',
-    cursor: 'pointer',
+    cursor: inline ? 'default' : 'pointer',
     flexShrink: 0,
   }
 
