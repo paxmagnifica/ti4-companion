@@ -54,6 +54,7 @@ namespace Server.Infra
             {
                 throw new NotFoundException("SessionList");
             }
+
             newSession.SessionLists.Add(sessionList);
             this.sessionContext.Sessions.Add(newSession);
         }

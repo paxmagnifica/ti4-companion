@@ -7,8 +7,8 @@ namespace Server.Domain
     {
         public Session()
         {
-            Events = new List<GameEvent>();
-            SessionLists = new List<SessionList>();
+            this.Events = new List<GameEvent>();
+            this.SessionLists = new List<SessionList>();
         }
 
         public Guid Id { get; set; }

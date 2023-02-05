@@ -310,7 +310,7 @@ namespace ServerTests
                         {
                             InitialPool = new string[] { "The_VuilRaith_Cabal", "The_Nomad" },
                             Players = new string[] { "Player 1", "Player 2" },
-                            MapPositions = new MapPosition[] { new MapPosition{Name = "aaa", Color = null}, new MapPosition {Name = "bbb", Color = null} },
+                            MapPositions = new MapPosition[] { new MapPosition { Name = "aaa", Color = null }, new MapPosition { Name = "bbb", Color = null } },
                             TablePick = true,
                         },
                     }),
