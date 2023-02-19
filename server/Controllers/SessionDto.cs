@@ -26,6 +26,7 @@ namespace Server.Controllers
             this.Draft = new DraftDto(session);
             this.Players = PlayerDto.GetPlayers(this);
             this.Secured = !string.IsNullOrEmpty(session.HashedPassword);
+            this.MapPositions = this.GetMapPositions(session.Events);
 
             this.Setup.Password = null;
         }
@@ -73,11 +74,22 @@ namespace Server.Controllers
 
         public string Map { get; internal set; }
 
+        public List<MapPosition> MapPositions { get; internal set; }
+
         public List<ScorableObjectiveDto> Objectives { get; internal set; }
 
         public List<string> Factions { get; set; }
 
         public List<FactionPoint> Points { get; internal set; }
+
+        private List<MapPosition> GetMapPositions(List<GameEvent> events)
+        {
+            var initialMapPositions = new List<MapPosition>(this.Setup?.Options?.MapPositions ?? new MapPosition[0]);
+
+            var mapPositionsFromUpdatedMetadata = this.GetLatestMetadataEventPayload(events)?.MapPositions;
+
+            return mapPositionsFromUpdatedMetadata ?? initialMapPositions;
+        }
 
         private void SetupGameState(List<GameEvent> events)
         {
@@ -89,16 +101,12 @@ namespace Server.Controllers
         private void SetSessionDetails(List<GameEvent> events)
         {
             this.VpCount = 10;
-            var latestMetadataEvent = (events ?? new List<GameEvent>())
-                .OrderByDescending(e => e.HappenedAt)
-                .FirstOrDefault(e => e.EventType == nameof(MetadataUpdated));
-
-            if (latestMetadataEvent == null)
+            var payload = this.GetLatestMetadataEventPayload(events);
+            if (payload == null)
             {
                 return;
             }
 
-            var payload = MetadataUpdated.GetPayload(latestMetadataEvent);
             this.DisplayName = payload.SessionDisplayName;
             this.TTS = payload.IsTTS;
             this.Split = payload.IsSplit;
@@ -107,6 +115,20 @@ namespace Server.Controllers
             this.Duration = payload.Duration;
             this.VpCount = payload.VpCount == 0 ? 10 : payload.VpCount;
             this.Colors = payload.Colors;
+        }
+
+        private MetadataUpdatedPayload GetLatestMetadataEventPayload(List<GameEvent> events)
+        {
+            var latestMetadataEvent = (events ?? new List<GameEvent>())
+                .OrderByDescending(e => e.HappenedAt)
+                .FirstOrDefault(e => e.EventType == nameof(MetadataUpdated));
+
+            if (latestMetadataEvent == null)
+            {
+                return null;
+            }
+
+            return MetadataUpdated.GetPayload(latestMetadataEvent);
         }
 
         private string GetMap(List<GameEvent> events)

@@ -31,7 +31,7 @@ namespace Server.Controllers
               (pickEvents.Count() < this.Order.Count() ? "picks" : "speaker");
             this.InitialPool = gameStartOptions?.InitialPool;
             this.Players = gameStartOptions?.Players ?? new string[0];
-            this.MapPositionNames = gameStartOptions?.MapPositionNames ?? new string[0];
+            this.MapPositions = gameStartOptions?.MapPositions ?? new MapPosition[0];
             this.BansPerRound = gameStartOptions?.BansPerRound ?? 1;
             this.Bans = bans;
             this.Picks = pickEvents.Select(Picked.GetPayload).ToArray();
@@ -54,7 +54,7 @@ namespace Server.Controllers
 
         public string[] Players { get; set; }
 
-        public string[] MapPositionNames { get; set; }
+        public MapPosition[] MapPositions { get; set; }
 
         public BanDto[] Bans { get; set; }
 

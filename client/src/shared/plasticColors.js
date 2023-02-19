@@ -17,6 +17,10 @@ export const colors = {
   pink: '#ff33cc',
 }
 
+export const colorNames = Object.fromEntries(
+  Object.entries(colors).map(([name, color]) => [color, name]),
+)
+
 export const PlasticColorsProvider = ({
   plasticColors,
   hide,

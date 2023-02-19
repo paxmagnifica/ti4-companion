@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 
 import { Trans, useTranslation } from '../../i18n'
+import { ColorBox } from '../../shared/ColorBox'
 import PlayerFlag from '../PlayerFlag'
 
 import { MapPreview } from './MapPreview'
@@ -71,7 +72,10 @@ export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
                 />
               </TableCell>
               {withTablePositions && (
-                <TableCell>{pick.tablePosition}</TableCell>
+                <TableCell>
+                  {pick.tablePosition.name}
+                  <ColorBox color={pick.tablePosition.color} inline />
+                </TableCell>
               )}
             </TableRow>
           ))}

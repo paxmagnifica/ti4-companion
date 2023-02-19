@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { Dialog } from '@material-ui/core'
 
-import { getMapPositionName } from '../../shared'
+import { getMapPositionName, getMapPositionColor } from '../../shared'
 import { DraftSummaryTable } from '../components'
 import { useSessionContext } from '../useSessionContext'
 
@@ -14,12 +14,18 @@ export function DraftSummaryDialog({ open, set }) {
     () =>
       session.players.map((player) => ({
         ...player,
-        tablePosition: getMapPositionName({
-          draft: session.draft,
-          position: player.atTable,
-        }),
+        tablePosition: {
+          name: getMapPositionName({
+            mapPositions: session.mapPositions,
+            position: player.atTable,
+          }),
+          color: getMapPositionColor({
+            mapPositions: session.mapPositions,
+            position: player.atTable,
+          }),
+        },
       })),
-    [session.players, session.draft],
+    [session.players, session.mapPositions],
   )
 
   return (

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Server.Domain;
+using Server.Domain.Exceptions;
 using Server.Persistence;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,7 +50,12 @@ namespace Server.Infra
         public async Task SaveSessionToListAsync(string sessionListId, Session newSession)
         {
             var sessionList = await this.sessionContext.SessionLists.FindAsync(sessionListId);
-            newSession.SessionLists = new List<SessionList>() { sessionList };
+            if (sessionList == null)
+            {
+                throw new NotFoundException("SessionList");
+            }
+
+            newSession.SessionLists.Add(sessionList);
             this.sessionContext.Sessions.Add(newSession);
         }
 

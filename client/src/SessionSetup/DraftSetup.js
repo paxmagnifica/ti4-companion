@@ -15,6 +15,7 @@ import {
 
 import { Trans } from '../i18n'
 import { SESSION_VIEW_ROUTES } from '../shared/constants'
+import { MapPositions } from '../shared/MapPositions'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
 import { GameVersionPicker, useFactionsList } from '../GameComponents'
@@ -47,13 +48,13 @@ export function DraftSetup() {
     'Player 5',
     'Player 6',
   ])
-  const [mapPositionNames, setMapPositionNames] = useState([
-    'P1',
-    'P2',
-    'P3',
-    'P4',
-    'P5',
-    'P6',
+  const [mapPositions, setMapPositions] = useState([
+    { name: 'P1', color: null },
+    { name: 'P2', color: null },
+    { name: 'P3', color: null },
+    { name: 'P4', color: null },
+    { name: 'P5', color: null },
+    { name: 'P6', color: null },
   ])
 
   const [bans, setBans] = useState(true)
@@ -90,7 +91,7 @@ export function DraftSetup() {
         options: {
           initialPool: factionsList,
           players,
-          mapPositionNames,
+          mapPositions,
           bans,
           banRounds,
           bansPerRound,
@@ -106,7 +107,7 @@ export function DraftSetup() {
       )
     },
     [
-      mapPositionNames,
+      mapPositions,
       factionsList,
       players,
       sessionService,
@@ -138,8 +139,20 @@ export function DraftSetup() {
 
       setPlayerCount(newValue)
       setPlayers(newPlayers)
+
+      const newMapPositions =
+        diff < 0
+          ? mapPositions.slice(0, diff)
+          : [...Array(newValue).keys()].map(
+              (playerIndex) =>
+                mapPositions[playerIndex] || {
+                  name: `P${playerIndex + 1}`,
+                  color: null,
+                },
+            )
+      setMapPositions(newMapPositions)
     },
-    [playerCount, players],
+    [playerCount, players, mapPositions],
   )
   const handlePlayerChange = useCallback((playerIndex, event) => {
     const { value } = event.currentTarget
@@ -148,16 +161,6 @@ export function DraftSetup() {
       ...p.slice(0, playerIndex),
       value,
       ...p.slice(playerIndex + 1),
-    ])
-  }, [])
-
-  const handleMapPositionNameChange = useCallback((mapPositionIndex, event) => {
-    const { value } = event.currentTarget
-
-    setMapPositionNames((p) => [
-      ...p.slice(0, mapPositionIndex),
-      value,
-      ...p.slice(mapPositionIndex + 1),
     ])
   }, [])
 
@@ -206,16 +209,10 @@ export function DraftSetup() {
       </FormGroup>
       <Typography>Map positions</Typography>
       <FormGroup className={classes.row} row>
-        {[...Array(playerCount).keys()].map((indice) => (
-          <TextField
-            key={`mapPosition${indice}`}
-            color="secondary"
-            label={`Map position ${indice + 1}`}
-            onChange={(e) => handleMapPositionNameChange(indice, e)}
-            value={mapPositionNames[indice] || ''}
-            variant="filled"
-          />
-        ))}
+        <MapPositions
+          onChange={(newPositions) => setMapPositions(newPositions)}
+          value={mapPositions}
+        />
       </FormGroup>
       <FormGroup className={classes.row} row>
         <FormControlLabel

@@ -5,6 +5,12 @@ namespace Server.Domain
 {
     public class Session
     {
+        public Session()
+        {
+            this.Events = new List<GameEvent>();
+            this.SessionLists = new List<SessionList>();
+        }
+
         public Guid Id { get; set; }
 
         public bool Locked { get; set; }

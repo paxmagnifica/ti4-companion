@@ -11,7 +11,11 @@ import speakerBack from '../../../assets/speaker-back.png'
 import { useTranslation } from '../../../i18n'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { FactionImage } from '../../../shared/FactionImage'
-import { getMapPositionName } from '../../../shared'
+import {
+  ColorBox,
+  getMapPositionName,
+  getMapPositionColor,
+} from '../../../shared'
 import { MapPreview } from '../../components'
 import { EditPrompt } from '../../Edit'
 import { SessionNutshell } from '../SessionNutshell'
@@ -136,6 +140,7 @@ function TablePositionPick({
   disabled,
   pick,
   draft,
+  session,
   selectedPosition,
   handleSelectedPosition,
 }) {
@@ -173,8 +178,24 @@ function TablePositionPick({
                 onClick={() => handleSelectedPosition(tablePositionIndex)}
                 variant="contained"
               >
-                <Typography>
-                  {getMapPositionName({ draft, position: tablePositionIndex })}
+                <Typography
+                  style={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    gridColumnGap: '0.3em',
+                  }}
+                >
+                  {getMapPositionName({
+                    mapPositions: session.mapPositions,
+                    position: tablePositionIndex,
+                  })}
+                  <ColorBox
+                    color={getMapPositionColor({
+                      mapPositions: session.mapPositions,
+                      position: tablePositionIndex,
+                    })}
+                    disabled
+                  />
                 </Typography>
                 {picked && (
                   <Typography style={{ marginLeft: '0.3em' }} variant="caption">
@@ -500,7 +521,7 @@ export function Drafting({ editable, session, sessionService }) {
       </Box>
       {draft.phase === PHASE.speaker && <Typography>picks:</Typography>}
       {session.setup.options.tablePick && draft.phase === PHASE.speaker && (
-        <TablePositionPick disabled draft={draft} />
+        <TablePositionPick disabled draft={draft} session={session} />
       )}
       {draft.phase === PHASE.bans && (
         <DraftPool

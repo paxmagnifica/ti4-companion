@@ -37,7 +37,12 @@ import PlayerFlag from '../PlayerFlag'
 import useSmallViewport from '../../shared/useSmallViewport'
 import ScrollToBottom from '../../shared/ScrollToBottom'
 import Relic from '../../shared/Relic'
-import { PointsWithDelta } from '../../shared'
+import {
+  getMapPositionName,
+  getMapPositionColor,
+  PointsWithDelta,
+} from '../../shared'
+import { ColorBox } from '../../shared/ColorBox'
 import useInvalidateQueries from '../../useInvalidateQueries'
 import { DraftSummaryTable } from '../components'
 import { useTimelineEvents, queryKeys } from '../queries'
@@ -585,7 +590,7 @@ function Banned({ eventType, payload, happenedAt }) {
   )
 }
 
-function Picked({ eventType, payload, happenedAt }) {
+function Picked({ eventType, payload, happenedAt, mapPositions }) {
   const { t } = useTranslation()
 
   return (
@@ -625,7 +630,19 @@ function Picked({ eventType, payload, happenedAt }) {
         {payload.type === 'tablePosition' && (
           <Typography>
             <Trans i18nKey="sessionTimeline.tableSpotPicked" />:{' '}
-            <strong>P{payload.pick + 1}</strong>
+            <strong>
+              {getMapPositionName({
+                mapPositions,
+                position: payload.pick,
+              })}
+            </strong>
+            <ColorBox
+              color={getMapPositionColor({
+                mapPositions,
+                position: payload.pick,
+              })}
+              inline
+            />
           </Typography>
         )}
         {payload.type === 'speaker' && (
@@ -848,7 +865,7 @@ function EventOnATimeline({
     case 'Banned':
       return <Banned {...props} />
     case 'Picked':
-      return <Picked {...props} />
+      return <Picked {...props} mapPositions={session.mapPositions} />
     case 'SpeakerSelected':
       return <SpeakerSelected {...props} />
     case 'DraftSummary':
