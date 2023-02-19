@@ -19,6 +19,7 @@ namespace Server.Controllers
             this.Points = this.GetPoints(session.Events);
             this.Objectives = this.GetObjectives(session.Events);
             this.Map = this.GetMap(session.Events);
+            this.MapLink = this.GetMapLink(session.Events);
             this.CreatedAt = session.CreatedAt;
             this.Locked = session.Locked;
             this.Editable = !session.Locked;
@@ -73,6 +74,8 @@ namespace Server.Controllers
         public IEnumerable<PlayerDto> Players { get; internal set; }
 
         public string Map { get; internal set; }
+
+        public string MapLink { get; internal set; }
 
         public List<MapPosition> MapPositions { get; internal set; }
 
@@ -145,6 +148,18 @@ namespace Server.Controllers
 #endif
 
             return mapEvent.SerializedPayload;
+        }
+
+        private string GetMapLink(List<GameEvent> events)
+        {
+            var mapLinkEvent = (events ?? new List<GameEvent>()).OrderByDescending(e => e.HappenedAt).LastOrDefault(e => e.EventType == nameof(MapLinkUpdated));
+
+            if (mapLinkEvent == null)
+            {
+                return string.Empty;
+            }
+
+            return mapLinkEvent.SerializedPayload.Trim('"');
         }
 
         private List<ScorableObjectiveDto> GetObjectives(List<GameEvent> events)

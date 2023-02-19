@@ -49,6 +49,11 @@ const factory = ({ fetch }) => {
         body: formData,
       }).then(handleErrors)
     },
+    setMapLink: (mapLink, sessionId) =>
+      fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/mapLink`, {
+        method: 'POST',
+        body: JSON.stringify({ mapLink }),
+      }).then(handleErrors),
 
     getTimeline: async (sessionId) =>
       (
