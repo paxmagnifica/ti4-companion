@@ -3,7 +3,7 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
-## 2023-02-06
+## 2023-02-19
 - [feat] map positions names and colors can now be set on draft setup and updated in "Details" in a session. map position name and color will show wherever applicable. for more info see [the PR](https://github.com/paxmagnifica/ti4-companion/pull/317)
 
 ## 2023-01-14
