@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   Button,
   Chip,
@@ -125,19 +125,17 @@ export function SessionsList({ sessions, listId, onDeleteSession }) {
                     : ''
                 }`}
               />
-              {window.showDelete && (
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    onDeleteSession({
-                      id: session.id,
-                      name: session.displayName,
-                    })
-                  }}
-                >
-                  {t('sessionList.delete')}
-                </Button>
-              )}
+              <Button
+                color="secondary"
+                onClick={() => {
+                  onDeleteSession({
+                    id: session.id,
+                    name: session.displayName,
+                  })
+                }}
+              >
+                {t('sessionList.delete')}
+              </Button>
             </ListItem>
           )
         })}
