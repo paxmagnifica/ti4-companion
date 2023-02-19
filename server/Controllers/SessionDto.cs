@@ -50,7 +50,7 @@ namespace Server.Controllers
         {
             get
             {
-                return this.Points.Any(point => point.Points == this.VpCount);
+                return this.Points.Any(point => point.Points >= this.VpCount);
             }
         }
 

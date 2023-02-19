@@ -3,11 +3,10 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
-## 2023-02-??
+## 2023-02-19
 - [fix] not showing "map positions" header in Details section for sessions that were not drafted
 - [feat] changed player plastic color picker to use the same picker as map position colors
-
-## 2023-02-19
+- [fix] correctly handling games where player exceeds VP target - show their points and correctly treat session as finished
 - [feat] map positions names and colors can now be set on draft setup and updated in "Details" in a session. map position name and color will show wherever applicable. for more info see [the PR](https://github.com/paxmagnifica/ti4-companion/pull/317)
 
 ## 2023-01-14

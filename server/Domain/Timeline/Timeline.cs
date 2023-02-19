@@ -356,7 +356,7 @@ namespace Server.Domain
                 targetVPCount = targetVPPayload.VpCount;
             }
 
-            var firstToScoreTargetVPCount = this.orderedEvents.FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && e.SerializedPayload.Contains($"\"points\":{targetVPCount}"));
+            var firstToScoreTargetVPCount = this.orderedEvents.FirstOrDefault(e => e.EventType == nameof(VictoryPointsUpdated) && VictoryPointsUpdated.GetPayload(e.SerializedPayload).Points >= targetVPCount);
 
             if (firstToScoreTargetVPCount == null)
             {
