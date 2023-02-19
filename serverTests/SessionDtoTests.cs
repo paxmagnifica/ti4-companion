@@ -168,7 +168,7 @@ namespace ServerTests
                     EventType = nameof(MetadataUpdated),
                     SerializedPayload = JsonConvert.SerializeObject(new MetadataUpdatedPayload
                     {
-                        VpCount = 12
+                        VpCount = 12,
                     }),
                 },
                 new GameEvent
