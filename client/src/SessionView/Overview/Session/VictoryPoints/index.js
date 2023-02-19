@@ -78,6 +78,17 @@ const useStyles = makeStyles({
   fullWidth: {
     width: '100%',
   },
+  defaultPointsContainer: {
+    minWidth: 50,
+    position: 'relative',
+    width: ({ inputWidth }) => `${inputWidth}%`,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    fontSize: '2em',
+  },
   img: {
     minWidth: 50,
     position: 'relative',
@@ -109,9 +120,10 @@ const useStyles = makeStyles({
 function VictoryPoints({ editable, target, onChange, points }) {
   const smallViewport = useSmallViewport()
   const { fullscreen } = useFullscreen()
-  const inputWidth = 100 / (target + 1)
+  const pointsToShow = Math.max(target, ...points.map((p) => p.points))
+  const inputWidth = 100 / (pointsToShow + 1)
   const classes = useStyles({ inputWidth, fullscreen })
-  const vpImages = target === 10 ? vp10_images : vp14_images
+  const vpImages = pointsToShow <= 10 ? vp10_images : vp14_images
 
   return (
     <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
@@ -122,17 +134,23 @@ function VictoryPoints({ editable, target, onChange, points }) {
         container
         justifyContent="center"
       >
-        {[...Array(target + 1).keys()].map((numberOfPoints) => {
+        {[...Array(pointsToShow + 1).keys()].map((numberOfPoints) => {
           const factionsWithThisManyPoints = points.filter(
             ({ points: factionPoints }) => factionPoints === numberOfPoints,
           )
 
           return (
             <Grid key={numberOfPoints} className={classes.img} item>
-              <img
-                alt={`${numberOfPoints} victory points background`}
-                src={vpImages[numberOfPoints]}
-              />
+              {vpImages[numberOfPoints] ? (
+                <img
+                  alt={`${numberOfPoints} victory points background`}
+                  src={vpImages[numberOfPoints]}
+                />
+              ) : (
+                <div className={classes.defaultPointsContainer}>
+                  <div>{numberOfPoints}</div>
+                </div>
+              )}
               <Grid
                 alignItems="center"
                 className={classes.dropContainerWrapper}
@@ -158,12 +176,12 @@ function VictoryPoints({ editable, target, onChange, points }) {
                       updatePoints={
                         editable
                           ? (factionPoints) => {
-                              if (factionPoints === numberOfPoints) {
-                                return
-                              }
-
-                              onChange(faction, factionPoints)
+                            if (factionPoints === numberOfPoints) {
+                              return
                             }
+
+                            onChange(faction, factionPoints)
+                          }
                           : undefined
                       }
                     />
