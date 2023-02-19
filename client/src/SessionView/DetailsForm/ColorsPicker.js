@@ -1,16 +1,11 @@
-import {
-  Typography,
-  Select,
-  MenuItem,
-  FormControl,
-  Grid,
-  InputLabel,
-} from '@material-ui/core'
+import { Typography, Grid, TextField } from '@material-ui/core'
 
-import { Trans } from '../../i18n'
-import { colors as plasticColors } from '../../shared/plasticColors'
+import { useTranslation, Trans } from '../../i18n'
+import { ColorPicker } from '../../shared/ColorPicker'
 
 export function ColorsPicker({ colors, players, onChange, disabled }) {
+  const { t } = useTranslation()
+
   return (
     <>
       <Grid item xs={12}>
@@ -18,22 +13,20 @@ export function ColorsPicker({ colors, players, onChange, disabled }) {
           <Trans i18nKey="sessionDetails.colorsPicker.sectionTitle" />
         </Typography>
       </Grid>
-      {players.map(({ faction: factionKey, playerName }) => (
-        <Grid key={`color-selector-${factionKey}`} item sm={3} xs={6}>
-          <FormControl disabled={disabled} fullWidth>
-            <InputLabel
-              id={`color-${factionKey}`}
-              style={{ color: plasticColors[colors[factionKey]] }}
-            >
-              <Trans i18nKey={`factions.${factionKey}.name`} />
-              {playerName && ` (${playerName})`}
-            </InputLabel>
-            <Select
-              id={`color-${factionKey}`}
-              labelId={`color-${factionKey}`}
-              onChange={(event) => {
-                const { value } = event.target
-
+      <Grid item style={{ display: 'flex', gridColumnGap: '1em' }} xs={12}>
+        {players.map(({ faction: factionKey, playerName }) => (
+          <div key={factionKey} style={{ display: 'flex' }}>
+            <TextField
+              color="secondary"
+              disabled
+              label={playerName}
+              value={t(`factions.${factionKey}.name`)}
+              variant="filled"
+            />
+            <ColorPicker
+              color={colors[factionKey] || null}
+              disabled={disabled}
+              onChange={(value) => {
                 onChange((oldColors) => {
                   const factionWithThisColor = Object.entries(oldColors).find(
                     ([, colorName]) => colorName === value,
@@ -48,18 +41,11 @@ export function ColorsPicker({ colors, players, onChange, disabled }) {
                   }
                 })
               }}
-              style={{ color: plasticColors[colors[factionKey]] }}
-              value={colors[factionKey] || ''}
-            >
-              {Object.entries(plasticColors).map(([colorName, color]) => (
-                <MenuItem key={colorName} style={{ color }} value={colorName}>
-                  <Trans i18nKey={`general.labels.colors.${colorName}`} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      ))}
+              style={{ marginLeft: '0.3em' }}
+            />
+          </div>
+        ))}
+      </Grid>
     </>
   )
 }
