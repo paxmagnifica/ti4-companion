@@ -31,7 +31,7 @@ export function ColorBox({
 
   return (
     <div
-      onClick={onClick}
+      onClick={!disabled ? onClick : null}
       style={{
         ...componentStyle,
         ...style,

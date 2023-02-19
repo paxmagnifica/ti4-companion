@@ -6,7 +6,13 @@ import { colors as plasticColors, colorNames } from './plasticColors'
 
 import { ColorBox } from './ColorBox'
 
-export function ColorPicker({ color, onChange, size = '2em', style }) {
+export function ColorPicker({
+  disabled,
+  color,
+  onChange,
+  size = '2em',
+  style,
+}) {
   const displayedColor = color ?? 'rgba(255, 255, 255, 0.2)'
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -26,27 +32,30 @@ export function ColorPicker({ color, onChange, size = '2em', style }) {
     <>
       <ColorBox
         color={displayedColor}
+        disabled={disabled}
         onClick={handleOpenPicker}
         size={size}
         style={style}
         title={color ? colorNames[color] : 'No color selected'}
       />
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        onClose={handlePickColor}
-        open={Boolean(anchorEl)}
-      >
-        {Object.entries(plasticColors).map(([name, plasticColor]) => (
-          <MenuItem
-            key={plasticColor}
-            onClick={() => handlePickColor(plasticColor)}
-          >
-            <ColorBox color={plasticColor} style={{ marginRight: '0.3em' }} />{' '}
-            {name}
-          </MenuItem>
-        ))}
-      </Menu>
+      {!disabled && (
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          onClose={handlePickColor}
+          open={Boolean(anchorEl)}
+        >
+          {Object.entries(plasticColors).map(([name, plasticColor]) => (
+            <MenuItem
+              key={plasticColor}
+              onClick={() => handlePickColor(plasticColor)}
+            >
+              <ColorBox color={plasticColor} style={{ marginRight: '0.3em' }} />{' '}
+              {name}
+            </MenuItem>
+          ))}
+        </Menu>
+      )}
     </>
   )
 }

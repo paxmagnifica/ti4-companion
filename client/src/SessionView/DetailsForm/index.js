@@ -251,7 +251,7 @@ function DetailsForm({ disabled, session }) {
                   players={session.players}
                 />
               )}
-              {!session.isDraft && (
+              {!session.isDraft && session.setup.setupType !== 'simple' && (
                 <>
                   <Grid item xs={12}>
                     <Typography>
