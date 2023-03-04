@@ -727,6 +727,7 @@ function DraftSummary({ payload, happenedAt, session }) {
           </Typography>
           <DraftSummaryTable
             map={session.map}
+            mapLink={session.mapLink}
             picks={payload.picks}
             speaker={payload.speaker}
             withTablePositions={Boolean(session.setup.options?.tablePick)}

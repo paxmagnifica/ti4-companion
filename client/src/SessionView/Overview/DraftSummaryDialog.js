@@ -32,6 +32,7 @@ export function DraftSummaryDialog({ open, set }) {
     <Dialog onClose={closeDialog} open={open}>
       <DraftSummaryTable
         map={session.map}
+        mapLink={session.mapLink}
         picks={picks}
         speaker={session.draft.speaker}
         withTablePositions={Boolean(session.setup?.options?.tablePick)}

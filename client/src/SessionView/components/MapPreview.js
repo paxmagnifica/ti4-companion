@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import clsx from 'clsx'
-import { Button, Drawer, Grid } from '@material-ui/core'
+import { Button, Drawer, Grid, Link } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Map as MapIcon } from '@material-ui/icons'
 
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export function MapPreview({ map, variant }) {
+export function MapPreview({ map, mapLink, variant }) {
   const { t } = useTranslation()
   const small = useSmallViewport()
   const classes = useStyles()
@@ -31,17 +31,32 @@ export function MapPreview({ map, variant }) {
     [],
   )
 
+  const onlyMapLink = mapLink && !map
+
   return (
     <>
-      <Button
-        disabled={!map}
-        onClick={toggleMapDrawer}
-        startIcon={<MapIcon />}
-        variant={variant}
-      >
-        {map && <Trans i18nKey="sessionTimeline.draftSummary.toggleGalaxy" />}
-        {!map && <Trans i18nKey="sessionMap.none" />}
-      </Button>
+      {onlyMapLink && (
+        <Button
+          href={mapLink}
+          rel="nofollow"
+          startIcon={<MapIcon />}
+          target="about:blank"
+          variant={variant}
+        >
+          <Trans i18nKey="sessionTimeline.draftSummary.toggleGalaxy" />
+        </Button>
+      )}
+      {!onlyMapLink && (
+        <Button
+          disabled={!map}
+          onClick={toggleMapDrawer}
+          startIcon={<MapIcon />}
+          variant={variant}
+        >
+          {map && <Trans i18nKey="sessionTimeline.draftSummary.toggleGalaxy" />}
+          {!map && <Trans i18nKey="sessionMap.none" />}
+        </Button>
+      )}
       {map && (
         <Drawer anchor="left" onClose={toggleMapDrawer} open={mapDrawerOpen}>
           <Grid
@@ -50,7 +65,18 @@ export function MapPreview({ map, variant }) {
             container
             direction="column"
             justifyContent="center"
+            style={{ gridRowGap: '2em' }}
           >
+            <Grid item>
+              <Link
+                href={mapLink}
+                rel="nofollow"
+                style={{ color: 'white', lineBreak: 'anywhere' }}
+                target="_blank"
+              >
+                {mapLink}
+              </Link>
+            </Grid>
             <Grid item>
               <img
                 alt={t('sessionTimeline.draftSummary.galaxy')}
