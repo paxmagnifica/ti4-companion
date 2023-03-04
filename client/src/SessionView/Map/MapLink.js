@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Button, Grid, TextField, Link } from '@material-ui/core'
 
-import { Trans, useTranslation } from '../../i18n'
+import { Trans } from '../../i18n'
 import { useDomainErrors } from '../../shared/errorHandling'
 import useInvalidateQueries from '../../useInvalidateQueries'
 
@@ -52,7 +52,7 @@ export function MapLink({
               onClick={() => setEditing(true)}
               variant="contained"
             >
-              Edit
+              <Trans i18nKey="general.edit" />
             </Button>
           </Grid>
         )}
@@ -84,7 +84,7 @@ export function MapLink({
           onClick={saveMapLink}
           variant="contained"
         >
-          Save link
+          <Trans i18nKey="general.labels.save" />
         </Button>
       </Grid>
     </>
