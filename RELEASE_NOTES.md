@@ -3,6 +3,9 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
+## 2023-03-04
+- [feat] allow adding link to generated map (as well as a picture)
+
 ## 2023-02-19
 - [fix] not showing "map positions" header in Details section for sessions that were not drafted
 - [feat] changed player plastic color picker to use the same picker as map position colors
