@@ -523,6 +523,42 @@ function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
   )
 }
 
+function MapLinkUpdated({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <MapIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
+        <Link
+          href={payload}
+          rel="nofollow"
+          style={{ color: 'white', lineBreak: 'anywhere' }}
+          target="_blank"
+        >
+          {payload}
+        </Link>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
 function DebugEvent({ eventType, payload, happenedAt }) {
   if (!config.isDevelopment) {
     return null
@@ -864,6 +900,8 @@ function EventOnATimeline({
       return <ObjectiveScored {...props} />
     case 'MapAdded':
       return <ImageFromPayload Icon={<MapIcon />} {...props} />
+    case 'MapLinkUpdated':
+      return <MapLinkUpdated {...props} />
     case 'TimelineUserEvent':
       return <TimelineUserEvent {...props} />
     case 'Banned':

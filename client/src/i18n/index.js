@@ -275,6 +275,7 @@ export const factory = (options = { debug: true }) =>
             sessionTimeline: {
               events: {
                 GameStarted: 'Game created',
+                MapLinkUpdated: 'Map link updated',
                 VpCountChanged: 'VP count changed',
                 MapAdded: 'Galaxy added',
                 ObjectiveScored: 'Objective scored',
