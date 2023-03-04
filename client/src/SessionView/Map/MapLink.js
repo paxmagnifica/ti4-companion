@@ -18,6 +18,12 @@ export function MapLink({
 
   const saveMapLink = useCallback(async () => {
     try {
+      if (link === initialLink) {
+        setEditing(false)
+
+        return
+      }
+
       const result = await sessionService.pushEvent(sessionId, {
         type: 'MapLinkUpdated',
         payload: link,
@@ -30,7 +36,14 @@ export function MapLink({
     } catch (e) {
       setError(e)
     }
-  }, [link, sessionId, sessionService, setError, invalidateQueries])
+  }, [
+    initialLink,
+    link,
+    sessionId,
+    sessionService,
+    setError,
+    invalidateQueries,
+  ])
 
   if (initialLink && !editing) {
     return (
