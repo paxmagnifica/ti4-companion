@@ -27,6 +27,7 @@ import {
   Block as BannedIcon,
   PanTool as PickedIcon,
   WhereToVote as SessionSummaryIcon,
+  BugReport as DebugIcon,
 } from '@material-ui/icons'
 
 import { Trans, useTranslation } from '../../i18n'
@@ -535,7 +536,9 @@ function DebugEvent({ eventType, payload, happenedAt }) {
         </Typography>
       </Ti4TimelineOppositeContent>
       <TimelineSeparator>
-        <Ti4TimelineDot title={eventType} />
+        <Ti4TimelineDot title={eventType}>
+          <DebugIcon />
+        </Ti4TimelineDot>
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
