@@ -143,6 +143,7 @@ export const factory = (options = { debug: true }) =>
               title: 'TI4 Companion',
               comingSoon: 'coming soon',
               from: 'from',
+              edit: 'Edit',
               labels: {
                 tg: 'trade goods',
                 player: 'player',
@@ -274,6 +275,7 @@ export const factory = (options = { debug: true }) =>
             sessionTimeline: {
               events: {
                 GameStarted: 'Game created',
+                MapLinkUpdated: 'Map link updated',
                 VpCountChanged: 'VP count changed',
                 MapAdded: 'Galaxy added',
                 ObjectiveScored: 'Objective scored',
@@ -354,7 +356,6 @@ export const factory = (options = { debug: true }) =>
               done: 'Finished',
               inProgress: 'In progress',
               locked: 'Locked for edit',
-              edit: 'Edit',
               delete: 'Delete',
               secondaryTitle: '(factions: {{factionList}})',
               cta: {
@@ -448,6 +449,7 @@ export const factory = (options = { debug: true }) =>
               switchLanguage: 'Zmień język',
               home: 'Home',
               title: 'TI4 Companion',
+              edit: 'Edytuj',
               labels: {
                 add: 'dodaj',
                 cancel: 'anuluj',

@@ -16,10 +16,16 @@ import PlayerFlag from '../PlayerFlag'
 
 import { MapPreview } from './MapPreview'
 
-export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
+export function DraftSummaryTable({
+  withTablePositions,
+  mapLink,
+  map,
+  picks,
+  speaker,
+}) {
   const { t } = useTranslation()
 
-  const showMap = withTablePositions && map
+  const showMap = withTablePositions && (map || mapLink)
   const sortedPicks = useMemo(() => {
     if (withTablePositions) {
       const memoized = [...picks]
@@ -46,7 +52,7 @@ export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
             {withTablePositions && (
               <TableCell>
                 <Trans i18nKey="general.labels.tablePosition" />
-                {showMap && <MapPreview map={map} />}
+                {showMap && <MapPreview map={map} mapLink={mapLink} />}
               </TableCell>
             )}
           </TableRow>
@@ -86,6 +92,8 @@ export function DraftSummaryTable({ withTablePositions, map, picks, speaker }) {
 }
 
 DraftSummaryTable.propTypes = {
+  map: PropTypes.string,
+  mapLink: PropTypes.string,
   picks: PropTypes.arrayOf(
     PropTypes.shape({
       faction: PropTypes.string.isRequired,
@@ -94,4 +102,9 @@ DraftSummaryTable.propTypes = {
     }),
   ).isRequired,
   speaker: PropTypes.string.isRequired,
+}
+
+DraftSummaryTable.defaultProps = {
+  map: '',
+  mapLink: '',
 }

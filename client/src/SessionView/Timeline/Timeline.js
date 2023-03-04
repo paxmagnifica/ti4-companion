@@ -27,6 +27,7 @@ import {
   Block as BannedIcon,
   PanTool as PickedIcon,
   WhereToVote as SessionSummaryIcon,
+  BugReport as DebugIcon,
 } from '@material-ui/icons'
 
 import { Trans, useTranslation } from '../../i18n'
@@ -522,6 +523,42 @@ function ImageFromPayload({ eventType, Icon, payload, happenedAt }) {
   )
 }
 
+function MapLinkUpdated({ eventType, payload, happenedAt }) {
+  const { t } = useTranslation()
+
+  return (
+    <Ti4TimelineItem>
+      <Ti4TimelineOppositeContent>
+        <Typography color="textSecondary">
+          {new Date(happenedAt).toLocaleString()}
+        </Typography>
+      </Ti4TimelineOppositeContent>
+      <TimelineSeparator>
+        <Ti4TimelineDot
+          color="primary"
+          title={t(`sessionTimeline.events.${eventType}`)}
+        >
+          <MapIcon />
+        </Ti4TimelineDot>
+        <TimelineConnector />
+      </TimelineSeparator>
+      <Ti4TimelineContent>
+        <Typography variant="h5">
+          <Trans i18nKey={`sessionTimeline.events.${eventType}`} />
+        </Typography>
+        <Link
+          href={payload}
+          rel="nofollow"
+          style={{ color: 'white', lineBreak: 'anywhere' }}
+          target="_blank"
+        >
+          {payload}
+        </Link>
+      </Ti4TimelineContent>
+    </Ti4TimelineItem>
+  )
+}
+
 function DebugEvent({ eventType, payload, happenedAt }) {
   if (!config.isDevelopment) {
     return null
@@ -535,7 +572,9 @@ function DebugEvent({ eventType, payload, happenedAt }) {
         </Typography>
       </Ti4TimelineOppositeContent>
       <TimelineSeparator>
-        <Ti4TimelineDot title={eventType} />
+        <Ti4TimelineDot title={eventType}>
+          <DebugIcon />
+        </Ti4TimelineDot>
         <TimelineConnector />
       </TimelineSeparator>
       <Ti4TimelineContent>
@@ -727,6 +766,7 @@ function DraftSummary({ payload, happenedAt, session }) {
           </Typography>
           <DraftSummaryTable
             map={session.map}
+            mapLink={session.mapLink}
             picks={payload.picks}
             speaker={payload.speaker}
             withTablePositions={Boolean(session.setup.options?.tablePick)}
@@ -860,6 +900,8 @@ function EventOnATimeline({
       return <ObjectiveScored {...props} />
     case 'MapAdded':
       return <ImageFromPayload Icon={<MapIcon />} {...props} />
+    case 'MapLinkUpdated':
+      return <MapLinkUpdated {...props} />
     case 'TimelineUserEvent':
       return <TimelineUserEvent {...props} />
     case 'Banned':
