@@ -1,10 +1,5 @@
 import clsx from 'clsx'
-import {
-  StepConnector,
-  Stepper,
-  Step,
-  StepLabel,
-} from '@material-ui/core'
+import { StepConnector, Stepper, Step, StepLabel } from '@material-ui/core'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 
 const ColorlibConnector = withStyles({
@@ -73,6 +68,7 @@ function ColorlibStepIcon(props) {
 const useStepperStyles = makeStyles((_theme) => ({
   root: {
     backgroundColor: 'transparent',
+    padding: 0,
   },
 }))
 

@@ -72,14 +72,7 @@ export function KatowiceDraft() {
         { secret: session.secret },
       )
     },
-    [
-      mapPositions,
-      factionsList,
-      players,
-      sessionService,
-      history,
-      gameVersion,
-    ],
+    [mapPositions, factionsList, players, sessionService, history, gameVersion],
   )
   const [passwordProtectionOpen, setPasswordProtectionOpen] = useState(false)
   const openPasswordProtection = useCallback(
