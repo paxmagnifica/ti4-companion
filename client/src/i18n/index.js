@@ -198,6 +198,7 @@ export const factory = (options = { debug: true }) =>
               },
             },
             drafting: {
+              startCta: 'Start drafting',
               speakerOrder: {
                 bans: {
                   title: 'Ban order',

@@ -23,6 +23,7 @@ import { SupportTheCreator } from './Support'
 import { DomainErrorProvider } from './shared/errorHandling'
 import homeIcon from './assets/icon.jpg'
 import { SessionSetup } from './SessionSetup'
+import { KatowiceDraft } from './SessionSetup/KatowiceDraft'
 import { SessionsListContainer } from './SessionsList'
 import { CallsToAction } from './CallsToAction'
 import SessionView from './SessionView'
@@ -140,6 +141,10 @@ function App() {
                   <Switch>
                     <Route path="/lets-fight">
                       <LetsFight />
+                    </Route>
+                    <Route path="/new/draft_katowice">
+                      <KnowledgeBase />
+                      <KatowiceDraft />
                     </Route>
                     <Route path="/new">
                       <KnowledgeBase />
