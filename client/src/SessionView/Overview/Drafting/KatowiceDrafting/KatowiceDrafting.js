@@ -1,15 +1,15 @@
 import {
   Gavel as NominationIcon,
-  Block as BanIcon,
   PanTool as PickIcon,
   AddShoppingCart as DraftingIcon,
 } from '@material-ui/icons'
-import { useState } from 'react'
+import { Box } from '@material-ui/core'
 import { MapPreview } from '../../../components'
 import { FACTION } from '../../../../GameComponents/gameInfo/factions'
 import { PhaseStepper } from '../components/PhaseStepper'
 import { useDraftQuery } from '../queries'
 import { PickBan } from './PickBan'
+import { Nominating } from './Nominating'
 
 export function KatowiceDrafting({ editable, session, sessionService }) {
   const {
@@ -19,6 +19,9 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
     sessionId: session.id,
     sessionService,
   })
+
+  // const { phase } = (draft || {})
+  const phase = 'nominations'
 
   const phases = [
     {
@@ -38,25 +41,6 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
     },
   ]
 
-  const [pickBans, setPickBans] = useState([
-    { player: 'Player 3', action: 'ban', choice: FACTION.The_Titans_of_Ul },
-    { player: 'Player 1', action: 'pick', choice: FACTION.The_Clan_of_Saar },
-    {
-      player: 'Player 5',
-      action: 'ban',
-      choice: FACTION.The_Universities_of_Jol__Nar,
-    },
-    { player: 'Player 4', action: 'pick', choice: null },
-    { player: 'Player 6', action: 'ban', choice: null },
-    { player: 'Player 2', action: 'pick', choice: null },
-    { player: 'Player 2', action: 'ban', choice: null },
-    { player: 'Player 6', action: 'pick', choice: null },
-    { player: 'Player 4', action: 'ban', choice: null },
-    { player: 'Player 5', action: 'pick', choice: null },
-    { player: 'Player 1', action: 'ban', choice: null },
-    { player: 'Player 3', action: 'pick', choice: null },
-  ])
-
   return (
     <div
       style={{
@@ -66,9 +50,13 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
         alignItems: 'center',
       }}
     >
-      <PhaseStepper currentPhase="pick_ban" phases={phases} />
+      <Box style={{ width: '100%' }}>
+        <PhaseStepper currentPhase={phase} phases={phases} />
+      </Box>
       <MapPreview map={session.map} />
-      {draftReady && <PickBan {...draft} pickBans={pickBans} />}
+      {draftReady && phase === 'pick_ban' && <PickBan {...draft} />}
+      {draftReady && phase === 'nominations' && <Nominating {...draft} />}
+      ---
       <pre>{JSON.stringify(draft, null, 2)}</pre>
       ---
       <pre>{JSON.stringify(session, null, 2)}</pre>
