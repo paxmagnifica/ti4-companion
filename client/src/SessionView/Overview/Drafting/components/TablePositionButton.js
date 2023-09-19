@@ -16,16 +16,8 @@ export function TablePositionButton({
       picked={picked}
       selected={selected}
     >
-      <Typography
-        style={{
-          display: 'flex',
-          alignItems: 'baseline',
-          gridColumnGap: '0.3em',
-        }}
-      >
-        {map.name}
-        <ColorBox color={map.color} disabled />
-      </Typography>
+      <Typography>{map.name}</Typography>
+      <ColorBox color={map.color} disabled />
     </PickButton>
   )
 }

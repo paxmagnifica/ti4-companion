@@ -12,6 +12,7 @@ export const useStyles = makeStyles((theme) => ({
         duration: theme.transitions.duration.leavingScreen,
       },
     ),
+    display: 'flex',
     '&:not(.MuiButton-containedSecondary)': {
       backgroundColor: 'white',
     },
@@ -45,12 +46,22 @@ export function PickButton({ picked, selected, onClick, disabled, children }) {
         onClick={onClick}
         variant="contained"
       >
-        {children}
-        {picked?.playerName && (
-          <Typography style={{ marginLeft: '0.3em' }} variant="caption">
-            picked by {picked.playerName}
-          </Typography>
-        )}
+        <div
+          style={{
+            height: '42px',
+            width: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            gridColumnGap: '0.3em',
+          }}
+        >
+          {children}
+          {picked?.playerName && (
+            <Typography style={{ marginLeft: '0.3em' }} variant="caption">
+              picked by {picked.playerName}
+            </Typography>
+          )}
+        </div>
       </Button>
     </EditPrompt>
   )
