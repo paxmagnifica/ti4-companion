@@ -3,12 +3,12 @@ import { ColorBox } from '../../../../../shared'
 import { FactionImage } from '../../../../../shared/FactionImage'
 import { Initiative } from './Initiative'
 
-export function Choice({ action, choice, mapPositions }) {
+export function Choice({ action, choice, mapPositions, height }) {
   if (action === 'faction') {
     return (
       <FactionImage
         factionKey={choice}
-        style={{ width: 'auto', height: '100%' }}
+        style={{ width: 'auto', height: height || '100%' }}
       />
     )
   }

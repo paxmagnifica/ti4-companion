@@ -5,12 +5,14 @@ import { DraftPool } from '../DraftPool'
 import { TablePositionSelection } from './components/TablePositionSelection'
 import { InitiativeSelection } from './components/InitiativeSelection'
 import { Choice } from './components/Choice'
+import { ConfirmPickButton } from '../components/ConfirmPickButton'
 
 export function Draft({ pickBans, nominations, draft, mapPositions }) {
   const steps = draft.map(({ choice, action, ...rest }) => ({
     ...rest,
-    action,
-    choice: !choice ? null : <Choice action={action} choice={choice} mapPositions={mapPositions} />,
+    choice: !choice ? null : (
+      <Choice action={action} choice={choice} mapPositions={mapPositions} />
+    ),
   }))
   const currentPlayer = draft.find(({ choice }) => choice === null)
 
@@ -26,6 +28,17 @@ export function Draft({ pickBans, nominations, draft, mapPositions }) {
   return (
     <>
       <PlayerActionsStepper steps={steps} />
+      <ConfirmPickButton disabled={selection === null}>
+        confirm{' '}
+        {selection && (
+          <Choice
+            action={selection.action}
+            choice={selection.choice}
+            mapPositions={mapPositions}
+          height='40px'
+          />
+        )}
+      </ConfirmPickButton>
       <InitiativeSelection
         currentPlayer={currentPlayer}
         draft={draft}
@@ -42,12 +55,15 @@ export function Draft({ pickBans, nominations, draft, mapPositions }) {
       <Typography>Faction</Typography>
       <DraftPool
         bans={[]}
+        disabled={draft.some(
+          ({ action, player }) =>
+            action === 'faction' && player === currentPlayer.player,
+        )}
         initialPool={draftPool}
         max={1}
         onSelected={([faction]) =>
           setSelection(faction ? { action: 'faction', choice: faction } : null)
         }
-        disabled={draft.some(({ action, player }) => action === 'faction' && player === currentPlayer.player)}
         picks={draft
           .filter(({ action }) => action === 'faction')
           .map(({ choice, player }) => ({ pick: choice, playerName: player }))}
