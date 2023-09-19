@@ -189,6 +189,87 @@ namespace ServerTests.Katowice
             actual.Nominations.Should().BeEquivalentTo(expectedNominations);
         }
 
+        [Test]
+        public void ShouldLoadNominationsAndConfirmationsFromEvents()
+        {
+            // given
+            var session = new Session
+            {
+                Events = new List<GameEvent>
+                {
+                    new GameEvent
+                    {
+                        EventType = nameof(GameStarted),
+                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
+                        {
+                            SetupType = "katowice_draft",
+                            Options = new DraftOptions
+                            {
+                                InitialPool = GetInitialPool(),
+                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
+                            },
+                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
+                        }),
+                    },
+                }
+            };
+            session.Events.AddRange(GetAllPickBans().Item2);
+            session.Events.AddRange(new List<GameEvent>{
+                new GameEvent
+                {
+                    EventType = nameof(KTW.Nomination),
+                    SerializedPayload = JsonConvert.SerializeObject(new KTW.NominationPayload
+                    {
+                        PlayerIndex = 2,
+                        Action = "nominate",
+                        Faction = "The_Mahact_Gene__Sorcerers",
+                    }),
+                },
+                new GameEvent
+                {
+                    EventType = nameof(KTW.Nomination),
+                    SerializedPayload = JsonConvert.SerializeObject(new KTW.NominationPayload
+                    {
+                        PlayerIndex = 5,
+                        Action = "nominate",
+                        Faction = "The_Titans_of_Ul",
+                    }),
+                },
+                new GameEvent
+                {
+                    EventType = nameof(KTW.Nomination),
+                    SerializedPayload = JsonConvert.SerializeObject(new KTW.NominationPayload
+                    {
+                        PlayerIndex = 5,
+                        Action = "confirm",
+                        Faction = "The_Mahact_Gene__Sorcerers",
+                    }),
+                },
+            });
+
+            var expectedNominations = new List<KTW.NominationDto> {
+                new KTW.NominationDto{ Player = "Player 2", PlayerIndex = 2, Action = "nominate", Choice = "The_Mahact_Gene__Sorcerers" },
+                new KTW.NominationDto{ Player = "Player 5", PlayerIndex = 5, Action = "nominate", Choice = "The_Titans_of_Ul" },
+                new KTW.NominationDto{ Player = "Player 3", PlayerIndex = 3, Action = "confirm", Choice = "The_Mahact_Gene__Sorcerers" },
+                new KTW.NominationDto{ Player = "Player 1", PlayerIndex = 1, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 1", PlayerIndex = 1, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 3", PlayerIndex = 3, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 5", PlayerIndex = 5, Action = null, Choice = null },
+                new KTW.NominationDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
+            };
+
+            // when
+            var actual = KTW.Draft.GetDto(session);
+
+            // then
+            actual.Phase.Should().Be("nominations");
+            actual.Nominations.Should().BeEquivalentTo(expectedNominations);
+        }
+
         private Tuple<IEnumerable<KTW.PickBanDto>, IEnumerable<GameEvent>> GetAllPickBans()
         {
             IEnumerable<KTW.PickBanDto> resultingDto = new List<KTW.PickBanDto> {

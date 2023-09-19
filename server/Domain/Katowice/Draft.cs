@@ -60,14 +60,17 @@ namespace Server.Domain.Katowice
             {
                 builtDto.Phase = Constants.NominationsPhase;
 
-                var nominations = playerIndexesThereAndBackAgain.Select(playerIndex =>
+                var nominationEvents = session.Events.Where(ge => ge.EventType == nameof(Nomination));
+                var nominations = playerIndexesThereAndBackAgain.Select((playerIndex, nominationIndex) =>
                 {
+                    var choice = nominationEvents.ElementAtOrDefault(nominationIndex);
+                    var choicePayload = choice != null ? Nomination.GetPayload(choice) : null;
                     return new NominationDto
                     {
                         Player = gameStartedPayload.Options.Players[playerIndex],
                         PlayerIndex = playerIndex,
-                        Action = null,
-                        Choice = null,
+                        Action = choicePayload?.Action,
+                        Choice = choicePayload?.Faction,
                     };
                 });
 

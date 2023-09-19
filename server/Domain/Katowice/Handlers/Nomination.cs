@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace Server.Domain.Katowice
 {
-    public class PickBan : IHandler
+    public class Nomination : IHandler
     {
         private readonly IRepository repository;
 
-        public PickBan(IRepository repository)
+        public Nomination(IRepository repository)
         {
             this.repository = repository;
         }
@@ -24,8 +24,9 @@ namespace Server.Domain.Katowice
             // TODO checks:
             // check if action is the same as current player
             // check if playerindex is the same as current player
-            // check if not duplicated
-
+            // check if confirming without nomination
+            // check if not duplicated (nominating nominated/confirmed or confirming confirmed)
+ 
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);
@@ -33,14 +34,14 @@ namespace Server.Domain.Katowice
             await this.repository.SaveChangesAsync();
         }
 
-        internal static PickBanPayload GetPayload(GameEvent gameEvent)
+        internal static NominationPayload GetPayload(GameEvent gameEvent)
         {
             return GetPayload(gameEvent.SerializedPayload);
         }
 
-        internal static PickBanPayload GetPayload(string serializedPayload)
+        internal static NominationPayload GetPayload(string serializedPayload)
         {
-            return JsonConvert.DeserializeObject<PickBanPayload>(serializedPayload);
+            return JsonConvert.DeserializeObject<NominationPayload>(serializedPayload);
         }
     }
 }
