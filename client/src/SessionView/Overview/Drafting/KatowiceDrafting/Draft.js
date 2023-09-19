@@ -69,8 +69,6 @@ export function Draft({ pickBans, nominations, draft, mapPositions }) {
           .map(({ choice, player }) => ({ pick: choice, playerName: player }))}
         selected={selection?.action !== 'faction' ? [] : [selection.choice]}
       />
-      ---
-      <pre>{JSON.stringify(selection, null, 2)}</pre>
     </>
   )
 }
