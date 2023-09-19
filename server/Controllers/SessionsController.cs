@@ -54,7 +54,7 @@ namespace Server.Controllers
                     SessionId = sessionId,
                     HappenedAt = this.timeProvider.Now,
                     EventType = GameEvent.GameStarted,
-                    SerializedPayload = JsonConvert.SerializeObject(payload),
+                    SerializedPayload = JsonConvert.SerializeObject(payload.SetupType == Domain.Katowice.Constants.SetupType ? Domain.Katowice.Draft.GetPayloadWithRandomOrder(payload) : payload),
                 },
             };
 

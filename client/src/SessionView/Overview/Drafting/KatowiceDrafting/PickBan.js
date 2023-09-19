@@ -26,7 +26,7 @@ export function PickBan({ pickBans, initialPool, sessionService, sessionId }) {
 
   const [selected, setSelected] = useState([])
   const FACTIONS_TO_SELECT = 1
-  const { action } = pickBans.find(({ choice }) => choice === null)
+  const { action, playerIndex } = pickBans.find(({ choice }) => choice === null)
 
   const { setError } = useDomainErrors()
   const pickBanMutation = useCallback(async () => {
@@ -37,12 +37,13 @@ export function PickBan({ pickBans, initialPool, sessionService, sessionId }) {
         payload: {
           action,
           faction: selectedFaction,
+          playerIndex,
         },
       })
     } catch (e) {
       setError(e)
     }
-  }, [sessionId, setError, sessionService, selected, action])
+  }, [sessionId, setError, sessionService, selected, action, playerIndex])
 
   const { mutate: pickBan, isLoading } = useDraftMutation({
     sessionId,

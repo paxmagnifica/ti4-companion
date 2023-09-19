@@ -7,6 +7,7 @@ namespace Server.Domain
     {
         public Task Handle(GameEvent gameEvent)
         {
+            // this is handled in SessionsController.Post
             throw new System.NotImplementedException();
         }
 
