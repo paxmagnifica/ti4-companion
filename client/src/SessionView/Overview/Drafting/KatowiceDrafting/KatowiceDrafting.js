@@ -120,9 +120,9 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
       },
     ],
     draft: [
-      { player: 'Player 1', action: null, choice: null },
-      { player: 'Player 4', action: null, choice: null },
-      { player: 'Player 2', action: null, choice: null },
+      { player: 'Player 1', action: 'initiative', choice: 1 },
+      { player: 'Player 4', action: 'faction', choice: FACTION.The_Mahact_Gene__Sorcerers },
+      { player: 'Player 2', action: 'tablePosition', choice: 3 },
       { player: 'Player 5', action: null, choice: null },
       { player: 'Player 6', action: null, choice: null },
       { player: 'Player 3', action: null, choice: null },
