@@ -56,11 +56,11 @@ namespace Server.Domain.Katowice
 
             builtDto.PickBans = pickBanOrder.ToArray();
 
+            var nominationEvents = session.Events.Where(ge => ge.EventType == nameof(Nomination));
             if (playerIndexesThereAndBackAgain.Count() == pickBanEvents.Count())
             {
                 builtDto.Phase = Constants.NominationsPhase;
 
-                var nominationEvents = session.Events.Where(ge => ge.EventType == nameof(Nomination));
                 var nominations = playerIndexesThereAndBackAgain.Select((playerIndex, nominationIndex) =>
                 {
                     var choice = nominationEvents.ElementAtOrDefault(nominationIndex);
@@ -75,6 +75,29 @@ namespace Server.Domain.Katowice
                 });
 
                 builtDto.Nominations = nominations.ToArray();
+            }
+
+            if (playerIndexesThereAndBackAgain.Count() == nominationEvents.Count())
+            {
+                builtDto.Phase = Constants.DraftPhase;
+
+                var draftIndexes3Lines = new List<int>();
+                draftIndexes3Lines.AddRange(gameStartedPayload.RandomPlayerOrder);
+                draftIndexes3Lines.AddRange(gameStartedPayload.RandomPlayerOrder.Reverse());
+                draftIndexes3Lines.AddRange(gameStartedPayload.RandomPlayerOrder);
+
+                var draft = draftIndexes3Lines.Select(playerIndex =>
+                {
+                    return new ActualDraftDto
+                    {
+                        Player = gameStartedPayload.Options.Players[playerIndex],
+                        PlayerIndex = playerIndex,
+                        Action = null,
+                        Choice = null,
+                    };
+                });
+
+                builtDto.Draft = draft.ToArray();
             }
 
             return builtDto;

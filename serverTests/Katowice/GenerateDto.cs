@@ -270,6 +270,95 @@ namespace ServerTests.Katowice
             actual.Nominations.Should().BeEquivalentTo(expectedNominations);
         }
 
+        [Test]
+        public void ShouldBeInDraftPhaseIfAllNominationsDone()
+        {
+            // given
+            var session = new Session
+            {
+                Events = new List<GameEvent>
+                {
+                    new GameEvent
+                    {
+                        EventType = nameof(GameStarted),
+                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
+                        {
+                            SetupType = "katowice_draft",
+                            Options = new DraftOptions
+                            {
+                                InitialPool = GetInitialPool(),
+                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
+                            },
+                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
+                        }),
+                    },
+                }
+            };
+            session.Events.AddRange(GetAllPickBans().Item2);
+            session.Events.AddRange(GetAllNominations().Item2);
+
+            var expectedDraft = new List<KTW.ActualDraftDto> {
+                new KTW.ActualDraftDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 5", PlayerIndex = 5, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 3", PlayerIndex = 3, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 1", PlayerIndex = 1, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 1", PlayerIndex = 1, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 3", PlayerIndex = 3, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 5", PlayerIndex = 5, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 5", PlayerIndex = 5, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 3", PlayerIndex = 3, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 1", PlayerIndex = 1, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+            };
+
+            // when
+            var actual = KTW.Draft.GetDto(session);
+
+            // then
+            actual.Phase.Should().Be("draft");
+            actual.PickBans.Should().BeEquivalentTo(GetAllPickBans().Item1);
+            actual.Nominations.Should().BeEquivalentTo(GetAllNominations().Item1);
+            actual.Draft.Should().BeEquivalentTo(expectedDraft);
+        }
+
+        private Tuple<IEnumerable<KTW.NominationDto>, IEnumerable<GameEvent>> GetAllNominations()
+        {
+            IEnumerable<KTW.NominationDto> resultingDto = new List<KTW.NominationDto> {
+                new KTW.NominationDto{ Player = "Player 2", PlayerIndex = 2, Action = "nominate", Choice = "The_Federation_of_Sol" },
+                new KTW.NominationDto{ Player = "Player 5", PlayerIndex = 5, Action = "nominate", Choice = "The_Ghosts_of_Creuss" },
+                new KTW.NominationDto{ Player = "Player 3", PlayerIndex = 3, Action = "nominate", Choice = "The_Mentak_Coalition" },
+                new KTW.NominationDto{ Player = "Player 1", PlayerIndex = 1, Action = "nominate", Choice = "Sardakk_Norr" },
+                new KTW.NominationDto{ Player = "Player 0", PlayerIndex = 0, Action = "nominate", Choice = "The_Winnu" },
+                new KTW.NominationDto{ Player = "Player 4", PlayerIndex = 4, Action = "nominate", Choice = "The_Yssaril_Tribes" },
+                new KTW.NominationDto{ Player = "Player 4", PlayerIndex = 4, Action = "nominate", Choice = "The_Empyrean" },
+                new KTW.NominationDto{ Player = "Player 0", PlayerIndex = 0, Action = "nominate", Choice = "The_Mahact_Gene__Sorcerers" },
+                new KTW.NominationDto{ Player = "Player 1", PlayerIndex = 1, Action = "confirm", Choice = "The_Ghosts_of_Creuss" },
+                new KTW.NominationDto{ Player = "Player 3", PlayerIndex = 3, Action = "confirm", Choice = "The_Yssaril_Tribes" },
+                new KTW.NominationDto{ Player = "Player 5", PlayerIndex = 5, Action = "nominate", Choice = "The_Naaz__Rokha_Alliance" },
+                new KTW.NominationDto{ Player = "Player 2", PlayerIndex = 2, Action = "confirm", Choice = "The_Empyrean" },
+            };
+
+            var gameEvents = resultingDto.Select(dto => new GameEvent
+            {
+                EventType = nameof(KTW.Nomination),
+                SerializedPayload = JsonConvert.SerializeObject(new KTW.NominationPayload
+                {
+                    PlayerIndex = dto.PlayerIndex,
+                    Action = dto.Action,
+                    Faction = dto.Choice,
+                }),
+            });
+
+            return Tuple.Create(resultingDto, gameEvents);
+        }
+
         private Tuple<IEnumerable<KTW.PickBanDto>, IEnumerable<GameEvent>> GetAllPickBans()
         {
             IEnumerable<KTW.PickBanDto> resultingDto = new List<KTW.PickBanDto> {
