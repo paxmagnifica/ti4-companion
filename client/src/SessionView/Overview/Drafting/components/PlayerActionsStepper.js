@@ -26,6 +26,7 @@ export function PlayerActionsStepper({ steps }) {
   const firstStepRef = useRef(null)
   const scrollContainerRef = useRef(null)
   const activePlayer = steps.findIndex(({ choice }) => choice === null)
+  console.log({ activePlayer })
 
   useEffect(() => {
     if (!firstStepRef.current || !scrollContainerRef.current) {

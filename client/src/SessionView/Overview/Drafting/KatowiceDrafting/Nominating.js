@@ -1,8 +1,10 @@
 import { CircularProgress, IconButton, Typography } from '@material-ui/core'
 import { Forward as ForwardIcon } from '@material-ui/icons'
 import { useState } from 'react'
+import { FactionImage } from '../../../../shared/FactionImage'
 import { FactionNutshell } from '../../FactionNutshell'
 import { FactionButton } from '../components/FactionButton'
+import { PlayerActionsStepper } from '../components/PlayerActionsStepper'
 
 export function Nominating({ initialPool, pickBans, nominations }) {
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
@@ -26,7 +28,7 @@ export function Nominating({ initialPool, pickBans, nominations }) {
   const nominated = pool.filter((p) => p.nominated && !p.confirmed)
   const confirmed = pool.filter((p) => p.confirmed)
 
-  const [selected, setSelected] = useState('The_Winnu')
+  const [selected, setSelected] = useState(null)
   const loading = false
 
   const columnStyles = {
@@ -66,8 +68,19 @@ export function Nominating({ initialPool, pickBans, nominations }) {
     setSelected(null)
   }
 
+  const steps = nominations.map(({ choice, ...rest }) => ({
+    ...rest,
+    choice: !choice ? null : (
+      <FactionImage
+        factionKey={choice}
+        style={{ width: 'auto', height: '100%' }}
+      />
+    ),
+  }))
+
   return (
     <>
+      <PlayerActionsStepper steps={steps} />
       <div
         style={{
           width: '100%',

@@ -6,13 +6,13 @@ import { DraftPool } from '../DraftPool'
 
 export function PickBan({ pickBans, initialPool }) {
   const steps = pickBans.map(({ choice, ...rest }) => ({
+    ...rest,
     choice: choice ? (
       <FactionImage
         factionKey={choice}
         style={{ width: 'auto', height: '100%' }}
       />
     ) : null,
-    ...rest,
   }))
 
   const bans = pickBans
@@ -33,6 +33,7 @@ export function PickBan({ pickBans, initialPool }) {
         action={action}
         max={FACTIONS_TO_SELECT}
         selected={selected}
+        onClick={() => console.log(selected)}
       />
       <DraftPool
         bans={bans}
