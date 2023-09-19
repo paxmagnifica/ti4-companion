@@ -40,6 +40,7 @@ export function PickBan({ pickBans, initialPool, sessionService, sessionId }) {
           playerIndex,
         },
       })
+      setSelected([])
     } catch (e) {
       setError(e)
     }
