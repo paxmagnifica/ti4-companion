@@ -22,7 +22,7 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
   })
   const draft = {
     ...backendDraft,
-    phase: 'draft',
+    phase: 'pickBan',
     pickBans: [
       {
         player: 'Player 1',
@@ -58,7 +58,8 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
       {
         player: 'Player 1',
         action: 'pick',
-        choice: FACTION.The_Naaz__Rokha_Alliance,
+        // choice: FACTION.The_Naaz__Rokha_Alliance,
+        choice: null,
       },
     ],
     nominations: [
@@ -121,11 +122,19 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
     ],
     draft: [
       { player: 'Player 1', action: 'initiative', choice: 1 },
-      { player: 'Player 4', action: 'faction', choice: FACTION.The_Mahact_Gene__Sorcerers },
+      {
+        player: 'Player 4',
+        action: 'faction',
+        choice: FACTION.The_Mahact_Gene__Sorcerers,
+      },
       { player: 'Player 2', action: 'tablePosition', choice: 3 },
       { player: 'Player 5', action: 'tablePosition', choice: 2 },
       { player: 'Player 6', action: 'initiative', choice: 2 },
-      { player: 'Player 3', action: 'faction', choice: FACTION.The_Yin_Brotherhood },
+      {
+        player: 'Player 3',
+        action: 'faction',
+        choice: FACTION.The_Yin_Brotherhood,
+      },
       { player: 'Player 3', action: 'tablePosition', choice: 1 },
       { player: 'Player 6', action: null, choice: null },
       { player: 'Player 5', action: null, choice: null },
@@ -175,7 +184,13 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
         <PhaseStepper currentPhase={phase} phases={phases} />
       </Box>
       <MapPreview map={session.map} />
-      {draftReady && phase === 'pickBan' && <PickBan {...draft} />}
+      {draftReady && phase === 'pickBan' && (
+        <PickBan
+          {...draft}
+          sessionId={session.id}
+          sessionService={sessionService}
+        />
+      )}
       {draftReady && phase === 'nominations' && <Nominating {...draft} />}
       {draftReady && phase === 'draft' && (
         <Draft {...draft} mapPositions={session.mapPositions} />

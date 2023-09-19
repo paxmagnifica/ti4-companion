@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useDomainErrors } from '../../../../shared/errorHandling'
 import { FactionImage } from '../../../../shared/FactionImage'
 import { ActionOnFactionListButton } from '../components/ActionOnFactionListButton'
 import { PlayerActionsStepper } from '../components/PlayerActionsStepper'
 import { DraftPool } from '../DraftPool'
+import { useDraftMutation } from '../queries'
 
-export function PickBan({ pickBans, initialPool }) {
+export function PickBan({ pickBans, initialPool, sessionService, sessionId }) {
   const steps = pickBans.map(({ choice, ...rest }) => ({
     ...rest,
     choice: choice ? (
@@ -26,14 +28,36 @@ export function PickBan({ pickBans, initialPool }) {
   const FACTIONS_TO_SELECT = 1
   const { action } = pickBans.find(({ choice }) => choice === null)
 
+  const { setError } = useDomainErrors()
+  const pickBanMutation = useCallback(async () => {
+    try {
+      const [selectedFaction] = selected
+      await sessionService.pushEvent(sessionId, {
+        type: 'PickBan',
+        payload: {
+          action,
+          faction: selectedFaction,
+        },
+      })
+    } catch (e) {
+      setError(e)
+    }
+  }, [sessionId, setError, sessionService, selected, action])
+
+  const { mutate: pickBan, isLoading } = useDraftMutation({
+    sessionId,
+    mutation: pickBanMutation,
+  })
+
   return (
     <>
       <PlayerActionsStepper steps={steps} />
       <ActionOnFactionListButton
         action={action}
+        loading={isLoading}
         max={FACTIONS_TO_SELECT}
+        onClick={pickBan}
         selected={selected}
-        onClick={() => console.log(selected)}
       />
       <DraftPool
         bans={bans}
@@ -42,6 +66,7 @@ export function PickBan({ pickBans, initialPool }) {
         onSelected={setSelected}
         picks={picks}
         selected={selected}
+        disabled={isLoading}
       />
     </>
   )

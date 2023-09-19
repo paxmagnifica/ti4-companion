@@ -6,14 +6,19 @@ export function ActionOnFactionListButton({
   max,
   selected,
   disabled,
+  loading,
   onClick,
 }) {
-  const bansLeft = max - selected.length
+  const factionsLeft = max - selected.length
 
   return (
-    <ConfirmPickButton disabled={disabled || bansLeft !== 0} onClick={onClick}>
+    <ConfirmPickButton
+      disabled={disabled || factionsLeft !== 0}
+      loading={loading}
+      onClick={onClick}
+    >
       {action} <InlineFactionList factions={selected} />{' '}
-      {max !== 1 && bansLeft ? ` (left: ${bansLeft})` : ''}
+      {max !== 1 && factionsLeft ? ` (left: ${factionsLeft})` : ''}
     </ConfirmPickButton>
   )
 }
