@@ -1,4 +1,5 @@
 import { Typography } from '@material-ui/core'
+import { Map as MapIcon } from '@material-ui/icons'
 import { ColorBox } from '../../../../../shared'
 import { FactionImage } from '../../../../../shared/FactionImage'
 import { Initiative } from './Initiative'
@@ -24,10 +25,11 @@ export function Choice({ action, choice, mapPositions, height }) {
       <div
         style={{
           display: 'flex',
-          gridColumnGap: '0.2em',
+          gridColumnGap: '0.1em',
           alignItems: 'center',
         }}
       >
+        <MapIcon />
         <Typography>{map.name}</Typography>
         <ColorBox color={map.color} disabled />
       </div>

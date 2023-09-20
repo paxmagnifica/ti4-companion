@@ -1,4 +1,5 @@
 import { Typography } from '@material-ui/core'
+import { Map as MapIcon } from '@material-ui/icons'
 import { ColorBox } from '../../../../shared'
 import { PickButton } from './PickButton'
 
@@ -16,6 +17,7 @@ export function TablePositionButton({
       picked={picked}
       selected={selected}
     >
+      <MapIcon />
       <Typography>{map.name}</Typography>
       <ColorBox color={map.color} disabled />
     </PickButton>
