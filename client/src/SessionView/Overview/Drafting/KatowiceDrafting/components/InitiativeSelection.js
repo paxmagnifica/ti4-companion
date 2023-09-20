@@ -7,6 +7,7 @@ export function InitiativeSelection({
   selection,
   onSelected,
   currentPlayer,
+  disabled,
 }) {
   return (
     <>
@@ -22,6 +23,7 @@ export function InitiativeSelection({
             <Grid key={index} item lg={3} md={4} sm={6} xs={12}>
               <PickButton
                 disabled={
+                  disabled ||
                   draft.some(
                     ({ player, action }) =>
                       player === currentPlayer.player &&

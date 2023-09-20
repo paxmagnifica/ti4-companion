@@ -68,8 +68,30 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
         />
       )}
       {draftReady && phase === 'draft' && (
-        <Draft {...draft} mapPositions={session.mapPositions} />
+        <Draft
+          {...draftWithNumberChoices(draft)}
+          mapPositions={session.mapPositions}
+          sessionId={session.id}
+          sessionService={sessionService}
+        />
       )}
     </div>
   )
+}
+
+function draftWithNumberChoices(draftDto) {
+  const { draft, ...rest } = draftDto
+  const withNumberChoices = draft.map((d) =>
+    d.action === 'initiative' || d.action === 'tablePosition'
+      ? {
+          ...d,
+          choice: Number(d.choice),
+        }
+      : d,
+  )
+
+  return {
+    ...rest,
+    draft: withNumberChoices,
+  }
 }

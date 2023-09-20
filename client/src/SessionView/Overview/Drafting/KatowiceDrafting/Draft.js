@@ -1,16 +1,25 @@
 import { Typography } from '@material-ui/core'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { PlayerActionsStepper } from '../components/PlayerActionsStepper'
 import { DraftPool } from '../DraftPool'
 import { TablePositionSelection } from './components/TablePositionSelection'
 import { InitiativeSelection } from './components/InitiativeSelection'
 import { Choice } from './components/Choice'
 import { ConfirmPickButton } from '../components/ConfirmPickButton'
+import { useDomainErrors } from '../../../../shared/errorHandling'
+import { useDraftMutation } from '../queries'
 
-export function Draft({ pickBans, nominations, draft, mapPositions }) {
+export function Draft({
+  pickBans,
+  nominations,
+  draft,
+  mapPositions,
+  sessionService,
+  sessionId,
+}) {
   const steps = draft.map(({ choice, action, ...rest }) => ({
     ...rest,
-    choice: !choice ? null : (
+    choice: choice === null ? null : (
       <Choice action={action} choice={choice} mapPositions={mapPositions} />
     ),
   }))
@@ -25,28 +34,60 @@ export function Draft({ pickBans, nominations, draft, mapPositions }) {
       .map((nom) => nom.choice),
   ]
 
+  const { setError } = useDomainErrors()
+  const draftPickMutation = useCallback(async () => {
+    try {
+      if (!selection) {
+        return;
+      }
+
+      await sessionService.pushEvent(sessionId, {
+        type: 'DraftPick',
+        payload: {
+          action: selection.action,
+          choice: selection.choice,
+          playerIndex: currentPlayer.index,
+        },
+      })
+      setSelection(null)
+    } catch (e) {
+      setError(e)
+    }
+  }, [sessionId, setError, sessionService, selection, currentPlayer])
+
+  const { mutate: draftPick, isLoading: loading } = useDraftMutation({
+    sessionId,
+    mutation: draftPickMutation,
+  })
+
   return (
     <>
       <PlayerActionsStepper steps={steps} />
-      <ConfirmPickButton disabled={selection === null}>
+      <ConfirmPickButton
+        disabled={selection === null}
+        loading={loading}
+        onClick={draftPick}
+      >
         confirm{' '}
         {selection && (
           <Choice
             action={selection.action}
             choice={selection.choice}
+            height="30px"
             mapPositions={mapPositions}
-          height='40px'
           />
         )}
       </ConfirmPickButton>
       <InitiativeSelection
         currentPlayer={currentPlayer}
+        disabled={loading}
         draft={draft}
         onSelected={setSelection}
         selection={selection}
       />
       <TablePositionSelection
         currentPlayer={currentPlayer}
+        disabled={loading}
         draft={draft}
         mapPositions={mapPositions}
         onSelected={setSelection}
@@ -55,10 +96,13 @@ export function Draft({ pickBans, nominations, draft, mapPositions }) {
       <Typography>Faction</Typography>
       <DraftPool
         bans={[]}
-        disabled={draft.some(
-          ({ action, player }) =>
-            action === 'faction' && player === currentPlayer.player,
-        )}
+        disabled={
+          loading ||
+          draft.some(
+            ({ action, player }) =>
+              action === 'faction' && player === currentPlayer.player,
+          )
+        }
         initialPool={draftPool}
         max={1}
         onSelected={([faction]) =>

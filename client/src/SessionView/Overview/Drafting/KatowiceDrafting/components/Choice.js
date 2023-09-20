@@ -15,7 +15,7 @@ export function Choice({ action, choice, mapPositions, height }) {
   }
 
   if (action === 'initiative') {
-    return <Initiative at={choice} />
+    return <Initiative at={choice} height={height} />
   }
 
   if (action === 'tablePosition') {

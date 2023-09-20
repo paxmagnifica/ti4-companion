@@ -328,6 +328,106 @@ namespace ServerTests.Katowice
             actual.Draft.Should().BeEquivalentTo(expectedDraft);
         }
 
+        [Test]
+        public void ShouldIncludeChoicesInDraft()
+        {
+            // given
+            var session = new Session
+            {
+                Events = new List<GameEvent>
+                {
+                    new GameEvent
+                    {
+                        EventType = nameof(GameStarted),
+                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
+                        {
+                            SetupType = "katowice_draft",
+                            Options = new DraftOptions
+                            {
+                                InitialPool = GetInitialPool(),
+                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
+                            },
+                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
+                        }),
+                    },
+                }
+            };
+            session.Events.AddRange(GetAllPickBans().Item2);
+            session.Events.AddRange(GetAllNominations().Item2);
+            session.Events.AddRange(new List<GameEvent>{
+                new GameEvent
+                {
+                    EventType = nameof(KTW.DraftPick),
+                    SerializedPayload = JsonConvert.SerializeObject(new KTW.DraftPickPayload
+                        {
+                        PlayerIndex = 2,
+                        Action = "initiative",
+                        Choice = "1",
+                        }),
+                },
+                new GameEvent
+                {
+                EventType = nameof(KTW.DraftPick),
+                SerializedPayload = JsonConvert.SerializeObject(new KTW.DraftPickPayload
+                        {
+                        PlayerIndex = 5,
+                        Action = "initiative",
+                        Choice = "2",
+                        }),
+                },
+                new GameEvent
+                {
+                EventType = nameof(KTW.DraftPick),
+                SerializedPayload = JsonConvert.SerializeObject(new KTW.DraftPickPayload
+                        {
+                        PlayerIndex = 3,
+                        Action = "tablePosition",
+                        Choice = "0",
+                        }),
+                },
+                new GameEvent
+                {
+                EventType = nameof(KTW.DraftPick),
+                SerializedPayload = JsonConvert.SerializeObject(new KTW.DraftPickPayload
+                        {
+                        PlayerIndex = 1,
+                        Action = "faction",
+                        Choice = "The_Arborec",
+                        }),
+                }
+            });
+
+            var expectedDraft = new List<KTW.ActualDraftDto> {
+                new KTW.ActualDraftDto{ Player = "Player 2", PlayerIndex = 2, Action = "initiative", Choice = "1" },
+                new KTW.ActualDraftDto{ Player = "Player 5", PlayerIndex = 5, Action = "initiative", Choice = "2" },
+                new KTW.ActualDraftDto{ Player = "Player 3", PlayerIndex = 3, Action = "tablePosition", Choice = "0" },
+                new KTW.ActualDraftDto{ Player = "Player 1", PlayerIndex = 1, Action = "faction", Choice = "The_Arborec" },
+                new KTW.ActualDraftDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 1", PlayerIndex = 1, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 3", PlayerIndex = 3, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 5", PlayerIndex = 5, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 5", PlayerIndex = 5, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 3", PlayerIndex = 3, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 1", PlayerIndex = 1, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 0", PlayerIndex = 0, Action = null, Choice = null },
+                new KTW.ActualDraftDto{ Player = "Player 4", PlayerIndex = 4, Action = null, Choice = null },
+            };
+
+            // when
+            var actual = KTW.Draft.GetDto(session);
+
+            // then
+            actual.Phase.Should().Be("draft");
+            actual.PickBans.Should().BeEquivalentTo(GetAllPickBans().Item1);
+            actual.Nominations.Should().BeEquivalentTo(GetAllNominations().Item1);
+            actual.Draft.Should().BeEquivalentTo(expectedDraft);
+        }
+
         private Tuple<IEnumerable<KTW.NominationDto>, IEnumerable<GameEvent>> GetAllNominations()
         {
             IEnumerable<KTW.NominationDto> resultingDto = new List<KTW.NominationDto> {

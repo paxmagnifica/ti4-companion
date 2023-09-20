@@ -7,6 +7,7 @@ export function TablePositionSelection({
   currentPlayer,
   onSelected,
   selection,
+  disabled,
 }) {
   return (
     <>
@@ -22,6 +23,7 @@ export function TablePositionSelection({
             <Grid key={index} item lg={3} md={4} sm={6} xs={12}>
               <TablePositionButton
                 disabled={
+                  disabled ||
                   draft.some(
                     ({ player, action }) =>
                       player === currentPlayer.player &&

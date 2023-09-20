@@ -86,14 +86,17 @@ namespace Server.Domain.Katowice
                 draftIndexes3Lines.AddRange(gameStartedPayload.RandomPlayerOrder.Reverse());
                 draftIndexes3Lines.AddRange(gameStartedPayload.RandomPlayerOrder);
 
-                var draft = draftIndexes3Lines.Select(playerIndex =>
+                var draftPickEvents = session.Events.Where(ge => ge.EventType == nameof(DraftPick));
+                var draft = draftIndexes3Lines.Select((playerIndex, draftPickIndex) =>
                 {
+                    var draftPick = draftPickEvents.ElementAtOrDefault(draftPickIndex);
+                    var draftPickPayload = draftPick != null ? DraftPick.GetPayload(draftPick) : null;
                     return new ActualDraftDto
                     {
                         Player = gameStartedPayload.Options.Players[playerIndex],
                         PlayerIndex = playerIndex,
-                        Action = null,
-                        Choice = null,
+                        Action = draftPickPayload?.Action,
+                        Choice = draftPickPayload?.Choice,
                     };
                 });
 
