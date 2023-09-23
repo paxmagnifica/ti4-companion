@@ -8,6 +8,7 @@ export function ActionOnFactionListButton({
   disabled,
   loading,
   onClick,
+  top,
 }) {
   const factionsLeft = max - selected.length
 
@@ -16,6 +17,7 @@ export function ActionOnFactionListButton({
       disabled={disabled || factionsLeft !== 0}
       loading={loading}
       onClick={onClick}
+      top={top}
     >
       {action} <InlineFactionList factions={selected} />{' '}
       {max !== 1 && factionsLeft ? ` (left: ${factionsLeft})` : ''}

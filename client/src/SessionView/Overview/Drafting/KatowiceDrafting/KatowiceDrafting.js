@@ -52,7 +52,12 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
       <Box style={{ width: '100%' }}>
         <PhaseStepper currentPhase={phase} phases={phases} />
       </Box>
-      <MapPreview map={session.map} />
+      <MapPreview
+        map={session.map}
+        mapLink={session.mapLink}
+        sticky
+        variant={session.mapLink || session.map ? 'contained' : ''}
+      />
       {draftReady && phase === 'pickBan' && (
         <PickBan
           {...draft}

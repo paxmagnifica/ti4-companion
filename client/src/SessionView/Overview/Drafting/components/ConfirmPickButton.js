@@ -1,9 +1,9 @@
 import { Button } from '@material-ui/core'
 import { EditPrompt } from '../../../Edit'
 
-export function ConfirmPickButton({ disabled, onClick, children, loading }) {
+export function ConfirmPickButton({ disabled, onClick, children, loading, top }) {
   return (
-    <div style={{ position: 'sticky', top: '10px', zIndex: 1101 }}>
+    <div style={{ position: 'sticky', top: top || '10px', zIndex: 1101 }}>
       <EditPrompt>
         <Button
           color="secondary"

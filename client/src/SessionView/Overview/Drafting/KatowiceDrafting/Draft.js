@@ -8,6 +8,7 @@ import { Choice } from './components/Choice'
 import { ConfirmPickButton } from '../components/ConfirmPickButton'
 import { useDomainErrors } from '../../../../shared/errorHandling'
 import { useDraftMutation } from '../queries'
+import { CONFIRM_BUTTON_TOP } from './shared'
 
 export function Draft({
   pickBans,
@@ -68,6 +69,7 @@ export function Draft({
         disabled={selection === null}
         loading={loading}
         onClick={draftPick}
+        top={CONFIRM_BUTTON_TOP}
       >
         confirm{' '}
         {selection && (

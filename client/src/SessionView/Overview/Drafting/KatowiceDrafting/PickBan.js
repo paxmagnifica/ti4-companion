@@ -5,6 +5,7 @@ import { ActionOnFactionListButton } from '../components/ActionOnFactionListButt
 import { PlayerActionsStepper } from '../components/PlayerActionsStepper'
 import { DraftPool } from '../DraftPool'
 import { useDraftMutation } from '../queries'
+import { CONFIRM_BUTTON_TOP } from './shared'
 
 export function PickBan({ pickBans, initialPool, sessionService, sessionId }) {
   const steps = pickBans.map(({ choice, ...rest }) => ({
@@ -60,6 +61,7 @@ export function PickBan({ pickBans, initialPool, sessionService, sessionId }) {
         max={FACTIONS_TO_SELECT}
         onClick={pickBan}
         selected={selected}
+        top={CONFIRM_BUTTON_TOP}
       />
       <DraftPool
         bans={bans}

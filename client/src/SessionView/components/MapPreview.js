@@ -9,7 +9,7 @@ import useSmallViewport from '../../shared/useSmallViewport'
 
 const useStyles = makeStyles((theme) => ({
   bigDraftSummaryMap: {
-    maxWidth: '87vw',
+    maxWidth: '87vw !important',
   },
   draftSummaryGalaxy: {
     maxWidth: '47vw',
@@ -18,12 +18,17 @@ const useStyles = makeStyles((theme) => ({
     height: '96%',
     padding: theme.spacing(1),
   },
+  openButton: {
+    position: ({ sticky }) => (sticky ? 'sticky' : ''),
+    top: '8px',
+    zIndex: 1101,
+  },
 }))
 
-export function MapPreview({ map, mapLink, variant }) {
+export function MapPreview({ map, mapLink, variant, sticky }) {
   const { t } = useTranslation()
   const small = useSmallViewport()
-  const classes = useStyles()
+  const classes = useStyles({ sticky: sticky && (mapLink || map) })
 
   const [mapDrawerOpen, setMapDrawerOpen] = useState(false)
   const toggleMapDrawer = useCallback(
@@ -37,6 +42,7 @@ export function MapPreview({ map, mapLink, variant }) {
     <>
       {onlyMapLink && (
         <Button
+          className={classes.openButton}
           href={mapLink}
           rel="nofollow"
           startIcon={<MapIcon />}
@@ -48,6 +54,7 @@ export function MapPreview({ map, mapLink, variant }) {
       )}
       {!onlyMapLink && (
         <Button
+          className={classes.openButton}
           disabled={!map}
           onClick={toggleMapDrawer}
           startIcon={<MapIcon />}
@@ -85,6 +92,17 @@ export function MapPreview({ map, mapLink, variant }) {
                 })}
                 src={map}
               />
+            </Grid>
+            <Grid item>
+              <Button
+                endIcon={<MapIcon />}
+                href={map}
+                rel="nofollow"
+                target="about:blank"
+                variant={variant}
+              >
+                <Trans i18nKey="sessionView.overview.openOriginal" />
+              </Button>
             </Grid>
           </Grid>
         </Drawer>
