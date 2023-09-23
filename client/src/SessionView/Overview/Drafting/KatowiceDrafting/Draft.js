@@ -19,9 +19,10 @@ export function Draft({
 }) {
   const steps = draft.map(({ choice, action, ...rest }) => ({
     ...rest,
-    choice: choice === null ? null : (
-      <Choice action={action} choice={choice} mapPositions={mapPositions} />
-    ),
+    choice:
+      choice === null ? null : (
+        <Choice action={action} choice={choice} mapPositions={mapPositions} />
+      ),
   }))
   const currentPlayer = draft.find(({ choice }) => choice === null)
 
@@ -38,7 +39,7 @@ export function Draft({
   const draftPickMutation = useCallback(async () => {
     try {
       if (!selection) {
-        return;
+        return
       }
 
       await sessionService.pushEvent(sessionId, {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,8 +29,7 @@ namespace Server.Domain.Katowice
 
         public static DraftDto GetDto(Session session)
         {
-            var gameStartedEvent = session.Events.FirstOrDefault(ge => ge.EventType == GameEvent.GameStarted);
-            var gameStartedPayload = GameStarted.GetPayload(gameStartedEvent.SerializedPayload);
+            var gameStartedPayload = session.GetGameStartedInfo();
 
             var builtDto = new DraftDto
             {
@@ -104,6 +104,43 @@ namespace Server.Domain.Katowice
             }
 
             return builtDto;
+        }
+
+        // TODO not cool that this is from controllers
+        // we should not depend on that in Domain
+        // but let's face it, the whole structure is all over the place anyway
+        public static IEnumerable<Controllers.PlayerDto> GeneratePlayerDto(Session session)
+        {
+            var gameStartedPayload = session.GetGameStartedInfo();
+
+            var draftPickPlayerIndexes = new List<int>();
+            draftPickPlayerIndexes.AddRange(gameStartedPayload.RandomPlayerOrder);
+            draftPickPlayerIndexes.AddRange(gameStartedPayload.RandomPlayerOrder.Reverse());
+            draftPickPlayerIndexes.AddRange(gameStartedPayload.RandomPlayerOrder);
+
+            var draftPickPayloads = session.Events.Where(ge => ge.EventType == nameof(DraftPick)).Select(ge => DraftPick.GetPayload(ge));
+
+            if (draftPickPayloads.Count() < draftPickPlayerIndexes.Count) {
+                return new Controllers.PlayerDto[0];
+            }
+
+            return draftPickPlayerIndexes.Select((playerIndex, draftPickPayloadIndex) => new
+            {
+                playerIndex = playerIndex,
+                payload = draftPickPayloads.ElementAt(draftPickPayloadIndex),
+            }).GroupBy(a => a.playerIndex).OrderBy(group => int.Parse(group.First(g => g.payload.Action == Constants.InitiativeAction).payload.Choice) ).Select(group =>
+            {
+                var faction = group.First(g => g.payload.Action == Constants.FactionAction).payload.Choice;
+                var atTable = int.Parse(group.First(g => g.payload.Action == Constants.TablePositionAction).payload.Choice);
+                var speaker = group.First(g => g.payload.Action == Constants.InitiativeAction).payload.Choice == "1";
+                return new Controllers.PlayerDto
+                {
+                    PlayerName = gameStartedPayload.Options.Players[group.Key],
+                    AtTable = atTable,
+                    Faction = faction,
+                    Speaker = speaker,
+                };
+            });
         }
     }
 }

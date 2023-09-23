@@ -32,7 +32,7 @@ namespace Server.Domain
             await this.repository.SaveChangesAsync();
         }
 
-        internal static CommitDraftPayload GetPayload(GameEvent gameEvent)
+        public static CommitDraftPayload GetPayload(GameEvent gameEvent)
         {
             return JsonConvert.DeserializeObject<CommitDraftPayload>(gameEvent.SerializedPayload);
         }

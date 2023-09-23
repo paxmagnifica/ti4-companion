@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
+using Server.Controllers;
 using Server.Domain;
 using KTW = Server.Domain.Katowice;
 
@@ -38,7 +38,7 @@ namespace ServerTests.Katowice
                             SetupType = "katowice_draft",
                             Options = new DraftOptions
                             {
-                                InitialPool = GetInitialPool(),
+                                InitialPool = Data.GetInitialPool(),
                                 Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
                             },
                             RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
@@ -67,7 +67,7 @@ namespace ServerTests.Katowice
 
             // then
             actual.Phase.Should().Be("pickBan");
-            actual.InitialPool.Should().BeEquivalentTo(GetInitialPool());
+            actual.InitialPool.Should().BeEquivalentTo(Data.GetInitialPool());
             actual.PickBans.Should().BeEquivalentTo(expectedPickBan);
         }
 
@@ -87,7 +87,7 @@ namespace ServerTests.Katowice
                             SetupType = "katowice_draft",
                             Options = new DraftOptions
                             {
-                                InitialPool = GetInitialPool(),
+                                InitialPool = Data.GetInitialPool(),
                                 Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
                             },
                             RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
@@ -155,7 +155,7 @@ namespace ServerTests.Katowice
                             SetupType = "katowice_draft",
                             Options = new DraftOptions
                             {
-                                InitialPool = GetInitialPool(),
+                                InitialPool = Data.GetInitialPool(),
                                 Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
                             },
                             RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
@@ -163,7 +163,7 @@ namespace ServerTests.Katowice
                     },
                 }
             };
-            session.Events.AddRange(GetAllPickBans().Item2);
+            session.Events.AddRange(Data.GetAllPickBans().Item2);
 
             var expectedNominations = new List<KTW.NominationDto> {
                 new KTW.NominationDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
@@ -185,7 +185,7 @@ namespace ServerTests.Katowice
 
             // then
             actual.Phase.Should().Be("nominations");
-            actual.PickBans.Should().BeEquivalentTo(GetAllPickBans().Item1);
+            actual.PickBans.Should().BeEquivalentTo(Data.GetAllPickBans().Item1);
             actual.Nominations.Should().BeEquivalentTo(expectedNominations);
         }
 
@@ -205,7 +205,7 @@ namespace ServerTests.Katowice
                             SetupType = "katowice_draft",
                             Options = new DraftOptions
                             {
-                                InitialPool = GetInitialPool(),
+                                InitialPool = Data.GetInitialPool(),
                                 Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
                             },
                             RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
@@ -213,7 +213,7 @@ namespace ServerTests.Katowice
                     },
                 }
             };
-            session.Events.AddRange(GetAllPickBans().Item2);
+            session.Events.AddRange(Data.GetAllPickBans().Item2);
             session.Events.AddRange(new List<GameEvent>{
                 new GameEvent
                 {
@@ -286,7 +286,7 @@ namespace ServerTests.Katowice
                             SetupType = "katowice_draft",
                             Options = new DraftOptions
                             {
-                                InitialPool = GetInitialPool(),
+                                InitialPool = Data.GetInitialPool(),
                                 Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
                             },
                             RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
@@ -294,8 +294,8 @@ namespace ServerTests.Katowice
                     },
                 }
             };
-            session.Events.AddRange(GetAllPickBans().Item2);
-            session.Events.AddRange(GetAllNominations().Item2);
+            session.Events.AddRange(Data.GetAllPickBans().Item2);
+            session.Events.AddRange(Data.GetAllNominations().Item2);
 
             var expectedDraft = new List<KTW.ActualDraftDto> {
                 new KTW.ActualDraftDto{ Player = "Player 2", PlayerIndex = 2, Action = null, Choice = null },
@@ -323,8 +323,8 @@ namespace ServerTests.Katowice
 
             // then
             actual.Phase.Should().Be("draft");
-            actual.PickBans.Should().BeEquivalentTo(GetAllPickBans().Item1);
-            actual.Nominations.Should().BeEquivalentTo(GetAllNominations().Item1);
+            actual.PickBans.Should().BeEquivalentTo(Data.GetAllPickBans().Item1);
+            actual.Nominations.Should().BeEquivalentTo(Data.GetAllNominations().Item1);
             actual.Draft.Should().BeEquivalentTo(expectedDraft);
         }
 
@@ -344,7 +344,7 @@ namespace ServerTests.Katowice
                             SetupType = "katowice_draft",
                             Options = new DraftOptions
                             {
-                                InitialPool = GetInitialPool(),
+                                InitialPool = Data.GetInitialPool(),
                                 Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
                             },
                             RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
@@ -352,8 +352,8 @@ namespace ServerTests.Katowice
                     },
                 }
             };
-            session.Events.AddRange(GetAllPickBans().Item2);
-            session.Events.AddRange(GetAllNominations().Item2);
+            session.Events.AddRange(Data.GetAllPickBans().Item2);
+            session.Events.AddRange(Data.GetAllNominations().Item2);
             session.Events.AddRange(new List<GameEvent>{
                 new GameEvent
                 {
@@ -423,102 +423,69 @@ namespace ServerTests.Katowice
 
             // then
             actual.Phase.Should().Be("draft");
-            actual.PickBans.Should().BeEquivalentTo(GetAllPickBans().Item1);
-            actual.Nominations.Should().BeEquivalentTo(GetAllNominations().Item1);
+            actual.PickBans.Should().BeEquivalentTo(Data.GetAllPickBans().Item1);
+            actual.Nominations.Should().BeEquivalentTo(Data.GetAllNominations().Item1);
             actual.Draft.Should().BeEquivalentTo(expectedDraft);
         }
 
-        private Tuple<IEnumerable<KTW.NominationDto>, IEnumerable<GameEvent>> GetAllNominations()
+        [Test]
+        public void ShouldGeneratePlayerDto()
         {
-            IEnumerable<KTW.NominationDto> resultingDto = new List<KTW.NominationDto> {
-                new KTW.NominationDto{ Player = "Player 2", PlayerIndex = 2, Action = "nominate", Choice = "The_Federation_of_Sol" },
-                new KTW.NominationDto{ Player = "Player 5", PlayerIndex = 5, Action = "nominate", Choice = "The_Ghosts_of_Creuss" },
-                new KTW.NominationDto{ Player = "Player 3", PlayerIndex = 3, Action = "nominate", Choice = "The_Mentak_Coalition" },
-                new KTW.NominationDto{ Player = "Player 1", PlayerIndex = 1, Action = "nominate", Choice = "Sardakk_Norr" },
-                new KTW.NominationDto{ Player = "Player 0", PlayerIndex = 0, Action = "nominate", Choice = "The_Winnu" },
-                new KTW.NominationDto{ Player = "Player 4", PlayerIndex = 4, Action = "nominate", Choice = "The_Yssaril_Tribes" },
-                new KTW.NominationDto{ Player = "Player 4", PlayerIndex = 4, Action = "nominate", Choice = "The_Empyrean" },
-                new KTW.NominationDto{ Player = "Player 0", PlayerIndex = 0, Action = "nominate", Choice = "The_Mahact_Gene__Sorcerers" },
-                new KTW.NominationDto{ Player = "Player 1", PlayerIndex = 1, Action = "confirm", Choice = "The_Ghosts_of_Creuss" },
-                new KTW.NominationDto{ Player = "Player 3", PlayerIndex = 3, Action = "confirm", Choice = "The_Yssaril_Tribes" },
-                new KTW.NominationDto{ Player = "Player 5", PlayerIndex = 5, Action = "nominate", Choice = "The_Naaz__Rokha_Alliance" },
-                new KTW.NominationDto{ Player = "Player 2", PlayerIndex = 2, Action = "confirm", Choice = "The_Empyrean" },
+            // given
+            var session = Data.GetSessionWithDraftCommitted();
+            var expectedPlayersDto = new List<PlayerDto>{
+                new PlayerDto{
+                    Speaker = true,
+                    PlayerName = "Player 2",
+                    Faction = "The_Embers_of_Muaat",
+                    AtTable = 1,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 5",
+                    Faction = "The_L1Z1X_Mindnet",
+                    AtTable = 4,
+                },
+                new PlayerDto {
+                    PlayerName = "Player 4",
+                    Faction = "The_Argent_Flight",
+                    AtTable = 3,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 1",
+                    Faction = "The_Arborec",
+                    AtTable = 5,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 3",
+                    Faction = "The_Yin_Brotherhood",
+                    AtTable = 0,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 0",
+                    Faction = "The_Barony_of_Letnev",
+                    AtTable = 2,
+                }
             };
 
-            var gameEvents = resultingDto.Select(dto => new GameEvent
-            {
-                EventType = nameof(KTW.Nomination),
-                SerializedPayload = JsonConvert.SerializeObject(new KTW.NominationPayload
-                {
-                    PlayerIndex = dto.PlayerIndex,
-                    Action = dto.Action,
-                    Faction = dto.Choice,
-                }),
-            });
+            // when
+            var actual = KTW.Draft.GeneratePlayerDto(session);
 
-            return Tuple.Create(resultingDto, gameEvents);
+            // then
+            actual.Should().BeEquivalentTo(expectedPlayersDto);
         }
-
-        private Tuple<IEnumerable<KTW.PickBanDto>, IEnumerable<GameEvent>> GetAllPickBans()
+        
+        [Test]
+        public void ShouldReturnEmptyIfNotEnoughDraftPicks()
         {
-            IEnumerable<KTW.PickBanDto> resultingDto = new List<KTW.PickBanDto> {
-                new KTW.PickBanDto{ Player = "Player 2", PlayerIndex = 2, Action = "ban", Choice = "The_Naalu_Collective" },
-                new KTW.PickBanDto{ Player = "Player 5", PlayerIndex = 5, Action = "pick", Choice = "The_Arborec" },
-                new KTW.PickBanDto{ Player = "Player 3", PlayerIndex = 3, Action = "ban", Choice = "The_Universities_of_Jol__Nar" },
-                new KTW.PickBanDto{ Player = "Player 1", PlayerIndex = 1, Action = "pick", Choice = "The_Barony_of_Letnev" },
-                new KTW.PickBanDto{ Player = "Player 0", PlayerIndex = 0, Action = "ban", Choice = "The_Clan_of_Saar" },
-                new KTW.PickBanDto{ Player = "Player 4", PlayerIndex = 4, Action = "pick", Choice = "The_Embers_of_Muaat" },
-                new KTW.PickBanDto{ Player = "Player 4", PlayerIndex = 4, Action = "ban", Choice = "The_Emirates_of_Hacan" },
-                new KTW.PickBanDto{ Player = "Player 0", PlayerIndex = 0, Action = "pick", Choice = "The_L1Z1X_Mindnet" },
-                new KTW.PickBanDto{ Player = "Player 1", PlayerIndex = 1, Action = "ban", Choice = "The_Nekro_Virus" },
-                new KTW.PickBanDto{ Player = "Player 3", PlayerIndex = 3, Action = "pick", Choice = "The_Yin_Brotherhood" },
-                new KTW.PickBanDto{ Player = "Player 5", PlayerIndex = 5, Action = "ban", Choice = "The_Xxcha_Kingdom" },
-                new KTW.PickBanDto{ Player = "Player 2", PlayerIndex = 2, Action = "pick", Choice = "The_Argent_Flight" },
-            };
+            // given
+            var session = Data.GetFullyDraftedSession();
+            session.Events.RemoveRange(session.Events.Count - 2, 2);
 
-            var gameEvents = resultingDto.Select(dto => new GameEvent
-            {
-                EventType = nameof(KTW.PickBan),
-                SerializedPayload = JsonConvert.SerializeObject(new KTW.PickBanPayload
-                {
-                    PlayerIndex = dto.PlayerIndex,
-                    Action = dto.Action,
-                    Faction = dto.Choice,
-                }),
-            });
+            // when
+            var actual = KTW.Draft.GeneratePlayerDto(session);
 
-            return Tuple.Create(resultingDto, gameEvents);
-        }
-
-        private string[] GetInitialPool()
-        {
-            return new string[] {
-                "The_Arborec",
-                "The_Barony_of_Letnev",
-                "The_Clan_of_Saar",
-                "The_Embers_of_Muaat",
-                "The_Emirates_of_Hacan",
-                "The_Federation_of_Sol",
-                "The_Ghosts_of_Creuss",
-                "The_L1Z1X_Mindnet",
-                "The_Mentak_Coalition",
-                "The_Naalu_Collective",
-                "The_Nekro_Virus",
-                "Sardakk_Norr",
-                "The_Universities_of_Jol__Nar",
-                "The_Winnu",
-                "The_Xxcha_Kingdom",
-                "The_Yin_Brotherhood",
-                "The_Yssaril_Tribes",
-                "The_Argent_Flight",
-                "The_Empyrean",
-                "The_Mahact_Gene__Sorcerers",
-                "The_Naaz__Rokha_Alliance",
-                "The_Nomad",
-                "The_Titans_of_Ul",
-                "The_VuilRaith_Cabal",
-                "The_Council_Keleres",
-            };
+            // then
+            actual.Count().Should().Be(0);
         }
     }
 }
