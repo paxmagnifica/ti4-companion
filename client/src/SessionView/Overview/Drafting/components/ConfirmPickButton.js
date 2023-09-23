@@ -3,7 +3,7 @@ import { EditPrompt } from '../../../Edit'
 
 export function ConfirmPickButton({ disabled, onClick, children, loading }) {
   return (
-    <div style={{ position: 'sticky', top: '10px', zIndex: 2 }}>
+    <div style={{ position: 'sticky', top: '10px', zIndex: 1101 }}>
       <EditPrompt>
         <Button
           color="secondary"
