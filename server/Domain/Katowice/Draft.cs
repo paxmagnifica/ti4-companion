@@ -98,14 +98,6 @@ namespace Server.Domain.Katowice
             return builtDto;
         }
 
-        private static void EnsureKatowiceDraft(GameStartedPayload payload)
-        {
-            if (payload.SetupType != Constants.SetupType)
-            {
-                throw new InvalidGameException();
-            }
-        }
-
         // TODO not cool that this is from controllers
         // we should not depend on that in Domain
         // but let's face it, the whole structure is all over the place anyway
@@ -148,5 +140,14 @@ namespace Server.Domain.Katowice
                 };
             });
         }
+
+        private static void EnsureKatowiceDraft(GameStartedPayload payload)
+        {
+            if (payload.SetupType != Constants.SetupType)
+            {
+                throw new InvalidGameException();
+            }
+        }
+
     }
 }

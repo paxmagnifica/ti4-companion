@@ -337,36 +337,42 @@ namespace ServerTests.Katowice
                     PlayerName = "Player 2",
                     Faction = "The_Embers_of_Muaat",
                     AtTable = 1,
+                    Initiative = 1,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 5",
                     Faction = "The_L1Z1X_Mindnet",
                     AtTable = 4,
+                    Initiative = 2,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 4",
                     Faction = "The_Argent_Flight",
                     AtTable = 3,
+                    Initiative = 3,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 1",
                     Faction = "The_Arborec",
                     AtTable = 5,
+                    Initiative = 4,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 3",
                     Faction = "The_Yin_Brotherhood",
                     AtTable = 0,
+                    Initiative = 5,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 0",
                     Faction = "The_Barony_of_Letnev",
                     AtTable = 2,
+                    Initiative = 6,
                 },
             };
 
@@ -390,12 +396,14 @@ namespace ServerTests.Katowice
                     PlayerName = "Player 0",
                     Faction = "The_Barony_of_Letnev",
                     AtTable = 2,
+                    Initiative = 0,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 1",
                     Faction = "The_Arborec",
                     AtTable = -1,
+                    Initiative = 4,
                 },
                 new PlayerDto
                 {
@@ -403,24 +411,28 @@ namespace ServerTests.Katowice
                     PlayerName = "Player 2",
                     Faction = "The_Embers_of_Muaat",
                     AtTable = -1,
+                    Initiative = 1,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 3",
                     Faction = "The_Yin_Brotherhood",
                     AtTable = 0,
+                    Initiative = 0,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 4",
                     Faction = null,
                     AtTable = 3,
+                    Initiative = 3,
                 },
                 new PlayerDto
                 {
                     PlayerName = "Player 5",
                     Faction = "The_L1Z1X_Mindnet",
                     AtTable = -1,
+                    Initiative = 2,
                 },
             };
 

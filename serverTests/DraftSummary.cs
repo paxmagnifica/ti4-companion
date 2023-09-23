@@ -127,7 +127,7 @@ namespace ServerTests
                 {
                     Order = 4,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -277,7 +277,7 @@ namespace ServerTests
                 {
                     Order = 6,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -425,7 +425,7 @@ namespace ServerTests
                 {
                     Order = 6,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -588,7 +588,7 @@ namespace ServerTests
                 {
                     Order = 7,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -752,7 +752,7 @@ namespace ServerTests
                 {
                     Order = 7,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -916,7 +916,7 @@ namespace ServerTests
                 {
                     Order = 7,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_VuilRaith_Cabal\",\"The_Nomad\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
