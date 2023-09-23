@@ -30,7 +30,21 @@ export function CheckPlayerPicks() {
       players.map((p) => ({
         ...p,
         tablePosition: mapPositions[p.atTable],
-      })),
+      })).sort((a, b) => {
+        if (a.initiative <= 0 && b.initiative <= 0) {
+          return 0
+        }
+
+        if (a.initiative > 0 && b.initiative <= 0) {
+          return -1
+        }
+
+        if (a.initiative <= 0 && b.initiative > 0) {
+          return 1
+        }
+
+        return (a.initiative - b.initiative);
+      }),
     [players],
   )
 
