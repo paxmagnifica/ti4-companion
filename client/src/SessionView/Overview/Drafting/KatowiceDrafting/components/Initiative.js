@@ -7,7 +7,13 @@ export function Initiative({ at, height, maxWidth }) {
   }
 
   if (at === 1) {
-    return <img src={speakerFront} style={{ height: height || '100%', width: 'auto', maxWidth }} />
+    return (
+      <img
+        alt="speaker"
+        src={speakerFront}
+        style={{ height: height || '100%', width: 'auto', maxWidth }}
+      />
+    )
   }
 
   if (at === 2) {

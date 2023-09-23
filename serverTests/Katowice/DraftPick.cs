@@ -1,18 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NSubstitute;
 using NUnit.Framework;
 using Server.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ServerTests.Katowice
 {
     public class DraftPick
     {
+        public DraftPick()
+        {
+            this.Repository = Substitute.For<IRepository>();
+        }
+
         private JsonSerializerSettings SerializerSettings
         {
             get
@@ -25,11 +30,6 @@ namespace ServerTests.Katowice
 
         private IRepository Repository { get; set; }
 
-        public DraftPick()
-        {
-            this.Repository = Substitute.For<IRepository>();
-        }
-
         [Test]
         public async Task ShouldAddCommitDraftEventAfterAllDraftPicks()
         {
@@ -38,7 +38,7 @@ namespace ServerTests.Katowice
             sessionWithOneDraftToGo.Events.RemoveAt(sessionWithOneDraftToGo.Events.Count - 1);
 
             this.Repository.GetByIdWithEvents(Arg.Any<Guid>()).Returns(sessionWithOneDraftToGo);
-            
+
             var draftPickHandler = new Server.Domain.Katowice.DraftPick(this.Repository);
             var given = new GameEvent
             {

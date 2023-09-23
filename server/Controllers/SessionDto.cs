@@ -37,10 +37,11 @@ namespace Server.Controllers
         }
 
         public bool IsKatowiceDraft { get; set; }
+
         public Domain.Katowice.DraftDto KatowiceDraft { get; set; }
 
         public DraftDto Draft { get; set; }
- 
+
         public bool Secured { get; set; }
 
         public bool IsDraft

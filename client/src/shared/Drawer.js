@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Drawer as MUIDrawer } from '@material-ui/core'
 import clsx from 'clsx'
 import useSmallViewport from './useSmallViewport'

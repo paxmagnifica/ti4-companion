@@ -25,10 +25,14 @@ export function CheckPlayerPicks() {
     session: { players, mapPositions },
   } = useSessionContext()
 
-  const playersWithTablePosition = useMemo(() => players.map((p) => ({
-    ...p,
-    tablePosition: mapPositions[p.atTable],
-  })), [players])
+  const playersWithTablePosition = useMemo(
+    () =>
+      players.map((p) => ({
+        ...p,
+        tablePosition: mapPositions[p.atTable],
+      })),
+    [players],
+  )
 
   return (
     <>
@@ -64,7 +68,11 @@ export function CheckPlayerPicks() {
                     {player.playerName}
                   </TableCell>
                   <TableCell>
-                    <Initiative at={player.initiative} height="30px" maxWidth='4em' />
+                    <Initiative
+                      at={player.initiative}
+                      height="30px"
+                      maxWidth="4em"
+                    />
                   </TableCell>
                   <TableCell>
                     {!player.faction ? (
@@ -83,7 +91,13 @@ export function CheckPlayerPicks() {
                     {!player.tablePosition ? (
                       '-'
                     ) : (
-                      <div style={{ display: 'flex', alignItems: 'center', gridColumnGap: '0.1em'}}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gridColumnGap: '0.1em',
+                        }}
+                      >
                         <ColorBox color={player.tablePosition.color} inline />
                         {player.tablePosition.name}
                         <MapIcon />

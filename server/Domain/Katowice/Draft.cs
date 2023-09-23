@@ -19,14 +19,6 @@ namespace Server.Domain.Katowice
             return newPayload;
         }
 
-        private static void EnsureKatowiceDraft(GameStartedPayload payload)
-        {
-            if (payload.SetupType != Constants.SetupType)
-            {
-                throw new InvalidGameException();
-            }
-        }
-
         public static DraftDto GetDto(Session session)
         {
             var gameStartedPayload = session.GetGameStartedInfo();
@@ -104,6 +96,14 @@ namespace Server.Domain.Katowice
             }
 
             return builtDto;
+        }
+
+        private static void EnsureKatowiceDraft(GameStartedPayload payload)
+        {
+            if (payload.SetupType != Constants.SetupType)
+            {
+                throw new InvalidGameException();
+            }
         }
 
         // TODO not cool that this is from controllers

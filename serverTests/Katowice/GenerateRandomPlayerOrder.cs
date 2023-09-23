@@ -1,9 +1,9 @@
-using System;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using Server.Domain;
+using System;
 using KTW = Server.Domain.Katowice;
 
 namespace ServerTests.Katowice
@@ -35,7 +35,7 @@ namespace ServerTests.Katowice
 
             // when
             GameStartedPayload payload = KTW.Draft.GetPayloadWithRandomOrder(given);
-            
+
             // then
             payload.RandomPlayerOrder.Length.Should().Be(6);
             payload.Should().NotBeSameAs(given);
@@ -52,7 +52,7 @@ namespace ServerTests.Katowice
 
             // when
             Func<GameStartedPayload> act = () => KTW.Draft.GetPayloadWithRandomOrder(given);
-            
+
             // then
             act.Should().Throw<KTW.InvalidGameException>();
         }

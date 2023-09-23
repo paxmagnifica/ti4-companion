@@ -1,7 +1,7 @@
+using Server.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Server.Domain.Exceptions;
 
 namespace Server.Domain
 {
@@ -25,9 +25,11 @@ namespace Server.Domain
 
         public DateTimeOffset CreatedAt { get; set; }
 
-        public GameStartedPayload GetGameStartedInfo() {
+        public GameStartedPayload GetGameStartedInfo()
+        {
             var e = this.Events.FirstOrDefault(ev => ev.EventType == nameof(GameStarted));
-            if (e == null) {
+            if (e == null)
+            {
                 throw new Ti4CompanionDomainException("game not started yet");
             }
 

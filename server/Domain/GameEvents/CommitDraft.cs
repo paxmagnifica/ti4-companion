@@ -14,6 +14,11 @@ namespace Server.Domain
             this.repository = repository;
         }
 
+        public static CommitDraftPayload GetPayload(GameEvent gameEvent)
+        {
+            return JsonConvert.DeserializeObject<CommitDraftPayload>(gameEvent.SerializedPayload);
+        }
+
         public async Task Handle(GameEvent gameEvent)
         {
             var session = await this.repository.GetByIdWithEvents(gameEvent.SessionId);
@@ -30,11 +35,6 @@ namespace Server.Domain
             this.repository.UpdateSession(session);
 
             await this.repository.SaveChangesAsync();
-        }
-
-        public static CommitDraftPayload GetPayload(GameEvent gameEvent)
-        {
-            return JsonConvert.DeserializeObject<CommitDraftPayload>(gameEvent.SerializedPayload);
         }
     }
 }

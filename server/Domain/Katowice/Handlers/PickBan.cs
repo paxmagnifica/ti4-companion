@@ -25,7 +25,6 @@ namespace Server.Domain.Katowice
             // check if action is the same as current player
             // check if playerindex is the same as current player
             // check if not duplicated
-
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);

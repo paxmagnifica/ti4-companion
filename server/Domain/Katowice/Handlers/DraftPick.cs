@@ -27,7 +27,6 @@ namespace Server.Domain.Katowice
             // check if playerindex is the same as current player
             // check if confirming without nomination
             // check if not duplicated (nominating nominated/confirmed or confirming confirmed)
-
             session.Events.Add(gameEvent);
 
             var gameStartEvent = GameStarted.GetPayload(session.Events.First(ev => ev.EventType == nameof(GameStarted)));
@@ -43,7 +42,7 @@ namespace Server.Domain.Katowice
                         Factions = draftPickPayloads.Where(faction => faction.Action == Constants.FactionAction).OrderBy(faction => faction.PlayerIndex).Select(faction => faction.Choice).ToArray(),
                         Initiative = draftPickPayloads.Where(init => init.Action == Constants.InitiativeAction).OrderBy(init => init.PlayerIndex).Select(init => int.Parse(init.Choice)).ToArray(),
                         TablePositions = draftPickPayloads.Where(table => table.Action == Constants.TablePositionAction).OrderBy(table => table.PlayerIndex).Select(table => int.Parse(table.Choice)).ToArray(),
-                    })
+                    }),
                 };
 
                 session.Events.Add(commitDraftEvent);

@@ -13,12 +13,12 @@ namespace Server.Domain
 
         public GameStartedPayload(GameStartedPayload payload)
         {
-            SetupType = payload.SetupType;
-            Factions = new List<string>(payload.Factions);
-            GameVersion = payload.GameVersion;
-            Options = new DraftOptions(payload.Options);
-            Password = payload.Password;
-            RandomPlayerOrder = (int[]) payload.RandomPlayerOrder.Clone();
+            this.SetupType = payload.SetupType;
+            this.Factions = new List<string>(payload.Factions);
+            this.GameVersion = payload.GameVersion;
+            this.Options = new DraftOptions(payload.Options);
+            this.Password = payload.Password;
+            this.RandomPlayerOrder = (int[])payload.RandomPlayerOrder.Clone();
         }
 
         public string SetupType { get; set; }

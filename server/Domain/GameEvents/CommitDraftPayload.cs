@@ -4,13 +4,15 @@ namespace Server.Domain
     {
         public CommitDraftPayload()
         {
-            Factions = new string[0];
-            TablePositions = new int[0];
-            Initiative = new int[0];
+            this.Factions = new string[0];
+            this.TablePositions = new int[0];
+            this.Initiative = new int[0];
         }
 
         public string[] Factions { get; set; }
+
         public int[] TablePositions { get; set; }
+
         public int[] Initiative { get; set; }
     }
 }

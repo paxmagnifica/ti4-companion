@@ -26,7 +26,6 @@ namespace Server.Domain.Katowice
             // check if playerindex is the same as current player
             // check if confirming without nomination
             // check if not duplicated (nominating nominated/confirmed or confirming confirmed)
- 
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);

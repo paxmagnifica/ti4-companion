@@ -1,4 +1,3 @@
-
 namespace Server.Domain.Katowice
 {
     public static class Constants

@@ -11,14 +11,14 @@ namespace Server.Domain
 
         public DraftOptions(DraftOptions options)
         {
-            InitialPool = (string[]) options.InitialPool.Clone();
-            Players = (string[]) options.Players.Clone();
-            MapPositions = (MapPosition[]) options.MapPositions.Clone();
-            Bans = options.Bans;
-            BanRounds = options.BanRounds;
-            BansPerRound = options.BansPerRound;
-            TablePick = options.TablePick;
-            SpeakerPick = options.SpeakerPick;
+            this.InitialPool = (string[])options.InitialPool.Clone();
+            this.Players = (string[])options.Players.Clone();
+            this.MapPositions = (MapPosition[])options.MapPositions.Clone();
+            this.Bans = options.Bans;
+            this.BanRounds = options.BanRounds;
+            this.BansPerRound = options.BansPerRound;
+            this.TablePick = options.TablePick;
+            this.SpeakerPick = options.SpeakerPick;
         }
 
         public string[] InitialPool { get; set; }

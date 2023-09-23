@@ -40,8 +40,13 @@ export function Nominate({
     ),
     by: pickBans.some((pb) => pb.choice === faction).player,
   }))
-  const getFilteredPool = unfiltered => unfiltered.filter(({ faction }) => faction.toLowerCase().includes(filterExpression.toLowerCase())) 
-  const untouched = getFilteredPool(pool.filter((p) => !p.nominated && !p.confirmed))
+  const getFilteredPool = (unfiltered) =>
+    unfiltered.filter(({ faction }) =>
+      faction.toLowerCase().includes(filterExpression.toLowerCase()),
+    )
+  const untouched = getFilteredPool(
+    pool.filter((p) => !p.nominated && !p.confirmed),
+  )
   untouched.sort((a, b) => {
     if (!a.banned && !a.picked && (b.banned || b.picked)) {
       return -1
@@ -53,7 +58,9 @@ export function Nominate({
 
     return 0
   })
-  const nominated = getFilteredPool(pool.filter((p) => p.nominated && !p.confirmed))
+  const nominated = getFilteredPool(
+    pool.filter((p) => p.nominated && !p.confirmed),
+  )
   const confirmed = pool.filter((p) => p.confirmed)
 
   const [selected, setSelected] = useState(null)
@@ -115,7 +122,10 @@ export function Nominate({
           <div style={columnStyles}>
             <Typography style={{ textAlign: 'center' }}>Factions</Typography>
             {untouched.map(({ faction, banned, picked }) => (
-              <div key={faction} style={{ position: 'relative', display: 'flex' }}>
+              <div
+                key={faction}
+                style={{ position: 'relative', display: 'flex' }}
+              >
                 {smallViewport && selected === faction && (
                   <ForwardButton
                     direction="up"
@@ -176,9 +186,11 @@ export function Nominate({
             ))}
           </div>
         </Grid>
-        {smallViewport && <Grid item container xs={12} justifyContent="center">
-          <SearchField onChange={setFilterExpression} />
-        </Grid>}
+        {smallViewport && (
+          <Grid item container xs={12} justifyContent="center">
+            <SearchField onChange={setFilterExpression} />
+          </Grid>
+        )}
         <Grid item md={4} xs={12}>
           <div style={columnStyles}>
             <Typography style={{ textAlign: 'center' }}>

@@ -351,7 +351,7 @@ function Pick({
               ({ type, playerIndex }) =>
                 type === 'tablePosition' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           draft={draft}
@@ -471,22 +471,27 @@ export function Drafting({ editable, session, sessionService }) {
     return null
   }
 
-  const phases = [Boolean(session.setup?.options?.bans) ? {
-    phase: PHASE.bans,
-    label: 'Ban',
-    icon: <BanIcon />
-  } : null,
-  {
-    phase: PHASE.picks,
-    label: 'Pick',
-    icon: <PickIcon />
-  },
-  Boolean(session.setup?.options?.speakerPick) ? null : {
-    phase: PHASE.speaker,
-    label: 'Speaker selection',
-    icon: <SpeakerIcon />
-  }
-  ].filter(Boolean);
+  const phases = [
+    session.setup?.options?.bans
+      ? {
+          phase: PHASE.bans,
+          label: 'Ban',
+          icon: <BanIcon />,
+        }
+      : null,
+    {
+      phase: PHASE.picks,
+      label: 'Pick',
+      icon: <PickIcon />,
+    },
+    session.setup?.options?.speakerPick
+      ? null
+      : {
+          phase: PHASE.speaker,
+          label: 'Speaker selection',
+          icon: <SpeakerIcon />,
+        },
+  ].filter(Boolean)
 
   return (
     <>
@@ -494,10 +499,7 @@ export function Drafting({ editable, session, sessionService }) {
       <Typography align="center" variant="h4">
         Phase:
       </Typography>
-      <PhaseStepper
-        phases={phases}
-        currentPhase={draft.phase}
-      />
+      <PhaseStepper phases={phases} currentPhase={draft.phase} />
       {draft.phase === PHASE.bans && (
         <BanStepper draft={draft} setup={session.setup} />
       )}
@@ -556,7 +558,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           initialPool={draft.initialPool}
@@ -576,7 +578,7 @@ export function Drafting({ editable, session, sessionService }) {
               ({ type, playerIndex }) =>
                 type === 'faction' &&
                 Number(draft.order[draft.activePlayerIndex]) ===
-                Number(playerIndex),
+                  Number(playerIndex),
             )
           }
           initialPool={draft.initialPool.filter(
