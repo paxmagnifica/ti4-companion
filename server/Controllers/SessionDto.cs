@@ -31,7 +31,7 @@ namespace Server.Controllers
             this.Secured = !string.IsNullOrEmpty(session.HashedPassword);
             this.MapPositions = this.GetMapPositions(session.Events);
 
-            this.KatowiceDraft = Domain.Katowice.Draft.GetDto(session);
+            this.KatowiceDraft = this.IsKatowiceDraft ? Domain.Katowice.Draft.GetDto(session) : null;
 
             this.Setup.Password = null;
         }
