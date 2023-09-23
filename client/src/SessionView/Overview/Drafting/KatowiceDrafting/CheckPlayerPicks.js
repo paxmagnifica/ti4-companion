@@ -27,24 +27,26 @@ export function CheckPlayerPicks() {
 
   const playersWithTablePosition = useMemo(
     () =>
-      players.map((p) => ({
-        ...p,
-        tablePosition: mapPositions[p.atTable],
-      })).sort((a, b) => {
-        if (a.initiative <= 0 && b.initiative <= 0) {
-          return 0
-        }
+      players
+        .map((p) => ({
+          ...p,
+          tablePosition: mapPositions[p.atTable],
+        }))
+        .sort((a, b) => {
+          if (a.initiative <= 0 && b.initiative <= 0) {
+            return 0
+          }
 
-        if (a.initiative > 0 && b.initiative <= 0) {
-          return -1
-        }
+          if (a.initiative > 0 && b.initiative <= 0) {
+            return -1
+          }
 
-        if (a.initiative <= 0 && b.initiative > 0) {
-          return 1
-        }
+          if (a.initiative <= 0 && b.initiative > 0) {
+            return 1
+          }
 
-        return (a.initiative - b.initiative);
-      }),
+          return a.initiative - b.initiative
+        }),
     [players],
   )
 

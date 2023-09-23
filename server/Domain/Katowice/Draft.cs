@@ -148,6 +148,5 @@ namespace Server.Domain.Katowice
                 throw new InvalidGameException();
             }
         }
-
     }
 }
