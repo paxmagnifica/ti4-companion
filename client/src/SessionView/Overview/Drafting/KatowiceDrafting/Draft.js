@@ -9,6 +9,7 @@ import { ConfirmPickButton } from '../components/ConfirmPickButton'
 import { useDomainErrors } from '../../../../shared/errorHandling'
 import { useDraftMutation } from '../queries'
 import { CONFIRM_BUTTON_TOP } from './shared'
+import { CheckPlayerPicks } from './CheckPlayerPicks'
 
 export function Draft({
   pickBans,
@@ -65,22 +66,32 @@ export function Draft({
   return (
     <>
       <PlayerActionsStepper steps={steps} />
-      <ConfirmPickButton
-        disabled={selection === null}
-        loading={loading}
-        onClick={draftPick}
-        top={CONFIRM_BUTTON_TOP}
+      <div
+        style={{
+          display: 'flex',
+          gridColumnGap: '1em',
+          position: 'sticky',
+          top: CONFIRM_BUTTON_TOP,
+          zIndex: 1101,
+        }}
       >
-        confirm{' '}
-        {selection && (
-          <Choice
-            action={selection.action}
-            choice={selection.choice}
-            height="30px"
-            mapPositions={mapPositions}
-          />
-        )}
-      </ConfirmPickButton>
+        <CheckPlayerPicks />
+        <ConfirmPickButton
+          disabled={selection === null}
+          loading={loading}
+          onClick={draftPick}
+        >
+          confirm{' '}
+          {selection && (
+            <Choice
+              action={selection.action}
+              choice={selection.choice}
+              height="30px"
+              mapPositions={mapPositions}
+            />
+          )}
+        </ConfirmPickButton>
+      </div>
       <InitiativeSelection
         currentPlayer={currentPlayer}
         disabled={loading}

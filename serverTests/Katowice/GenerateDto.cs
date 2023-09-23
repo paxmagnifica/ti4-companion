@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -26,26 +25,7 @@ namespace ServerTests.Katowice
         public void ShouldBeInEmptyBanPickPhaseAfterGameStart()
         {
             // given
-            var session = new Session
-            {
-                Events = new List<GameEvent>
-                {
-                    new GameEvent
-                    {
-                        EventType = nameof(GameStarted),
-                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
-                        {
-                            SetupType = "katowice_draft",
-                            Options = new DraftOptions
-                            {
-                                InitialPool = Data.GetInitialPool(),
-                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
-                            },
-                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
-                        }),
-                    },
-                }
-            };
+            var session = Data.GetEmptySession();
 
             var expectedPickBan = new KTW.PickBanDto[] {
                 new KTW.PickBanDto{ Player = "Player 2", PlayerIndex = 2, Action = "ban", Choice = null },
@@ -75,46 +55,29 @@ namespace ServerTests.Katowice
         public void ShouldIncludePlayerChoicesInPickBans()
         {
             // given
-            var session = new Session
-            {
-                Events = new List<GameEvent>
+            var session = Data.GetEmptySession();
+            session.Events.AddRange(new List<GameEvent> {
+                new GameEvent
                 {
-                    new GameEvent
+                EventType = nameof(KTW.PickBan),
+                SerializedPayload = JsonConvert.SerializeObject(new KTW.PickBanPayload
                     {
-                        EventType = nameof(GameStarted),
-                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
-                        {
-                            SetupType = "katowice_draft",
-                            Options = new DraftOptions
-                            {
-                                InitialPool = Data.GetInitialPool(),
-                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
-                            },
-                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
-                        }),
-                    },
-                    new GameEvent
+                        PlayerIndex = 2,
+                        Action = "ban",
+                        Faction = "The_Naalu_Collective",
+                    }),
+                },
+                new GameEvent
+                {
+                EventType = nameof(KTW.PickBan),
+                SerializedPayload = JsonConvert.SerializeObject(new KTW.PickBanPayload
                     {
-                        EventType = nameof(KTW.PickBan),
-                        SerializedPayload = JsonConvert.SerializeObject(new KTW.PickBanPayload
-                        {
-                            PlayerIndex = 2,
-                            Action = "ban",
-                            Faction = "The_Naalu_Collective",
-                        }),
-                    },
-                    new GameEvent
-                    {
-                        EventType = nameof(KTW.PickBan),
-                        SerializedPayload = JsonConvert.SerializeObject(new KTW.PickBanPayload
-                        {
-                            PlayerIndex = 5,
-                            Action = "pick",
-                            Faction = "The_Arborec",
-                        }),
-                    },
+                        PlayerIndex = 5,
+                        Action = "pick",
+                        Faction = "The_Arborec",
+                    }),
                 }
-            };
+            });
 
             var expectedPickBan = new KTW.PickBanDto[] {
                 new KTW.PickBanDto{ Player = "Player 2", PlayerIndex = 2, Action = "ban", Choice = "The_Naalu_Collective" },
@@ -143,26 +106,7 @@ namespace ServerTests.Katowice
         public void ShouldBeInNominationPhaseIfAllPickBansWereDone()
         {
             // given
-            var session = new Session
-            {
-                Events = new List<GameEvent>
-                {
-                    new GameEvent
-                    {
-                        EventType = nameof(GameStarted),
-                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
-                        {
-                            SetupType = "katowice_draft",
-                            Options = new DraftOptions
-                            {
-                                InitialPool = Data.GetInitialPool(),
-                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
-                            },
-                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
-                        }),
-                    },
-                }
-            };
+            var session = Data.GetEmptySession();
             session.Events.AddRange(Data.GetAllPickBans().Item2);
 
             var expectedNominations = new List<KTW.NominationDto> {
@@ -193,26 +137,7 @@ namespace ServerTests.Katowice
         public void ShouldLoadNominationsAndConfirmationsFromEvents()
         {
             // given
-            var session = new Session
-            {
-                Events = new List<GameEvent>
-                {
-                    new GameEvent
-                    {
-                        EventType = nameof(GameStarted),
-                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
-                        {
-                            SetupType = "katowice_draft",
-                            Options = new DraftOptions
-                            {
-                                InitialPool = Data.GetInitialPool(),
-                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
-                            },
-                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
-                        }),
-                    },
-                }
-            };
+            var session = Data.GetEmptySession();
             session.Events.AddRange(Data.GetAllPickBans().Item2);
             session.Events.AddRange(new List<GameEvent>{
                 new GameEvent
@@ -274,26 +199,7 @@ namespace ServerTests.Katowice
         public void ShouldBeInDraftPhaseIfAllNominationsDone()
         {
             // given
-            var session = new Session
-            {
-                Events = new List<GameEvent>
-                {
-                    new GameEvent
-                    {
-                        EventType = nameof(GameStarted),
-                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
-                        {
-                            SetupType = "katowice_draft",
-                            Options = new DraftOptions
-                            {
-                                InitialPool = Data.GetInitialPool(),
-                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
-                            },
-                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
-                        }),
-                    },
-                }
-            };
+            var session = Data.GetEmptySession();
             session.Events.AddRange(Data.GetAllPickBans().Item2);
             session.Events.AddRange(Data.GetAllNominations().Item2);
 
@@ -332,26 +238,7 @@ namespace ServerTests.Katowice
         public void ShouldIncludeChoicesInDraft()
         {
             // given
-            var session = new Session
-            {
-                Events = new List<GameEvent>
-                {
-                    new GameEvent
-                    {
-                        EventType = nameof(GameStarted),
-                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
-                        {
-                            SetupType = "katowice_draft",
-                            Options = new DraftOptions
-                            {
-                                InitialPool = Data.GetInitialPool(),
-                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
-                            },
-                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
-                        }),
-                    },
-                }
-            };
+            var session = Data.GetEmptySession();
             session.Events.AddRange(Data.GetAllPickBans().Item2);
             session.Events.AddRange(Data.GetAllNominations().Item2);
             session.Events.AddRange(new List<GameEvent>{
@@ -473,19 +360,101 @@ namespace ServerTests.Katowice
             // then
             actual.Should().BeEquivalentTo(expectedPlayersDto);
         }
-        
+
         [Test]
-        public void ShouldReturnEmptyIfNotEnoughDraftPicks()
+        public void ShouldReturnEmptiesIfNotEnoughDraftPicks()
         {
             // given
             var session = Data.GetFullyDraftedSession();
-            session.Events.RemoveRange(session.Events.Count - 2, 2);
+            session.Events.RemoveRange(session.Events.Count - 6, 6);
+            var expectedPlayersDto = new List<PlayerDto>{
+                new PlayerDto{
+                    PlayerName = "Player 0",
+                    Faction = "The_Barony_of_Letnev",
+                    AtTable = 2,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 1",
+                    Faction = "The_Arborec",
+                    AtTable = -1,
+                },
+                new PlayerDto{
+                    Speaker = true,
+                    PlayerName = "Player 2",
+                    Faction = "The_Embers_of_Muaat",
+                    AtTable = -1,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 3",
+                    Faction = "The_Yin_Brotherhood",
+                    AtTable = 0,
+                },
+                new PlayerDto {
+                    PlayerName = "Player 4",
+                    Faction = null,
+                    AtTable = 3,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 5",
+                    Faction = "The_L1Z1X_Mindnet",
+                    AtTable = -1,
+                },
+            };
 
             // when
             var actual = KTW.Draft.GeneratePlayerDto(session);
+            System.Console.WriteLine(JsonConvert.SerializeObject(actual));
 
             // then
-            actual.Count().Should().Be(0);
+            actual.Should().BeEquivalentTo(expectedPlayersDto);
+        }
+
+        [Test]
+        public void ShouldReturnEmptyDtosForNoDraftPickSession()
+        {
+            // given
+            var session = Data.GetEmptySession();
+            session.Events.AddRange(Data.GetAllPickBans().Item2);
+            session.Events.AddRange(Data.GetAllNominations().Item2);
+            var expectedPlayersDto = new List<PlayerDto>{
+                new PlayerDto{
+                    PlayerName = "Player 0",
+                    Faction = null,
+                    AtTable = -1,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 1",
+                    Faction = null,
+                    AtTable = -1,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 2",
+                    Faction = null,
+                    AtTable = -1,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 3",
+                    Faction = null,
+                    AtTable = -1,
+                },
+                new PlayerDto {
+                    PlayerName = "Player 4",
+                    Faction = null,
+                    AtTable = -1,
+                },
+                new PlayerDto{
+                    PlayerName = "Player 5",
+                    Faction = null,
+                    AtTable = -1,
+                },
+            };
+
+            // when
+            var actual = KTW.Draft.GeneratePlayerDto(session);
+            System.Console.WriteLine(JsonConvert.SerializeObject(actual));
+
+            // then
+            actual.Should().BeEquivalentTo(expectedPlayersDto);
         }
     }
 }

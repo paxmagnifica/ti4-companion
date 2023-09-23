@@ -120,25 +120,31 @@ namespace Server.Domain.Katowice
 
             var draftPickPayloads = session.Events.Where(ge => ge.EventType == nameof(DraftPick)).Select(ge => DraftPick.GetPayload(ge));
 
-            if (draftPickPayloads.Count() < draftPickPlayerIndexes.Count) {
-                return new Controllers.PlayerDto[0];
-            }
-
-            return draftPickPlayerIndexes.Select((playerIndex, draftPickPayloadIndex) => new
+            var groupedByPlayerIndex = draftPickPlayerIndexes.Select((playerIndex, payloadIndex) => new
             {
                 playerIndex = playerIndex,
-                payload = draftPickPayloads.ElementAt(draftPickPayloadIndex),
-            }).GroupBy(a => a.playerIndex).OrderBy(group => int.Parse(group.First(g => g.payload.Action == Constants.InitiativeAction).payload.Choice) ).Select(group =>
+                payload = draftPickPayloads.ElementAtOrDefault(payloadIndex),
+            }).GroupBy(a => a.playerIndex);
+
+            var isFinished = draftPickPayloads.Count() == draftPickPlayerIndexes.Count;
+            var ordered = isFinished ? groupedByPlayerIndex.OrderBy(group => int.Parse(group.First(g => g.payload.Action == Constants.InitiativeAction).payload.Choice)) : groupedByPlayerIndex.OrderBy(group => group.Key);
+
+            return ordered.Select(group =>
             {
-                var faction = group.First(g => g.payload.Action == Constants.FactionAction).payload.Choice;
-                var atTable = int.Parse(group.First(g => g.payload.Action == Constants.TablePositionAction).payload.Choice);
-                var speaker = group.First(g => g.payload.Action == Constants.InitiativeAction).payload.Choice == "1";
+                var groupWithoutNulls = group.Where(g => g.payload != null);
+
+                var faction = groupWithoutNulls.FirstOrDefault(g => g.payload.Action == Constants.FactionAction)?.payload.Choice;
+                var atTable = int.Parse(groupWithoutNulls.FirstOrDefault(g => g.payload.Action == Constants.TablePositionAction)?.payload.Choice ?? "-1");
+                var initiative = int.Parse(groupWithoutNulls.FirstOrDefault(g => g.payload.Action == Constants.InitiativeAction)?.payload.Choice ?? "0");
+                var speaker = initiative == 1;
+
                 return new Controllers.PlayerDto
                 {
                     PlayerName = gameStartedPayload.Options.Players[group.Key],
                     AtTable = atTable,
                     Faction = faction,
                     Speaker = speaker,
+                    Initiative = initiative,
                 };
             });
         }

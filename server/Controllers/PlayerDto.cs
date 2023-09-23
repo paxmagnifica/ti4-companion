@@ -21,6 +21,8 @@ namespace Server.Controllers
 
         public int AtTable { get; set; }
 
+        public int Initiative { get; set; }
+
         public static IEnumerable<PlayerDto> GetPlayers(SessionDto session)
         {
             var factionPicks = session.Draft?.Picks?.Where(p => p.Type == "faction") ?? new PickedPayload[0];

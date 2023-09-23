@@ -141,27 +141,7 @@ namespace ServerTests.Katowice
 
         public static Session GetFullyDraftedSession()
         {
-            var sessionId = Guid.NewGuid();
-            var session = new Session()
-            {
-                Id = sessionId,
-                Events = new List<GameEvent>{
-                    new GameEvent
-                    {
-                        EventType = nameof(GameStarted),
-                        SerializedPayload = JsonConvert.SerializeObject(new GameStartedPayload
-                        {
-                            SetupType = "katowice_draft",
-                            Options = new DraftOptions
-                            {
-                                InitialPool = Data.GetInitialPool(),
-                                Players = new string[] { "Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5" },
-                            },
-                            RandomPlayerOrder = new int[] { 2, 5, 3, 1, 0, 4 },
-                        }),
-                    },
-                },
-            };
+            var session = GetEmptySession();
 
             session.Events.AddRange(GetAllPickBans().Item2);
             session.Events.AddRange(GetAllNominations().Item2);
@@ -170,10 +150,10 @@ namespace ServerTests.Katowice
             return session;
         }
 
-        public static Session GetSessionWithDraftCommitted()
+        public static Session GetEmptySession()
         {
             var sessionId = Guid.NewGuid();
-            var session = new Session()
+            return new Session()
             {
                 Id = sessionId,
                 Events = new List<GameEvent>{
@@ -193,6 +173,11 @@ namespace ServerTests.Katowice
                     },
                 },
             };
+        }
+
+        public static Session GetSessionWithDraftCommitted()
+        {
+            var session = GetEmptySession();
 
             session.Events.AddRange(GetAllPickBans().Item2);
             session.Events.AddRange(GetAllNominations().Item2);

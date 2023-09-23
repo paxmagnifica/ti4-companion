@@ -1,9 +1,13 @@
 import { Typography } from '@material-ui/core'
 import speakerFront from '../../../../../assets/speaker-front.png'
 
-export function Initiative({ at, height }) {
+export function Initiative({ at, height, maxWidth }) {
+  if (at <= 0 || !at) {
+    return <Typography>-</Typography>
+  }
+
   if (at === 1) {
-    return <img src={speakerFront} style={{ height: height || '100%', width: 'auto' }} />
+    return <img src={speakerFront} style={{ height: height || '100%', width: 'auto', maxWidth }} />
   }
 
   if (at === 2) {
