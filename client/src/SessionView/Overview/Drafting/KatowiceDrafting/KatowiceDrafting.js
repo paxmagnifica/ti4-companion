@@ -8,7 +8,7 @@ import { MapPreview } from '../../../components'
 import { PhaseStepper } from '../components/PhaseStepper'
 import { useKatowiceDraftQuery } from '../queries'
 import { PickBan } from './PickBan'
-import { Nomination } from './Nomination'
+import { Nominate } from './Nominate'
 import { Draft } from './Draft'
 
 export function KatowiceDrafting({ editable, session, sessionService }) {
@@ -61,7 +61,7 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
         />
       )}
       {draftReady && phase === 'nominations' && (
-        <Nomination
+        <Nominate
           {...draft}
           sessionId={session.id}
           sessionService={sessionService}
