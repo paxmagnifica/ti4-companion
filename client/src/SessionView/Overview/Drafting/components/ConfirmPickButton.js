@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button, CircularProgress } from '@material-ui/core'
 import { EditPrompt } from '../../../Edit'
 
 export function ConfirmPickButton({
@@ -27,7 +27,7 @@ export function ConfirmPickButton({
             }}
           >
             {children}
-            {loading && 'loading...'}
+            {loading && <CircularProgress color="primary" size={18} />}
           </div>
         </Button>
       </EditPrompt>
