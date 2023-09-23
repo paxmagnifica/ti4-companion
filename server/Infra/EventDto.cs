@@ -5,5 +5,7 @@ namespace Server.Infra
         public string EventType { get; set; }
 
         public string SerializedPayload { get; set; }
+
+        public System.Guid Checksum { get; set; }
     }
 }

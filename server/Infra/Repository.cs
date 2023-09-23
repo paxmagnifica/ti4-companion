@@ -92,9 +92,16 @@ namespace Server.Infra
 
         public async Task<bool> SessionExists(Guid sessionId)
         {
-            var sessionExits = await this.sessionContext.Sessions.AnyAsync(x => x.Id == sessionId);
+            var sessionExists = await this.sessionContext.Sessions.AnyAsync(x => x.Id == sessionId);
 
-            return sessionExits;
+            return sessionExists;
+        }
+
+        public async Task<Guid> GetSessionChecksum(Guid sessionId)
+        {
+            var gameEvent = await this.sessionContext.Events.Where(e => e.SessionId == sessionId).OrderBy(e => e.HappenedAt).LastAsync();
+
+            return gameEvent.Id;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Server.Controllers
         public SessionDto(Session session)
         {
             this.Id = session.Id;
+            this.Checksum = session.Events.OrderBy(e => e.HappenedAt).Last().Id;
             this.Setup = this.GetSetup(session.Events);
             this.IsKatowiceDraft = this.Setup.SetupType == Domain.Katowice.Constants.SetupType;
 
@@ -35,6 +36,8 @@ namespace Server.Controllers
 
             this.Setup.Password = null;
         }
+
+        public Guid Checksum { get; set; }
 
         public bool IsKatowiceDraft { get; set; }
 

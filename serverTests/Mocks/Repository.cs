@@ -45,5 +45,10 @@ namespace ServerTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<Guid> GetSessionChecksum(Guid sessionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
