@@ -11,6 +11,7 @@ import {
 import { useCallback, useState } from 'react'
 import { useDomainErrors } from '../../../../shared/errorHandling'
 import { FactionImage } from '../../../../shared/FactionImage'
+import { SearchField } from '../../../../shared/searchWithHighlight'
 import useSmallViewport from '../../../../shared/useSmallViewport'
 import { FactionNutshell } from '../../FactionNutshell'
 import { FactionButton } from '../components/FactionButton'
@@ -26,6 +27,7 @@ export function Nominate({
 }) {
   const [nutshellFactionKey, setFactionNutshellKey] = useState(null)
   const { playerIndex } = nominations.find(({ choice }) => choice === null)
+  const [filterExpression, setFilterExpression] = useState('')
   const pool = initialPool.map((faction) => ({
     faction,
     nominated: nominations.some((nom) => nom.choice === faction),
@@ -38,7 +40,8 @@ export function Nominate({
     ),
     by: pickBans.some((pb) => pb.choice === faction).player,
   }))
-  const untouched = pool.filter((p) => !p.nominated && !p.confirmed)
+  const getFilteredPool = unfiltered => unfiltered.filter(({ faction }) => faction.toLowerCase().includes(filterExpression.toLowerCase())) 
+  const untouched = getFilteredPool(pool.filter((p) => !p.nominated && !p.confirmed))
   untouched.sort((a, b) => {
     if (!a.banned && !a.picked && (b.banned || b.picked)) {
       return -1
@@ -50,7 +53,7 @@ export function Nominate({
 
     return 0
   })
-  const nominated = pool.filter((p) => p.nominated && !p.confirmed)
+  const nominated = getFilteredPool(pool.filter((p) => p.nominated && !p.confirmed))
   const confirmed = pool.filter((p) => p.confirmed)
 
   const [selected, setSelected] = useState(null)
@@ -128,6 +131,7 @@ export function Nominate({
                   onInfoClick={() => setFactionNutshellKey(faction)}
                   picked={picked}
                   selected={selected === faction}
+                  highlightText={filterExpression}
                 />
                 {!smallViewport && selected === faction && (
                   <ForwardButton
@@ -172,6 +176,9 @@ export function Nominate({
             ))}
           </div>
         </Grid>
+        {smallViewport && <Grid item container xs={12} justifyContent="center">
+          <SearchField onChange={setFilterExpression} />
+        </Grid>}
         <Grid item md={4} xs={12}>
           <div style={columnStyles}>
             <Typography style={{ textAlign: 'center' }}>

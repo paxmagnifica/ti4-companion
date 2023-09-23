@@ -7,9 +7,10 @@ import {
 } from '@material-ui/core'
 import { Info as InfoIcon } from '@material-ui/icons'
 import clsx from 'clsx'
-import { Trans } from '../../../../i18n'
+import { useTranslation } from '../../../../i18n'
 import { useFactionData } from '../../../../GameComponents'
 import { EditPrompt } from '../../../Edit'
+import { HighlightedText } from '../../../../shared/searchWithHighlight'
 
 const useStyles = makeStyles((theme) => ({
   containedButton: {
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: `${theme.palette.primary.light} !important`,
   },
 }))
+
 export function FactionButton({
   onClick,
   onInfoClick,
@@ -60,9 +62,11 @@ export function FactionButton({
   disabled,
   factionKey,
   highlighted,
+  highlightText,
 }) {
   const classes = useStyles()
   const { getData } = useFactionData()
+  const { t } = useTranslation()
 
   return (
     <ButtonGroup
@@ -89,7 +93,9 @@ export function FactionButton({
           }
           variant="contained"
         >
-          <Trans i18nKey={`factions.${factionKey}.name`} />
+          <HighlightedText highlight={highlightText}>
+            {t(`factions.${factionKey}.name`)}
+          </HighlightedText>
         </Button>
       </EditPrompt>
       <IconButton
