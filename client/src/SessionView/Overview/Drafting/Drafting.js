@@ -1,6 +1,10 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { Grid, Box, Button, Typography } from '@material-ui/core'
-import { PanTool as PickedIcon } from '@material-ui/icons'
+import {
+  Block as BanIcon,
+  PanTool as PickIcon,
+  AssignmentInd as SpeakerIcon,
+} from '@material-ui/icons'
 import Alert from '@material-ui/lab/Alert'
 import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
@@ -22,7 +26,7 @@ import { SessionNutshell } from '../SessionNutshell'
 
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
-import { PhaseStepper } from './PhaseStepper'
+import { PhaseStepper } from './components/PhaseStepper'
 import { PlayerOrderStepper } from './PlayerOrderStepper'
 import { PickStepper } from './PickStepper'
 import { SpeakerIndicator } from './SpeakerIndicator'
@@ -173,7 +177,7 @@ function TablePositionPick({
                 disabled={Boolean(
                   disabled || disabledDueToSelection || picked || pick,
                 )}
-                endIcon={picked ? <PickedIcon fontSize="large" /> : null}
+                endIcon={picked ? <PickIcon fontSize="large" /> : null}
                 fullWidth
                 onClick={() => handleSelectedPosition(tablePositionIndex)}
                 variant="contained"
@@ -467,14 +471,35 @@ export function Drafting({ editable, session, sessionService }) {
     return null
   }
 
+  const phases = [
+    session.setup?.options?.bans
+      ? {
+          phase: PHASE.bans,
+          label: 'Ban',
+          icon: <BanIcon />,
+        }
+      : null,
+    {
+      phase: PHASE.picks,
+      label: 'Pick',
+      icon: <PickIcon />,
+    },
+    session.setup?.options?.speakerPick
+      ? null
+      : {
+          phase: PHASE.speaker,
+          label: 'Speaker selection',
+          icon: <SpeakerIcon />,
+        },
+  ].filter(Boolean)
+
   return (
     <>
       <SessionNutshell />
-      <PhaseStepper
-        bans={Boolean(session.setup?.options?.bans)}
-        phase={draft.phase}
-        speakerInPicks={Boolean(session.setup?.options?.speakerPick)}
-      />
+      <Typography align="center" variant="h4">
+        Phase:
+      </Typography>
+      <PhaseStepper phases={phases} currentPhase={draft.phase} />
       {draft.phase === PHASE.bans && (
         <BanStepper draft={draft} setup={session.setup} />
       )}

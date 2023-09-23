@@ -81,7 +81,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -225,7 +225,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -387,7 +387,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -518,7 +518,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -637,7 +637,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -761,7 +761,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -897,7 +897,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {
@@ -983,7 +983,7 @@ namespace ServerTests
                 {
                     Order = 0,
                     EventType = "CommitDraft",
-                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"]}",
+                    SerializedPayload = "{\"factions\":[\"The_Nekro_Virus\",\"Sardakk_Norr\",\"The_Winnu\",\"The_Xxcha_Kingdom\"],\"tablePositions\":[],\"initiative\":[]}",
                 },
                 new TimelineEvent
                 {

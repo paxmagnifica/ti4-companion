@@ -9,6 +9,9 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish -c release -o /app --no-restore
 
+# generate dev certificate to handle https
+RUN dotnet dev-certs https
+
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app

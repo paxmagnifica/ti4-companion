@@ -9,6 +9,18 @@ namespace Server.Domain
             this.MapPositions = new MapPosition[0];
         }
 
+        public DraftOptions(DraftOptions options)
+        {
+            this.InitialPool = (string[])options.InitialPool.Clone();
+            this.Players = (string[])options.Players.Clone();
+            this.MapPositions = (MapPosition[])options.MapPositions.Clone();
+            this.Bans = options.Bans;
+            this.BanRounds = options.BanRounds;
+            this.BansPerRound = options.BansPerRound;
+            this.TablePick = options.TablePick;
+            this.SpeakerPick = options.SpeakerPick;
+        }
+
         public string[] InitialPool { get; set; }
 
         public string[] Players { get; set; }

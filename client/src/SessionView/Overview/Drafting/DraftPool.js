@@ -68,8 +68,15 @@ export function DraftPool({
     (factionKey) => selected.includes(factionKey),
     [selected],
   )
+  const singleSelection = max === 1
   const toggleSelection = useCallback(
     (factionKey) => {
+      if (singleSelection) {
+        onSelected([factionKey])
+
+        return
+      }
+
       if (isSelected(factionKey)) {
         onSelected(selected.filter((faction) => faction !== factionKey))
 
@@ -90,7 +97,9 @@ export function DraftPool({
           const picked = picks.find(({ pick }) => pick === factionKey)
           const banned = bans.find(({ ban }) => ban === factionKey)
           const disabledDueToSelection =
-            selected.length === max && !selected.includes(factionKey)
+            !singleSelection &&
+            selected.length === max &&
+            !selected.includes(factionKey)
 
           return (
             <Grid key={factionKey} item lg={3} md={4} sm={6} xs={12}>

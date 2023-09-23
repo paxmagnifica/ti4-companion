@@ -198,6 +198,10 @@ export const factory = (options = { debug: true }) =>
               },
             },
             drafting: {
+              startCta: 'Start drafting',
+              banCta: 'ban',
+              pickCta: 'pick',
+              checkPicks: 'check picks',
               speakerOrder: {
                 bans: {
                   title: 'Ban order',

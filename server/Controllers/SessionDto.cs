@@ -14,7 +14,9 @@ namespace Server.Controllers
         public SessionDto(Session session)
         {
             this.Id = session.Id;
-            this.SetupGameState(session.Events);
+            this.Setup = this.GetSetup(session.Events);
+            this.IsKatowiceDraft = this.Setup.SetupType == Domain.Katowice.Constants.SetupType;
+
             this.Factions = this.GetFactions(session.Events);
             this.Points = this.GetPoints(session.Events);
             this.Objectives = this.GetObjectives(session.Events);
@@ -25,12 +27,18 @@ namespace Server.Controllers
             this.Editable = !session.Locked;
             this.SetSessionDetails(session.Events);
             this.Draft = new DraftDto(session);
-            this.Players = PlayerDto.GetPlayers(this);
+            this.Players = this.IsKatowiceDraft ? Domain.Katowice.Draft.GeneratePlayerDto(session) : PlayerDto.GetPlayers(this);
             this.Secured = !string.IsNullOrEmpty(session.HashedPassword);
             this.MapPositions = this.GetMapPositions(session.Events);
 
+            this.KatowiceDraft = Domain.Katowice.Draft.GetDto(session);
+
             this.Setup.Password = null;
         }
+
+        public bool IsKatowiceDraft { get; set; }
+
+        public Domain.Katowice.DraftDto KatowiceDraft { get; set; }
 
         public DraftDto Draft { get; set; }
 
@@ -94,11 +102,11 @@ namespace Server.Controllers
             return mapPositionsFromUpdatedMetadata ?? initialMapPositions;
         }
 
-        private void SetupGameState(List<GameEvent> events)
+        private GameStartedPayload GetSetup(List<GameEvent> events)
         {
             var gameStartEvent = events.FirstOrDefault(e => e.EventType == nameof(GameStarted));
 
-            this.Setup = GameStarted.GetPayload(gameStartEvent);
+            return GameStarted.GetPayload(gameStartEvent);
         }
 
         private void SetSessionDetails(List<GameEvent> events)

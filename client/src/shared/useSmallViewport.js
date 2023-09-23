@@ -1,7 +1,7 @@
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 
-const useSmallViewport = () => {
-  const smallViewport = useMediaQuery('(max-width:649px)')
+const useSmallViewport = (maxWidth = 649) => {
+  const smallViewport = useMediaQuery(`(max-width:${maxWidth}px)`)
 
   return smallViewport
 }

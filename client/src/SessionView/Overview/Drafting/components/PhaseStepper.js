@@ -1,19 +1,6 @@
 import clsx from 'clsx'
-import {
-  StepConnector,
-  Stepper,
-  Typography,
-  Step,
-  StepLabel,
-} from '@material-ui/core'
+import { StepConnector, Stepper, Step, StepLabel } from '@material-ui/core'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
-import {
-  Block as BanIcon,
-  PanTool as PickIcon,
-  AssignmentInd as SpeakerIcon,
-} from '@material-ui/icons'
-
-import { PHASE } from './shared'
 
 const ColorlibConnector = withStyles({
   alternativeLabel: {
@@ -78,54 +65,36 @@ function ColorlibStepIcon(props) {
   )
 }
 
-const useStepperStyles = makeStyles((theme) => ({
+const useStepperStyles = makeStyles((_theme) => ({
   root: {
     backgroundColor: 'transparent',
+    padding: 0,
   },
 }))
 
-export function PhaseStepper({ phase, bans, speakerInPicks }) {
+export function PhaseStepper({ phases, currentPhase }) {
   const classes = useStepperStyles()
 
-  const phases = [
-    bans ? PHASE.bans : null,
-    PHASE.picks,
-    speakerInPicks ? null : PHASE.speaker,
-  ].filter((a) => a !== null)
-  const steps = [
-    bans ? 'Ban' : null,
-    'Pick',
-    speakerInPicks ? null : 'Speaker selection',
-  ].filter((a) => a !== null)
-  const icons = [
-    bans ? <BanIcon /> : null,
-    <PickIcon />,
-    speakerInPicks ? null : <SpeakerIcon />,
-  ].filter((a) => a !== null)
-  const activeStep = phases.findIndex((a) => a === phase)
+  const icons = phases.map(({ icon }) => icon)
+  const activeStep = phases.findIndex(({ phase }) => phase === currentPhase)
 
   return (
-    <>
-      <Typography align="center" variant="h4">
-        Phase:
-      </Typography>
-      <Stepper
-        activeStep={activeStep}
-        alternativeLabel
-        className={classes.root}
-        connector={<ColorlibConnector />}
-      >
-        {steps.map((label) => (
-          <Step key={label} color="secondary">
-            <StepLabel
-              StepIconComponent={ColorlibStepIcon}
-              StepIconProps={{ icons }}
-            >
-              {label}
-            </StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-    </>
+    <Stepper
+      activeStep={activeStep}
+      alternativeLabel
+      className={classes.root}
+      connector={<ColorlibConnector />}
+    >
+      {phases.map(({ label }) => (
+        <Step key={label} color="secondary">
+          <StepLabel
+            StepIconComponent={ColorlibStepIcon}
+            StepIconProps={{ icons }}
+          >
+            {label}
+          </StepLabel>
+        </Step>
+      ))}
+    </Stepper>
   )
 }

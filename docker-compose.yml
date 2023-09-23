@@ -16,6 +16,8 @@ services:
     depends_on:
       - server
   server:
+    stdin_open: true
+    tty: true
     build:
       context: ./server
       dockerfile: Dockerfile.dev
