@@ -31,7 +31,8 @@ namespace Server.Controllers
             {
                 var eventAllowed = await this.eventFactory.CanEventBeAdded(sessionId, eventDto);
 
-                if (!eventAllowed) {
+                if (!eventAllowed)
+                {
                     return new BadRequestResult();
                 }
 

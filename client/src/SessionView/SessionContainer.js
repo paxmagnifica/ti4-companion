@@ -77,7 +77,11 @@ export function SessionContainer({ children }) {
   const loading = !queryInfo.isFetched
 
   const sessionService = useMemo(
-    () => sessionServiceFactory({ fetch: authorizedFetch, checksum: session?.checksum }),
+    () =>
+      sessionServiceFactory({
+        fetch: authorizedFetch,
+        checksum: session?.checksum,
+      }),
     [authorizedFetch, session?.checksum],
   )
 

@@ -14,6 +14,12 @@ namespace ServerTests
 {
     public class DataIntegrity
     {
+        public DataIntegrity()
+        {
+            this.Repository = Substitute.For<IRepository>();
+            this.TimeProvider = Substitute.For<ITimeProvider>();
+        }
+
         private JsonSerializerSettings SerializerSettings
         {
             get
@@ -22,12 +28,6 @@ namespace ServerTests
                 serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 return serializerSettings;
             }
-        }
-
-        public DataIntegrity()
-        {
-            this.Repository = Substitute.For<IRepository>();
-            this.TimeProvider = Substitute.For<ITimeProvider>();
         }
 
         private IRepository Repository { get; set; }
@@ -110,7 +110,8 @@ namespace ServerTests
             var sessionId = Guid.NewGuid();
             var sessionChecksum = Guid.NewGuid();
             var eventFactory = new EventFactory(this.TimeProvider, this.Repository);
-            var eventDto = new EventDto{
+            var eventDto = new EventDto
+            {
                 Checksum = Guid.NewGuid(),
             };
 
@@ -129,7 +130,7 @@ namespace ServerTests
             // given
             var sessionId = Guid.NewGuid();
             var eventFactory = new EventFactory(this.TimeProvider, this.Repository);
-            var eventDto = new EventDto{ };
+            var eventDto = new EventDto { };
 
             this.Repository.GetSessionChecksum(sessionId).Returns(Guid.NewGuid());
 
@@ -147,7 +148,8 @@ namespace ServerTests
             var sessionId = Guid.NewGuid();
             var sessionChecksum = Guid.NewGuid();
             var eventFactory = new EventFactory(this.TimeProvider, this.Repository);
-            var eventDto = new EventDto{
+            var eventDto = new EventDto
+            {
                 Checksum = sessionChecksum,
             };
 
