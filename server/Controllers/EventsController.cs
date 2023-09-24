@@ -33,8 +33,9 @@ namespace Server.Controllers
 
                 if (!eventAllowed)
                 {
-                    return new BadRequestObjectResult(new {
-                        tiCompanionError = "stale_state_event"
+                    return new BadRequestObjectResult(new
+                    {
+                        tiCompanionError = "stale_state_event",
                     });
                 }
 
