@@ -2,12 +2,13 @@ import CONFIG from '../config'
 
 import { handleErrors } from './errorHandling'
 
-const factory = ({ fetch }) => {
+const factory = ({ fetch, checksum }) => {
   const pushEvent = (sessionId, gameEvent) =>
     fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        checksum,
         eventType: gameEvent.type,
         serializedPayload: JSON.stringify(gameEvent.payload),
       }),

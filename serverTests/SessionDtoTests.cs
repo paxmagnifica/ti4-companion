@@ -4,6 +4,7 @@ using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using Server.Controllers;
 using Server.Domain;
+using System;
 using System.Collections.Generic;
 
 namespace ServerTests

@@ -20,5 +20,7 @@ namespace Server.Domain
         Task RememberSessionInList(string v, Session sessionFromDb);
 
         Task<bool> SessionExists(Guid sessionId);
+
+        Task<Guid> GetSessionChecksum(Guid sessionId);
     }
 }

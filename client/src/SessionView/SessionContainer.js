@@ -54,11 +54,6 @@ export function SessionContainer({ children }) {
     }
   }, [secret, fetch])
 
-  const sessionService = useMemo(
-    () => sessionServiceFactory({ fetch: authorizedFetch }),
-    [authorizedFetch],
-  )
-
   const editFeature = useEdit()
   const { setEnableEditDialogOpen } = editFeature
   const originalDomainErrorContext = useContext(DomainErrorContext)
@@ -80,6 +75,15 @@ export function SessionContainer({ children }) {
   })
   useRealTimeSession({ sessionId })
   const loading = !queryInfo.isFetched
+
+  const sessionService = useMemo(
+    () =>
+      sessionServiceFactory({
+        fetch: authorizedFetch,
+        checksum: session?.checksum,
+      }),
+    [authorizedFetch, session?.checksum],
+  )
 
   const pushEvent = useCallback(
     async (action) => {

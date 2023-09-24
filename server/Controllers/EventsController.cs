@@ -29,6 +29,16 @@ namespace Server.Controllers
         {
             try
             {
+                var eventAllowed = await this.eventFactory.CanEventBeAdded(sessionId, eventDto);
+
+                if (!eventAllowed)
+                {
+                    return new BadRequestObjectResult(new
+                    {
+                        tiCompanionError = "stale_state_event",
+                    });
+                }
+
                 var gameEvent = this.eventFactory.GetGameEvent(sessionId, eventDto);
                 await this.dispatcher.Dispatch(gameEvent);
 

@@ -12,9 +12,25 @@ export class DomainError extends Error {
   }
 }
 
-export const handleErrors = (response) => {
+export const handleErrors = async (response) => {
   if (response.ok) {
     return response
+  }
+
+  if (response.status === 400) {
+    let body = null
+    try {
+      body = await response.json()
+    } catch (_) {
+      throw new DomainError(response)
+    }
+
+    if (body?.tiCompanionError) {
+      throw new DomainError({
+        statusText: 'Bad Request',
+        status: body.tiCompanionError,
+      })
+    }
   }
 
   throw new DomainError(response)
