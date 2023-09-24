@@ -113,6 +113,8 @@ export const factory = (options = { debug: true }) =>
               401: 'Unauthorized',
               404: 'The item you are looking for was not found',
               500: 'Something went wrong on our side, try again in a moment',
+              stale_state_event:
+                'You are missing some updates, please refresh the page and retry. If the problem persists please contact support.',
             },
             components: {
               agenda: {

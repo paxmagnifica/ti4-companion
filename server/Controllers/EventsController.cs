@@ -33,7 +33,9 @@ namespace Server.Controllers
 
                 if (!eventAllowed)
                 {
-                    return new BadRequestResult();
+                    return new BadRequestObjectResult(new {
+                        tiCompanionError = "stale_state_event"
+                    });
                 }
 
                 var gameEvent = this.eventFactory.GetGameEvent(sessionId, eventDto);
