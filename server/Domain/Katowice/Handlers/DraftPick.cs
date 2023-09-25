@@ -38,7 +38,7 @@ namespace Server.Domain.Katowice
                 throw new ConflictException("draft_already_done");
             }
 
-            var draftPickEventPayloads = session.Events.Where(ev => ev.EventType == nameof(DraftPick));
+            var draftPickEventPayloads = session.Events.Where(ev => ev.EventType == nameof(DraftPick)).OrderBy(ev => ev.HappenedAt);
             var draftPickEventsWithPlayerIndexes = draftPickEventPayloads.Select((dpe, index) => Tuple.Create(draftPickPlayerIndexes.ElementAt(index), dpe));
             var currentPlayerIndex = draftPickPlayerIndexes.ElementAt(draftPickEventsWithPlayerIndexes.Count());
 
