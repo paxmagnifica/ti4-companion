@@ -34,7 +34,7 @@ namespace Server.Domain.Katowice
             }
 
             var eventWhereFactionUsed = session.Events.LastOrDefault(ev => GetPayload(ev).Faction == currentEventPayload.Faction);
-            var payloadWhereFactionUsed = eventWhereFactionUsed == null && eventWhereFactionUsed.EventType != nameof(Nomination) ? null : GetPayload(eventWhereFactionUsed);
+            var payloadWhereFactionUsed = eventWhereFactionUsed == null ? null : GetPayload(eventWhereFactionUsed);
 
             var confirmingNomination = currentEventPayload.Action == Constants.ConfirmAction && payloadWhereFactionUsed?.Action == Constants.NominateAction;
 
