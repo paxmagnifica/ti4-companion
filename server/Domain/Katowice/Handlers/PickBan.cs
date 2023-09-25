@@ -41,7 +41,6 @@ namespace Server.Domain.Katowice
             // TODO checks:
             // check if action is the same as current player
             // check if playerindex is the same as current player
-            // should not accept nominations / confirmations after all done
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);
