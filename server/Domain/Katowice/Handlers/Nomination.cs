@@ -30,7 +30,7 @@ namespace Server.Domain.Katowice
 
             if (nominationEvents.Count() == expectedNominationEventsCount)
             {
-                throw new ConflictException();
+                throw new ConflictException("nominations_done");
             }
 
             var eventWhereFactionUsed = session.Events.LastOrDefault(ev => GetPayload(ev).Faction == currentEventPayload.Faction);
@@ -41,13 +41,13 @@ namespace Server.Domain.Katowice
             var duplicatingAction = payloadWhereFactionUsed != null && !confirmingNomination;
             if (duplicatingAction)
             {
-                throw new ConflictException();
+                throw new ConflictException("already_nominated_confirmed");
             }
 
             var confirmingWithoutNomination = currentEventPayload.Action == Constants.ConfirmAction && payloadWhereFactionUsed == null;
             if (confirmingWithoutNomination)
             {
-                throw new ConflictException();
+                throw new ConflictException("confirming_without_nomination");
             }
 
             session.Events.Add(gameEvent);

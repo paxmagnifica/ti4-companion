@@ -29,18 +29,15 @@ namespace Server.Domain.Katowice
 
             if (pickBanEvents.Count() == expectedNumberOfPickBanEvents)
             {
-                throw new ConflictException();
+                throw new ConflictException("pick_bans_done");
             }
 
             var factionAlreadyUsed = pickBanEvents.Any(ev => GetPayload(ev).Faction == currentEventPayload.Faction);
             if (factionAlreadyUsed)
             {
-                throw new ConflictException();
+                throw new ConflictException("faction_already_used");
             }
 
-            // TODO checks:
-            // check if action is the same as current player
-            // check if playerindex is the same as current player
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);

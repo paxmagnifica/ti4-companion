@@ -35,7 +35,7 @@ namespace Server.Domain.Katowice
 
             if (draftPickAlreadyDone)
             {
-                throw new ConflictException();
+                throw new ConflictException("draft_already_done");
             }
 
             var draftPickEventPayloads = session.Events.Where(ev => ev.EventType == nameof(DraftPick));
@@ -49,7 +49,7 @@ namespace Server.Domain.Katowice
 
             if (playerDuplicatingAction)
             {
-                throw new ConflictException();
+                throw new ConflictException("draft_duplicating_action");
             }
 
             if (currentPayload.Action == Constants.FactionAction)
@@ -97,6 +97,11 @@ namespace Server.Domain.Katowice
             return GetPayload(gameEvent.SerializedPayload);
         }
 
+        internal static DraftPickPayload GetPayload(string serializedPayload)
+        {
+            return JsonConvert.DeserializeObject<DraftPickPayload>(serializedPayload);
+        }
+
         private void ValidateFactionPick(List<GameEvent> events, DraftPickPayload currentPayload)
         {
             var factionsPickedIntoPool = events.Where(ev => ev.EventType == nameof(PickBan) && PickBan.GetPayload(ev).Action == Constants.PickAction).Select(PickBan.GetPayload).Select(p => p.Faction);
@@ -105,11 +110,16 @@ namespace Server.Domain.Katowice
             var pickedFactions = events.Where(ev => ev.EventType == nameof(DraftPick) && GetPayload(ev).Action == Constants.FactionAction).Select(DraftPick.GetPayload).Select(p => p.Choice);
             var factionAlreadyPicked = pickedFactions.Contains(currentPayload.Choice);
 
-            var pickedAvailableFaction = !factionAlreadyPicked && (factionsPickedIntoPool.Contains(currentPayload.Choice) || factionsConfirmedIntoPool.Contains(currentPayload.Choice));
+            if (factionAlreadyPicked)
+            {
+                throw new ConflictException("faction_already_picked");
+            }
+
+            var pickedAvailableFaction = factionsPickedIntoPool.Contains(currentPayload.Choice) || factionsConfirmedIntoPool.Contains(currentPayload.Choice);
 
             if (!pickedAvailableFaction)
             {
-                throw new ConflictException();
+                throw new ConflictException("faction_not_available");
             }
         }
 
@@ -121,7 +131,7 @@ namespace Server.Domain.Katowice
 
             if (!validChoice)
             {
-                throw new ConflictException();
+                throw new ConflictException("initiative_already_picked");
             }
         }
 
@@ -133,13 +143,8 @@ namespace Server.Domain.Katowice
 
             if (!validChoice)
             {
-                throw new ConflictException();
+                throw new ConflictException("table_position_already_picked");
             }
-        }
-
-        internal static DraftPickPayload GetPayload(string serializedPayload)
-        {
-            return JsonConvert.DeserializeObject<DraftPickPayload>(serializedPayload);
         }
     }
 }
