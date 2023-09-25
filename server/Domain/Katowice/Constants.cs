@@ -7,6 +7,8 @@ namespace Server.Domain.Katowice
         internal static readonly string NominationsPhase = "nominations";
         internal static readonly string BanAction = "ban";
         internal static readonly string PickAction = "pick";
+        internal static readonly string NominateAction = "nominate";
+        internal static readonly string ConfirmAction = "confirm";
         internal static readonly string DraftPhase = "draft";
         internal static readonly string InitiativeAction = "initiative";
         internal static readonly string FactionAction = "faction";

@@ -24,10 +24,15 @@ namespace Server.Domain.Katowice
             }
 
             var currentEventPayload = GetPayload(gameEvent);
-
             var pickBanEvents = session.Events.Where(ev => ev.EventType == nameof(PickBan));
-            var factionAlreadyUsed = session.Events.Any(ev => GetPayload(ev).Faction == currentEventPayload.Faction);
+            var expectedNumberOfPickBanEvents = session.GetGameStartedInfo().RandomPlayerOrder.Length * 2;
 
+            if (pickBanEvents.Count() == expectedNumberOfPickBanEvents)
+            {
+                throw new ConflictException();
+            }
+
+            var factionAlreadyUsed = pickBanEvents.Any(ev => GetPayload(ev).Faction == currentEventPayload.Faction);
             if (factionAlreadyUsed)
             {
                 throw new ConflictException();
@@ -36,6 +41,7 @@ namespace Server.Domain.Katowice
             // TODO checks:
             // check if action is the same as current player
             // check if playerindex is the same as current player
+            // should not accept nominations / confirmations after all done
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);
