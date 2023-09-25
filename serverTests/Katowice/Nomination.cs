@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Server.Domain;
 using Server.Domain.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
