@@ -33,7 +33,7 @@ namespace Server.Domain.Katowice
             playerIndexesThereAndBackAgain.AddRange(gameStartedPayload.RandomPlayerOrder);
             playerIndexesThereAndBackAgain.AddRange(gameStartedPayload.RandomPlayerOrder.Reverse());
 
-            var pickBanEvents = session.Events.Where(ge => ge.EventType == nameof(PickBan));
+            var pickBanEvents = session.Events.Where(ge => ge.EventType == nameof(PickBan)).OrderBy(ev => ev.HappenedAt);
             var pickBanOrder = playerIndexesThereAndBackAgain.Select((playerIndex, pickBanIndex) =>
             {
                 var choice = pickBanEvents.ElementAtOrDefault(pickBanIndex);
@@ -48,7 +48,7 @@ namespace Server.Domain.Katowice
 
             builtDto.PickBans = pickBanOrder.ToArray();
 
-            var nominationEvents = session.Events.Where(ge => ge.EventType == nameof(Nomination));
+            var nominationEvents = session.Events.Where(ge => ge.EventType == nameof(Nomination)).OrderBy(ev => ev.HappenedAt);
             if (playerIndexesThereAndBackAgain.Count() == pickBanEvents.Count())
             {
                 builtDto.Phase = Constants.NominationsPhase;
@@ -78,7 +78,7 @@ namespace Server.Domain.Katowice
                 draftIndexes3Lines.AddRange(gameStartedPayload.RandomPlayerOrder.Reverse());
                 draftIndexes3Lines.AddRange(gameStartedPayload.RandomPlayerOrder);
 
-                var draftPickEvents = session.Events.Where(ge => ge.EventType == nameof(DraftPick));
+                var draftPickEvents = session.Events.Where(ge => ge.EventType == nameof(DraftPick)).OrderBy(ev => ev.HappenedAt);
                 var draft = draftIndexes3Lines.Select((playerIndex, draftPickIndex) =>
                 {
                     var draftPick = draftPickEvents.ElementAtOrDefault(draftPickIndex);
@@ -110,7 +110,7 @@ namespace Server.Domain.Katowice
             draftPickPlayerIndexes.AddRange(gameStartedPayload.RandomPlayerOrder.Reverse());
             draftPickPlayerIndexes.AddRange(gameStartedPayload.RandomPlayerOrder);
 
-            var draftPickPayloads = session.Events.Where(ge => ge.EventType == nameof(DraftPick)).Select(ge => DraftPick.GetPayload(ge));
+            var draftPickPayloads = session.Events.Where(ge => ge.EventType == nameof(DraftPick)).OrderBy(ev => ev.HappenedAt).Select(ge => DraftPick.GetPayload(ge));
 
             var groupedByPlayerIndex = draftPickPlayerIndexes.Select((playerIndex, payloadIndex) => new
             {
