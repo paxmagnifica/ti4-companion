@@ -113,8 +113,27 @@ export const factory = (options = { debug: true }) =>
               401: 'Unauthorized',
               404: 'The item you are looking for was not found',
               500: 'Something went wrong on our side, try again in a moment',
+              something_went_wrong:
+                'Something went wrong, try again in a moment',
               stale_state_event:
                 'You are missing some updates, please refresh the page and retry. If the problem persists please contact support.',
+              pick_bans_done: 'Picks and bans are already over.',
+              faction_already_used: 'This faction was already banned or picked',
+              nominations_done: 'Nominations are already over',
+              already_nominated_confirmed: 'This faction was already used',
+              confirming_without_nomination:
+                'Factions need to be nominated before they can be confirmed',
+              draft_already_done:
+                'Draft is already over, have fun in the game!',
+              draft_duplicating_action:
+                'You can only pick one of each (faction, initiative, table position etc.)',
+              faction_not_available: 'This faction is not in the draft pool',
+              faction_already_picked:
+                'This faction has already been picked by somebody else',
+              initiative_already_picked:
+                'This initiative has already been picked by somebody else',
+              table_position_already_picked:
+                'This position at the table has already been picked by somebody else',
             },
             components: {
               agenda: {

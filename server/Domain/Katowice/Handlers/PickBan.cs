@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Server.Domain.Exceptions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Server.Domain.Katowice
@@ -21,10 +23,21 @@ namespace Server.Domain.Katowice
                 // error
             }
 
-            // TODO checks:
-            // check if action is the same as current player
-            // check if playerindex is the same as current player
-            // check if not duplicated
+            var currentEventPayload = GetPayload(gameEvent);
+            var pickBanEvents = session.Events.Where(ev => ev.EventType == nameof(PickBan));
+            var expectedNumberOfPickBanEvents = session.GetGameStartedInfo().RandomPlayerOrder.Length * 2;
+
+            if (pickBanEvents.Count() == expectedNumberOfPickBanEvents)
+            {
+                throw new ConflictException("pick_bans_done");
+            }
+
+            var factionAlreadyUsed = pickBanEvents.Any(ev => GetPayload(ev).Faction == currentEventPayload.Faction);
+            if (factionAlreadyUsed)
+            {
+                throw new ConflictException("faction_already_used");
+            }
+
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);

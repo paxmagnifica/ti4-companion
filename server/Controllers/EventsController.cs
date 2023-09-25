@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Server.Domain.Exceptions;
 using Server.Infra;
 using System;
 using System.Threading.Tasks;
@@ -50,6 +51,14 @@ namespace Server.Controllers
             {
                 this.logger.LogWarning(exception.Message);
                 return new NotFoundResult();
+            }
+            catch (Ti4CompanionDomainException exception)
+            {
+                this.logger.LogWarning(exception.Message);
+                return new BadRequestObjectResult(new
+                {
+                    tiCompanionError = exception.ErrorKey,
+                });
             }
         }
     }

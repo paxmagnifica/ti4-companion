@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Server.Domain.Exceptions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Server.Domain.Katowice
@@ -21,11 +23,33 @@ namespace Server.Domain.Katowice
                 // error
             }
 
-            // TODO checks:
-            // check if action is the same as current player
-            // check if playerindex is the same as current player
-            // check if confirming without nomination
-            // check if not duplicated (nominating nominated/confirmed or confirming confirmed)
+            var currentEventPayload = GetPayload(gameEvent);
+
+            var nominationEvents = session.Events.Where(ev => ev.EventType == nameof(Nomination));
+            var expectedNominationEventsCount = session.GetGameStartedInfo().RandomPlayerOrder.Length * 2;
+
+            if (nominationEvents.Count() == expectedNominationEventsCount)
+            {
+                throw new ConflictException("nominations_done");
+            }
+
+            var eventWhereFactionUsed = session.Events.LastOrDefault(ev => GetPayload(ev).Faction == currentEventPayload.Faction);
+            var payloadWhereFactionUsed = eventWhereFactionUsed == null && eventWhereFactionUsed.EventType != nameof(Nomination) ? null : GetPayload(eventWhereFactionUsed);
+
+            var confirmingNomination = currentEventPayload.Action == Constants.ConfirmAction && payloadWhereFactionUsed?.Action == Constants.NominateAction;
+
+            var duplicatingAction = payloadWhereFactionUsed != null && !confirmingNomination;
+            if (duplicatingAction)
+            {
+                throw new ConflictException("already_nominated_confirmed");
+            }
+
+            var confirmingWithoutNomination = currentEventPayload.Action == Constants.ConfirmAction && payloadWhereFactionUsed == null;
+            if (confirmingWithoutNomination)
+            {
+                throw new ConflictException("confirming_without_nomination");
+            }
+
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);
