@@ -1,5 +1,5 @@
 import { Typography } from '@material-ui/core'
-import speakerFront from '../../../../../assets/speaker-front.png'
+import speakerFront from '../../../../assets/speaker-front.png'
 
 export function Initiative({ at, height, maxWidth }) {
   if (at <= 0 || !at) {

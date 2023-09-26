@@ -15,7 +15,7 @@ import { Trans } from 'react-i18next'
 import { ColorBox } from '../../../../shared'
 import PlayerFlag from '../../../PlayerFlag'
 import { useSessionContext } from '../../../useSessionContext'
-import { Initiative } from './components/Initiative'
+import { Initiative } from '../components/Initiative'
 
 export function CheckPlayerPicks() {
   const [open, setOpen] = useState(false)

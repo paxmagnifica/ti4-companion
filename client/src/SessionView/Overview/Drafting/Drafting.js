@@ -502,7 +502,9 @@ export function Drafting({ editable, session, sessionService }) {
   ].filter(Boolean)
 
   return (
-    <>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', gridRowGap: '2em' }}
+    >
       <SessionNutshell />
       <Typography align="center" variant="h4">
         Phase:
@@ -635,6 +637,6 @@ export function Drafting({ editable, session, sessionService }) {
           in the chat (lower bottom corner) - it will help us immensely!
         </Alert>
       </Box>
-    </>
+    </div>
   )
 }
