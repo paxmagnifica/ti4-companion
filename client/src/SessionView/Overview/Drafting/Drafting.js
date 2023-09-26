@@ -12,7 +12,7 @@ import clsx from 'clsx'
 
 import speakerFront from '../../../assets/speaker-front.png'
 import speakerBack from '../../../assets/speaker-back.png'
-import { useTranslation } from '../../../i18n'
+import { Trans } from '../../../i18n'
 import { useDomainErrors } from '../../../shared/errorHandling'
 import { FactionImage } from '../../../shared/FactionImage'
 import {
@@ -27,10 +27,10 @@ import { SessionNutshell } from '../SessionNutshell'
 import { DraftPool } from './DraftPool'
 import { useDraftQuery, useDraftMutation } from './queries'
 import { PhaseStepper } from './components/PhaseStepper'
-import { PlayerOrderStepper } from './PlayerOrderStepper'
 import { PickStepper } from './PickStepper'
 import { SpeakerIndicator } from './SpeakerIndicator'
 import { PHASE } from './shared'
+import { PlayerActionsStepper } from './components/PlayerActionsStepper'
 
 function Speaker({ disabled, draft, session, sessionService }) {
   const { setError } = useDomainErrors()
@@ -366,36 +366,44 @@ function Pick({
 }
 
 function BanStepper({ draft, setup }) {
-  const { t } = useTranslation()
   const { playerCount, bansPerRound, banRounds } = setup.options
 
-  const history = new Array(playerCount * banRounds)
-    .fill()
-    .map((_p, playerIndex) => (
-      <>
-        {new Array(bansPerRound).fill().map((_b, banIndex) => {
+  const steps = new Array(playerCount * banRounds)
+    .fill(0)
+    .map((_p, playerIndex) => {
+      const player = draft.players[playerIndex]
+      const bans = new Array(bansPerRound)
+        .fill(0)
+        .map((_b, banIndex) => {
           const ban = draft.bans[playerIndex * bansPerRound + banIndex]
-          if (!ban) {
-            return null
-          }
 
-          return (
-            <FactionImage
-              factionKey={ban.ban}
-              style={{ width: 'auto', height: '100%' }}
-            />
-          )
-        })}
-      </>
-    ))
+          return ban?.ban || null
+        })
+        .filter(Boolean)
+
+      return {
+        player,
+        choice:
+          bans.length === 0 ? null : (
+            <>
+              {bans.map((ban) => (
+                <FactionImage
+                  factionKey={ban}
+                  style={{ width: 'auto', height: '100%' }}
+                />
+              ))}
+            </>
+          ),
+      }
+    })
 
   return (
-    <PlayerOrderStepper
-      activePlayer={draft.activePlayerIndex}
-      history={history}
-      order={draft.order.map((playerIndex) => draft.players[playerIndex])}
-      title={t(`drafting.speakerOrder.${draft.phase}.title`)}
-    />
+    <>
+      <Typography align="center" variant="h4">
+        <Trans i18nKey={`drafting.speakerOrder.${draft.phase}.title`} />
+      </Typography>
+      <PlayerActionsStepper steps={steps} />
+    </>
   )
 }
 
@@ -499,11 +507,13 @@ export function Drafting({ editable, session, sessionService }) {
       <Typography align="center" variant="h4">
         Phase:
       </Typography>
-      <PhaseStepper phases={phases} currentPhase={draft.phase} />
+      <PhaseStepper currentPhase={draft.phase} phases={phases} />
       {draft.phase === PHASE.bans && (
         <BanStepper draft={draft} setup={session.setup} />
       )}
-      {draft.phase === PHASE.picks && <PickStepper draft={draft} />}
+      {draft.phase === PHASE.picks && (
+        <PickStepper draft={draft} mapPositions={session.mapPositions} />
+      )}
       {draft.phase === PHASE.speaker && (
         <SpeakerIndicator indicated={draft.speaker} players={draft.players} />
       )}
