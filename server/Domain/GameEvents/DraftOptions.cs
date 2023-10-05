@@ -19,6 +19,7 @@ namespace Server.Domain
             this.BansPerRound = options.BansPerRound;
             this.TablePick = options.TablePick;
             this.SpeakerPick = options.SpeakerPick;
+            this.KeepPlayerOrder = options.KeepPlayerOrder;
         }
 
         public string[] InitialPool { get; set; }
@@ -43,5 +44,7 @@ namespace Server.Domain
         public bool SpeakerPick { get; set; }
 
         public int AllBansCount { get => this.PlayerCount * this.BansPerRound * this.BanRounds; }
+
+        public bool KeepPlayerOrder { get; set; }
     }
 }

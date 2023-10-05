@@ -42,6 +42,27 @@ namespace ServerTests.Katowice
         }
 
         [Test]
+        public void ShouldSetRandomOrderWithoutChangeIfDraftSetupToSkipRandomization()
+        {
+            // given
+            var given = new GameStartedPayload
+            {
+                SetupType = "katowice_draft",
+                Options = new DraftOptions
+                {
+                    Players = new string[] { "Player1", "Player2", "Player3", "Player4", "Player5", "Player6" },
+                    KeepPlayerOrder = true,
+                },
+            };
+
+            // when
+            GameStartedPayload payload = KTW.Draft.GetPayloadWithRandomOrder(given);
+
+            // then
+            payload.RandomPlayerOrder.Should().Equal(new int[] { 0, 1, 2, 3, 4, 5 });
+        }
+
+        [Test]
         public void ShouldNotWorkOnPayloadsNotFromKatowiceDraft()
         {
             // given

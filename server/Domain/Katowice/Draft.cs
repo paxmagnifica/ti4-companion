@@ -12,9 +12,16 @@ namespace Server.Domain.Katowice
 
             GameStartedPayload newPayload = new GameStartedPayload(payload);
 
-            var randomizedPlayerOrder = Enumerable.Range(0, payload.Options.Players.Length).ToList();
-            randomizedPlayerOrder.Shuffle();
-            newPayload.RandomPlayerOrder = randomizedPlayerOrder.ToArray();
+            if (!payload.Options.KeepPlayerOrder)
+            {
+                var randomizedPlayerOrder = Enumerable.Range(0, payload.Options.Players.Length).ToList();
+                randomizedPlayerOrder.Shuffle();
+                newPayload.RandomPlayerOrder = randomizedPlayerOrder.ToArray();
+            }
+            else
+            {
+                newPayload.RandomPlayerOrder = Enumerable.Range(0, payload.Options.Players.Length).ToArray();
+            }
 
             return newPayload;
         }
