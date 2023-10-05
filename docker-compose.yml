@@ -1,4 +1,7 @@
 version: "3.9"
+volumes:
+  serverBin:
+  serverObj:
 services:
   client:
     image: "node:16"
@@ -32,7 +35,9 @@ services:
       - postgres
       - storage-emulator
     volumes:
-      - "./server:/source"
+      - ./server:/source
+      - serverBin:/source/bin
+      - serverObj:/source/obj
   postgres:
     image: postgres
     environment:
