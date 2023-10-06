@@ -21,6 +21,7 @@ import { useFetch } from '../useFetch'
 import { GameVersionPicker, useFactionsList } from '../GameComponents'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
+import { usePlayersAndMapPositions } from './usePlayersAndMapPositions'
 
 const playerMarks = [
   { value: 4, label: '4' },
@@ -31,31 +32,23 @@ const playerMarks = [
 const useStyles = makeStyles((theme) => ({
   row: {
     marginBottom: theme.spacing(3),
+    gridColumnGap: '1.2em',
+    gridRowGap: '1em',
   },
 }))
+
+const DEFAULT_PLAYER_COUNT = 6
 
 export function DraftSetup() {
   const classes = useStyles()
 
   const [gameVersion, setGameVersion] = useState()
   const { factions: factionsList } = useFactionsList(gameVersion)
-  const [playerCount, setPlayerCount] = useState(6)
-  const [players, setPlayers] = useState([
-    'Player 1',
-    'Player 2',
-    'Player 3',
-    'Player 4',
-    'Player 5',
-    'Player 6',
-  ])
-  const [mapPositions, setMapPositions] = useState([
-    { name: 'P1', color: null },
-    { name: 'P2', color: null },
-    { name: 'P3', color: null },
-    { name: 'P4', color: null },
-    { name: 'P5', color: null },
-    { name: 'P6', color: null },
-  ])
+  const [
+    [mapPositions, setMapPositions],
+    [players, setPlayers],
+    [playerCount, setPlayerCount]
+  ] = usePlayersAndMapPositions(DEFAULT_PLAYER_COUNT)
 
   const [bans, setBans] = useState(true)
   const toggleBans = useCallback(() => setBans((b) => !b), [])
@@ -126,34 +119,6 @@ export function DraftSetup() {
     [],
   )
 
-  const handlePlayerCountChange = useCallback(
-    (_, newValue) => {
-      const diff = newValue - playerCount
-      const newPlayers =
-        diff < 0
-          ? players.slice(0, diff)
-          : [...Array(newValue).keys()].map(
-              (playerIndex) =>
-                players[playerIndex] || `Player ${playerIndex + 1}`,
-            )
-
-      setPlayerCount(newValue)
-      setPlayers(newPlayers)
-
-      const newMapPositions =
-        diff < 0
-          ? mapPositions.slice(0, diff)
-          : [...Array(newValue).keys()].map(
-              (playerIndex) =>
-                mapPositions[playerIndex] || {
-                  name: `P${playerIndex + 1}`,
-                  color: null,
-                },
-            )
-      setMapPositions(newMapPositions)
-    },
-    [playerCount, players, mapPositions],
-  )
   const handlePlayerChange = useCallback((playerIndex, event) => {
     const { value } = event.currentTarget
 
@@ -183,7 +148,7 @@ export function DraftSetup() {
               marks={playerMarks}
               max={8}
               min={2}
-              onChange={handlePlayerCountChange}
+              onChange={setPlayerCount}
               step={1}
               value={playerCount}
               valueLabelDisplay="on"
