@@ -45,7 +45,7 @@ export function KatowiceDraft() {
   const [
     [mapPositions, setMapPositions],
     [players, setPlayers],
-    [playerCount, setPlayerCount]
+    [playerCount, setPlayerCount],
   ] = usePlayersAndMapPositions(DEFAULT_PLAYER_COUNT)
 
   const [gameVersion, setGameVersion] = useState()

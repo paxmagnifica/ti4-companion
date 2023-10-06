@@ -47,7 +47,7 @@ export function DraftSetup() {
   const [
     [mapPositions, setMapPositions],
     [players, setPlayers],
-    [playerCount, setPlayerCount]
+    [playerCount, setPlayerCount],
   ] = usePlayersAndMapPositions(DEFAULT_PLAYER_COUNT)
 
   const [bans, setBans] = useState(true)
