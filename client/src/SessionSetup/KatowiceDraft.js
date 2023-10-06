@@ -8,6 +8,9 @@ import {
   FormGroup,
   TextField,
   Button,
+  FormControlLabel,
+  Switch,
+  Slider,
 } from '@material-ui/core'
 
 import { Trans } from '../i18n'
@@ -16,39 +19,38 @@ import { MapPositions } from '../shared/MapPositions'
 import sessionFactory from '../shared/sessionService'
 import { useFetch } from '../useFetch'
 import { GameVersionPicker, useFactionsList } from '../GameComponents'
-import { colors as plasticColors } from '../shared/plasticColors'
 
 import { PasswordProtectionDialog } from './PasswordProtectionDialog'
+import { usePlayersAndMapPositions } from './usePlayersAndMapPositions'
 
 const useStyles = makeStyles((theme) => ({
   row: {
     marginBottom: theme.spacing(3),
+    gridColumnGap: '1.2em',
+    gridRowGap: '1em',
   },
 }))
 
-const playerCount = 6
+const PLAYER_MARKS = [
+  { value: 4, label: '4' },
+  { value: 6, label: '6' },
+  { value: 8, label: '8' },
+]
+
+const DEFAULT_PLAYER_COUNT = 6
 
 export function KatowiceDraft() {
   const classes = useStyles()
 
+  const [
+    [mapPositions, setMapPositions],
+    [players, setPlayers],
+    [playerCount, setPlayerCount]
+  ] = usePlayersAndMapPositions(DEFAULT_PLAYER_COUNT)
+
   const [gameVersion, setGameVersion] = useState()
   const { factions: factionsList } = useFactionsList(gameVersion)
-  const [players, setPlayers] = useState([
-    'Player 1',
-    'Player 2',
-    'Player 3',
-    'Player 4',
-    'Player 5',
-    'Player 6',
-  ])
-  const [mapPositions, setMapPositions] = useState([
-    { name: 'black', color: plasticColors.black },
-    { name: 'yellow', color: plasticColors.yellow },
-    { name: 'purple', color: plasticColors.purple },
-    { name: 'red', color: plasticColors.red },
-    { name: 'green', color: plasticColors.green },
-    { name: 'blue', color: plasticColors.blue },
-  ])
+  const [keepPlayerOrder, setKeepPlayerOrder] = useState(false)
 
   const history = useHistory()
   const { fetch } = useFetch()
@@ -63,6 +65,7 @@ export function KatowiceDraft() {
           initialPool: factionsList,
           players,
           mapPositions,
+          keepPlayerOrder,
         },
       })
       history.push(
@@ -72,7 +75,15 @@ export function KatowiceDraft() {
         { secret: session.secret },
       )
     },
-    [mapPositions, factionsList, players, sessionService, history, gameVersion],
+    [
+      keepPlayerOrder,
+      mapPositions,
+      factionsList,
+      players,
+      sessionService,
+      history,
+      gameVersion,
+    ],
   )
   const [passwordProtectionOpen, setPasswordProtectionOpen] = useState(false)
   const openPasswordProtection = useCallback(
@@ -100,6 +111,26 @@ export function KatowiceDraft() {
         </Container>
       </Box>
 
+      <FormGroup className={classes.row} row>
+        <FormControlLabel
+          control={
+            <Slider
+              color="secondary"
+              defaultValue={6}
+              marks={PLAYER_MARKS}
+              max={8}
+              min={2}
+              onChange={setPlayerCount}
+              step={1}
+              value={playerCount}
+              valueLabelDisplay="on"
+            />
+          }
+          label="Player count"
+          labelPlacement="bottom"
+          style={{ width: '100%' }}
+        />
+      </FormGroup>
       <Typography>Players</Typography>
       <FormGroup className={classes.row} row>
         {[...Array(playerCount).keys()].map((indice) => (
@@ -113,6 +144,16 @@ export function KatowiceDraft() {
           />
         ))}
       </FormGroup>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={keepPlayerOrder}
+            onChange={() => setKeepPlayerOrder((a) => !a)}
+          />
+        }
+        label="Keep player order (do not randomize for pick/ban/nomination/draft)"
+        style={{ marginBottom: '2em' }}
+      />
       <Typography>Map positions</Typography>
       <FormGroup className={classes.row} row>
         <MapPositions
