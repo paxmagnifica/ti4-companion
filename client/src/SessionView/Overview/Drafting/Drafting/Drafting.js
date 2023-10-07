@@ -10,27 +10,26 @@ import shuffle from 'lodash.shuffle'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
-import speakerFront from '../../../assets/speaker-front.png'
-import speakerBack from '../../../assets/speaker-back.png'
-import { Trans } from '../../../i18n'
-import { useDomainErrors } from '../../../shared/errorHandling'
-import { FactionImage } from '../../../shared/FactionImage'
+import speakerFront from '../../../../assets/speaker-front.png'
+import speakerBack from '../../../../assets/speaker-back.png'
+import { useDomainErrors } from '../../../../shared/errorHandling'
 import {
   ColorBox,
   getMapPositionName,
   getMapPositionColor,
-} from '../../../shared'
-import { MapPreview } from '../../components'
-import { EditPrompt } from '../../Edit'
-import { SessionNutshell } from '../SessionNutshell'
+} from '../../../../shared'
+import { MapPreview } from '../../../components'
+import { EditPrompt } from '../../../Edit'
+import { SessionNutshell } from '../../SessionNutshell'
+import { DraftPool } from '../DraftPool'
+import { useDraftQuery, useDraftMutation } from '../queries'
+import { PhaseStepper } from '../components/PhaseStepper'
+import { SpeakerIndicator } from '../SpeakerIndicator'
+import { PHASE } from '../shared'
 
-import { DraftPool } from './DraftPool'
-import { useDraftQuery, useDraftMutation } from './queries'
-import { PhaseStepper } from './components/PhaseStepper'
+import { BanStepper } from './BanStepper'
 import { PickStepper } from './PickStepper'
-import { SpeakerIndicator } from './SpeakerIndicator'
-import { PHASE } from './shared'
-import { PlayerActionsStepper } from './components/PlayerActionsStepper'
+import { ActionOnFactionListButton } from '../components/ActionOnFactionListButton'
 
 function Speaker({ disabled, draft, session, sessionService }) {
   const { setError } = useDomainErrors()
@@ -365,48 +364,6 @@ function Pick({
   )
 }
 
-function BanStepper({ draft, setup }) {
-  const { playerCount, bansPerRound, banRounds } = setup.options
-
-  const steps = new Array(playerCount * banRounds)
-    .fill(0)
-    .map((_p, playerIndex) => {
-      const player = draft.players[playerIndex]
-      const bans = new Array(bansPerRound)
-        .fill(0)
-        .map((_b, banIndex) => {
-          const ban = draft.bans[playerIndex * bansPerRound + banIndex]
-
-          return ban?.ban || null
-        })
-        .filter(Boolean)
-
-      return {
-        player,
-        choice:
-          bans.length === 0 ? null : (
-            <>
-              {bans.map((ban) => (
-                <FactionImage
-                  factionKey={ban}
-                  style={{ width: 'auto', height: '100%' }}
-                />
-              ))}
-            </>
-          ),
-      }
-    })
-
-  return (
-    <>
-      <Typography align="center" variant="h4">
-        <Trans i18nKey={`drafting.speakerOrder.${draft.phase}.title`} />
-      </Typography>
-      <PlayerActionsStepper steps={steps} />
-    </>
-  )
-}
-
 function Ban({
   disabled,
   bans,
@@ -438,19 +395,17 @@ function Ban({
     mutation: banMutation,
   })
 
-  const bansLeft = draft.bansPerRound - bans.length
-
   return (
-    <EditPrompt>
-      <Button
-        color="secondary"
-        disabled={disabled || bans.length < draft.bansPerRound}
+    <>
+      <BanStepper draft={draft} setup={session.setup} />
+      <ActionOnFactionListButton
+        action="ban"
+        disabled={disabled}
+        max={draft.bansPerRound}
         onClick={ban}
-        variant="contained"
-      >
-        ban{bansLeft ? ` (left: ${bansLeft})` : ''}
-      </Button>
-    </EditPrompt>
+        selected={bans}
+      />
+    </>
   )
 }
 
@@ -503,15 +458,27 @@ export function Drafting({ editable, session, sessionService }) {
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', gridRowGap: '2em' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gridRowGap: '2em',
+        alignItems: 'center',
+      }}
     >
       <SessionNutshell />
-      <Typography align="center" variant="h4">
-        Phase:
-      </Typography>
-      <PhaseStepper currentPhase={draft.phase} phases={phases} />
+      <Box style={{ width: '100%' }}>
+        <PhaseStepper currentPhase={draft.phase} phases={phases} />
+      </Box>
+      <MapPreview map={session.map} />
       {draft.phase === PHASE.bans && (
-        <BanStepper draft={draft} setup={session.setup} />
+        <Ban
+          bans={selected}
+          clearSelection={() => setSelected([])}
+          disabled={!editable}
+          draft={draft}
+          session={session}
+          sessionService={sessionService}
+        />
       )}
       {draft.phase === PHASE.picks && (
         <PickStepper draft={draft} mapPositions={session.mapPositions} />
@@ -519,43 +486,28 @@ export function Drafting({ editable, session, sessionService }) {
       {draft.phase === PHASE.speaker && (
         <SpeakerIndicator indicated={draft.speaker} players={draft.players} />
       )}
-      <Box align="center" mb={2}>
-        {draft.phase === PHASE.picks && (
-          <Pick
-            clearSelection={() => setSelected([])}
-            disabled={!editable}
-            draft={draft}
-            onPositionSelected={(selectedPosition) => {
-              setDisableFactionSelection(selectedPosition !== null)
-            }}
-            onSpeakerSelected={setDisableFactionSelection}
-            pick={selected[0]}
-            session={session}
-            sessionService={sessionService}
-          />
-        )}
-        {draft.phase === PHASE.bans && (
-          <Ban
-            bans={selected}
-            clearSelection={() => setSelected([])}
-            disabled={!editable}
-            draft={draft}
-            session={session}
-            sessionService={sessionService}
-          />
-        )}
-        {draft.phase === PHASE.speaker && (
-          <Speaker
-            disabled={!editable}
-            draft={draft}
-            session={session}
-            sessionService={sessionService}
-          />
-        )}
-      </Box>
-      <Box align="center" mb={2}>
-        <MapPreview map={session.map} />
-      </Box>
+      {draft.phase === PHASE.picks && (
+        <Pick
+          clearSelection={() => setSelected([])}
+          disabled={!editable}
+          draft={draft}
+          onPositionSelected={(selectedPosition) => {
+            setDisableFactionSelection(selectedPosition !== null)
+          }}
+          onSpeakerSelected={setDisableFactionSelection}
+          pick={selected[0]}
+          session={session}
+          sessionService={sessionService}
+        />
+      )}
+      {draft.phase === PHASE.speaker && (
+        <Speaker
+          disabled={!editable}
+          draft={draft}
+          session={session}
+          sessionService={sessionService}
+        />
+      )}
       {draft.phase === PHASE.speaker && <Typography>picks:</Typography>}
       {session.setup.options.tablePick && draft.phase === PHASE.speaker && (
         <TablePositionPick disabled draft={draft} session={session} />
@@ -615,7 +567,7 @@ export function Drafting({ editable, session, sessionService }) {
 
       {/* show banned factions */}
       {draft.phase !== PHASE.bans && (
-        <Box mt={2}>
+        <>
           <Typography>bans:</Typography>
           <DraftPool
             bans={draft.bans}
@@ -624,19 +576,8 @@ export function Drafting({ editable, session, sessionService }) {
             picks={draft.picks}
             selected={selected}
           />
-        </Box>
+        </>
       )}
-      <Box mt={3}>
-        <Alert severity="warning">
-          This is an early prototype of the drafting tool.
-          <br />
-          Please be patient with us, we are working to improve the UI and
-          provide you with more drafting options.
-          <br />
-          If you run into an error, please be so kind as to write us a message
-          in the chat (lower bottom corner) - it will help us immensely!
-        </Alert>
-      </Box>
     </div>
   )
 }

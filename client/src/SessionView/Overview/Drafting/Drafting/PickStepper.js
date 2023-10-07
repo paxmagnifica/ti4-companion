@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core'
-import { Trans, useTranslation } from '../../../i18n'
-import { Choice } from './components/Choice'
-import { PlayerActionsStepper } from './components/PlayerActionsStepper'
+import { Trans, useTranslation } from '../../../../i18n'
+import { Choice } from '../components/Choice'
+import { PlayerActionsStepper } from '../components/PlayerActionsStepper'
 
 export function PickStepper({ draft, mapPositions }) {
   const { t } = useTranslation()
