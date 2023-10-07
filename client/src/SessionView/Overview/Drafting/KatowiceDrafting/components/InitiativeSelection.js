@@ -8,12 +8,13 @@ export function InitiativeSelection({
   onSelected,
   currentPlayer,
   disabled,
+  playerCount,
 }) {
   return (
     <>
       <Typography>Initiative</Typography>
       <Grid container justifyContent="center" spacing={4}>
-        {Array.from(Array(6)).map((_, index) => {
+        {Array.from(Array(playerCount)).map((_, index) => {
           const pick = draft.find(
             ({ action, choice }) =>
               action === 'initiative' && index + 1 === choice,

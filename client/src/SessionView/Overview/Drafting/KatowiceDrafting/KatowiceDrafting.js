@@ -78,7 +78,7 @@ export function KatowiceDrafting({ editable, session, sessionService }) {
           mapPositions={session.mapPositions}
           sessionId={session.id}
           sessionService={sessionService}
-          players={session.players}
+          playerCount={session.players.length}
         />
       )}
     </div>
