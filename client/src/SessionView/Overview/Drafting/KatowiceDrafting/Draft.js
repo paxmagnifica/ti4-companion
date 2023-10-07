@@ -18,6 +18,7 @@ export function Draft({
   mapPositions,
   sessionService,
   sessionId,
+  playerCount,
 }) {
   const steps = draft.map(({ choice, action, ...rest }) => ({
     ...rest,
@@ -98,6 +99,7 @@ export function Draft({
         draft={draft}
         onSelected={setSelection}
         selection={selection}
+        playerCount={playerCount}
       />
       <TablePositionSelection
         currentPlayer={currentPlayer}
