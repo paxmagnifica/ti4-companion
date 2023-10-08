@@ -3,7 +3,7 @@ import { Trans, useTranslation } from '../../../../i18n'
 import { Choice } from '../components/Choice'
 import { PlayerActionsStepper } from '../components/PlayerActionsStepper'
 
-export function PickStepper({ draft, mapPositions }) {
+export function DraftStepper({ draft, mapPositions }) {
   const { t } = useTranslation()
 
   const steps = draft.order.map((playerIndex, orderIndex) => {

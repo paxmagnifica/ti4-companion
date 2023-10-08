@@ -1,14 +1,14 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useDomainErrors } from '../../../../shared/errorHandling'
 import { useDraftMutation } from '../queries'
-import { PickStepper } from './PickStepper'
+import { DraftStepper } from './DraftStepper'
 import { SpeakerSelectorToggle } from "./SpeakerSelectorToggle"
 import { TablePositionPick } from "./TablePositionPick"
 import { DraftPool } from '../DraftPool'
 import { Choice } from '../components/Choice'
 import { ConfirmPickButton } from '../components/ConfirmPickButton'
 
-export function Pick({
+export function Draft({
   disabled,
   draft,
   session,
@@ -58,7 +58,7 @@ export function Pick({
 
   return (
     <>
-      <PickStepper draft={draft} mapPositions={session.mapPositions} />
+      <DraftStepper draft={draft} mapPositions={session.mapPositions} />
       <ConfirmPickButton
         disabled={selection === null}
         loading={loading}
