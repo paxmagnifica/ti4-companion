@@ -244,7 +244,7 @@ export const factory = (options = { debug: true }) =>
                   [VP_SOURCE.support]: 'SFT',
                   [VP_SOURCE.emphidia]: 'Crown of emphidia',
                   [VP_SOURCE.shard]: 'Shard of the Throne',
-                  [VP_SOURCE.mecatol]: 'Mecatol',
+                  [VP_SOURCE.mecatol]: 'Imperial + Mecatol',
                   [VP_SOURCE.agenda]: 'Agenda',
                 },
               },
