@@ -2,13 +2,13 @@ import { useState, useCallback, useMemo } from 'react'
 import { Box, Button, Drawer } from '@material-ui/core'
 import { Details as DetailsIcon } from '@material-ui/icons'
 
+import { useMutation, useQueryClient } from 'react-query'
 import { Trans } from '../../../i18n'
-import { useTimelineEvents, ORDER } from '../../queries'
+import { useTimelineEvents, ORDER, queryKeys } from '../../queries'
 import { VP_SOURCE } from '../../../shared/constants'
 import PlayerFlag from '../../PlayerFlag'
 
 import { PointsHistory } from './PointsHistory'
-import { useMutation, useQueryClient } from 'react-query'
 
 const pointsHistoryEvents = ['VictoryPointsUpdated', 'ObjectiveScored']
 
