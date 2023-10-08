@@ -3,6 +3,9 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
+## 2023-10-08
+- [fix] fixed broken point source, which was not updated together with integrity checks
+
 ## 2023-09-24
 - [feat] Improved data integrity checks - users that do not see newest state should not be able to perform and actions that will affect draft/session state. This also means that the same event sent multiple times should not be applied, avoiding duplicating picks/bans during connectivity problems.
 

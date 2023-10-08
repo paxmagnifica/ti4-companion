@@ -10,7 +10,6 @@ import VictoryPoints from './VictoryPoints'
 import PublicObjectives from './PublicObjectives'
 import FactionNutshells from './FactionNutshells'
 import { PointControls } from './PointControls'
-import { PointsSourceHelper } from './PointsSourceHelper'
 
 const useStyles = makeStyles({
   root: {
@@ -47,7 +46,7 @@ export function Session({
   editable,
   session,
   updateFactionPoints,
-  setChatVisibility,
+  children: additionalContent,
 }) {
   const classes = useStyles()
   const { fullscreen } = useFullscreen()
@@ -110,14 +109,7 @@ export function Session({
           justifyContent="center"
           style={{ gridRowGap: '2em' }}
         >
-          {!session.locked && (
-            <PointsSourceHelper
-              editable={editable}
-              sessionId={session.id}
-              factions={session.factions}
-              setChatVisibility={setChatVisibility}
-            />
-          )}
+          {additionalContent}
           {!session.locked && (
             <PointControls
               editable={editable}

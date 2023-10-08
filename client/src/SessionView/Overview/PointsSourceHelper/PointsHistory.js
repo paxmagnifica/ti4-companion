@@ -1,13 +1,13 @@
 import { Fragment, useMemo } from 'react'
 import { Grid, Button, List, ListItem, ListItemIcon } from '@material-ui/core'
 
-import { Trans } from '../../../../i18n'
-import { useObjectives } from '../../../../GameComponents'
-import PlayerFlag from '../../../PlayerFlag'
-import { ObjectiveSelector } from '../../../../shared/ObjectiveSelector'
-import Objective from '../../../../shared/Objective'
-import { VP_SOURCE } from '../../../../shared/constants'
-import { PointsWithDelta } from '../../../../shared'
+import { Trans } from '../../../i18n'
+import { useObjectives } from '../../../GameComponents'
+import PlayerFlag from '../../PlayerFlag'
+import { ObjectiveSelector } from '../../../shared/ObjectiveSelector'
+import Objective from '../../../shared/Objective'
+import { VP_SOURCE } from '../../../shared/constants'
+import { PointsWithDelta } from '../../../shared'
 
 import { Toggle, Show } from './Toggle'
 

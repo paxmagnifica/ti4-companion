@@ -2,14 +2,11 @@ import { useState, useCallback, useMemo } from 'react'
 import { Box, Button, Drawer } from '@material-ui/core'
 import { Details as DetailsIcon } from '@material-ui/icons'
 
-import { Trans } from '../../../../i18n'
-import {
-  useTimelineEvents,
-  useAddPointSourceMutation,
-  ORDER,
-} from '../../../queries'
-import { VP_SOURCE } from '../../../../shared/constants'
-import PlayerFlag from '../../../PlayerFlag'
+import { useMutation, useQueryClient } from 'react-query'
+import { Trans } from '../../../i18n'
+import { useTimelineEvents, ORDER, queryKeys } from '../../queries'
+import { VP_SOURCE } from '../../../shared/constants'
+import PlayerFlag from '../../PlayerFlag'
 
 import { PointsHistory } from './PointsHistory'
 
@@ -20,6 +17,7 @@ export function PointsSourceHelper({
   sessionId,
   factions,
   setChatVisibility,
+  sessionService,
 }) {
   const [selectedFactionFilter, setSelectedFactionFilter] = useState(null)
   const [open, setOpen] = useState(false)
@@ -62,7 +60,10 @@ export function PointsSourceHelper({
         ),
     [timeline, selectedFactionFilter],
   )
-  const { mutate: addSource } = useAddPointSourceMutation({ sessionId })
+  const { mutate: addSource } = useAddPointSourceMutation({
+    sessionId,
+    sessionService,
+  })
 
   return (
     <>
@@ -137,5 +138,27 @@ export function PointsSourceHelper({
         </Button>
       </Drawer>
     </>
+  )
+}
+
+function useAddPointSourceMutation({ sessionId, sessionService }) {
+  const queryClient = useQueryClient()
+
+  return useMutation(
+    ({ faction, points, source, context }) =>
+      sessionService.pushEvent(sessionId, {
+        type: 'AddPointSource',
+        payload: {
+          faction,
+          points,
+          source: VP_SOURCE.fromFrontendToBackend(source),
+          context,
+        },
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(queryKeys.timeline(sessionId))
+      },
+    },
   )
 }

@@ -1,5 +1,6 @@
 import { Session } from './Session'
 import { Drafting } from './Drafting'
+import { PointsSourceHelper } from './PointsSourceHelper'
 
 // TODO catch error, clear from local storage and ask for refresh
 export function Overview({
@@ -19,8 +20,17 @@ export function Overview({
     <Session
       editable={editable}
       session={session}
-      setChatVisibility={setChatVisibility}
       updateFactionPoints={updateFactionPoints}
-    />
+    >
+      {!session.locked && (
+        <PointsSourceHelper
+          editable={editable}
+          sessionService={sessionService}
+          sessionId={session.id}
+          factions={session.factions}
+          setChatVisibility={setChatVisibility}
+        />
+      )}
+    </Session>
   )
 }
