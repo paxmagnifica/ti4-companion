@@ -1,9 +1,8 @@
-import { useQuery, useQueryClient, useMutation } from 'react-query'
+import { useQuery } from 'react-query'
 
 import CONFIG from '../config'
 import { handleErrors } from '../shared/errorHandling'
 import { useFetch } from '../useFetch'
-import { VP_SOURCE } from '../shared/constants'
 
 export const ORDER = {
   ASC: 'asc',
@@ -83,33 +82,4 @@ export const useTimelineEvents = ({ sessionId, order = ORDER.ASC }) => {
     timeline: data,
     queryInfo,
   }
-}
-
-const addPointSource = (
-  fetch,
-  sessionId,
-  { faction, points, source, context },
-) =>
-  fetch(`${CONFIG.apiUrl}/api/sessions/${sessionId}/events`, {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      eventType: 'AddPointSource',
-      serializedPayload: JSON.stringify({
-        faction,
-        points,
-        source: VP_SOURCE.fromFrontendToBackend(source),
-        context,
-      }),
-    }),
-  }).then(handleErrors)
-export const useAddPointSourceMutation = ({ sessionId }) => {
-  const { fetch } = useFetch()
-  const queryClient = useQueryClient()
-
-  return useMutation((payload) => addPointSource(fetch, sessionId, payload), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKeys.timeline(sessionId))
-    },
-  })
 }
