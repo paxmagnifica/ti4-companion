@@ -1,7 +1,6 @@
 import { Grid } from '@material-ui/core'
 import speakerFront from '../../../../assets/speaker-front.png'
 import speakerBack from '../../../../assets/speaker-back.png'
-import { useStyles } from './Drafting'
 
 export function SpeakerSelectorToggle({
   selected,
@@ -9,19 +8,12 @@ export function SpeakerSelectorToggle({
   disabled,
   cannotSelect,
 }) {
-  const classes = useStyles()
-
   const onClick = () => {
     onChange(!selected)
   }
 
   return (
-    <Grid
-      className={classes.marginTop}
-      container
-      justifyContent="center"
-      spacing={4}
-    >
+    <Grid container justifyContent="center" spacing={4}>
       <Grid item>
         <div
           onClick={onClick}

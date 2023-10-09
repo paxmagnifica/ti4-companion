@@ -20,7 +20,7 @@ import { PHASE } from '../shared'
 
 import { BanStepper } from './BanStepper'
 import { ActionOnFactionListButton } from '../components/ActionOnFactionListButton'
-import { Draft } from './Pick'
+import { Draft } from './Draft'
 import { TablePositionPick } from './TablePositionPick'
 
 function Speaker({ disabled, draft, session, sessionService }) {
@@ -95,7 +95,7 @@ function Speaker({ disabled, draft, session, sessionService }) {
   )
 }
 
-export const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   containedButton: {
     transition: theme.transitions.create(
       ['opacity', 'background-color', 'color'],

@@ -2,18 +2,13 @@ import { useState, useCallback, useMemo } from 'react'
 import { useDomainErrors } from '../../../../shared/errorHandling'
 import { useDraftMutation } from '../queries'
 import { DraftStepper } from './DraftStepper'
-import { SpeakerSelectorToggle } from "./SpeakerSelectorToggle"
-import { TablePositionPick } from "./TablePositionPick"
+import { SpeakerSelectorToggle } from './SpeakerSelectorToggle'
+import { TablePositionPick } from './TablePositionPick'
 import { DraftPool } from '../DraftPool'
 import { Choice } from '../components/Choice'
 import { ConfirmPickButton } from '../components/ConfirmPickButton'
 
-export function Draft({
-  disabled,
-  draft,
-  session,
-  sessionService,
-}) {
+export function Draft({ disabled, draft, session, sessionService }) {
   const [selection, setSelection] = useState(null)
 
   const { setError } = useDomainErrors()
@@ -26,7 +21,7 @@ export function Draft({
       eventPick = 'speaker'
     }
 
-    let eventType = selection.action
+    const eventType = selection.action
     try {
       await sessionService.pushEvent(session.id, {
         type: 'Picked',
@@ -94,8 +89,12 @@ export function Draft({
             )
           }
           draft={draft}
-          handleSelectedPosition={(position) => setSelection({ action: 'tablePosition', choice: position })}
-          selectedPosition={selection?.action === 'tablePosition' ? selection.choice : null }
+          handleSelectedPosition={(position) =>
+            setSelection({ action: 'tablePosition', choice: position })
+          }
+          selectedPosition={
+            selection?.action === 'tablePosition' ? selection.choice : null
+          }
           session={session}
         />
       )}
@@ -114,7 +113,9 @@ export function Draft({
           (factionKey) => !bannedFactionKeys.includes(factionKey),
         )}
         max={1}
-        onSelected={(faction) => setSelection({ action: 'faction', choice: faction[0], })}
+        onSelected={(faction) =>
+          setSelection({ action: 'faction', choice: faction[0] })
+        }
         picks={draft.picks}
         selected={selection?.action === 'faction' ? [selection.choice] : []}
       />

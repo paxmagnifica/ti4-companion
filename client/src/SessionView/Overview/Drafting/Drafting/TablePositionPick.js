@@ -1,4 +1,4 @@
-import { Grid, Button, Typography } from '@material-ui/core'
+import { Grid, Button, Typography, makeStyles } from '@material-ui/core'
 import { PanTool as PickIcon } from '@material-ui/icons'
 import clsx from 'clsx'
 import {
@@ -7,11 +7,35 @@ import {
   getMapPositionColor,
 } from '../../../../shared'
 import { EditPrompt } from '../../../Edit'
-import { useStyles } from './Drafting'
+
+const useStyles = makeStyles((theme) => ({
+  containedButton: {
+    transition: theme.transitions.create(
+      ['opacity', 'background-color', 'color'],
+      {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      },
+    ),
+    '&:not(.MuiButton-containedSecondary)': {
+      backgroundColor: 'white',
+    },
+    '&:disabled': {
+      color: 'black',
+      opacity: 0.5,
+    },
+  },
+  picked: {
+    backgroundColor: `${theme.palette.success.light} !important`,
+    opacity: '0.8 !important',
+    '& .MuiButton-endIcon': {
+      color: theme.palette.success.contrastText,
+    },
+  },
+}))
 
 export function TablePositionPick({
   disabled,
-  pick,
   draft,
   session,
   selectedPosition,
@@ -20,12 +44,7 @@ export function TablePositionPick({
   const classes = useStyles()
 
   return (
-    <Grid
-      className={classes.marginTop}
-      container
-      justifyContent="center"
-      spacing={4}
-    >
+    <Grid container justifyContent="center" spacing={4}>
       {[...Array(draft.players.length).keys()].map((tablePositionIndex) => {
         const picked = draft.picks
           .filter(({ type }) => type === 'tablePosition')
