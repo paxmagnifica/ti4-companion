@@ -6,7 +6,6 @@ import {
   AssignmentInd as SpeakerIcon,
 } from '@material-ui/icons'
 import shuffle from 'lodash.shuffle'
-import { makeStyles } from '@material-ui/core/styles'
 
 import { useDomainErrors } from '../../../../shared/errorHandling'
 import { MapPreview } from '../../../components'
@@ -18,10 +17,9 @@ import { PhaseStepper } from '../components/PhaseStepper'
 import { SpeakerIndicator } from '../SpeakerIndicator'
 import { PHASE } from '../shared'
 
-import { BanStepper } from './BanStepper'
-import { ActionOnFactionListButton } from '../components/ActionOnFactionListButton'
 import { Draft } from './Draft'
 import { TablePositionPick } from './TablePositionPick'
+import { Ban } from './Ban'
 
 function Speaker({ disabled, draft, session, sessionService }) {
   const { setError } = useDomainErrors()
@@ -95,62 +93,11 @@ function Speaker({ disabled, draft, session, sessionService }) {
   )
 }
 
-function Ban({
-  disabled,
-  bans,
-  clearSelection,
-  draft,
-  sessionService,
-  session,
-}) {
-  const { setError } = useDomainErrors()
-  const banMutation = useCallback(async () => {
-    try {
-      await sessionService.pushEvent(session.id, {
-        type: 'Banned',
-        payload: {
-          sessionId: session.id,
-          bans,
-          playerIndex: draft.order[draft.activePlayerIndex],
-          playerName: draft.players[draft.order[draft.activePlayerIndex]],
-        },
-      })
-      clearSelection()
-    } catch (e) {
-      setError(e)
-    }
-  }, [bans, setError, sessionService, session.id, draft, clearSelection])
-
-  const { mutate: ban } = useDraftMutation({
-    sessionId: session.id,
-    mutation: banMutation,
-  })
-
-  return (
-    <>
-      <BanStepper draft={draft} setup={session.setup} />
-      <ActionOnFactionListButton
-        action="ban"
-        disabled={disabled}
-        max={draft.bansPerRound}
-        onClick={ban}
-        selected={bans}
-      />
-    </>
-  )
-}
-
 export function Drafting({ editable, session, sessionService }) {
-  const [selected, setSelected] = useState([])
   const { draft } = useDraftQuery({
     sessionId: session.id,
     sessionService,
   })
-
-  const bannedFactionKeys = useMemo(
-    () => draft?.bans.map(({ ban }) => ban) || [],
-    [draft?.bans],
-  )
 
   const pickedFactionKeys = useMemo(
     () =>
@@ -202,14 +149,16 @@ export function Drafting({ editable, session, sessionService }) {
       <MapPreview map={session.map} />
       {draft.phase === PHASE.bans && (
         <Ban
-          bans={selected}
-          clearSelection={() => setSelected([])}
           disabled={!editable}
           draft={draft}
           session={session}
           sessionService={sessionService}
         />
       )}
+      {/*
+        yes, phase name is picks, but it's just draft
+        (frontend naming change, didn't change and migrate)
+      */}
       {draft.phase === PHASE.picks && (
         <Draft
           disabled={!editable}
@@ -233,48 +182,14 @@ export function Drafting({ editable, session, sessionService }) {
       {session.setup.options.tablePick && draft.phase === PHASE.speaker && (
         <TablePositionPick disabled draft={draft} session={session} />
       )}
-      {draft.phase === PHASE.bans && (
-        <DraftPool
-          bans={draft.bans}
-          disabled={
-            !editable ||
-            draft.picks.some(
-              ({ type, playerIndex }) =>
-                type === 'faction' &&
-                Number(draft.order[draft.activePlayerIndex]) ===
-                  Number(playerIndex),
-            )
-          }
-          initialPool={draft.initialPool}
-          max={draft.phase === PHASE.bans ? draft.bansPerRound : 1}
-          onSelected={setSelected}
-          picks={[]}
-          selected={selected}
-        />
-      )}
-
       {draft.phase === PHASE.speaker && (
         <DraftPool
           bans={[]}
           disabled
           initialPool={pickedFactionKeys}
           picks={draft.picks}
-          selected={selected}
+          selected={[]}
         />
-      )}
-
-      {/* show banned factions */}
-      {draft.phase !== PHASE.bans && (
-        <>
-          <Typography>bans:</Typography>
-          <DraftPool
-            bans={draft.bans}
-            disabled
-            initialPool={bannedFactionKeys}
-            picks={draft.picks}
-            selected={selected}
-          />
-        </>
       )}
     </div>
   )
