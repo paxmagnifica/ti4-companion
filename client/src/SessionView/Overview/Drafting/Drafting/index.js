@@ -95,42 +95,6 @@ function Speaker({ disabled, draft, session, sessionService }) {
   )
 }
 
-const useStyles = makeStyles((theme) => ({
-  containedButton: {
-    transition: theme.transitions.create(
-      ['opacity', 'background-color', 'color'],
-      {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      },
-    ),
-    '&:not(.MuiButton-containedSecondary)': {
-      backgroundColor: 'white',
-    },
-    '&:disabled': {
-      color: 'black',
-      opacity: 0.5,
-    },
-  },
-  banned: {
-    backgroundColor: `${theme.palette.error.light} !important`,
-    opacity: '0.8 !important',
-    '& .MuiButton-endIcon': {
-      color: theme.palette.error.contrastText,
-    },
-  },
-  picked: {
-    backgroundColor: `${theme.palette.success.light} !important`,
-    opacity: '0.8 !important',
-    '& .MuiButton-endIcon': {
-      color: theme.palette.success.contrastText,
-    },
-  },
-  marginTop: {
-    marginTop: theme.spacing(1),
-  },
-}))
-
 function Ban({
   disabled,
   bans,
