@@ -1,10 +1,11 @@
 import { useCallback } from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import shuffle from 'lodash.shuffle'
 import { useDomainErrors } from '../../../../shared/errorHandling'
 import { EditPrompt } from '../../../Edit'
 import { useDraftMutation } from '../queries'
 import { SpeakerIndicator } from '../SpeakerIndicator'
+import { ConfirmPickButton } from '../components/ConfirmPickButton'
 
 export function Speaker({ disabled, draft, session, sessionService }) {
   const { setError } = useDomainErrors()
@@ -52,18 +53,9 @@ export function Speaker({ disabled, draft, session, sessionService }) {
     <>
       <SpeakerIndicator indicated={draft.speaker} players={draft.players} />
       {draft.speaker && (
-        <Box mb={2}>
-          <EditPrompt>
-            <Button
-              color="secondary"
-              disabled={disabled}
-              onClick={commitDraft}
-              variant="contained"
-            >
-              commit draft & start session
-            </Button>
-          </EditPrompt>
-        </Box>
+        <ConfirmPickButton disabled={disabled} onClick={commitDraft}>
+          commit draft and start session
+        </ConfirmPickButton>
       )}
       <EditPrompt>
         <Button
