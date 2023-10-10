@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core'
 import { Map as MapIcon } from '@material-ui/icons'
-import { ColorBox } from '../../../../../shared'
-import { FactionImage } from '../../../../../shared/FactionImage'
+import { ColorBox } from '../../../../shared'
+import { FactionImage } from '../../../../shared/FactionImage'
 import { Initiative } from './Initiative'
 
 export function Choice({ action, choice, mapPositions, height }) {

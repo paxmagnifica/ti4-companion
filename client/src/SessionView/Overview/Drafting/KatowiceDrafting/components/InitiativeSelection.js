@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@material-ui/core'
 import { PickButton } from '../../components/PickButton'
-import { Initiative } from './Initiative'
+import { Initiative } from '../../components/Initiative'
 
 export function InitiativeSelection({
   draft,
