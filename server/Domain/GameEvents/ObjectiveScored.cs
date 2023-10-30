@@ -22,6 +22,20 @@ namespace Server.Domain
                 session.Events = new List<GameEvent>();
             }
 
+            var payload = ObjectiveScored.GetPayload(gameEvent);
+
+            session.Events.Add(new GameEvent
+            {
+                EventType = nameof(VictoryPointsUpdated),
+                SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload
+                {
+                    Faction = payload.Faction,
+                    Points = payload.Points,
+                    Source = VictoryPointSource.Objective,
+                    Context = payload.Slug,
+                })
+            });
+
             session.Events.Add(gameEvent);
 
             this.repository.UpdateSession(session);
