@@ -43,7 +43,10 @@ export const usePlasticColors = () => {
         Object.entries(plasticColorsContext?.colors || {}).map(
           ([key, value]) => [
             key.toLowerCase(),
-            { color: value, hex: colors[value] },
+            {
+              color: value.startsWith('#') ? null : value,
+              hex: value.startsWith('#') ? value : colors[value],
+            },
           ],
         ),
       ),

@@ -47,6 +47,7 @@ function FactionFlag(
   const { t } = useTranslation()
   const getPlasticColor = usePlasticColors()
   const plasticColor = getPlasticColor(factionKey)
+  console.log({ plasticColor, factionKey })
   const classes = useFlagStyles({
     borderWidth: borderWidth ?? '2px',
     selected,
