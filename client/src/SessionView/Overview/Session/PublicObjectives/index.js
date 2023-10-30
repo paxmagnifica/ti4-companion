@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   },
 })
 
-function PublicObjectives({ editable, session, updateFactionPoints }) {
+function PublicObjectives({ editable, session }) {
   const { t } = useTranslation()
   const smallViewport = useSmallViewport()
   const { fullscreen } = useFullscreen()
@@ -61,11 +61,6 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
       const objectivePoints = availableObjectives[objective.slug].points
 
       if (change.event === 'selected') {
-        updateFactionPoints({
-          sessionId: session.id,
-          faction: change.factionKey,
-          points: factionPoints + objectivePoints,
-        })
         comboDispatch({
           type: 'ObjectiveScored',
           payload: {
@@ -76,11 +71,6 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
           },
         })
       } else {
-        updateFactionPoints({
-          sessionId: session.id,
-          faction: change.factionKey,
-          points: factionPoints - objectivePoints,
-        })
         comboDispatch({
           type: 'ObjectiveDescored',
           payload: {
@@ -92,13 +82,7 @@ function PublicObjectives({ editable, session, updateFactionPoints }) {
         })
       }
     },
-    [
-      comboDispatch,
-      session.id,
-      session.points,
-      updateFactionPoints,
-      availableObjectives,
-    ],
+    [comboDispatch, session.id, session.points, availableObjectives],
   )
 
   if (!queryInfo.isFetched) {

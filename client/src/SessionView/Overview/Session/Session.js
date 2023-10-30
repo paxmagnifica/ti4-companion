@@ -97,7 +97,6 @@ export function Session({
           <PublicObjectives
             editable={editable && !fullscreen}
             session={session}
-            updateFactionPoints={updateFactionPoints}
           />
         </Grid>
       </Grid>

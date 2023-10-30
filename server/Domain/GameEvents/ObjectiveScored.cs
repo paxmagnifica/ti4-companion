@@ -7,10 +7,12 @@ namespace Server.Domain
     public class ObjectiveScored : IHandler
     {
         private readonly IRepository repository;
+        private readonly ITimeProvider timeProvider;
 
-        public ObjectiveScored(IRepository repository)
+        public ObjectiveScored(IRepository repository, ITimeProvider timeProvider)
         {
             this.repository = repository;
+            this.timeProvider = timeProvider;
         }
 
         public async Task Handle(GameEvent gameEvent)
@@ -21,6 +23,21 @@ namespace Server.Domain
             {
                 session.Events = new List<GameEvent>();
             }
+
+            var payload = ObjectiveScored.GetPayload(gameEvent);
+
+            session.Events.Add(new GameEvent
+            {
+                EventType = nameof(VictoryPointsUpdated),
+                HappenedAt = this.timeProvider.Now,
+                SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload
+                {
+                    Faction = payload.Faction,
+                    Points = payload.Points,
+                    Source = VictoryPointSource.Objective,
+                    Context = payload.Slug,
+                }),
+            });
 
             session.Events.Add(gameEvent);
 
