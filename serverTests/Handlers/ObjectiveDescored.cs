@@ -68,7 +68,7 @@ namespace ServerTests.Handlers
             this.TimeProvider.Now.Returns(expectedTime);
 
             var handler = new Server.Domain.ObjectiveDescored(this.Repository, this.TimeProvider);
-            var ObjectiveDescoredPayload = new ObjectiveDescoredPayload
+            var objectiveDescoredPayload = new ObjectiveDescoredPayload
             {
                 Faction = "some_faction",
                 Slug = "some_objective",
@@ -77,7 +77,7 @@ namespace ServerTests.Handlers
             var given = new GameEvent
             {
                 EventType = nameof(Server.Domain.ObjectiveDescored),
-                SerializedPayload = JsonConvert.SerializeObject(ObjectiveDescoredPayload),
+                SerializedPayload = JsonConvert.SerializeObject(objectiveDescoredPayload),
             };
 
             // when

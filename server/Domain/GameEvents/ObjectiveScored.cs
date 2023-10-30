@@ -29,14 +29,14 @@ namespace Server.Domain
             session.Events.Add(new GameEvent
             {
                 EventType = nameof(VictoryPointsUpdated),
-                HappenedAt = timeProvider.Now,
+                HappenedAt = this.timeProvider.Now,
                 SerializedPayload = JsonConvert.SerializeObject(new VictoryPointsUpdatedPayload
                 {
                     Faction = payload.Faction,
                     Points = payload.Points,
                     Source = VictoryPointSource.Objective,
                     Context = payload.Slug,
-                })
+                }),
             });
 
             session.Events.Add(gameEvent);
