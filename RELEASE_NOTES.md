@@ -6,6 +6,7 @@ Bear in mind that release notes before 2022-08-14 were compiled post-factum and 
 ## 2023-10-30
 - [improvement] improved plastic color assignment for mobile view on session details
 - [fix] plastic colors are correctly indicated on faction flags now
+- [fix] improve public objective scoring to prevent missing point updates
 
 ## 2023-10-08
 - [fix] fixed broken point source, which was not updated together with integrity checks
