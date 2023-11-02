@@ -165,6 +165,7 @@ export const factory = (options = { debug: true }) =>
               comingSoon: 'coming soon',
               from: 'from',
               edit: 'Edit',
+              editable: 'Editable',
               labels: {
                 tg: 'trade goods',
                 player: 'player',
