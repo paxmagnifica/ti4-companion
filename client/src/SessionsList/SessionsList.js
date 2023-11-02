@@ -103,7 +103,7 @@ export function SessionsList({ sessions, listId, onDeleteSession }) {
                   <Chip
                     color="secondary"
                     icon={<EditOutlined />}
-                    label={t('general.edit')}
+                    label={t('general.editable')}
                   />
                 </ListItemIcon>
               )}
