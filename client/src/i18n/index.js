@@ -390,6 +390,14 @@ export const factory = (options = { debug: true }) =>
               },
               confirmDelete:
                 'Are you sure you want to delete "{{sessionName}}" session?',
+              changeListDialog: {
+                title: 'Change list',
+                whyChangeList:
+                  'Each client has a private list identifier assigned. By taking list identifier from a different client and setting it here, you will be able to browse your private list of games in multiple places.',
+                current: 'Current list identifier',
+                identifierInvalid:
+                  'This list identifier does not seem to be valid',
+              },
             },
             kb: {
               title: 'Knowledge base',
