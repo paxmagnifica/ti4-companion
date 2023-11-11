@@ -43,8 +43,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     gap: '1rem',
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-      alignItems: 'start',
+      flexWrap: 'wrap',
+      borderBottom: '1px solid white',
+      paddingBottom: '1rem',
     },
   },
   cta: {
@@ -81,6 +82,24 @@ export function SessionsList({ sessions, onDeleteSession }) {
 
         return (
           <ListItem key={session.id} button className={classes.listItem}>
+            <ListItemText
+              onClick={() =>
+                history.push(
+                  generatePath(SESSION_VIEW_ROUTES.main, {
+                    sessionId: session.id,
+                    secret: session.editable ? session.secret : undefined,
+                  }),
+                )
+              }
+              primary={session.displayName || defaultName}
+              secondary={`${session.start || ''} ${
+                session.displayName
+                  ? t('sessionList.secondaryTitle', {
+                      factionList: defaultName,
+                    })
+                  : ''
+              }`}
+            />
             <ListItemIcon>
               {session.finished ? (
                 <Tooltip placement="top" title={t('sessionList.done')}>
@@ -106,30 +125,12 @@ export function SessionsList({ sessions, onDeleteSession }) {
                 />
               </ListItemIcon>
             )}
-            <ListItemText
-              onClick={() =>
-                history.push(
-                  generatePath(SESSION_VIEW_ROUTES.main, {
-                    sessionId: session.id,
-                    secret: session.editable ? session.secret : undefined,
-                  }),
-                )
-              }
-              primary={session.displayName || defaultName}
-              secondary={`${session.start || ''} ${
-                session.displayName
-                  ? t('sessionList.secondaryTitle', {
-                      factionList: defaultName,
-                    })
-                  : ''
-              }`}
-            />
             <Button
               color="secondary"
               onClick={() => {
                 onDeleteSession({
                   id: session.id,
-                  name: session.displayName,
+                  name: session.displayName || defaultName,
                 })
               }}
             >
