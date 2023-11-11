@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react'
-import { Button, CircularProgress } from '@material-ui/core'
-import { EditOutlined } from '@material-ui/icons'
+import { Button, CircularProgress, IconButton } from '@material-ui/core'
+import { EditOutlined, FileCopy } from '@material-ui/icons'
 
 import { getNewListIdentifier } from './getNewListIdentifier'
 import { useSessionsList } from './queries'
@@ -9,6 +9,7 @@ import Confirmation from '../shared/Confirmation'
 import { deleteSession } from './removeSession'
 import { Trans } from '../i18n'
 import { ListIdentifierDialog } from './ListIdentifierDialog'
+import { CopyListIdentifierButton } from './CopyListIdentifierButton'
 
 export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
   const [loading, setLoading] = useState(true)
@@ -51,18 +52,22 @@ export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
         }}
         sessions={sessions || []}
       />
-      <Button
-        startIcon={<EditOutlined />}
-        style={{ marginTop: '0.5em' }}
-        onClick={() => setIdentifierDialogOpen((a) => !a)}
+      <div
+        style={{ display: 'flex', gridColumnGap: '1em', marginTop: '0.5em' }}
       >
-        <em style={{ fontSize: '.85em' }}>
-          <Trans
-            i18nKey="sessionList.yourListIdentifier"
-            values={{ listId: listIdentifier }}
-          />
-        </em>
-      </Button>
+        <Button
+          startIcon={<EditOutlined />}
+          onClick={() => setIdentifierDialogOpen((a) => !a)}
+        >
+          <em style={{ fontSize: '.85em' }}>
+            <Trans
+              i18nKey="sessionList.yourListIdentifier"
+              values={{ listId: listIdentifier }}
+            />
+          </em>
+        </Button>
+        <CopyListIdentifierButton listIdentifier={listIdentifier} />
+      </div>
       <ListIdentifierDialog
         initialIdentifier={listIdentifier}
         onAccept={onListIdentifierChanged}
