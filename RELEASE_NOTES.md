@@ -5,6 +5,8 @@ Bear in mind that release notes before 2022-08-14 were compiled post-factum and 
 
 ## 2023-11-11
 - [feat] allowed users to copy and input session list ids
+- [improvement] improved session list layout on mobile
+- [fix] confirmation dialog when deleting list correctly shows list name
 
 ## 2023-10-30
 - [improvement] improved plastic color assignment for mobile view on session details
