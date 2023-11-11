@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // TODO handle drafts
-export function SessionsList({ sessions, listId, onDeleteSession }) {
+export function SessionsList({ sessions, onDeleteSession }) {
   const classes = useStyles()
   const history = useHistory()
   const { t } = useTranslation()
@@ -64,85 +64,80 @@ export function SessionsList({ sessions, listId, onDeleteSession }) {
   }, [setGameVersion])
 
   return (
-    <>
-      <List
-        className={classes.list}
-        subheader={
-          <ListSubheader>
-            <Trans i18nKey="sessionList.title" />
-          </ListSubheader>
-        }
-      >
-        {sessions.map((session) => {
-          const defaultName = session.factions?.length
-            ? session.factions
-                .map((factionKey) => t(`factions.${factionKey}.name`))
-                .join(', ')
-            : `Drafting in progress...`
+    <List
+      className={classes.list}
+      subheader={
+        <ListSubheader>
+          <Trans i18nKey="sessionList.title" />
+        </ListSubheader>
+      }
+    >
+      {sessions.map((session) => {
+        const defaultName = session.factions?.length
+          ? session.factions
+              .map((factionKey) => t(`factions.${factionKey}.name`))
+              .join(', ')
+          : `Drafting in progress...`
 
-          return (
-            <ListItem key={session.id} button className={classes.listItem}>
-              <ListItemIcon>
-                {session.finished ? (
-                  <Tooltip placement="top" title={t('sessionList.done')}>
-                    <Done color="secondary" />
-                  </Tooltip>
-                ) : (
-                  <Tooltip placement="top" title={t('sessionList.inProgress')}>
-                    <InProgress />
-                  </Tooltip>
-                )}
-                {session.editable && session.locked && (
-                  <Tooltip placement="top" title={t('sessionList.locked')}>
-                    <Lock />
-                  </Tooltip>
-                )}
-              </ListItemIcon>
-              {session.editable && !session.locked && (
-                <ListItemIcon>
-                  <Chip
-                    color="secondary"
-                    icon={<EditOutlined />}
-                    label={t('general.editable')}
-                  />
-                </ListItemIcon>
+        return (
+          <ListItem key={session.id} button className={classes.listItem}>
+            <ListItemIcon>
+              {session.finished ? (
+                <Tooltip placement="top" title={t('sessionList.done')}>
+                  <Done color="secondary" />
+                </Tooltip>
+              ) : (
+                <Tooltip placement="top" title={t('sessionList.inProgress')}>
+                  <InProgress />
+                </Tooltip>
               )}
-              <ListItemText
-                onClick={() =>
-                  history.push(
-                    generatePath(SESSION_VIEW_ROUTES.main, {
-                      sessionId: session.id,
-                      secret: session.editable ? session.secret : undefined,
-                    }),
-                  )
-                }
-                primary={session.displayName || defaultName}
-                secondary={`${session.start || ''} ${
-                  session.displayName
-                    ? t('sessionList.secondaryTitle', {
-                        factionList: defaultName,
-                      })
-                    : ''
-                }`}
-              />
-              <Button
-                color="secondary"
-                onClick={() => {
-                  onDeleteSession({
-                    id: session.id,
-                    name: session.displayName,
-                  })
-                }}
-              >
-                {t('sessionList.delete')}
-              </Button>
-            </ListItem>
-          )
-        })}
-      </List>
-      <em style={{ fontSize: '.85em', float: 'right' }}>
-        <Trans i18nKey="sessionList.yourListIdentifier" values={{ listId }} />
-      </em>
-    </>
+              {session.editable && session.locked && (
+                <Tooltip placement="top" title={t('sessionList.locked')}>
+                  <Lock />
+                </Tooltip>
+              )}
+            </ListItemIcon>
+            {session.editable && !session.locked && (
+              <ListItemIcon>
+                <Chip
+                  color="secondary"
+                  icon={<EditOutlined />}
+                  label={t('general.editable')}
+                />
+              </ListItemIcon>
+            )}
+            <ListItemText
+              onClick={() =>
+                history.push(
+                  generatePath(SESSION_VIEW_ROUTES.main, {
+                    sessionId: session.id,
+                    secret: session.editable ? session.secret : undefined,
+                  }),
+                )
+              }
+              primary={session.displayName || defaultName}
+              secondary={`${session.start || ''} ${
+                session.displayName
+                  ? t('sessionList.secondaryTitle', {
+                      factionList: defaultName,
+                    })
+                  : ''
+              }`}
+            />
+            <Button
+              color="secondary"
+              onClick={() => {
+                onDeleteSession({
+                  id: session.id,
+                  name: session.displayName,
+                })
+              }}
+            >
+              {t('sessionList.delete')}
+            </Button>
+          </ListItem>
+        )
+      })}
+    </List>
   )
 }

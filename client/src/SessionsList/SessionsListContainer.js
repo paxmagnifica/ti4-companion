@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import { CircularProgress } from '@material-ui/core'
+import { useCallback, useState, useEffect } from 'react'
+import { Button, CircularProgress } from '@material-ui/core'
+import { EditOutlined } from '@material-ui/icons'
 
 import { getNewListIdentifier } from './getNewListIdentifier'
 import { useSessionsList } from './queries'
@@ -7,10 +8,12 @@ import { SessionsList } from './SessionsList'
 import Confirmation from '../shared/Confirmation'
 import { deleteSession } from './removeSession'
 import { Trans } from '../i18n'
+import { ListIdentifierDialog } from './ListIdentifierDialog'
 
 export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
   const [loading, setLoading] = useState(true)
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false)
+  const [identifierDialogOpen, setIdentifierDialogOpen] = useState(false)
   const [sesssionToDelete, setSesssionToDelete] = useState(null)
 
   useEffect(() => {
@@ -26,6 +29,11 @@ export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
     })
   }, [listIdentifier, setListIdentifier])
 
+  const onListIdentifierChanged = useCallback((identifier) => {
+    setListIdentifier(identifier)
+    setIdentifierDialogOpen(false)
+  }, [])
+
   const { sessions, queryInfo, invalidateSessions } = useSessionsList({
     listId: listIdentifier,
   })
@@ -37,12 +45,29 @@ export function SessionsListContainer({ listIdentifier, setListIdentifier }) {
   return (
     <>
       <SessionsList
-        listId={listIdentifier}
         onDeleteSession={(session) => {
           setSesssionToDelete(session)
           setConfirmationDialogOpen(true)
         }}
         sessions={sessions || []}
+      />
+      <Button
+        startIcon={<EditOutlined />}
+        style={{ marginTop: '0.5em' }}
+        onClick={() => setIdentifierDialogOpen((a) => !a)}
+      >
+        <em style={{ fontSize: '.85em' }}>
+          <Trans
+            i18nKey="sessionList.yourListIdentifier"
+            values={{ listId: listIdentifier }}
+          />
+        </em>
+      </Button>
+      <ListIdentifierDialog
+        initialIdentifier={listIdentifier}
+        onAccept={onListIdentifierChanged}
+        onClose={() => setIdentifierDialogOpen(false)}
+        open={identifierDialogOpen}
       />
       {sesssionToDelete && (
         <Confirmation
