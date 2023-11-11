@@ -3,6 +3,9 @@
 You will find here a log of features introduced in the app.
 Bear in mind that release notes before 2022-08-14 were compiled post-factum and should not be considered accurate.
 
+## 2023-11-11
+- [feat] allowed users to copy and input session list ids
+
 ## 2023-10-30
 - [improvement] improved plastic color assignment for mobile view on session details
 - [fix] plastic colors are correctly indicated on faction flags now
