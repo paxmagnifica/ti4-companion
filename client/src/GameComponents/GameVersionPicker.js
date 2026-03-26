@@ -12,10 +12,11 @@ export const GameVersion = {
   PoK_Codex2: 2,
   PoK_Codex3: 3,
   DiscordantStars: 4,
+  ThundersEdge: 5,
 }
 
 // WARNING if you're changing this default version, change the default in /server/Startup.cs
-export const DEFAULT_VERSION = GameVersion.PoK_Codex3
+export const DEFAULT_VERSION = GameVersion.ThundersEdge
 
 export const GameVersionPicker = ({ value, onChange, disabled }) => {
   const getFromEvent = (event) => {
@@ -80,6 +81,13 @@ export const GameVersionPicker = ({ value, onChange, disabled }) => {
               label="Codex 3"
               labelPlacement="bottom"
               value={GameVersion.PoK_Codex3.toString()}
+            />
+            <FormControlLabel
+              control={<Radio color="secondary" />}
+              disabled={disabled && value !== GameVersion.ThundersEdge}
+              label="Thunder's Edge"
+              labelPlacement="bottom"
+              value={GameVersion.ThundersEdge.toString()}
             />
             <FormControlLabel
               control={<Radio color="secondary" />}

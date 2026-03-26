@@ -115,4 +115,10 @@ export const en = {
   [FACTION.The_Kyro_Sodality]: { name: 'The Kyro Sodality' },
   [FACTION.The_Lanefir_Remnants]: { name: 'The Lanefir Remnants' },
   [FACTION.The_Nokar_Sellships]: { name: 'The Nokar Sellships' },
+
+  [FACTION.Last_Bastion]: { name: 'Last Bastion' },
+  [FACTION.The_Ral_Nel_Consortium]: { name: 'The Ral Nel Consortium' },
+  [FACTION.The_Deepwrought_Scholarate]: { name: 'The Deepwrought Scholarate' },
+  [FACTION.The_Crimson_Rebellion]: { name: 'The Crimson Rebellion' },
+  [FACTION.The_Firmament_The_Obsidian]: { name: 'The Firmament / The Obsidian' }
 }

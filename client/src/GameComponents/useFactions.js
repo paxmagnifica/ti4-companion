@@ -50,6 +50,13 @@ const discordantStars = [
   FACTION.The_Nokar_Sellships,
 ]
 const codex3 = [FACTION.The_Council_Keleres]
+const thundersEdge = [
+  FACTION.Last_Bastion,
+  FACTION.The_Deepwrought_Scolarate,
+  FACTION.The_Crimson_Rebellion,
+  FACTION.The_Ral_Nel_Consortium,
+  FACTION.The_Firmament_The_Obsidian
+]
 const base = Object.entries(FACTION)
   .filter(
     ([key]) =>
