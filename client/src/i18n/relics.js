@@ -77,4 +77,19 @@ export const en = {
     effect:
       'ACTION: Attach this card to a non-legendary, non-home planet you control; its resource and influence values are increased by 2 and it is a legendary planet.',
   },
+  'circlet-of-the-void': {
+    slug: 'circlet-of-the-void',
+    title: 'Circlet of the Void',
+    effect: 'Your units do not roll for gravity rifts, and you ignore the movement effects of other anomalies.\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players\' ships.'
+  },
+  'book-of-latvinia': {
+    slug: 'book-of-latvinia',
+    title: 'Book of Latvinia',
+    effect: 'When you gain this card, research up to 2 technologies that have no prerequisites.\nACTION: Purge this card; if you control planets that have all 4 types of technology specialties, gain 1 victory point. Otherwise, gain the speaker token.'
+  },
+  'neuraloop': {
+    slug: 'neuraloop',
+    title: 'Neuraloop',
+    effect: 'When a public objective is revealed, you may purge one of your relics to discard that objective and replace it with a random objective from any objective deck; that objective is a public objective. even if it is a secret objective.'
+  },
 }

@@ -41,7 +41,7 @@ see [issues](https://github.com/tarnas14/ti4-companion/issues)
 use provided `docker-compose.yml`, together with the committed `.env.dev` file, like this (in the root of the repo):
 
 ```bash
-$ docker-compose --env-file .env.dev up -d
+$ docker compose --env-file .env.dev up -d
 ```
 
 This will run postgres, backend and frontend services in dockers.
@@ -62,8 +62,9 @@ make sure you have [Entity Framework CLI](https://docs.microsoft.com/en-us/ef/co
 
 make your changes to any class used in SessionContext (these are db entities)
 
-in `server` directory run
-```bash
+on `docker compose up create-migrations`:
+```sh
+$ export PATH="$PATH:/root/.dotnet/tools"
 $ dotnet ef migrations add NameOfYourMigration
 ```
 this will automatically add required changes to `server/Migrations/` directory
