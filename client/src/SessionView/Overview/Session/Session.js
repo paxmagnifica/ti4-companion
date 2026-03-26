@@ -39,6 +39,7 @@ const useStyles = makeStyles({
     height: 0,
     paddingTop: '71.25%',
     cursor: 'pointer',
+    backgroundSize: 'contain',
   },
 })
 

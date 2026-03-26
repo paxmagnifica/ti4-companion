@@ -95,3 +95,7 @@ Code conventions are enforced automatically
 - for backend: `dotnet format`
 
 Github actions will fail your contribution if you do not comply :)
+
+# Big thanks to:
+
+This kind sould reddit user for scanning the faction reference cards: https://www.reddit.com/r/twilightimperium/comments/1qmpken/faction_reference_cards_pokte/
