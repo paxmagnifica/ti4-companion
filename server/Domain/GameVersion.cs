@@ -7,6 +7,7 @@ namespace Server.Domain
         PoK_Codex2,
         PoK_Codex3,
         DiscordantStars,
+        PoK_Codex4,
         ThundersEdge
     }
 }
