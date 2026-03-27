@@ -18,7 +18,13 @@ import { en as factionsEn } from './factions'
 import { en as relicsEn } from './relics'
 import { en as agendasEn } from './agendas'
 
-const translationNamespaces = ['translation', 'pok', 'codex2', 'codex3', 'thundersEdge']
+const translationNamespaces = [
+  'translation',
+  'pok',
+  'codex2',
+  'codex3',
+  'thundersEdge',
+]
 const getTranslationNamespace = (gameVersion) =>
   translationNamespaces.slice(0, gameVersion + 1).reverse()
 export const useTranslation = () => {

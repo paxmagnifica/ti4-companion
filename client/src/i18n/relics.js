@@ -80,51 +80,61 @@ export const en = {
   'circlet-of-the-void': {
     slug: 'circlet-of-the-void',
     title: 'Circlet of the Void',
-    effect: 'Your units do not roll for gravity rifts, and you ignore the movement effects of other anomalies.\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players\' ships.'
+    effect:
+      "Your units do not roll for gravity rifts, and you ignore the movement effects of other anomalies.\nACTION: Exhaust this card to explore a frontier token in a system that does not contain any other players' ships.",
   },
   'book-of-latvinia': {
     slug: 'book-of-latvinia',
     title: 'Book of Latvinia',
-    effect: 'When you gain this card, research up to 2 technologies that have no prerequisites.\nACTION: Purge this card; if you control planets that have all 4 types of technology specialties, gain 1 victory point. Otherwise, gain the speaker token.'
+    effect:
+      'When you gain this card, research up to 2 technologies that have no prerequisites.\nACTION: Purge this card; if you control planets that have all 4 types of technology specialties, gain 1 victory point. Otherwise, gain the speaker token.',
   },
-  'neuraloop': {
+  neuraloop: {
     slug: 'neuraloop',
     title: 'Neuraloop',
-    effect: 'When a public objective is revealed, you may purge one of your relics to discard that objective and replace it with a random objective from any objective deck; that objective is a public objective. even if it is a secret objective.'
+    effect:
+      'When a public objective is revealed, you may purge one of your relics to discard that objective and replace it with a random objective from any objective deck; that objective is a public objective. even if it is a secret objective.',
   },
   'metali-void-armaments': {
     slug: 'metali-void-armaments',
     title: 'Metali Void Armaments',
-    effect: 'During the "Anti Fighter Barrage" step of space combat, you may resolve ANTI-FIGHTER BARRAGE 6 (X3) against your opponent\'s units.'
+    effect:
+      'During the "Anti Fighter Barrage" step of space combat, you may resolve ANTI-FIGHTER BARRAGE 6 (X3) against your opponent\'s units.',
   },
   'the-quantumcore': {
     slug: 'the-quantumcore',
     title: 'The Quantumcore',
-    effect: 'When you gain this card, gain your breakthrough. You have SYNERGY for all technology types.'
+    effect:
+      'When you gain this card, gain your breakthrough. You have SYNERGY for all technology types.',
   },
   'the-silver-flame': {
     slug: 'the-silver-flame',
     title: 'The Silver Flame',
-    effect: 'The Silver Flame be exchanged as part of a transaction.\nACTION: Roll 1 die and purge this card; if the result is a 10 gain 1 victory point. Otherwise, purge your home system and all units in it; you cannot score public objectives. Put the Fracture into play if it is not already.'
+    effect:
+      'The Silver Flame be exchanged as part of a transaction.\nACTION: Roll 1 die and purge this card; if the result is a 10 gain 1 victory point. Otherwise, purge your home system and all units in it; you cannot score public objectives. Put the Fracture into play if it is not already.',
   },
   'lightrail-ordnance': {
     slug: 'lightrail-ordnance',
     title: 'Lighrail Ordnance',
-    effect: 'Your space docks gain SPACE CANNON 5 (X2). You may use your space dock\'s SPACE CANNON against ships that are adjacent to their system.'
+    effect:
+      "Your space docks gain SPACE CANNON 5 (X2). You may use your space dock's SPACE CANNON against ships that are adjacent to their system.",
   },
   'metali-void-shielding': {
     slug: 'metali-void-shielding',
     title: 'Metali Void Shielding',
-    effect: 'Each time hits are produced against 1 of your non-fighter ships, 1 of those ships may use SUSTAIN DAMAGE as if it had that ability.'
+    effect:
+      'Each time hits are produced against 1 of your non-fighter ships, 1 of those ships may use SUSTAIN DAMAGE as if it had that ability.',
   },
   'the-triad': {
     slug: 'the-triad',
     title: 'The Triad',
-    effect: 'This card can be readied and spent as if it were a planet card. Its resource and influence values are equal to 3 plus the number of different types of relic fragments you own.'
+    effect:
+      'This card can be readied and spent as if it were a planet card. Its resource and influence values are equal to 3 plus the number of different types of relic fragments you own.',
   },
   'heart-of-ixth': {
     slug: 'heart-of-ixth',
     title: 'Heart of Ixth',
-    effect: 'After any die is rolled, you may exhaust this card to add or subtract 1 from its results.'
+    effect:
+      'After any die is rolled, you may exhaust this card to add or subtract 1 from its results.',
   },
 }

@@ -66,7 +66,7 @@ export const FACTION = {
   The_Ral_Nel_Consortium: 'The_Ral_Nel_Consortium',
   The_Deepwrought_Scholarate: 'The_Deepwrought_Scholarate',
   The_Crimson_Rebellion: 'The_Crimson_Rebellion',
-  The_Firmament_The_Obsidian: 'The_Firmament_The_Obsidian'
+  The_Firmament_The_Obsidian: 'The_Firmament_The_Obsidian',
 }
 
 export const factionsData = {

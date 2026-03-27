@@ -50,6 +50,4 @@ export const en = {
   },
 }
 
-export const pl = {
-
-}
+export const pl = {}

@@ -55,7 +55,7 @@ const thundersEdge = [
   FACTION.The_Deepwrought_Scolarate,
   FACTION.The_Crimson_Rebellion,
   FACTION.The_Ral_Nel_Consortium,
-  FACTION.The_Firmament_The_Obsidian
+  FACTION.The_Firmament_The_Obsidian,
 ]
 const base = Object.entries(FACTION)
   .filter(

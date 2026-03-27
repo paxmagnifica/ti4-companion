@@ -120,5 +120,7 @@ export const en = {
   [FACTION.The_Ral_Nel_Consortium]: { name: 'The Ral Nel Consortium' },
   [FACTION.The_Deepwrought_Scholarate]: { name: 'The Deepwrought Scholarate' },
   [FACTION.The_Crimson_Rebellion]: { name: 'The Crimson Rebellion' },
-  [FACTION.The_Firmament_The_Obsidian]: { name: 'The Firmament / The Obsidian' }
+  [FACTION.The_Firmament_The_Obsidian]: {
+    name: 'The Firmament / The Obsidian',
+  },
 }
