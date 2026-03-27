@@ -50,3 +50,19 @@ services:
       - "10000:10000"
       - "10001:10001"
       - "10002:10002"
+  create-migrations:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./server
+      dockerfile: Dockerfile.migrations
+    environment:
+      - ConnectionStrings__SessionContext
+      - ConnectionStrings__BlobStorage
+      - AllowedOrigins
+    depends_on:
+      - postgres
+    volumes:
+      - ./server:/source
+      - serverBin:/source/bin
+      - serverObj:/source/obj

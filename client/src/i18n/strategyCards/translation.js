@@ -1,4 +1,4 @@
-import StrategyCard from '../GameComponents/gameInfo/strategyCards'
+import StrategyCard from '../../GameComponents/gameInfo/strategyCards'
 
 export const en = {
   [StrategyCard.Leadership]: {
@@ -49,3 +49,5 @@ export const en = {
       'Spend 1 token from your strategy pool to draw 1 secret objective.',
   },
 }
+
+export const pl = {}

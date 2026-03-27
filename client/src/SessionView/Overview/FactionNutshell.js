@@ -24,6 +24,7 @@ export function FactionNutshell({ onClose, factionKey }) {
               alt={factionKey}
               src={getData(factionKey).cheatSheetPath}
               title={factionName}
+              style={{ width: '100%', height: 'auto' }}
             />
           </CardContent>
           <CardActions disableSpacing>

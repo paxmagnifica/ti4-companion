@@ -13,12 +13,18 @@ import { VP_SOURCE } from '../shared/constants'
 
 import objectivesI18n from './objectives'
 import explorationI18n from './explorationCards'
+import strategyCardsI18n from './strategyCards'
 import { en as factionsEn } from './factions'
-import { en as strategyCardsEn } from './strategyCards'
 import { en as relicsEn } from './relics'
 import { en as agendasEn } from './agendas'
 
-const translationNamespaces = ['translation', 'pok', 'codex2', 'codex3']
+const translationNamespaces = [
+  'translation',
+  'pok',
+  'codex2',
+  'codex3',
+  'thundersEdge',
+]
 const getTranslationNamespace = (gameVersion) =>
   translationNamespaces.slice(0, gameVersion + 1).reverse()
 export const useTranslation = () => {
@@ -60,7 +66,7 @@ export const factory = (options = { debug: true }) =>
     // for all options read: https://www.i18next.com/overview/configuration-options
     .init({
       ...options,
-      ns: ['codex3', 'translation'],
+      ns: ['codex3', 'translation', 'thundersEdge'],
       defaultNS: 'translation',
       fallbackLng: 'en',
       interpolation: {
@@ -72,11 +78,14 @@ export const factory = (options = { debug: true }) =>
             objectives: objectivesI18n.en.codex3,
             explorationCards: explorationI18n.en.codex3,
           },
+          thundersEdge: {
+            strategyCards: strategyCardsI18n.en.thundersEdge,
+          },
           translation: {
             factions: factionsEn,
             objectives: objectivesI18n.en.translation,
             explorationCards: explorationI18n.en.translation,
-            strategyCards: strategyCardsEn,
+            strategyCards: strategyCardsI18n.en.translation,
             relics: relicsEn,
             agendas: agendasEn,
             vpCount: '{{points}} VP',
@@ -476,9 +485,13 @@ export const factory = (options = { debug: true }) =>
             objectives: objectivesI18n.pl.codex3,
             explorationCards: explorationI18n.pl.codex3,
           },
+          thundersEdge: {
+            strategyCards: strategyCardsI18n.pl.thundersEdge,
+          },
           translation: {
             objectives: objectivesI18n.pl.translation,
-            explorationCards: explorationI18n.pl.codex3,
+            explorationCards: explorationI18n.pl.translation,
+            strategyCards: strategyCardsI18n.pl.translation,
             general: {
               switchLanguage: 'Zmień język',
               home: 'Home',
